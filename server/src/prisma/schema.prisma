@@ -1,0 +1,21 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    schemas  = ["core", "documents"]
+}
+
+model Documents {
+    id         Int      @id @default(autoincrement())
+    data       Bytes
+    documentId String   @unique
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    // metadata  DocumentMetadata?
+
+    @@schema("documents")
+}
