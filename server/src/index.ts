@@ -1,12 +1,12 @@
 console.log('Starting server...');
 console.time('deps');
-import express, { Request, Response } from 'express';
+import express, { Request } from 'express';
 import expressWebsockets from 'express-ws';
-import { Configuration, Server } from '@hocuspocus/server';
-import HocuspocusConfig from './hocuspocus.config';
+import { Server } from '@hocuspocus/server';
+import HocuspocusConfig from './hocuspocus.config.js';
 import morgan from 'morgan';
 import chalk from 'chalk';
-import WebSocket from 'ws';
+import type WebSocket from 'ws';
 import bodyParser from 'body-parser';
 
 console.timeEnd('deps');
@@ -15,7 +15,7 @@ const { APP_PORT, NODE_ENV } = process.env;
 
 console.time('startup');
 // Configure Hocuspocus backend
-const server = Server.configure(HocuspocusConfig as Partial<Configuration>);
+const server = Server.configure(HocuspocusConfig());
 
 // Setup the express server
 const { app } = expressWebsockets(express());
@@ -52,8 +52,7 @@ app.ws('/collaboration/:documentId', (websocket: WebSocket, req: Request) => {
       name: 'Jane',
     },
   };
-
-  console.log({ context, params: req.params });
+  console.log('handler endpoint hit');
 
   server.handleConnection(websocket, req, context);
 });

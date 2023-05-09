@@ -17,5 +17,6 @@ model Documents {
     updatedAt  DateTime @updatedAt
     // metadata  DocumentMetadata?
 
+    @@index([documentId])
     @@schema("documents")
 }

@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "lib": ["es6"],
-    "allowJs": true,
-    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
-    "rootDir": "src",
+    "target": "ES2020",
+    "module": "ES2020",
     "strict": true,
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "allowJs": true,
+    "lib": ["esnext", "dom"],
     "types": ["node"],
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "resolveJsonModule": true /* Enable importing .json files */,
-    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */
+    "skipLibCheck": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"]
+  "resolve": {
+    "extensions": [".js", ".ts"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["**/node_modules", "**/dist"]
 }
