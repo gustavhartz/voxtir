@@ -15,8 +15,14 @@ import { useSearchParams } from 'react-router-dom';
 //OTHER
 import MenuBar from '../components/Menubar';
 import React from 'react';
+import { FaHome } from 'react-icons/fa';
+import { IconContext, IconType } from 'react-icons';
+
+import { Link } from 'react-router-dom';
 
 const TipTapEditor = () => {
+  const Icon: IconType = FaHome;
+
   // useSearchParams
   const [searchParams, _] = useSearchParams({});
   const id = searchParams.get('id');
@@ -30,7 +36,7 @@ const TipTapEditor = () => {
     //Tiptap styling see https://tailwindcss.com/docs/typography-plugin and https://tiptap.dev/guide/styling#with-tailwind-css
     editorProps: {
       attributes: {
-        class: 'prose',
+        class: 'prose max-w-none outline-transparent relative z-20',
       },
     },
     extensions: [
@@ -60,15 +66,65 @@ const TipTapEditor = () => {
  <p>
  [2:30] It will automatically save an multiple people should be able to work in the document at once.
     </p>
+    <h2>
+    Hi there,
+  </h2>    <h2>
+  Hi there,
+</h2>
+
+<h2>
+Hi there,
+</h2>    <h2>
+Hi there,
+</h2>
   `,
   });
   if (!editor) {
     return null;
   }
   return (
-    <div className="px-5 py-5">
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} className="element" />
+    <div className="flex">
+      {/* Return to home container */}
+      <div className="top-0 left-0 h-screen w-10 flex  flex-col p-2 m-2">
+        <div className="">
+          <Link to="/">
+            <IconContext.Provider value={{ color: 'black', size: '1em' }}>
+              <Icon className="text-white text-xl cursor-pointer fixed" />
+            </IconContext.Provider>
+          </Link>
+        </div>
+      </div>
+      {/* Document section */}
+      <div className="flex flex-col">
+        <div className="w-full bg-red-600 h-16 sticky top-0 z-30">
+          <p className="text-white p-2">Audio bar</p>
+        </div>
+        <div className="w-full bg-black h-16 items-center justify-center">
+          <p className="text-white p-2">Interview with Andrew</p>
+        </div>
+        <div className="h-full w-full">
+          <EditorContent editor={editor} className=" z-0" />
+        </div>
+      </div>
+      {/* Settings panel */}
+      <div className="top-0 right-0 h-screen w-1/5 flex flex-col">
+        <div className="fixed bg-white drop-shadow-xl h-full">
+          <div className="p-4 mb-2 text-center">
+            <p className="text-xl font-semibold text-brand-black">VOXTIR</p>
+          </div>
+          <div className="flex-grow">
+            <div>fs</div>
+          </div>
+          <div className="flex flex-col items-center py-4 px-2">
+            <div className="bg-gradient-to-br from-purple-400 to-indigo-900 text-white px-4 py-6 rounded-xl mb-4">
+              <p className="text-sm">Upgrade to PRO access all features</p>
+            </div>
+            <button className="text-black hover:text-brand-blue">
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
