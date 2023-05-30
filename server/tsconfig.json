@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES2020",
+    "module": "esnext",
     "strict": true,
     "importHelpers": true,
     "resolveJsonModule": true,
@@ -15,11 +15,17 @@
     "allowJs": true,
     "lib": ["esnext", "dom"],
     "types": ["node"],
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    "forceConsistentCasingInFileNames": true
   },
   "resolve": {
     "extensions": [".js", ".ts"]
   },
-  "include": ["**/*.ts"],
-  "exclude": ["**/node_modules", "**/dist"]
+  "include": [
+    "src/**/*.ts",
+    "src/routes/graphql/resolvers/index.ts",
+    "src/routes/graphql/schema.ts",
+    "src/routes/graphql/context.ts"
+  ],
+  "exclude": ["**/node_modules", "**/dist", "**/*.local.*"]
 }

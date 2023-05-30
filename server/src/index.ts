@@ -1,71 +1,65 @@
 console.log('Starting server...');
 console.time('deps');
-import express, { Request } from 'express';
+import express from 'express';
 import expressWebsockets from 'express-ws';
-import { Server } from '@hocuspocus/server';
-import HocuspocusConfig from './hocuspocus.config.js';
+import { app as routes } from './routes/index.js';
+import { expressMiddleware } from '@apollo/server/express4';
 import morgan from 'morgan';
 import chalk from 'chalk';
-import type WebSocket from 'ws';
 import bodyParser from 'body-parser';
+import http from 'http';
+import cors from 'cors';
+import prisma from './prisma/index.js';
+import { getGqlServer } from './routes/apollo.js';
 
 console.timeEnd('deps');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-const { APP_PORT, NODE_ENV } = process.env;
+var { APP_PORT, NODE_ENV, APP_NAME } = process.env;
+APP_NAME = APP_NAME || 'VOXTIR';
 
 console.time('startup');
-// Configure Hocuspocus backend
-const server = Server.configure(HocuspocusConfig());
 
-// Setup the express server
-const { app } = expressWebsockets(express());
+async function main() {
+  // Setup the express server
+  const { app } = expressWebsockets(express());
 
-// Logging setup and middleware
-// TODO: Move to separate file
-app.use(
-  morgan(
-    `${chalk.green(
-      `[${HocuspocusConfig.name}]`
-    )} :method :url :status - :response-time ms`
-  )
-);
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+  // Logging setup and middleware
+  // TODO: Move to separate file
+  app.use(
+    morgan(
+      `${chalk.green(`[${APP_NAME}]`)} :method :url :status - :response-time ms`
+    )
+  );
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
 
-// Add API routes
-app.get('/', (_request, response) => {
-  response.send({ message: 'Hello World!' });
-});
+  // ws and http routes
+  app.use(routes);
 
-// ws routes
+  const httpServer = http.createServer(app);
 
-// Add a websocket route for hocuspocus
-// Note: make sure to include a parameter for the document name.
-// You can set any contextual data like in the onConnect hook
-// and pass it to the handleConnection method.
-app.ws('/collaboration/:documentId', (websocket: WebSocket, req: Request) => {
-  const context = {
-    params: req.query,
-    documentId: req.params.documentId,
-    user: {
-      id: 1234,
-      name: 'Jane',
-    },
-  };
-  console.log('handler endpoint hit');
+  // Graphql setup
+  const gqlServer = await getGqlServer(httpServer);
+  app.use(
+    '/graphql',
+    cors<cors.CorsRequest>(),
+    expressMiddleware(gqlServer, {
+      context: async ({ req }) => ({ prisma: prisma }),
+    })
+  );
 
-  server.handleConnection(websocket, req, context);
-});
+  httpServer.listen({ port: APP_PORT }, () => {
+    console.info(`
+        Server "${chalk.magentaBright(
+          'APP_NAME'
+        )}" started. Port: ${chalk.blue.bold(
+      APP_PORT
+    )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
+        Open Project: ${chalk.bold.underline.yellow(
+          `http://localhost:${APP_PORT}`
+        )} (ctrl+click)
+      `);
+  });
+}
 
-app.listen(APP_PORT, () => {
-  console.info(`
-      Server "${chalk.magentaBright(
-        HocuspocusConfig.name
-      )}" started. Port: ${chalk.blue.bold(
-    APP_PORT
-  )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
-      Open Project: ${chalk.bold.underline.yellow(
-        `http://localhost:${APP_PORT}`
-      )} (ctrl+click)
-    `);
-});
+await main();

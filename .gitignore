@@ -148,8 +148,8 @@ client/build
 secrets.auto.tfvars
 
 # GQL generated
-src/routes/graphql/generated
-src/routes/graphql/schema.graphql
+server/src/routes/graphql/generated
+server/src/routes/graphql/schema.graphql
 
 # Generated storybook
 src/storybook-static
@@ -157,3 +157,5 @@ storybook-static/
 
 # VSCODE 
 .idea
+
+schema.graphql

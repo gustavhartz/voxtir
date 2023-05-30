@@ -1,4 +1,4 @@
-import prisma from './prisma/index.js';
+import prisma from '../prisma/index.js';
 import { v4 as uuidv4 } from 'uuid';
 import { Database } from '@hocuspocus/extension-database';
 import { Configuration } from '@hocuspocus/server';
@@ -18,12 +18,6 @@ export default (): Partial<Configuration> => {
     // Only works with the token specified from the frontend configuration. Do own logic before handler
     async onAuthenticate(data) {
       console.log('onAuthenticate');
-      return {
-        user: {
-          id: 1234,
-          name: 'John',
-        },
-      };
     },
   };
 
