@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import http from 'http';
 import cors from 'cors';
 import prisma from './prisma/index.js';
+import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import { getGqlServer } from './routes/apollo.js';
 
 console.timeEnd('deps');
@@ -43,6 +44,7 @@ async function main() {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
+    graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({ prisma: prisma }),
     })

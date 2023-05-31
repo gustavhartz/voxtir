@@ -1,6 +1,7 @@
 overwrite: true
 schema: './src/routes/graphql/**/*.ts'
 emitLegacyCommonJSImports: false,
+documents: '../frontend/src/graphql/**/*.{ts,gql,graphql}'
 generates:
   src/routes/graphql/generated/graphql.ts:
     plugins:

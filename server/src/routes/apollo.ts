@@ -11,9 +11,10 @@ export const getGqlServer = async (httpServer: http.Server) => {
   const server = new ApolloServer<Context>({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    introspection: true,
   });
   await server.start();
-  console.log('Apollo server started');
+  console.log('Apollo server initialized');
 
   return server;
 };
