@@ -4,7 +4,12 @@
     "es6": true,
     "node": true
   },
-  "ignorePatterns": ["**/node_modules/*", "**/dist/*"],
+  "ignorePatterns": [
+    "**/node_modules/*",
+    "**/dist/*",
+    "**/generated/*",
+    "**/*.local.*"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "tsconfig.json",
@@ -35,7 +40,7 @@
         "@graphql-eslint/known-type-names": "error"
       },
       "parserOptions": {
-        "schema": "./**/*.graphql"
+        "schema": "./src/routes/graphql/**/*.ts"
       }
     }
   ]

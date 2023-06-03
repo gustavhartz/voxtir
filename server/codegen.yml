@@ -11,3 +11,4 @@ generates:
       - 'typescript-react-apollo'
     config:
       contextType: ../context#Context
+      enumsAsConst: true
