@@ -1,10 +1,9 @@
+import { Server } from '@hocuspocus/server';
 import express, { Request } from 'express';
 import expressWebsockets from 'express-ws';
-import { Server } from '@hocuspocus/server';
-import HocuspocusConfig from './hocuspocus.config.js';
-import morgan from 'morgan';
-import chalk from 'chalk';
 import type WebSocket from 'ws';
+
+import HocuspocusConfig from './hocuspocus.config.js';
 
 // Configure Hocuspocus backend
 export const { app } = expressWebsockets(express());
