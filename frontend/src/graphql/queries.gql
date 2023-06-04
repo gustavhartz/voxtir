@@ -1,0 +1,5 @@
+query GetStatus {
+  status {
+    message
+  }
+}

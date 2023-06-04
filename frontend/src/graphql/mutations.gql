@@ -1,0 +1,6 @@
+mutation UploadDocuments($docs: [DocumentUploadInput!]!) {
+  uploadDocuments(docs: $docs) {
+    success
+    message
+  }
+}
