@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.16.0",
+    "npm": ">=9.5.1"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -13,6 +17,7 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.0.6",
+    "@storybook/addon-styling": "^1.0.8",
     "@tiptap/extension-collaboration": "^2.0.3",
     "@tiptap/extension-color": "^2.0.3",
     "@tiptap/extension-document": "^2.0.3",
@@ -23,6 +28,7 @@
     "@tiptap/extension-text": "^2.0.3",
     "@tiptap/extension-text-style": "^2.0.3",
     "@tiptap/react": "^2.0.3",
+    "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { ReactNode } from 'react';
 import { IconType } from 'react-icons';
 import { FiArchive, FiEdit, FiShare2 } from 'react-icons/fi';
-
+import { Button as Test } from '../components/Button';
 interface ButtonProps {
   children: ReactNode;
   icon?: IconType;
@@ -69,6 +69,9 @@ function Home() {
           Share project
         </Button>
       </div>
+      <Test>
+        123
+      </Test>
       {/* Table start */}
       <div className="flex">
         <table className=" w-full">
