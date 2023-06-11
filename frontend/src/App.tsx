@@ -1,10 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import TipTapEditor from './pages/Documents';
 import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import AdminLayout from './components/AdminLayout';
-import Settings from './pages/Settings';
-import Billing from './pages/Billing';
 // state for sidebar
 
 function App() {
@@ -13,13 +8,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<AdminLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/billing" element={<Billing />} />
-        </Route>
-        <Route path="documents" element={<TipTapEditor />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </div>
   );
