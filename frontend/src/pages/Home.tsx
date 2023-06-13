@@ -12,8 +12,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Heading from '@tiptap/extension-heading';
-import Mention from '@tiptap/extension-mention';
-import TrackTimeStamp from '../components/TrackTimeStamp';
+import TrackTimeStamp from '../components/TimeStamp';
 
 function Home() {
 
@@ -39,8 +38,6 @@ function Home() {
     },
     autofocus: true
   });
-
-  const { src, totalLength } = useAppSelector((state) => state.track);
 
   const dispatch = useDispatch();
 
