@@ -1,8 +1,10 @@
 import { NodeViewWrapper, NodeConfig } from "@tiptap/react";
 import React, { useState } from "react";
 import useDoubleClick from 'use-double-click';
-
+import { useDispatch } from "react-redux";
+import { skipToPosition } from "../../../../state/track";
 export default (props: NodeConfig) => {
+  const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [timeStamp, setTimeStamp] = useState<string>("00:00:00");
   const buttonRef = React.useRef(null);
@@ -11,7 +13,7 @@ export default (props: NodeConfig) => {
 
   const triggerButton = () => {
     if (!show) {
-        console.log("running single click")
+      dispatch(skipToPosition(timeStamp));
       props.updateAttributes({
         count: props.node.attrs.count + 1,
       });
@@ -20,7 +22,6 @@ export default (props: NodeConfig) => {
 
   const toggleShowInput = () => {
     setShow(true);
-    console.log("running double click")
   };
 
   const toggleCloseInput = () => {
@@ -28,7 +29,6 @@ export default (props: NodeConfig) => {
 };
 
   const changeTimeStamp = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("test");
     const { value } = event.currentTarget;
     setTimeStamp(value);
   };
@@ -44,20 +44,12 @@ export default (props: NodeConfig) => {
     latency: 250
   });
 
-  /*
-  onBlur={toggleCloseInput}
-onKeyDown={(e) => {
-    if (e.key === 'Escape') {
-        toggleCloseInput();
-    }
-}}
-  */
   return (
-    <NodeViewWrapper className="timestamp-button" as={'span'}>
+    <NodeViewWrapper className="timestamp-button text-inherit" as={'span'}>
     <button
         ref={buttonRef}
         className={`
-        text-white text-md px-1 
+        text-white text-md px-1 -mx-1 rounded-lg shadow-lg focus:outline-none
         ${timeRegex.test(timeStamp) ? 'bg-[#07BF5C]' : 'bg-red-500'}
         `}
     

@@ -4,7 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 interface TrackState {
     src: string;
     totalLength: number;
-    currentPosition: number;
+    skipToPosition: string;
     isPlaying: boolean;
     volume: number;
     isMuted: boolean;
@@ -20,7 +20,7 @@ interface SetTrackPayload {
   const initialState: TrackState = {
     src: '',
     totalLength: 0,
-    currentPosition: 0,
+    skipToPosition: "00:00:00",
     isPlaying: false,
     volume: 0.5,
     isMuted: false,
@@ -34,12 +34,16 @@ interface SetTrackPayload {
         setTrack: (state, action: PayloadAction<SetTrackPayload>) => {
             state.src = action.payload.src;
             state.totalLength = action.payload.totalLength;
+        },
+        skipToPosition: (state, action: PayloadAction<string>) => {
+            state.skipToPosition = action.payload;
         }
     },
   })
   
   export const { 
-    setTrack
+    setTrack,
+    skipToPosition
 } = track.actions;
   
   export default track.reducer;
