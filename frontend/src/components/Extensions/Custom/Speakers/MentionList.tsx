@@ -8,7 +8,6 @@ import React, {
 
 export const MentionList = forwardRef<MentionListRef, Props>((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  console.log(selectedIndex);
 
   const selectItem = (index: number) => {
     const item = props.items[index];
