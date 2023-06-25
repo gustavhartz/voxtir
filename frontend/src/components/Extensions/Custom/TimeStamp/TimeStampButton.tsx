@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { skipToPosition } from '../../../../state/track';
 export default (props: NodeConfig) => {
   const dispatch = useDispatch();
-  const [show, setShow] = useState(true);
-  const [timeStamp, setTimeStamp] = useState<string>('00:00:00');
+  const [show, setShow] = useState(props.node.attrs.show);
+  const [timeStamp, setTimeStamp] = useState<string>(props.node.attrs.timestamp);
   const buttonRef = React.useRef(null);
 
   const timeRegex = new RegExp('^[0-9]{2}:[0-9]{2}:[0-9]{2}$');
@@ -14,10 +14,9 @@ export default (props: NodeConfig) => {
   const triggerButton = () => {
     if (!show) {
       dispatch(skipToPosition(timeStamp));
-      props.updateAttributes({
-        count: props.node.attrs.count + 1,
-      });
     }
+
+    console.log("triggered");
   };
 
   const toggleShowInput = () => {
@@ -31,11 +30,16 @@ export default (props: NodeConfig) => {
   const changeTimeStamp = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setTimeStamp(value);
+    props.updateAttributes({
+      timestamp: value
+    });
   };
 
   useDoubleClick({
     onSingleClick: () => {
-      triggerButton();
+      if (!show) {
+        triggerButton();
+      }
     },
     onDoubleClick: () => {
       toggleShowInput();
@@ -49,7 +53,7 @@ export default (props: NodeConfig) => {
       <button
         ref={buttonRef}
         className={`
-        text-white text-md px-1 -mx-1 rounded-lg shadow-lg focus:outline-none
+        text-white text-md px-1 mx-1 rounded-lg hover:shadow-lg focus:outline-none
         ${timeRegex.test(timeStamp) ? 'bg-[#07BF5C]' : 'bg-red-500'}
         `}
       >

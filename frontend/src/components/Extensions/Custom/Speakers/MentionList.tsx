@@ -73,7 +73,7 @@ export const MentionList = forwardRef<MentionListRef, Props>((props, ref) => {
           className="bg-transparent border rounded-md block m-0 p-1 text-left w-full on"
           onClick={() => props.command({ id: props.query })}
         >
-          Add "{props.query}"" as a new speaker
+          Add "{props.query}" as a new speaker
         </button>
       )}
     </div>
