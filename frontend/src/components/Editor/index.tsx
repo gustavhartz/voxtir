@@ -38,7 +38,7 @@ function Editor() {
     },
     editorProps: {
       attributes: {
-        class: `h-full w-full min-h-screen prose sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none`,
+        class: ` mt-24 h-full bg-gray-100/60 rounded-lg min-w-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`
       },
     },
     autofocus: true,

@@ -11,10 +11,15 @@ export default Node.create({
   inline: true,
   group: 'inline',
 
+  onCreate() {
+   
+  },
+
   addAttributes() {
     return {
-      count: {
-        default: 0,
+      timestamp: {
+        default: "00:00:00",
+        show: false
       },
     }
   },
@@ -30,7 +35,7 @@ export default Node.create({
   addKeyboardShortcuts() {
     return {
       'Mod-Enter': () => {
-        return this.editor.chain().insertContentAt(this.editor.state.selection.head,{ type: this.type.name }).focus().run()
+        return this.editor.chain().insertContentAt(this.editor.state.selection.head,{ type: this.type.name, attrs: { show: true } }).focus().run()
       },
     }
   },
