@@ -12,7 +12,7 @@ variable "app_name" {
   type        = string
 }
 
-variable "env" {
+variable "environment" {
   description = "Production or staging"
   type        = string
 }
@@ -37,11 +37,6 @@ variable "base_domain_name" {
   description = "The root domain"
 }
 
-variable "api_prefix" {
-  type        = string
-  description = "The prefix of the domain"
-}
-
 variable "cloudflare_api_token" {
   type        = string
   description = "The api token to access cloudflare resources"
@@ -50,4 +45,9 @@ variable "cloudflare_api_token" {
 variable "cloudflare_zone_id" {
   type        = string
   description = "The zoneid to access cloudflare resources"
+}
+
+variable "random_string" {
+  type        = string
+  description = "Random string to use in resources"
 }

@@ -1,7 +1,21 @@
 # DevOps 🚀
 
-Our terraform infrastructure.
+Our terraform infrastructure. This is the main source of all infrastructue used by voxtir, but outside of this exists a couple of things
+* A bucket not maintained here to store the terraform states
+* The AWS organization used to structure everything
+* Actual accounts and users
 
+**Accounts:**
+Currently there exists three accounts
+* The root account maintained by Gustav Hartz
+  * Owns the state bucket
+* The staging account
+  * Owns the staging related resources
+  * Owns CI/CD as there is no CD on production. This is done manually
+* The production account *(In progress)*
+  * Owns the production related resources
+
+## Getting started
 ```
 #Install aws cli and auth
 #Install Terraform CLI
