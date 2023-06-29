@@ -10,7 +10,7 @@ const Track = () => {
         progressJumpSteps={{ backward: 10000, forward: 10000 }}
         layout="horizontal"
         showFilledProgress={true}
-        className="w-full h-20 !bg-transparent border-none px-8"
+        className="bg-white w-full h-20 border-none px-8"
   />
   )
 };
