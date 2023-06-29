@@ -16,6 +16,15 @@ resource "aws_s3_bucket_public_access_block" "s3_bucket_public_access_block" {
   restrict_public_buckets = false
 }
 
+resource "cloudflare_record" "site_cname" {
+  zone_id = var.cloudflare_zone_id
+  name    = "app.${var.environment}.${var.base_domain_name}"
+  value   = aws_s3_bucket_website_configuration.voxtir_react_app_website.website_endpoint
+  type    = "CNAME"
+  ttl     = 1
+  proxied = true
+}
+
 
 # Configure S3 bucket for static website hosting
 resource "aws_s3_bucket_website_configuration" "voxtir_react_app_website" {
