@@ -10,6 +10,11 @@ interface TrackState {
     volume: number;
     isMuted: boolean;
     playbackSpeed: number;
+    settings: {
+      pauseOnSkip: boolean;
+      goBackTime: number;
+      goForwardTime: number;
+    }
 
 }
 
@@ -26,7 +31,12 @@ interface SetTrackPayload {
     isPlaying: false,
     volume: 0.5,
     isMuted: false,
-    playbackSpeed: 1
+    playbackSpeed: 1,
+    settings: {
+      goBackTime: 10,
+      goForwardTime: 50,
+      pauseOnSkip: true 
+    }
   }
   
   export const track = createSlice({
