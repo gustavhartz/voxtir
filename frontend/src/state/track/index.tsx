@@ -5,10 +5,16 @@ interface TrackState {
     src: string;
     totalLength: number;
     skipToPosition: string;
+    hasSkipped: boolean;
     isPlaying: boolean;
     volume: number;
     isMuted: boolean;
     playbackSpeed: number;
+    settings: {
+      pauseOnSkip: boolean;
+      goBackTime: number;
+      goForwardTime: number;
+    }
 
 }
 
@@ -21,10 +27,16 @@ interface SetTrackPayload {
     src: '',
     totalLength: 0,
     skipToPosition: "00:00:00",
+    hasSkipped: true,
     isPlaying: false,
     volume: 0.5,
     isMuted: false,
-    playbackSpeed: 1
+    playbackSpeed: 1,
+    settings: {
+      goBackTime: 10,
+      goForwardTime: 50,
+      pauseOnSkip: true 
+    }
   }
   
   export const track = createSlice({
@@ -36,14 +48,19 @@ interface SetTrackPayload {
             state.totalLength = action.payload.totalLength;
         },
         skipToPosition: (state, action: PayloadAction<string>) => {
+            state.hasSkipped = false;
             state.skipToPosition = action.payload;
+        },
+        setToSkipped: (state) => {
+            state.hasSkipped = true;
         }
     },
   })
   
   export const { 
     setTrack,
-    skipToPosition
+    skipToPosition,
+    setToSkipped
 } = track.actions;
   
   export default track.reducer;
