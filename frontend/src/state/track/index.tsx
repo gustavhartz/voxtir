@@ -5,6 +5,7 @@ interface TrackState {
     src: string;
     totalLength: number;
     skipToPosition: string;
+    hasSkipped: boolean;
     isPlaying: boolean;
     volume: number;
     isMuted: boolean;
@@ -21,6 +22,7 @@ interface SetTrackPayload {
     src: '',
     totalLength: 0,
     skipToPosition: "00:00:00",
+    hasSkipped: true,
     isPlaying: false,
     volume: 0.5,
     isMuted: false,
@@ -36,14 +38,19 @@ interface SetTrackPayload {
             state.totalLength = action.payload.totalLength;
         },
         skipToPosition: (state, action: PayloadAction<string>) => {
+            state.hasSkipped = false;
             state.skipToPosition = action.payload;
+        },
+        setToSkipped: (state) => {
+            state.hasSkipped = true;
         }
     },
   })
   
   export const { 
     setTrack,
-    skipToPosition
+    skipToPosition,
+    setToSkipped
 } = track.actions;
   
   export default track.reducer;
