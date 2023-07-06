@@ -1,0 +1,36 @@
+version: 0.2
+phases:
+  install:
+    #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
+    #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo Installing source NPM dependencies...
+      - echo Branch name - $CODEBUILD_SOURCE_VERSION
+      - echo Branch name - $CODEBUILD_WEBHOOK_BASE_REF
+      - echo Branch name - $CODEBUILD_WEBHOOK_HEAD_REF
+      - echo Branch name - $CODEBUILD_WEBHOOK_TRIGGER
+      - cd frontend
+      - npm install
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Build started on 'date'
+      - npm run build
+  post_build:
+    on-failure: ABORT
+    commands:
+      - |
+        if [ "$CODEBUILD_WEBHOOK_BASE_REF" = "main" ]; then
+          aws s3 cp --recursive --acl public-read ./build s3://${aws_s3_bucket}/
+          aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/index.html s3://${aws_s3_bucket}/
+        else
+          echo "Skipping S3 copy since branch is not main."
+        fi
+      - echo Build completed on 'date'
+      - aws s3 cp --recursive --acl public-read ./build s3://${aws_s3_bucket}/
+      - aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/index.html s3://${aws_s3_bucket}/
+      - echo Build completed on 'date'
