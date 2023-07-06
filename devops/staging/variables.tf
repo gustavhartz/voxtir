@@ -17,16 +17,6 @@ variable "environment" {
   type        = string
 }
 
-variable "availability_zone_public_subnet" {
-  type        = string
-  description = "The availability zone used. Must match the one defined in region"
-}
-
-variable "availability_zone_private_subnet" {
-  type        = string
-  description = "The availability zone used. Must match the one defined in region"
-}
-
 variable "node_env" {
   type        = string
   description = "Node enviroment variable"
@@ -50,4 +40,9 @@ variable "cloudflare_zone_id" {
 variable "random_string" {
   type        = string
   description = "Random string to use in resources"
+}
+
+variable "github_api_token" {
+  type        = string
+  description = "Github api token to access github resources"
 }

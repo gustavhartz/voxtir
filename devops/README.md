@@ -5,7 +5,7 @@ Our terraform infrastructure. This is the main source of all infrastructue used 
 * The AWS organization used to structure everything
 * Actual accounts and users
 
-**Accounts:**
+**Accounts:** (not in use)
 Currently there exists three accounts
 * The root account maintained by Gustav Hartz
   * Owns the state bucket
@@ -53,3 +53,6 @@ to additional user access.
 [link1](https://github.com/no10ds/rapid-infrastructure/blob/1126fbbf3887fe231fc4b5106738842f9927d0a9/modules/app-cluster/main.tf)
 [link2](https://github.com/hashicorp/terraform-aws-consul-ecs/blob/e6c6425120fdb09e842f5a6268ed6b1473a8925c/examples/dev-server-fargate/main.tf#L42)
 [Main link - same architecture ish](https://www.tecracer.com/blog/2020/03/building-a-fargate-based-container-app-with-cognito-authentication.html)
+
+# TODO
+There can be some issues with the ordering on initial deploy, but running the apply twice should solve it :)

@@ -2,9 +2,7 @@
 # Bucket for static website
 resource "aws_s3_bucket" "voxtir_react_app_bucket" {
   bucket = "voxtir-react-app-bucket-${var.random_string}" # Replace with your desired bucket name
-  tags = {
-    environment = var.environment
-  }
+
 }
 
 resource "aws_s3_bucket_public_access_block" "s3_bucket_public_access_block" {
@@ -67,7 +65,7 @@ resource "aws_s3_bucket_policy" "site_policy" {
           aws_s3_bucket.voxtir_react_app_bucket.arn,
           "${aws_s3_bucket.voxtir_react_app_bucket.arn}/*",
         ]
-      },
+      }
     ]
   })
   depends_on = [aws_s3_bucket_public_access_block.s3_bucket_public_access_block]
