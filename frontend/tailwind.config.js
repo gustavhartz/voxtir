@@ -12,8 +12,8 @@ export default {
           black: '#1F1E1E',
         },
         gradient: {
-          start: "#EAABF0",
-          end: "#4623E9"
+          start: '#EAABF0',
+          end: '#4623E9',
         },
         error: {
           light: '#F04855',

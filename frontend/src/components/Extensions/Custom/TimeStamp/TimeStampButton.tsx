@@ -6,7 +6,9 @@ import { skipToPosition } from '../../../../state/track';
 export default (props: NodeConfig) => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(props.node.attrs.show);
-  const [timeStamp, setTimeStamp] = useState<string>(props.node.attrs.timestamp);
+  const [timeStamp, setTimeStamp] = useState<string>(
+    props.node.attrs.timestamp
+  );
   const buttonRef = React.useRef(null);
 
   const timeRegex = new RegExp('^[0-9]{2}:[0-9]{2}:[0-9]{2}$');
@@ -16,7 +18,7 @@ export default (props: NodeConfig) => {
       dispatch(skipToPosition(timeStamp));
     }
 
-    console.log("triggered");
+    console.log('triggered');
   };
 
   const toggleShowInput = () => {
@@ -31,7 +33,7 @@ export default (props: NodeConfig) => {
     const { value } = event.currentTarget;
     setTimeStamp(value);
     props.updateAttributes({
-      timestamp: value
+      timestamp: value,
     });
   };
 

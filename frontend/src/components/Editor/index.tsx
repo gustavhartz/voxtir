@@ -55,7 +55,7 @@ function Editor() {
     },
     editorProps: {
       attributes: {
-        class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`
+        class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`,
       },
     },
     autofocus: true,
