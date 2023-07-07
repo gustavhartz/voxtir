@@ -12,7 +12,7 @@ function _prepareImageParts(htmlSource: string) {
   const imageContentParts: string[] = [];
   const inlinedSrcPattern = /"data:(\w+\/\w+);(\w+),(\S+)"/g;
   const inlinedReplacer = (
-    match: string,
+    _: string,
     contentType: string,
     contentEncoding: string,
     encodedContent: string
