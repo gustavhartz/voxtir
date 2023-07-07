@@ -31,6 +31,12 @@ const Drawer = () => {
   };
   // import html
 
+  // delete document
+  const onDelete = () => {
+    const editor = getEditorInstance();
+    editor?.commands.clearContent();
+  };
+
   return (
     <>
       <aside
@@ -77,7 +83,7 @@ const Drawer = () => {
           </button>
           <button
             onClick={() => {
-              console.log('Clicked on trash');
+              onDelete();
             }}
             data-tooltip-id="document-sidebar"
             data-tooltip-content="Trash"
