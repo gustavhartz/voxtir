@@ -25,8 +25,8 @@ phases:
     commands:
       - |
         if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/main" ]; then
-          aws s3 cp --recursive --acl public-read ./build s3://${aws_s3_bucket}/
-          aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./build/index.html s3://${aws_s3_bucket}/
+          aws s3 cp --recursive --acl public-read ./dist s3://${aws_s3_bucket}/
+          aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./dist/index.html s3://${aws_s3_bucket}/
         else
           echo "Skipping S3 copy since branch is not main."
         fi
