@@ -7,13 +7,18 @@ import {
   TbFileImport,
 } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
-import { Editor } from '@tiptap/react';
 import { asBlob } from '../../utils/html-to-docx';
 import { saveAs } from 'file-saver';
+import { getEditorInstance } from '../Editor';
 
 const Drawer = () => {
   // Update this function to export the document as a docx file based on the redux context
-  const onExport = async (editor: Editor) => {
+  const onExport = async () => {
+    const editor = getEditorInstance();
+    if (!editor) {
+      console.error('Editor instance not found');
+      return;
+    }
     const data = await asBlob(editor.getHTML(), {
       orientation: 'portrait',
     });
@@ -24,6 +29,7 @@ const Drawer = () => {
     });
     saveAs(blob, 'voxtir-export.docx');
   };
+  // import html
 
   return (
     <>
@@ -53,7 +59,7 @@ const Drawer = () => {
           </button>
           <button
             onClick={() => {
-              console.log('Clicked on file export');
+              onExport();
             }}
             data-tooltip-id="document-sidebar"
             data-tooltip-content="File export"

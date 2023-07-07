@@ -1,8 +1,5 @@
 import React from 'react';
 import { useEditor, EditorContent, Editor as ttEditor } from '@tiptap/react';
-import { asBlob } from '../../utils/html-to-docx';
-import { saveAs } from 'file-saver';
-
 import { Color } from '@tiptap/extension-color';
 import History from '@tiptap/extension-history';
 import Document from '@tiptap/extension-document';
@@ -15,16 +12,14 @@ import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TextStyle from '@tiptap/extension-text-style';
 
-const onExport = async (editor: ttEditor) => {
-  const data = await asBlob(editor.getHTML(), {
-    orientation: 'portrait',
-  });
-  // if buffer convert to string
+let editorInstance: ttEditor | null = null;
 
-  const blob = new Blob([data], {
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  });
-  saveAs(blob, 'document.docx');
+export const setEditorInstance = (editor: ttEditor | null) => {
+  editorInstance = editor;
+};
+
+export const getEditorInstance = (): ttEditor | null => {
+  return editorInstance;
 };
 
 function Editor() {
@@ -60,13 +55,11 @@ function Editor() {
     },
     autofocus: true,
   });
+  setEditorInstance(editor);
 
   return (
     <div>
       <EditorContent className="w-full" editor={editor} />
-      {editor ? (
-        <button onClick={() => onExport(editor)}>Log HTML</button>
-      ) : null}
     </div>
   );
 }
