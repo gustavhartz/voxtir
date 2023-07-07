@@ -50,11 +50,10 @@ resource "aws_codebuild_source_credential" "gsh" {
 }
 
 resource "aws_codebuild_project" "staging_build" {
-  name           = "voxtir-codebuild-staging"
-  description    = "This is the primary ci/cd tool for the voxtir app"
-  build_timeout  = "60"
-  service_role   = aws_iam_role.codebuild_role.arn
-  source_version = "main"
+  name          = "voxtir-codebuild-staging"
+  description   = "This is the primary ci/cd tool for the voxtir app"
+  build_timeout = "60"
+  service_role  = aws_iam_role.codebuild_role.arn
 
 
 
@@ -94,4 +93,33 @@ resource "aws_codebuild_project" "staging_build" {
     report_build_status = true
   }
   depends_on = [aws_codebuild_source_credential.gsh]
+}
+
+resource "aws_codebuild_webhook" "codebuild_webhook" {
+  project_name = aws_codebuild_project.staging_build.name
+  build_type   = "BUILD"
+  filter_group {
+    filter {
+      exclude_matched_pattern = false
+      pattern                 = "PULL_REQUEST_CREATED, PUSH"
+      type                    = "EVENT"
+    }
+  }
+
+}
+
+resource "github_repository_webhook" "codebuild_webhook" {
+  active = true
+  events = [
+    "pull_request",
+    "push",
+  ]
+  repository = "voxtir"
+
+  configuration {
+    content_type = "json"
+    insecure_ssl = false
+    url          = aws_codebuild_webhook.codebuild_webhook.payload_url
+    secret       = aws_codebuild_webhook.codebuild_webhook.secret
+  }
 }

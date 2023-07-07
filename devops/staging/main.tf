@@ -8,6 +8,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "4.9.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "5.29.0"
+    }
   }
   backend "s3" {
     bucket = "voxtir-general-terraform-backend"
@@ -28,4 +32,9 @@ provider "aws" {
 # Configure cloudflare
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
+}
+
+provider "github" {
+  token = var.github_api_token # or `GITHUB_TOKEN`
+  owner = "Voxtir"
 }
