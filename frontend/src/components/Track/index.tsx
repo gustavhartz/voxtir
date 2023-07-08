@@ -11,7 +11,7 @@ const Track = () => {
   const audioRef = React.useRef<AudioPlayer>(null);
   const dispatch = useDispatch();
   const { hasSkipped, skipToPosition, settings } = useAppSelector((state) => state.track);
-  const { mute, playPause, skipBackward, skipForward, playbackDown, playbackUp } = useAppSelector((state) => state.keyboard);
+  const { mute, playPause, skipBackward, skipForward, playbackDown, playbackUp, volumeDown, volumeUp } = useAppSelector((state) => state.keyboard);
 
 
   const GoBackIcon = () => {
@@ -25,6 +25,7 @@ const Track = () => {
       <GrForwardTen className="text-gray-100 text-2xl ml-2" />
     )
   }
+  
   React.useEffect(() => {
     if (audioRef?.current?.audio.current && !hasSkipped) {
       const splitHHMMSS = skipToPosition.split(':');
@@ -52,7 +53,6 @@ const Track = () => {
       audioRef.current.audio.current.muted = false;
     }
   })
-  /*
   useKeyPress(volumeDown, () => {
     if (audioRef && audioRef.current && audioRef?.current?.audio?.current?.volume !== (null || undefined) && audioRef?.current?.audio?.current?.volume > 0.1) {
       audioRef.current.audio.current.volume = audioRef.current.audio.current.volume - 0.1;
@@ -65,7 +65,7 @@ const Track = () => {
       audioRef.current.audio.current.volume = audioRef.current.audio.current.volume + 0.1;
     }
     console.log('volumeUp')
-  })*/
+  })
 
   useKeyPress(skipBackward, () => {
     if (audioRef && audioRef.current && audioRef?.current?.audio?.current?.currentTime !== (null || undefined) && audioRef?.current?.audio?.current?.currentTime > 0) {
