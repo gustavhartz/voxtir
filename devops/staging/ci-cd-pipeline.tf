@@ -23,10 +23,11 @@ data "aws_iam_policy_document" "code_build_iam_policy" {
   }
   statement {
     effect  = "Allow"
-    actions = ["s3:*"]
+    actions = ["*"]
     resources = [
       aws_s3_bucket.voxtir_react_app_bucket.arn,
       "${aws_s3_bucket.voxtir_react_app_bucket.arn}:*",
+      "${aws_s3_bucket.voxtir_react_app_bucket.arn}/*"
     ]
   }
 }
