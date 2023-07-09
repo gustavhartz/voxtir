@@ -29,7 +29,10 @@ docker push $REPOSITORY_URI
 Run the model locally:
 `docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm <IMAGE_ID> serve`
 
+Get the remote image
+`aws ecr get-login-password --region <AWS_REGION> | docker login --username AWS --password-stdin <AWS_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com`
+
 
 ## Known issues and bugs
 * Don't push an image built on ARM (M1 mac) to the container registry as it will not run
-
+* Don't push stuff built on windows either due to the difference in data formats or edit it. [Reason](https://askubuntu.com/questions/896860/usr-bin-env-python3-r-no-such-file-or-directory)
