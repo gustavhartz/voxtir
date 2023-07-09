@@ -10,8 +10,25 @@ Compared to the typical approach in both of those links, our case does not use S
 Base image originates from [Podwhisperer](https://github.com/fourTheorem/podwhisperer)
 
 ## Development
+
+**Set the repository URI**
+export REPOSITORY_URI=<YOUR_REPO_URI>
+
+**Build the container image**
+´docker build -t $REPOSITORY_URI .´
+
+**Log in to ECR with Docker (make sure to set AWS_REGION and AWS_ACCCOUNT_ID)**
+´aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com´
+
+**Push the container image to ECR**
+docker push $REPOSITORY_URI
+
+
+**Other**
+
 Run the model locally:
 `docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm <IMAGE_ID> serve`
+
 
 ## Known issues and bugs
 * Don't push an image built on ARM (M1 mac) to the container registry as it will not run
