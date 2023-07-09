@@ -8,14 +8,18 @@ phases:
   pre_build:
     on-failure: ABORT
     commands:
-      - echo Branch name - $CODEBUILD_SOURCE_VERSION
-      - echo Branch name - $CODEBUILD_WEBHOOK_BASE_REF
-      - echo Branch name - $CODEBUILD_WEBHOOK_HEAD_REF
-      - echo Branch name - $CODEBUILD_WEBHOOK_TRIGGER
-      - echo Branch name - $CODEBUILD_RESOLVED_SOURCE_VERSION
-      - echo Branch name - $CODEBUILD_WEBHOOK_PREV_COMMIT
+      - echo CODEBUILD_SOURCE_VERSION - $CODEBUILD_SOURCE_VERSION
+      - echo CODEBUILD_WEBHOOK_BASE_REF - $CODEBUILD_WEBHOOK_BASE_REF
+      - echo CODEBUILD_WEBHOOK_HEAD_REF - $CODEBUILD_WEBHOOK_HEAD_REF
+      - echo CODEBUILD_WEBHOOK_TRIGGER - $CODEBUILD_WEBHOOK_TRIGGER
+      - echo CODEBUILD_RESOLVED_SOURCE_VERSION - $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo CODEBUILD_WEBHOOK_PREV_COMMIT - $CODEBUILD_WEBHOOK_PREV_COMMIT
+      - echo Changed Files "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT)"
 
-      - echo Installing source NPM dependencies...
+      - WHISPER_BUILD=$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT | grep -q whisper-server && echo "true" || echo "false")
+      - echo building whisper - $WHISPER_BUILD
+
+      - echo Installing source NPM dependencies frontend...
       - cd frontend
       - npm install
 
@@ -30,23 +34,40 @@ phases:
       - npm run build
       # Build docker image if altered
       - echo Done building frontend
-
-      - echo Building docker image
-      - cd .. && cd whisper-server
-      - docker build --cache-from ${ecr_repository_uri}:${build_master_tag} -t ${ecr_repository_uri}:${whisper_image_tag} .
-      - cd .. && cd frontend
-      - echo done building docker image
+      - |
+        if [ "$WHISPER_BUILD" = "true" ]; then
+          echo Building docker image
+          cd .. && cd whisper-server
+          docker build --cache-from ${ecr_repository_uri}:${build_master_tag} -t ${ecr_repository_uri}:${whisper_image_tag} .
+          cd .. && cd frontend
+          echo done building docker image
+        else
+          echo Skipping docker image build since whisper-server was not altered.
+        fi
   post_build:
     on-failure: ABORT
     commands:
       - echo Pushing to Amazon ECR...
       - |
+        if [ "$WHISPER_BUILD" = "true" ]; then
+          echo "Pushing to Amazon ECR... with latest tag"
+          docker push ${ecr_repository_uri}:${whisper_image_tag}
+        else
+          echo Skipping docker image push since whisper-server was not altered.
+        fi
+      - |
         if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/main" ]; then
           echo "Main branch detected. Copying to S3."
           aws s3 cp --recursive --acl public-read ./dist s3://${aws_s3_bucket}/
           aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./dist/index.html s3://${aws_s3_bucket}/
-          echo "Pushing to Amazon ECR... with master tag"
-          docker push ${ecr_repository_uri}:${build_master_tag}
+          if [ "$WHISPER_BUILD" = "true" ]; then
+            echo Building docker images master
+            echo "Pushing to Amazon ECR... with master tag"
+              docker tag ${ecr_repository_uri}:${whisper_image_tag} ${ecr_repository_uri}:${build_master_tag}
+              docker push ${ecr_repository_uri}:${build_master_tag}
+          else
+            echo Skipping docker image push since whisper-server was not altered.
+          fi
         else
           echo "Skipping S3 copy since branch is not main."
         fi

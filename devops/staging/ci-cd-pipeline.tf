@@ -124,7 +124,7 @@ resource "aws_codebuild_project" "staging_build" {
     })
     type            = "GITHUB"
     location        = "https://github.com/Voxtir/voxtir.git"
-    git_clone_depth = 1
+    git_clone_depth = 5
 
     git_submodules_config {
       fetch_submodules = false
