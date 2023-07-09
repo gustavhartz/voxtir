@@ -34,9 +34,18 @@ data "aws_iam_policy_document" "code_build_iam_policy" {
     effect  = "Allow"
     actions = ["*"]
     resources = [
-      aws_ecr_repository.voxtir_staging.arn,
-      "${aws_ecr_repository.voxtir_staging.arn}:*",
-      "${aws_ecr_repository.voxtir_staging.arn}/*"
+      aws_ecr_repository.voxtir_whisper.arn,
+      "${aws_ecr_repository.voxtir_whisper.arn}:*",
+      "${aws_ecr_repository.voxtir_whisper.arn}/*"
+    ]
+  }
+  statement {
+    effect  = "Allow"
+    actions = ["*"]
+    resources = [
+      aws_s3_bucket.build_cache_bucket.arn,
+      "${aws_s3_bucket.build_cache_bucket.arn}:*",
+      "${aws_s3_bucket.build_cache_bucket.arn}/*"
     ]
   }
 }
@@ -59,6 +68,10 @@ resource "aws_codebuild_source_credential" "gsh" {
   token       = var.github_api_token
 }
 
+resource "aws_s3_bucket" "build_cache_bucket" {
+  bucket = "voxtir-build-cache-bucket"
+}
+
 resource "aws_codebuild_project" "staging_build" {
   name          = "voxtir-codebuild-staging"
   description   = "This is the primary ci/cd tool for the voxtir app"
@@ -72,7 +85,8 @@ resource "aws_codebuild_project" "staging_build" {
   }
 
   cache {
-    type = "NO_CACHE"
+    type     = "S3"
+    location = aws_s3_bucket.build_cache_bucket.bucket
   }
 
   environment {
@@ -92,9 +106,8 @@ resource "aws_codebuild_project" "staging_build" {
   source {
     buildspec = templatefile("./buildspec.yaml", {
       aws_s3_bucket      = aws_s3_bucket.voxtir_react_app_bucket.bucket
-      ecr_repository_uri = aws_ecr_repository.voxtir_staging.repository_url
+      ecr_repository_uri = aws_ecr_repository.voxtir_whisper.repository_url
       whisper_image_tag  = "latest"
-      whisper_image_name = "voxtir-whisper"
     })
     type            = "GITHUB"
     location        = "https://github.com/Voxtir/voxtir.git"

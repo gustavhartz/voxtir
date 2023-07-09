@@ -39,11 +39,3 @@ provider "github" {
   owner = "Voxtir"
 }
 
-# ECR
-resource "aws_ecr_repository" "voxtir_staging" {
-  name                 = "voxtir-staging"
-  image_tag_mutability = "MUTABLE"
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-}

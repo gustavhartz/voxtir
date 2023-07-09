@@ -28,8 +28,8 @@ phases:
 
       - echo Building docker image
       - cd .. && cd whisper-server
-      - docker build -t ${ecr_repository_uri}/${whisper_image_name}:${whisper_image_tag} .
-      - docker push ${ecr_repository_uri}/${whisper_image_name}:${whisper_image_tag}
+      - docker build -t ${ecr_repository_uri}:${whisper_image_tag} .
+      - docker push ${ecr_repository_uri}:${whisper_image_tag}
       - cd .. && cd frontend
       - echo done building docker image
 
