@@ -20,15 +20,10 @@ const Track = () => {
     skipForward,
     playbackDown,
     playbackUp,
+    volumeDown,
+    volumeUp,
   } = useAppSelector((state) => state.keyboard);
 
-  const GoBackIcon = () => {
-    return <GrBackTen className="text-gray-100 text-2xl" />;
-  };
-
-  const GoForwardIcon = () => {
-    return <GrForwardTen className="text-gray-100 text-2xl ml-2" />;
-  };
   React.useEffect(() => {
     if (audioRef?.current?.audio.current && !hasSkipped) {
       const splitHHMMSS = skipToPosition.split(':');
@@ -56,41 +51,47 @@ const Track = () => {
 
   useKeyPress(mute, () => {
     if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.muted !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.muted !== null &&
+      audioRef?.current?.audio?.current?.muted !== undefined &&
       audioRef?.current?.audio?.current?.muted === false
     ) {
       audioRef.current.audio.current.muted = true;
     } else if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.muted !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.muted !== null &&
+      audioRef?.current?.audio?.current?.muted !== undefined &&
       audioRef?.current?.audio?.current?.muted === true
     ) {
       audioRef.current.audio.current.muted = false;
     }
   });
-  /*
   useKeyPress(volumeDown, () => {
-    if (audioRef && audioRef.current && audioRef?.current?.audio?.current?.volume !== (null || undefined) && audioRef?.current?.audio?.current?.volume > 0.1) {
-      audioRef.current.audio.current.volume = audioRef.current.audio.current.volume - 0.1;
+    if (
+      audioRef?.current?.audio?.current?.volume !== null &&
+      audioRef?.current?.audio?.current?.volume !== undefined &&
+      audioRef?.current?.audio?.current?.volume > 0.1
+    ) {
+      audioRef.current.audio.current.volume =
+        audioRef.current.audio.current.volume - 0.1;
     }
-    console.log('volumeDown')
-  })
+    console.log('volumeDown');
+  });
 
   useKeyPress(volumeUp, () => {
-    if (audioRef && audioRef.current && audioRef?.current?.audio?.current?.volume !== (null || undefined) && audioRef?.current?.audio?.current?.volume < 1) {
-      audioRef.current.audio.current.volume = audioRef.current.audio.current.volume + 0.1;
+    if (
+      audioRef?.current?.audio?.current?.volume !== undefined &&
+      audioRef?.current?.audio?.current?.volume !== null &&
+      audioRef?.current?.audio?.current?.volume < 1
+    ) {
+      audioRef.current.audio.current.volume =
+        audioRef.current.audio.current.volume + 0.1;
     }
-    console.log('volumeUp')
-  })*/
+    console.log('volumeUp');
+  });
 
   useKeyPress(skipBackward, () => {
     if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.currentTime !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.currentTime !== null &&
+      audioRef?.current?.audio?.current?.currentTime !== undefined &&
       audioRef?.current?.audio?.current?.currentTime > 0
     ) {
       audioRef.current.audio.current.currentTime =
@@ -101,9 +102,8 @@ const Track = () => {
 
   useKeyPress(skipForward, () => {
     if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.currentTime !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.currentTime !== null &&
+      audioRef?.current?.audio?.current?.currentTime !== undefined &&
       audioRef?.current?.audio?.current?.currentTime <
         audioRef?.current?.audio?.current?.duration
     ) {
@@ -115,9 +115,8 @@ const Track = () => {
 
   useKeyPress(playbackDown, () => {
     if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.playbackRate !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.playbackRate !== null &&
+      audioRef?.current?.audio?.current?.playbackRate !== undefined &&
       audioRef?.current?.audio?.current?.playbackRate > 0.1
     ) {
       audioRef.current.audio.current.playbackRate =
@@ -128,9 +127,8 @@ const Track = () => {
 
   useKeyPress(playbackUp, () => {
     if (
-      audioRef &&
-      audioRef.current &&
-      audioRef?.current?.audio?.current?.playbackRate !== (null || undefined) &&
+      audioRef?.current?.audio?.current?.playbackRate !== null &&
+      audioRef?.current?.audio?.current?.playbackRate !== undefined &&
       audioRef?.current?.audio?.current?.playbackRate < 3
     ) {
       audioRef.current.audio.current.playbackRate =
@@ -143,8 +141,8 @@ const Track = () => {
     <AudioPlayer
       ref={audioRef}
       customIcons={{
-        rewind: <GoBackIcon />,
-        forward: <GoForwardIcon />,
+        rewind: <GrBackTen className="text-gray-100 text-2xl" />,
+        forward: <GrForwardTen className="text-gray-100 text-2xl ml-2" />,
       }}
       src="https://upload.wikimedia.org/wikipedia/commons/c/ca/TWIP_-_2010-05-30_Interview_with_Gaza_Freedom_Flotilla_organizer_Greta_Berlin_.vorb.oga"
       autoPlay

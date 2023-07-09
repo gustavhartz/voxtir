@@ -57,11 +57,7 @@ function Editor() {
   });
   setEditorInstance(editor);
 
-  return (
-    <div>
-      <EditorContent className="w-full" editor={editor} />
-    </div>
-  );
+  return <EditorContent className="w-full" editor={editor} />;
 }
 
 export default Editor;

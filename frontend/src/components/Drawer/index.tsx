@@ -10,6 +10,8 @@ import { Tooltip } from 'react-tooltip';
 import { asBlob } from '../../utils/html-to-docx';
 import { saveAs } from 'file-saver';
 import { getEditorInstance } from '../Editor';
+import { useAppDispatch } from '../../hooks';
+import { toggleModal } from '../../state/keyboard';
 
 const Drawer = () => {
   // Update this function to export the document as a docx file based on the redux context
@@ -23,13 +25,17 @@ const Drawer = () => {
       orientation: 'portrait',
     });
     // if buffer convert to string
-
     const blob = new Blob([data], {
       type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     });
     saveAs(blob, 'voxtir-export.docx');
   };
-  // import html
+
+  const dispatch = useAppDispatch();
+  const handleOpenModal = () => {
+    dispatch(toggleModal());
+    console.log('dispatched');
+  };
 
   // delete document
   const onDelete = () => {
@@ -46,9 +52,7 @@ const Drawer = () => {
       >
         <div className="space-y-6 flex flex-col items-center py-8 w-full h-full overflow-y-auto bg-white shadow-lg">
           <button
-            onClick={() => {
-              console.log('Clicked on keyboard shortcuts');
-            }}
+            onClick={handleOpenModal}
             data-tooltip-id="document-sidebar"
             data-tooltip-content="Keyboard shortcuts"
           >
