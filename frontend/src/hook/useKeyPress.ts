@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 
-const useKeyPress = (
-  targetKey: string,
-  callback: () => void
-): void => {
+const useKeyPress = (targetKey: string, callback: () => void): void => {
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent): void => {
       if (
@@ -13,7 +10,6 @@ const useKeyPress = (
         event.preventDefault(); // Prevent default browser behavior (e.g., opening a new tab)
         callback();
       }
-      
     };
 
     window.addEventListener('keydown', handleKeyPress);

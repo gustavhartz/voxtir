@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor as ttEditor } from '@tiptap/react';
 import { Color } from '@tiptap/extension-color';
 import History from '@tiptap/extension-history';
 import Document from '@tiptap/extension-document';
@@ -10,6 +10,17 @@ import Heading from '@tiptap/extension-heading';
 import Mention from '@tiptap/extension-mention';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
+import TextStyle from '@tiptap/extension-text-style';
+
+let editorInstance: ttEditor | null = null;
+
+export const setEditorInstance = (editor: ttEditor | null) => {
+  editorInstance = editor;
+};
+
+export const getEditorInstance = (): ttEditor | null => {
+  return editorInstance;
+};
 
 function Editor() {
   const editor = useEditor({
@@ -21,6 +32,7 @@ function Editor() {
       HorizontalRule,
       Heading,
       Color,
+      TextStyle,
       Mention.configure({
         HTMLAttributes: {
           class:
@@ -32,21 +44,18 @@ function Editor() {
     ],
     content:
       localStorage.getItem('document') ??
-      '<p>123</p>',
+      '<h1>Te</h1><p><timestamp-button count="1"></timestamp-button></p><p></p><p>Writing some <span style="color: #958DF1">Oh, for some reason that’s purple.</span> test informa <span data-type="mention" class="border-black rounded-md break-clone py-0.5 px-1.5 p-2 bg-blue-500 text-white" data-id="Lea Thompson">@Lea Thompson</span> <span data-type="mention" class="border-black rounded-md break-clone py-0.5 px-1.5 p-2 bg-blue-500 text-white" data-id="Jerry Hall">@Jerry Hall</span> <span data-type="mention" class="border-black rounded-md break-clone py-0.5 px-1.5 p-2 bg-blue-500 text-white" data-id="Tom Cruise">@Tom Cruise</span> <span data-type="mention" class="border-black rounded-md break-clone py-0.5 px-1.5 p-2 bg-blue-500 text-white" data-id="Jerry Hall">@Jerry Hall</span> <span data-type="mention" class="border-black rounded-md break-clone py-0.5 px-1.5 p-2 bg-blue-500 text-white" data-id="Jerry Hall">@Jerry Hall</span> fe</p><p></p>',
     onTransaction: (editor) => {
       localStorage.setItem('document', editor.editor.getHTML());
     },
     editorProps: {
       attributes: {
-        class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`
+        class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`,
       },
     },
     autofocus: true,
   });
-
-  React.useEffect(() => {
-    console.log(editor?.getHTML());
-  }, [editor])
+  setEditorInstance(editor);
 
   return <EditorContent className="w-full" editor={editor} />;
 }
