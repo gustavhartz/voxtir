@@ -11,7 +11,7 @@ import Mention from '@tiptap/extension-mention';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TextStyle from '@tiptap/extension-text-style';
-
+import { useAppSelector } from '../../hooks';
 let editorInstance: ttEditor | null = null;
 
 export const setEditorInstance = (editor: ttEditor | null) => {
@@ -23,6 +23,7 @@ export const getEditorInstance = (): ttEditor | null => {
 };
 
 function Editor() {
+  const { newContent } = useAppSelector((state) => state.track);
   const editor = useEditor({
     extensions: [
       Document,
@@ -57,6 +58,11 @@ function Editor() {
   });
   setEditorInstance(editor);
 
+  React.useEffect(() => {
+    if (newContent) {
+      editor?.commands.setContent(newContent);
+    }
+  }, [newContent])
   return <EditorContent className="w-full" editor={editor} />;
 }
 
