@@ -13,13 +13,31 @@ phases:
       - echo Branch name - $CODEBUILD_WEBHOOK_BASE_REF
       - echo Branch name - $CODEBUILD_WEBHOOK_HEAD_REF
       - echo Branch name - $CODEBUILD_WEBHOOK_TRIGGER
+      - echo Altered files - "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT)"
       - cd frontend
       - npm install
   build:
     on-failure: ABORT
     commands:
       - echo Build started on 'date'
+
+      - echo Building frontend
       - npm run build
+      # Build docker image if altered
+      - echo Done building frontend
+
+      - echo Building docker image
+      - cd .. && cd whisper-server
+      - docker build -t ${ecr_repository_uri}/${whisper_image_name}:${whisper_image_tag} .
+      - docker push ${ecr_repository_uri}/${whisper_image_name}:${whisper_image_tag}
+      - cd .. && cd frontend
+      - echo done building docker image
+
+      - |
+        if [ "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT | grep -e "whisper-server")" != "" ]; then
+          #your code;
+          echo "Building docker image"
+        fi
   post_build:
     on-failure: ABORT
     commands:

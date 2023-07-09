@@ -30,6 +30,15 @@ data "aws_iam_policy_document" "code_build_iam_policy" {
       "${aws_s3_bucket.voxtir_react_app_bucket.arn}/*"
     ]
   }
+  statement {
+    effect  = "Allow"
+    actions = ["*"]
+    resources = [
+      aws_ecr_repository.voxtir_staging.arn,
+      "${aws_ecr_repository.voxtir_staging.arn}:*",
+      "${aws_ecr_repository.voxtir_staging.arn}/*"
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
@@ -71,6 +80,7 @@ resource "aws_codebuild_project" "staging_build" {
     image                       = "aws/codebuild/standard:7.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
   }
 
   logs_config {
@@ -81,7 +91,10 @@ resource "aws_codebuild_project" "staging_build" {
 
   source {
     buildspec = templatefile("./buildspec.yaml", {
-      aws_s3_bucket = aws_s3_bucket.voxtir_react_app_bucket.bucket
+      aws_s3_bucket      = aws_s3_bucket.voxtir_react_app_bucket.bucket
+      ecr_repository_uri = aws_ecr_repository.voxtir_staging.repository_url
+      whisper_image_tag  = "latest"
+      whisper_image_name = "voxtir-whisper"
     })
     type            = "GITHUB"
     location        = "https://github.com/Voxtir/voxtir.git"
