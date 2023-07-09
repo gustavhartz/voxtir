@@ -8,12 +8,14 @@ phases:
   pre_build:
     on-failure: ABORT
     commands:
-      - echo Installing source NPM dependencies...
       - echo Branch name - $CODEBUILD_SOURCE_VERSION
       - echo Branch name - $CODEBUILD_WEBHOOK_BASE_REF
       - echo Branch name - $CODEBUILD_WEBHOOK_HEAD_REF
       - echo Branch name - $CODEBUILD_WEBHOOK_TRIGGER
-      - echo Altered files - "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT)"
+      - echo Branch name - $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - echo Branch name - $CODEBUILD_WEBHOOK_PREV_COMMIT
+
+      - echo Installing source NPM dependencies...
       - cd frontend
       - npm install
 
@@ -31,24 +33,20 @@ phases:
 
       - echo Building docker image
       - cd .. && cd whisper-server
-      - docker build -t ${ecr_repository_uri}:${whisper_image_tag} .
-      - docker push ${ecr_repository_uri}:${whisper_image_tag}
+      - docker build --cache-from ${ecr_repository_uri}:${build_master_tag} -t ${ecr_repository_uri}:${whisper_image_tag} .
       - cd .. && cd frontend
       - echo done building docker image
-
-      - |
-        if [ "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT | grep -e "whisper-server")" != "" ]; then
-          #your code;
-          echo "Building docker image"
-        fi
   post_build:
     on-failure: ABORT
     commands:
+      - echo Pushing to Amazon ECR...
       - |
         if [ "$CODEBUILD_WEBHOOK_TRIGGER" = "branch/main" ]; then
+          echo "Main branch detected. Copying to S3."
           aws s3 cp --recursive --acl public-read ./dist s3://${aws_s3_bucket}/
           aws s3 cp --acl public-read --cache-control="max-age=0, no-cache, no-store, must-revalidate" ./dist/index.html s3://${aws_s3_bucket}/
+          echo "Pushing to Amazon ECR... with master tag"
+          docker push ${ecr_repository_uri}:${build_master_tag}
         else
           echo "Skipping S3 copy since branch is not main."
         fi
-      - echo Build completed on 'date'

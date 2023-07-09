@@ -118,6 +118,7 @@ resource "aws_codebuild_project" "staging_build" {
       aws_s3_bucket       = aws_s3_bucket.voxtir_react_app_bucket.bucket
       ecr_repository_uri  = aws_ecr_repository.voxtir_whisper.repository_url
       whisper_image_tag   = "latest"
+      build_master_tag    = "build-master"
       ecr_repository_base = split("/", aws_ecr_repository.voxtir_whisper.repository_url)[0]
       aws_region          = var.region
     })
