@@ -16,6 +16,9 @@ phases:
       - echo Altered files - "$(git diff --name-only $CODEBUILD_RESOLVED_SOURCE_VERSION $CODEBUILD_WEBHOOK_PREV_COMMIT)"
       - cd frontend
       - npm install
+
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ${aws_region} | docker login --username AWS --password-stdin ${ecr_repository_base}
   build:
     on-failure: ABORT
     commands:

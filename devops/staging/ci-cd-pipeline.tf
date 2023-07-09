@@ -48,6 +48,16 @@ data "aws_iam_policy_document" "code_build_iam_policy" {
       "${aws_s3_bucket.build_cache_bucket.arn}/*"
     ]
   }
+  statement {
+    effect = "Allow"
+    actions = ["ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetAuthorizationToken",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+    "ecr:UploadLayerPart"]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
@@ -105,9 +115,11 @@ resource "aws_codebuild_project" "staging_build" {
 
   source {
     buildspec = templatefile("./buildspec.yaml", {
-      aws_s3_bucket      = aws_s3_bucket.voxtir_react_app_bucket.bucket
-      ecr_repository_uri = aws_ecr_repository.voxtir_whisper.repository_url
-      whisper_image_tag  = "latest"
+      aws_s3_bucket       = aws_s3_bucket.voxtir_react_app_bucket.bucket
+      ecr_repository_uri  = aws_ecr_repository.voxtir_whisper.repository_url
+      whisper_image_tag   = "latest"
+      ecr_repository_base = split("/", aws_ecr_repository.voxtir_whisper.repository_url)[0]
+      aws_region          = var.region
     })
     type            = "GITHUB"
     location        = "https://github.com/Voxtir/voxtir.git"
