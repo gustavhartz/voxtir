@@ -8,28 +8,16 @@ import { GrBackTen, GrForwardTen } from 'react-icons/gr';
 import useKeyPress from '../../hook/useKeyPress';
 import { toggleModal } from '../../state/track';
 
-const fileToBlob = (file: File): Promise<Blob> => {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const blob = new Blob([reader.result as ArrayBuffer]);
-      resolve(blob);
-    };
-    reader.readAsArrayBuffer(file);
-  });
-};
-
 const Track = () => {
   const audioRef = React.useRef<AudioPlayer>(null);
   const dispatch = useDispatch();
-  const [audioBlob, setAudioBlob] = React.useState<Blob>();
-  const { hasSkipped, skipToPosition, settings, src } = useAppSelector(
+  const { hasSkipped, skipToPosition, settings, fileUrl } = useAppSelector(
     (state) => state.track
   );
 
   const handleUploadAudio = () => {
     dispatch(toggleModal());
-  }
+  };
   const {
     mute,
     playPause,
@@ -154,19 +142,15 @@ const Track = () => {
     console.log('playbackUp');
   });
 
-  React.useEffect(() => {
-    if (src) {
-      const audio = fileToBlob(src);
-      audio.then((res) => {
-        setAudioBlob(res);
-      })
-    }
-  }, [src])
-
-  if (!audioBlob) {
+  if (!fileUrl) {
     return (
-      <button onClick={handleUploadAudio} className="p-3 font-medium text-white shadow-md transition-colors hover:bg-blue-500 bg-blue-400 w-full text-center">Upload audio to start</button>
-    )
+      <button
+        onClick={handleUploadAudio}
+        className="p-3 font-medium text-white shadow-md transition-colors hover:bg-blue-500 bg-blue-400 w-full text-center"
+      >
+        Upload audio to start
+      </button>
+    );
   }
 
   return (
@@ -176,8 +160,10 @@ const Track = () => {
         rewind: <GrBackTen className="text-gray-100 text-2xl" />,
         forward: <GrForwardTen className="text-gray-100 text-2xl ml-2" />,
       }}
-      src={URL.createObjectURL(audioBlob)}
-      onLoadedData={(e) => { audioRef.current?.audio.current?.pause()}}
+      src={fileUrl}
+      onLoadedData={(_) => {
+        audioRef.current?.audio.current?.pause();
+      }}
       progressJumpSteps={{
         backward: settings.goBackTime * 1000,
         forward: settings.goForwardTime * 1000,

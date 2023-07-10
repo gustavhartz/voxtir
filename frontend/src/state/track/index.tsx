@@ -3,9 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface TrackState {
   isModalOpen: boolean;
-  newContent: string | undefined;
-  src: File | undefined;
-  totalLength: number;
   skipToPosition: string;
   hasSkipped: boolean;
   isPlaying: boolean;
@@ -17,18 +14,21 @@ interface TrackState {
     goBackTime: number;
     goForwardTime: number;
   };
+  fileUrl: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
 }
 
 interface SetTrackPayload {
   src: string;
-  totalLength: number;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
 }
 
 const initialState: TrackState = {
-  newContent: undefined,
   isModalOpen: false,
-  src: undefined,
-  totalLength: 0,
   skipToPosition: '00:00:00',
   hasSkipped: true,
   isPlaying: false,
@@ -40,6 +40,10 @@ const initialState: TrackState = {
     goForwardTime: 50,
     pauseOnSkip: true,
   },
+  fileUrl: '',
+  fileName: '',
+  fileSize: 0,
+  fileType: '',
 };
 
 export const track = createSlice({
@@ -47,7 +51,10 @@ export const track = createSlice({
   initialState,
   reducers: {
     setTrack: (state, action: PayloadAction<SetTrackPayload>) => {
-      state.totalLength = action.payload.totalLength;
+      state.fileUrl = action.payload.src;
+      state.fileName = action.payload.fileName;
+      state.fileSize = action.payload.fileSize;
+      state.fileType = action.payload.fileType;
     },
     skipToPosition: (state, action: PayloadAction<string>) => {
       state.hasSkipped = false;
@@ -56,21 +63,13 @@ export const track = createSlice({
     setToSkipped: (state) => {
       state.hasSkipped = true;
     },
-    setSrc: (state, action: PayloadAction<File>) => {
-      state.src = action.payload;
-    },
-    addNewContent: (state, action: PayloadAction<string>) => {
-      state.newContent = action.payload;
-    },
-    removeNewContent: (state) => {
-      state.newContent = undefined;
-    },
     toggleModal: (state) => {
       state.isModalOpen = !state.isModalOpen;
-    }
+    },
   },
 });
 
-export const { addNewContent, removeNewContent, setTrack, skipToPosition, setToSkipped, toggleModal, setSrc } = track.actions;
+export const { setTrack, skipToPosition, setToSkipped, toggleModal } =
+  track.actions;
 
 export default track.reducer;
