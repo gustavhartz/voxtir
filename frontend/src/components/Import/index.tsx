@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import useFileUpload from '../../hook/useFileUpload';
 import { useDispatch } from 'react-redux';
-import { addNewContent, setTrack } from '../../state/track';
-import { useAppSelector } from '../../hooks';
+import { setTrack } from '../../state/track';
+import { getEditorInstance } from '../Editor';
 
 const Import: React.FC = () => {
-  const { newContent } = useAppSelector((state) => state.track);
   const [HTMLInput, setHTMLInput] = React.useState('');
   const supportedAudioFileTypes = [
     'audio/mpeg', // MP3 audio
@@ -51,10 +50,14 @@ const Import: React.FC = () => {
   };
 
   const handleUploadContent = () => {
-    if (HTMLInput !== newContent) {
-      addNewContent(HTMLInput);
+    let editor = getEditorInstance();
+    if (!editor) {
+      console.error('Editor instance not found');
+      return;
     }
+    editor.commands.setContent(HTMLInput);
   };
+
   return (
     <>
       <h1 className="text-lg font-semibold mb-2">Upload Audio</h1>
@@ -110,7 +113,7 @@ const Import: React.FC = () => {
       />
       <button
         className="disabled:bg-gray-300 disabled:text-gray-400 bg-blue-500 hover:bg-blue-600 text-white h-10 px-2 rounded-md font-bold mr-2"
-        disabled={HTMLInput === newContent || HTMLInput.length === 0}
+        disabled={HTMLInput.length === 0}
         onClick={handleUploadContent}
       >
         Upload HTML

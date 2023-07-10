@@ -3,7 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 interface TrackState {
   isModalOpen: boolean;
-  newContent: string | undefined;
   skipToPosition: string;
   hasSkipped: boolean;
   isPlaying: boolean;
@@ -29,7 +28,6 @@ interface SetTrackPayload {
 }
 
 const initialState: TrackState = {
-  newContent: undefined,
   isModalOpen: false,
   skipToPosition: '00:00:00',
   hasSkipped: true,
@@ -65,25 +63,13 @@ export const track = createSlice({
     setToSkipped: (state) => {
       state.hasSkipped = true;
     },
-    addNewContent: (state, action: PayloadAction<string>) => {
-      state.newContent = action.payload;
-    },
-    removeNewContent: (state) => {
-      state.newContent = undefined;
-    },
     toggleModal: (state) => {
       state.isModalOpen = !state.isModalOpen;
     },
   },
 });
 
-export const {
-  addNewContent,
-  removeNewContent,
-  setTrack,
-  skipToPosition,
-  setToSkipped,
-  toggleModal,
-} = track.actions;
+export const { setTrack, skipToPosition, setToSkipped, toggleModal } =
+  track.actions;
 
 export default track.reducer;
