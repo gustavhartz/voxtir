@@ -42,7 +42,6 @@ const Import: React.FC = () => {
       dispatch(
         setTrack({
           src: fileUrl,
-          totalLength: 0,
           fileName: fileName,
           fileSize: fileSize,
           fileType: fileType,
