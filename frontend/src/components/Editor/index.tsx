@@ -62,7 +62,7 @@ function Editor() {
     if (newContent) {
       editor?.commands.setContent(newContent);
     }
-  }, [newContent])
+  }, [newContent]);
   return <EditorContent className="w-full" editor={editor} />;
 }
 

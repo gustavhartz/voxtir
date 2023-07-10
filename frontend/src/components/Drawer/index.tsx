@@ -39,7 +39,7 @@ const Drawer = () => {
 
   const handleOpenImportModal = () => {
     dispatch(ToggleImportModal());
-  }
+  };
 
   // delete document
   const onDelete = () => {
