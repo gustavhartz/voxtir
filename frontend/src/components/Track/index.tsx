@@ -161,7 +161,7 @@ const Track = () => {
         forward: <GrForwardTen className="text-gray-100 text-2xl ml-2" />,
       }}
       src={fileUrl}
-      onLoadedData={(e) => {
+      onLoadedData={(_) => {
         audioRef.current?.audio.current?.pause();
       }}
       progressJumpSteps={{
