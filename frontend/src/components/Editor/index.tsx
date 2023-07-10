@@ -12,7 +12,7 @@ import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TextStyle from '@tiptap/extension-text-style';
 import Placeholder from '@tiptap/extension-placeholder';
-
+import { PlaceholderText } from './placeholder-text';
 let editorInstance: ttEditor | null = null;
 
 export const setEditorInstance = (editor: ttEditor | null) => {
@@ -35,8 +35,9 @@ function Editor() {
       Color,
       TextStyle,
       Placeholder.configure({
-        placeholder: 'Start typing...',
-        emptyEditorClass: 'empty-editor',
+        placeholder: 'Start typing here...',
+        emptyNodeClass:
+          'first:before:h-0 first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
       }),
       Mention.configure({
         HTMLAttributes: {
@@ -47,7 +48,7 @@ function Editor() {
       }),
       TrackTimeStamp,
     ],
-    content: localStorage.getItem('document') ?? '',
+    content: localStorage.getItem('document') ?? PlaceholderText,
     onTransaction: (editor) => {
       localStorage.setItem('document', editor.editor.getHTML());
     },
