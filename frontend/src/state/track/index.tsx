@@ -18,6 +18,7 @@ interface TrackState {
   fileName: string;
   fileSize: number;
   fileType: string;
+  currentPosition: string;
 }
 
 interface SetTrackPayload {
@@ -37,13 +38,14 @@ const initialState: TrackState = {
   playbackSpeed: 1,
   settings: {
     goBackTime: 10,
-    goForwardTime: 50,
+    goForwardTime: 30,
     pauseOnSkip: true,
   },
   fileUrl: '',
   fileName: '',
   fileSize: 0,
   fileType: '',
+  currentPosition: '00:00:00',
 };
 
 export const track = createSlice({
@@ -66,10 +68,18 @@ export const track = createSlice({
     toggleModal: (state) => {
       state.isModalOpen = !state.isModalOpen;
     },
+    setCurrentPosition: (state, action: PayloadAction<string>) => {
+      state.currentPosition = action.payload;
+    },
   },
 });
 
-export const { setTrack, skipToPosition, setToSkipped, toggleModal } =
-  track.actions;
+export const {
+  setTrack,
+  skipToPosition,
+  setToSkipped,
+  toggleModal,
+  setCurrentPosition,
+} = track.actions;
 
 export default track.reducer;

@@ -29,7 +29,7 @@ const initialState: KeyboardState =
   localStorage.getItem('keyboard') !== null
     ? getKeyboardStorage()
     : {
-        isModalOpen: true,
+        isModalOpen: false,
         playPause: 'Escape',
         skipForward: 'ArrowRight',
         skipBackward: 'ArrowLeft',
