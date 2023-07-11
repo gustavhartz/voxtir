@@ -11,7 +11,7 @@ export default (props: NodeConfig) => {
   );
   const buttonRef = React.useRef(null);
 
-  const timeRegex = new RegExp('^[0-9]{2}:[0-9]{2}:[0-9]{2}$');
+  const timeRegex = new RegExp('^[0-9]{2}:[0-9]{2}:[0-5]{1}[0-9]{1}$');
 
   const triggerButton = () => {
     if (!show) {
