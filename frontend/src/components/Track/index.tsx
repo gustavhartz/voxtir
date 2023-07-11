@@ -3,7 +3,7 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { useAppSelector } from '../../hooks';
 import { useDispatch } from 'react-redux';
-import { setToSkipped } from '../../state/track';
+import { setToSkipped, setCurrentPosition } from '../../state/track';
 import { GrBackTen, GrForwardTen } from 'react-icons/gr';
 import useKeyPress from '../../hook/useKeyPress';
 import { toggleModal } from '../../state/track';
@@ -141,6 +141,26 @@ const Track = () => {
     }
     console.log('playbackUp');
   });
+
+  // Set the state for use in the editor timestamp default button
+  const handleTimeUpdate = () => {
+    if (audioRef.current?.audio.current) {
+      const time = audioRef.current.audio.current.currentTime;
+      const hours = Math.floor(time / 3600);
+      const minutes = Math.floor((time - hours * 3600) / 60);
+      const seconds = Math.floor(time - hours * 3600 - minutes * 60);
+      const formattedTime = `${hours < 10 ? '0' + hours : hours}:${
+        minutes < 10 ? '0' + minutes : minutes
+      }:${seconds < 10 ? '0' + seconds : seconds}`;
+
+      dispatch(setCurrentPosition(formattedTime));
+      console.log(formattedTime);
+    }
+  };
+  audioRef.current?.audio.current?.addEventListener(
+    'timeupdate',
+    handleTimeUpdate
+  );
 
   if (!fileUrl) {
     return (
