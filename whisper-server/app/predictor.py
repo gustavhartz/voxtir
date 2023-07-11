@@ -10,20 +10,27 @@ import tempfile
 import flask
 import boto3
 import whisper
+from whisper.tokenizer import TO_LANGUAGE_CODE, LANGUAGES
+
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+JSON_TYPE = "application/json"
 
 app = flask.Flask(__name__)
+if ENVIRONMENT == "production":
+    session = boto3.Session()
+else:
+    session = boto3.Session(aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"])
 
-s3_client = boto3.client("s3")
-model_name = "medium.en"
+s3_client = session.client("s3")
 
 @app.route("/ping", methods=["GET"])
 def ping():
     logger.debug("PING")
     status = 200
-    return flask.Response(response="\n", status=status, mimetype="application/json")
+    return flask.Response(response="\n", status=status, mimetype=JSON_TYPE)
 
 
 @app.route("/execution-parameters", methods=["GET"])
@@ -33,7 +40,7 @@ def execution_parameters():
     request_data = flask.request.data
     logger.info(f"execution-parameters: {content_type} {request_data}")
     status = 200
-    return flask.Response(response="{}", status=status, mimetype="application/json")
+    return flask.Response(response="{}", status=status, mimetype=JSON_TYPE)
 
 @app.route("/invocations", methods=["POST"])
 def transformation():
@@ -46,8 +53,14 @@ def transformation():
 
     input_dict = None
 
-    if flask.request.content_type == "application/json":
-        input_dict = json.loads(data)
+    if flask.request.content_type == JSON_TYPE:
+        try:
+            input_dict = json.loads(data)
+        except json.JSONDecodeError:
+            logger.exception(f"Unable to parse payload {data}")
+            return flask.Response(
+                response="Unable to parse payload", status=400, mimetype="text/plain"
+            )
     else:
         return flask.Response(
             response="The predictor only supports application/json content type", status=415, mimetype="text/plain"
@@ -55,16 +68,25 @@ def transformation():
 
     bucket_name = input_dict["bucket_name"]
     object_key = input_dict["object_key"]
+    model = input_dict["model"]
+    language = input_dict["language"]
+    language = TO_LANGUAGE_CODE.get(language, language)
+    if (language not in TO_LANGUAGE_CODE) and (language not in LANGUAGES):
+        logger.error(f"Language {language} not supported. Supported languages: {TO_LANGUAGE_CODE}")
+        return flask.Response(
+            response=f"Language {language} not supported. Supported languages: {LANGUAGES}", status=400, mimetype="text/plain"
+        )
+
     fd, filename = tempfile.mkstemp()
     try:
-        os.close(fd)
         logger.info(f"Downloading s3://{bucket_name}/{object_key} to {filename}")
-        s3_client.download_file(bucket_name, object_key, filename)
-
-        logger.info(f"Loading model {model_name}")
-        model = whisper.load_model(model_name)
+        print()
+        s3_client.download_file(bucket_name, object_key, "./fesf")
+        os.close(fd)
+        logger.info(f"Loading model {model}")
+        model = whisper.load_model(model)
         logger.info(f"Transcribing {filename}")
-        result = model.transcribe(filename)
+        result = model.transcribe(filename, decode_options={"language": language})
         logger.info(f"Transcription of {filename} complete")
     finally:
         os.unlink(filename)
