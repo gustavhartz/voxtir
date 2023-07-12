@@ -21,6 +21,9 @@ Run the commands in the package.json folder
 # Build docker
 docker build -t voxtir-backend . 
 
+# If mac m1 we need to use buildx to set the target architecture
+docker buildx build --platform linux/amd64 -t voxtir-app-backend .
+
 # Run docker
 docker run -p 3000:3000 -e APP_PORT=3000 voxtir-backend
 ```
