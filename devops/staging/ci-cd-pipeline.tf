@@ -30,6 +30,34 @@ data "aws_iam_policy_document" "code_build_iam_policy" {
       "${aws_s3_bucket.voxtir_react_app_bucket.arn}/*"
     ]
   }
+  statement {
+    effect  = "Allow"
+    actions = ["*"]
+    resources = [
+      aws_ecr_repository.voxtir_whisper.arn,
+      "${aws_ecr_repository.voxtir_whisper.arn}:*",
+      "${aws_ecr_repository.voxtir_whisper.arn}/*"
+    ]
+  }
+  statement {
+    effect  = "Allow"
+    actions = ["*"]
+    resources = [
+      aws_s3_bucket.build_cache_bucket.arn,
+      "${aws_s3_bucket.build_cache_bucket.arn}:*",
+      "${aws_s3_bucket.build_cache_bucket.arn}/*"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = ["ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetAuthorizationToken",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+    "ecr:UploadLayerPart"]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_role_policy" "codebuild_policy" {
@@ -50,6 +78,10 @@ resource "aws_codebuild_source_credential" "gsh" {
   token       = var.github_api_token
 }
 
+resource "aws_s3_bucket" "build_cache_bucket" {
+  bucket = "voxtir-build-cache-bucket"
+}
+
 resource "aws_codebuild_project" "staging_build" {
   name          = "voxtir-codebuild-staging"
   description   = "This is the primary ci/cd tool for the voxtir app"
@@ -63,7 +95,8 @@ resource "aws_codebuild_project" "staging_build" {
   }
 
   cache {
-    type = "NO_CACHE"
+    type     = "S3"
+    location = aws_s3_bucket.build_cache_bucket.bucket
   }
 
   environment {
@@ -71,6 +104,7 @@ resource "aws_codebuild_project" "staging_build" {
     image                       = "aws/codebuild/standard:7.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
   }
 
   logs_config {
@@ -81,11 +115,16 @@ resource "aws_codebuild_project" "staging_build" {
 
   source {
     buildspec = templatefile("./buildspec.yaml", {
-      aws_s3_bucket = aws_s3_bucket.voxtir_react_app_bucket.bucket
+      aws_s3_bucket       = aws_s3_bucket.voxtir_react_app_bucket.bucket
+      ecr_repository_uri  = aws_ecr_repository.voxtir_whisper.repository_url
+      whisper_image_tag   = "latest"
+      build_master_tag    = "build-master"
+      ecr_repository_base = split("/", aws_ecr_repository.voxtir_whisper.repository_url)[0]
+      aws_region          = var.region
     })
     type            = "GITHUB"
     location        = "https://github.com/Voxtir/voxtir.git"
-    git_clone_depth = 1
+    git_clone_depth = 5
 
     git_submodules_config {
       fetch_submodules = false
