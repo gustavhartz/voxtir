@@ -16,10 +16,10 @@ export default Node.create({
   addAttributes() {
     return {
       timestamp: {
-        default: localStorage.getItem("currentPosition") ?? "00:00:00",
+        default: localStorage.getItem('currentPosition') ?? '00:00:00',
         show: this.options.show,
       },
-    }
+    };
   },
 
   parseHTML() {
@@ -38,9 +38,9 @@ export default Node.create({
           .insertContentAt(this.editor.state.selection.head, {
             type: this.type.name,
             attrs: {
-              timestamp: localStorage.getItem("currentPosition") ?? "00:00:00",
+              timestamp: localStorage.getItem('currentPosition') ?? '00:00:00',
               show: this.options.show,
-            }
+            },
           })
           .focus()
           .run();

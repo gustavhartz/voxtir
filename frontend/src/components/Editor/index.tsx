@@ -47,8 +47,8 @@ function Editor() {
         suggestion,
       }),
       TrackTimeStamp.configure({
-        timestamp: "00:00:00",
-        show: false
+        timestamp: '00:00:00',
+        show: false,
       }),
     ],
     content: localStorage.getItem('document') ?? PlaceholderText,
