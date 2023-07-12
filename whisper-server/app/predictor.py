@@ -13,10 +13,11 @@ import whisper
 from whisper.tokenizer import TO_LANGUAGE_CODE, LANGUAGES
 
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
+JSON_TYPE = "application/json"
+AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS", "[]"))
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-JSON_TYPE = "application/json"
 
 app = flask.Flask(__name__)
 if ENVIRONMENT == "production":
@@ -70,23 +71,29 @@ def transformation():
     object_key = input_dict["object_key"]
     model = input_dict["model"]
     language = input_dict["language"]
+
     language = TO_LANGUAGE_CODE.get(language, language)
     if (language not in TO_LANGUAGE_CODE) and (language not in LANGUAGES):
         logger.error(f"Language {language} not supported. Supported languages: {TO_LANGUAGE_CODE}")
         return flask.Response(
             response=f"Language {language} not supported. Supported languages: {LANGUAGES}", status=400, mimetype="text/plain"
         )
+    
+    if model not in AVAILABLE_WHISPER_MODELS:
+        logger.error(f"Model {model} not supported. Supported models: {AVAILABLE_WHISPER_MODELS}")
+        return flask.Response(
+            response=f"Model {model} not supported. Supported models: {AVAILABLE_WHISPER_MODELS}", status=400, mimetype="text/plain"
+        )
 
     fd, filename = tempfile.mkstemp()
     try:
-        logger.info(f"Downloading s3://{bucket_name}/{object_key} to {filename}")
-        print()
-        s3_client.download_file(bucket_name, object_key, "./fesf")
         os.close(fd)
+        logger.info(f"Downloading s3://{bucket_name}/{object_key} to {filename}")
+        s3_client.download_file(bucket_name, object_key, filename)
         logger.info(f"Loading model {model}")
-        model = whisper.load_model(model)
+        model = whisper.load_model(model, download_root="./whisper_image")
         logger.info(f"Transcribing {filename}")
-        result = model.transcribe(filename, decode_options={"language": language})
+        result = model.transcribe(filename, language=language)
         logger.info(f"Transcription of {filename} complete")
     finally:
         os.unlink(filename)
