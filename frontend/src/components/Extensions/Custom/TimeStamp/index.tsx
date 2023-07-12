@@ -16,8 +16,8 @@ export default Node.create({
   addAttributes() {
     return {
       timestamp: {
-        default: '00:00:00',
-        show: false,
+        default: localStorage.getItem('currentPosition') ?? '00:00:00',
+        show: this.options.show,
       },
     };
   },
@@ -37,7 +37,10 @@ export default Node.create({
           .chain()
           .insertContentAt(this.editor.state.selection.head, {
             type: this.type.name,
-            attrs: { show: true },
+            attrs: {
+              timestamp: localStorage.getItem('currentPosition') ?? '00:00:00',
+              show: this.options.show,
+            },
           })
           .focus()
           .run();

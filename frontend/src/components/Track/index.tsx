@@ -11,9 +11,8 @@ import { toggleModal } from '../../state/track';
 const Track = () => {
   const audioRef = React.useRef<AudioPlayer>(null);
   const dispatch = useDispatch();
-  const { hasSkipped, skipToPosition, settings, fileUrl } = useAppSelector(
-    (state) => state.track
-  );
+  const { hasSkipped, skipToPosition, settings, fileUrl, currentPosition } =
+    useAppSelector((state) => state.track);
 
   const handleUploadAudio = () => {
     dispatch(toggleModal());
@@ -152,9 +151,10 @@ const Track = () => {
       const formattedTime = `${hours < 10 ? '0' + hours : hours}:${
         minutes < 10 ? '0' + minutes : minutes
       }:${seconds < 10 ? '0' + seconds : seconds}`;
-
-      dispatch(setCurrentPosition(formattedTime));
-      console.log(formattedTime);
+      if (formattedTime !== currentPosition) {
+        dispatch(setCurrentPosition(formattedTime));
+        localStorage.setItem('currentPosition', formattedTime);
+      }
     }
   };
   audioRef.current?.audio.current?.addEventListener(
@@ -163,6 +163,7 @@ const Track = () => {
   );
 
   if (!fileUrl) {
+    localStorage.setItem('currentPosition', '00:00:00');
     return (
       <button
         onClick={handleUploadAudio}
