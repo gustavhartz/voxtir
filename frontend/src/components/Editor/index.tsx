@@ -46,7 +46,10 @@ function Editor() {
         },
         suggestion,
       }),
-      TrackTimeStamp,
+      TrackTimeStamp.configure({
+        timestamp: "00:00:00",
+        show: false
+      }),
     ],
     content: localStorage.getItem('document') ?? PlaceholderText,
     onTransaction: (editor) => {
@@ -60,8 +63,7 @@ function Editor() {
     autofocus: true,
   });
   setEditorInstance(editor);
-
-  return <EditorContent className="w-full" editor={editor} />;
+  return <EditorContent className="w-full !pr-14" editor={editor} />;
 }
 
 export default Editor;
