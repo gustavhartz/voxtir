@@ -39,7 +39,7 @@ const initialState: TrackState = {
   settings: {
     goBackTime: 10,
     goForwardTime: 30,
-    pauseOnSkip: true,
+    pauseOnSkip: false,
   },
   fileUrl: '',
   fileName: '',
