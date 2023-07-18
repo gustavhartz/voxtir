@@ -48,58 +48,50 @@ const Drawer = () => {
   };
 
   return (
-    <>
-      <aside
-        id="default-sidebar"
-        className="absolute top-0 right-0 w-16 h-screen"
-        aria-label="Sidebar"
+    <div className="fixed top-0 right-0 w-16 h-screen space-y-6 flex flex-col items-center py-8 overflow-y-auto bg-white shadow-lg">
+      <button
+        onClick={handleOpenKeyboardModal}
+        data-tooltip-id="document-sidebar"
+        data-tooltip-content="Keyboard shortcuts"
       >
-        <div className="space-y-6 flex flex-col items-center py-8 w-full h-full overflow-y-auto bg-white shadow-lg">
-          <button
-            onClick={handleOpenKeyboardModal}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="Keyboard shortcuts"
-          >
-            <TbKeyboard className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={() => {
-              console.log('Clicked on info circle');
-            }}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="Info"
-          >
-            <TbInfoCircle className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={() => {
-              onExport();
-            }}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="File export"
-          >
-            <TbFileExport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={handleOpenImportModal}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="File import"
-          >
-            <TbFileImport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={() => {
-              onDelete();
-            }}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="Trash"
-          >
-            <TbTrash className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <Tooltip id="document-sidebar" place="top-start" />
-        </div>
-      </aside>
-    </>
+        <TbKeyboard className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
+      </button>
+      <button
+        onClick={() => {
+          console.log('Clicked on info circle');
+        }}
+        data-tooltip-id="document-sidebar"
+        data-tooltip-content="Info"
+      >
+        <TbInfoCircle className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
+      </button>
+      <button
+        onClick={() => {
+          onExport();
+        }}
+        data-tooltip-id="document-sidebar"
+        data-tooltip-content="File export"
+      >
+        <TbFileExport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
+      </button>
+      <button
+        onClick={handleOpenImportModal}
+        data-tooltip-id="document-sidebar"
+        data-tooltip-content="File import"
+      >
+        <TbFileImport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
+      </button>
+      <button
+        onClick={() => {
+          onDelete();
+        }}
+        data-tooltip-id="document-sidebar"
+        data-tooltip-content="Trash"
+      >
+        <TbTrash className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
+      </button>
+      <Tooltip id="document-sidebar" place="top-start" />
+    </div>
   );
 };
 
