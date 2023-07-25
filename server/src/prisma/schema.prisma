@@ -1,22 +1,78 @@
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["multiSchema"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
-    schemas  = ["core", "documents"]
 }
 
-model Documents {
-    id         Int      @id @default(autoincrement())
-    data       Bytes
-    documentId String   @unique
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    // metadata  DocumentMetadata?
+model Document {
+    id                   Int                    @id @default(autoincrement())
+    data                 Bytes
+    documentUUID         String                 @unique
+    createdAt            DateTime               @default(now())
+    updatedAt            DateTime               @updatedAt
+    audioFileUrl         String
+    TranscriptionProcess TranscriptionProcess[]
+    project              Project                @relation(fields: [projectId], references: [id])
+    projectId            Int // relation scalar field (used in the `@relation` attribute above)    
 
-    @@index([documentId])
-    @@schema("documents")
+    @@index([documentUUID])
+}
+
+// Trigger included with historic table
+model TranscriptionProcess {
+    id                          Int                        @id @default(autoincrement())
+    status                      TranscriptionProcessStatus
+    doSpeakerDiarization        Boolean
+    document                    Document                   @relation(fields: [documentId], references: [id])
+    documentId                  Int // relation scalar field (used in the `@relation` attribute above)
+    // S3 file locations
+    rawAudioFileURL             String
+    transcriptionAudioFileURL   String
+    speakerDiarizationFileURL   String
+    whisperTranscriptionFileURL String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum TranscriptionProcessStatus {
+    CREATED
+    QUEUED
+    PROCESSING
+    FAILED
+    DONE
+}
+
+model User {
+    id              Int             @id @default(autoincrement())
+    auth0Id         Int             @unique
+    UsersOnProjects UserOnProject[]
+}
+
+model Project {
+    id              Int             @id @default(autoincrement())
+    name            String
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    UsersOnProjects UserOnProject[]
+    Documents       Document[]
+}
+
+model UserOnProject {
+    id        Int         @id @default(autoincrement())
+    project   Project     @relation(fields: [projectId], references: [id])
+    projectId Int // relation scalar field (used in the `@relation` attribute above)
+    user      User        @relation(fields: [userId], references: [id])
+    userId    Int // relation scalar field (used in the `@relation` attribute above)
+    role      ProjectRole
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+}
+
+enum ProjectRole {
+    ADMIN
+    USER
 }
