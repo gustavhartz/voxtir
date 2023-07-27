@@ -48,8 +48,10 @@ enum TranscriptionProcessStatus {
 
 model User {
     id              Int             @id @default(autoincrement())
-    auth0Id         Int             @unique
+    authProviderId  String          @unique
     UsersOnProjects UserOnProject[]
+
+    @@index([authProviderId])
 }
 
 model Project {
