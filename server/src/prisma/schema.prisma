@@ -8,26 +8,25 @@ datasource db {
 }
 
 model Document {
-    id                   Int                    @id @default(autoincrement())
+    id                   String                 @id @default(uuid())
     data                 Bytes
-    documentUUID         String                 @unique
     createdAt            DateTime               @default(now())
     updatedAt            DateTime               @updatedAt
     audioFileUrl         String
     TranscriptionProcess TranscriptionProcess[]
     project              Project                @relation(fields: [projectId], references: [id])
-    projectId            Int // relation scalar field (used in the `@relation` attribute above)    
+    projectId            String // relation scalar field (used in the `@relation` attribute above)    
 
-    @@index([documentUUID, projectId])
+    @@index([projectId])
 }
 
 // Trigger included with historic table
 model TranscriptionProcess {
-    id                          Int                        @id @default(autoincrement())
+    id                          String                     @id @default(uuid())
     status                      TranscriptionProcessStatus
     doSpeakerDiarization        Boolean
     document                    Document                   @relation(fields: [documentId], references: [id])
-    documentId                  Int // relation scalar field (used in the `@relation` attribute above)
+    documentId                  String // relation scalar field (used in the `@relation` attribute above)
     // S3 file locations
     rawAudioFileURL             String
     transcriptionAudioFileURL   String
@@ -53,8 +52,9 @@ model User {
 }
 
 model Project {
-    id              Int             @id @default(autoincrement())
+    id              String          @id @default(uuid())
     name            String
+    description     String?
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
     UsersOnProjects UserOnProject[]
@@ -62,9 +62,9 @@ model Project {
 }
 
 model UserOnProject {
-    id        Int         @id @default(autoincrement())
+    id        String      @id @default(uuid())
     project   Project     @relation(fields: [projectId], references: [id])
-    projectId Int // relation scalar field (used in the `@relation` attribute above)
+    projectId String // relation scalar field (used in the `@relation` attribute above)
     user      User        @relation(fields: [userId], references: [id])
     userId    String // relation scalar field (used in the `@relation` attribute above)
     role      ProjectRole
