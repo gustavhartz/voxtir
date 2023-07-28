@@ -18,7 +18,7 @@ model Document {
     project              Project                @relation(fields: [projectId], references: [id])
     projectId            Int // relation scalar field (used in the `@relation` attribute above)    
 
-    @@index([documentUUID])
+    @@index([documentUUID, projectId])
 }
 
 // Trigger included with historic table
@@ -47,11 +47,9 @@ enum TranscriptionProcessStatus {
 }
 
 model User {
-    id              Int             @id @default(autoincrement())
-    authProviderId  String          @unique
-    UsersOnProjects UserOnProject[]
-
-    @@index([authProviderId])
+    id                            String          @id
+    auth0ManagementApiUserDetails Json?
+    UsersOnProjects               UserOnProject[]
 }
 
 model Project {
@@ -68,10 +66,12 @@ model UserOnProject {
     project   Project     @relation(fields: [projectId], references: [id])
     projectId Int // relation scalar field (used in the `@relation` attribute above)
     user      User        @relation(fields: [userId], references: [id])
-    userId    Int // relation scalar field (used in the `@relation` attribute above)
+    userId    String // relation scalar field (used in the `@relation` attribute above)
     role      ProjectRole
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
+
+    @@index([projectId, userId])
 }
 
 enum ProjectRole {

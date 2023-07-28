@@ -12,13 +12,13 @@ async function main() {
   // Create users
   const user1 = await prisma.user.create({
     data: {
-      authProviderId: '123456', // Replace with the desired Auth0 ID for user1
+      id: '123456', // Replace with the desired Auth0 ID for user1
     },
   });
 
   const user2 = await prisma.user.create({
     data: {
-      authProviderId: '789012', // Replace with the desired Auth0 ID for user2
+      id: '789012', // Replace with the desired Auth0 ID for user2
     },
   });
 
