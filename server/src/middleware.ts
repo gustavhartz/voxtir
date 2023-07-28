@@ -3,10 +3,13 @@ const { AUTH0_DOMAIN } = process.env;
 import { v4 as uuidv4 } from 'uuid';
 import { Request, Response, NextFunction, Handler } from 'express';
 import prisma from './prisma/index.js';
+import { Auth0Client } from './services/auth0.js';
+import { Prisma } from '@prisma/client';
 
 const VOXTIR_SEEN_USER_COOKIE = 'voxtir_seen_user';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
+const auth0Client = new Auth0Client();
 /*
 Standard auth0 logic except for in development where the user can be defined as a header on the request
 HEADER: x_voxtir_user = [AUTH0 user_id]
@@ -52,7 +55,7 @@ The purpose is to determine if we should fetch user data from auth0 and update i
 session we will not update the user data in the database. If the user does not have we will. Additionally it will serve as a way of 
 determining if the user has been seen before. We don't get webhooks etc. on signup
 */
-export const userInfoSync = (
+export const userInfoSync = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -66,13 +69,22 @@ export const userInfoSync = (
       secure: true,
       sameSite: 'none',
     });
-    prisma.user.upsert({
+    let auth0UserData = await auth0Client.getUserById(
+      req.auth.payload.sub,
+      req.auth.token
+    );
+    await prisma.user.upsert({
       create: {
-        authProviderId: req.auth.payload.sub,
+        id: req.auth.payload.sub,
+        auth0ManagementApiUserDetails:
+          auth0UserData as unknown as Prisma.JsonObject,
       },
-      update: {},
+      update: {
+        auth0ManagementApiUserDetails:
+          auth0UserData as unknown as Prisma.JsonObject,
+      },
       where: {
-        authProviderId: req.auth.payload.sub,
+        id: req.auth.payload.sub,
       },
     });
   }
