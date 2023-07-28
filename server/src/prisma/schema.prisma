@@ -8,33 +8,23 @@ datasource db {
 }
 
 model Document {
-    id                   String                 @id @default(uuid())
-    data                 Bytes
-    createdAt            DateTime               @default(now())
-    updatedAt            DateTime               @updatedAt
-    audioFileUrl         String
-    TranscriptionProcess TranscriptionProcess[]
-    project              Project                @relation(fields: [projectId], references: [id])
-    projectId            String // relation scalar field (used in the `@relation` attribute above)    
+    id                          String                      @id @default(uuid())
+    data                        Bytes
+    createdAt                   DateTime                    @default(now())
+    updatedAt                   DateTime                    @updatedAt
+    audioFileUrl                String
+    project                     Project                     @relation(fields: [projectId], references: [id])
+    projectId                   String // relation scalar field (used in the `@relation` attribute above)  
+    // Transcription data
+    doTranscription             Boolean
+    transcriptionStatus         TranscriptionProcessStatus?
+    doSpeakerDiarization        Boolean?
+    rawAudioFileURL             String?
+    transcriptionAudioFileURL   String?
+    speakerDiarizationFileURL   String?
+    whisperTranscriptionFileURL String?
 
     @@index([projectId])
-}
-
-// Trigger included with historic table
-model TranscriptionProcess {
-    id                          String                     @id @default(uuid())
-    status                      TranscriptionProcessStatus
-    doSpeakerDiarization        Boolean
-    document                    Document                   @relation(fields: [documentId], references: [id])
-    documentId                  String // relation scalar field (used in the `@relation` attribute above)
-    // S3 file locations
-    rawAudioFileURL             String
-    transcriptionAudioFileURL   String
-    speakerDiarizationFileURL   String
-    whisperTranscriptionFileURL String
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 }
 
 enum TranscriptionProcessStatus {

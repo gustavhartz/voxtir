@@ -60,43 +60,21 @@ async function main() {
   const document1: Document = await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 1'),
-      documentUUID: uuidv4(),
+      id: uuidv4(),
       audioFileUrl: 'https://example.com/audio1.mp3',
       projectId: project1.id,
+      doTranscription: true,
     },
   });
 
   const document2: Document = await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 2'),
-      documentUUID: uuidv4(),
+      id: uuidv4(),
       audioFileUrl: 'https://example.com/audio2.mp3',
       projectId: project2.id,
+      doTranscription: true,
     },
-  });
-
-  // Create transcription processes
-  await prisma.transcriptionProcess.createMany({
-    data: [
-      {
-        status: TranscriptionProcessStatus.DONE,
-        doSpeakerDiarization: true,
-        documentId: document1.id,
-        rawAudioFileURL: 'https://example.com/raw1.wav',
-        transcriptionAudioFileURL: 'https://example.com/transcription1.wav',
-        speakerDiarizationFileURL: 'https://example.com/speaker1.txt',
-        whisperTranscriptionFileURL: 'https://example.com/whisper1.txt',
-      },
-      {
-        status: TranscriptionProcessStatus.PROCESSING,
-        doSpeakerDiarization: false,
-        documentId: document2.id,
-        rawAudioFileURL: 'https://example.com/raw2.wav',
-        transcriptionAudioFileURL: 'https://example.com/transcription2.wav',
-        speakerDiarizationFileURL: 'https://example.com/speaker2.txt',
-        whisperTranscriptionFileURL: 'https://example.com/whisper2.txt',
-      },
-    ],
   });
 }
 
