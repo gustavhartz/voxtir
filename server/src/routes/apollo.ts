@@ -1,12 +1,8 @@
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { PrismaClient } from '@prisma/client';
 import http from 'http';
-
+import { Context } from './graphql/context.js';
 import { schema } from './graphql/schema.js';
-export interface Context {
-  prisma: PrismaClient;
-}
 
 export const getGqlServer = async (
   httpServer: http.Server
