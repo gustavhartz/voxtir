@@ -7,22 +7,36 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum TranscriptionType {
+    AUTOMATIC
+    MANUAL
+}
+
 model Document {
-    id                          String                      @id @default(uuid())
-    data                        Bytes
-    createdAt                   DateTime                    @default(now())
-    updatedAt                   DateTime                    @updatedAt
-    audioFileUrl                String
-    project                     Project                     @relation(fields: [projectId], references: [id])
-    projectId                   String // relation scalar field (used in the `@relation` attribute above)  
+    id                String            @id @default(uuid())
+    title             String
+    data              Bytes
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
+    audioFileUrl      String
+    project           Project           @relation(fields: [projectId], references: [id])
+    projectId         String // relation scalar field (used in the `@relation` attribute above)  
     // Transcription data
-    doTranscription             Boolean
+    language          String?
+    speakerCount      Int?
+    dialect           String?
+    transcriptionType TranscriptionType
+
+    // Automatic transcription data
     transcriptionStatus         TranscriptionProcessStatus?
     doSpeakerDiarization        Boolean?
     rawAudioFileURL             String?
     transcriptionAudioFileURL   String?
     speakerDiarizationFileURL   String?
     whisperTranscriptionFileURL String?
+
+    // Other
+    isTrashed Boolean @default(false)
 
     @@index([projectId])
 }

@@ -63,7 +63,8 @@ async function main() {
       id: uuidv4(),
       audioFileUrl: 'https://example.com/audio1.mp3',
       projectId: project1.id,
-      doTranscription: true,
+      transcriptionType: 'AUTOMATIC',
+      title: 'Document 2',
     },
   });
 
@@ -73,7 +74,8 @@ async function main() {
       id: uuidv4(),
       audioFileUrl: 'https://example.com/audio2.mp3',
       projectId: project2.id,
-      doTranscription: true,
+      transcriptionType: 'AUTOMATIC',
+      title: 'Document 2',
     },
   });
 }
