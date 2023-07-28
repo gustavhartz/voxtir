@@ -9,7 +9,8 @@
     "codegen-generate": "graphql-codegen --config codegen.yml",
     "generate": "npm run prisma-generate && npm run codegen-generate",
     "prisma-generate": "npx prisma generate --schema src/prisma/schema.prisma",
-    "prisma-push-seed": "npx prisma db push --schema src/prisma/schema.prisma && npx prisma db seed"
+    "prisma-push-seed": "npx prisma db push --schema src/prisma/schema.prisma && npx prisma db seed",
+    "actenv": "export $(grep -v '^#' .env | xargs)"
   },
   "prisma": {
     "seed": "ts-node --esm --transpile-only src/prisma/seed.ts"
@@ -22,10 +23,15 @@
     "@hocuspocus/extension-database": "^2.0.6",
     "@hocuspocus/server": "^2.0.6",
     "@prisma/client": "^5.0.0",
+    "access-token-jwt": "^0.1.2",
+    "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-oauth2-jwt-bearer": "^1.5.0",
     "express-ws": "^5.0.2",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
@@ -46,6 +52,8 @@
     "@graphql-codegen/typescript-resolvers": "^4.0.0",
     "@graphql-eslint/eslint-plugin": "^3.19.1",
     "@types/async-lock": "^1.4.0",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cookie-session": "^2.0.44",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/express-ws": "^3.0.1",
