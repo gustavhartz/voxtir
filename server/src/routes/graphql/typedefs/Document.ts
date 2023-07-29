@@ -2,9 +2,11 @@ import gql from 'graphql-tag';
 
 export const typeDefs = gql`
   enum TranscriptionStatus {
-    NOT_STARTED
-    IN_PROGRESS
-    COMPLETED
+    CREATED
+    QUEUED
+    PROCESSING
+    FAILED
+    DONE
   }
 
   enum TranscriptionType {
@@ -16,7 +18,6 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     projectId: ID!
-    sharedWith: [UserSharing]!
     isTrashed: Boolean!
     lastModified: String!
     description: String
@@ -28,6 +29,6 @@ export const typeDefs = gql`
   type TranscriptionMetadata {
     speakersCount: Int
     dialects: [String]
-    language: String!
+    language: String
   }
 `;
