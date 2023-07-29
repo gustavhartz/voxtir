@@ -1,7 +1,11 @@
 import { GraphQLUpload } from 'graphql-upload-minimal';
 import type { Readable } from 'stream';
+import prisma from '../../../prisma/index.js';
 
-import { Resolvers } from '../generated/graphql';
+import { Resolvers, Project } from '../generated/graphql';
+import { TranscriptionProcessStatus, ProjectRole } from '@prisma/client';
+import { GraphQLError } from 'graphql';
+import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 
 export const resolvers: Resolvers = {
   Upload: GraphQLUpload,
@@ -10,115 +14,107 @@ export const resolvers: Resolvers = {
     status: async () => {
       return { success: true, message: 'ok' };
     },
-    me: async () => {
-      return { id: '1234', name: 'Jane', email: 'fes@tes.dk' };
-    },
-    projects: async () => {
-      // Replace with your logic to fetch projects from the database
-      return [
-        {
-          id: '1',
-          name: 'Project 1',
-          description: 'Project 1 description',
-          sharedWith: [
-            {
-              id: '2',
-              name: 'User 2',
-              email: 'user2@example.com',
-              role: 'ADMIN',
-            },
-            {
-              id: '3',
-              name: 'User 3',
-              email: 'user3@example.com',
-              role: 'ADMIN',
-            },
-          ],
-          documents: [
-            {
-              id: '1',
-              title: 'Document 1',
-              projectId: '234',
-              sharedWith: [
-                {
-                  id: '2',
-                  name: 'User 2',
-                  email: 'user2@example.com',
-                  role: 'ADMIN',
-                },
-                {
-                  id: '3',
-                  name: 'User 3',
-                  email: 'user3@example.com',
-                  role: 'ADMIN',
-                },
-              ],
-              isTrashed: false,
-              lastModified: '2023-06-01',
-              description: 'Document 1 description',
-              transcriptionMetadata: {
-                speakersCount: 2,
-                dialects: ['Dialect 1', 'Dialect 2'],
-                language: 'English',
-              },
-              transcriptionStatus: 'COMPLETED',
-              transcriptionType: 'MANUAL',
-            },
-          ],
+    me: async (_, __, context) => {
+      let user = await prisma.user.findFirst({
+        where: {
+          id: context.userId,
         },
-      ];
-    },
-    project: async () => {
-      // Replace with your logic to fetch a specific project by ID from the database
+      });
+      if (!user) {
+        throw new GraphQLError('User not known');
+      }
+      let aut0Details: Auth0ManagementApiUser = JSON.parse(
+        user?.auth0ManagementApiUserDetails as string
+      );
+
       return {
-        id: '1',
-        name: 'Project 1',
-        description: 'Project 1 description',
-        sharedWith: [
-          {
-            id: '2',
-            name: 'User 2',
-            email: 'user2@example.com',
-            role: 'ADMIN',
-          },
-          {
-            id: '3',
-            name: 'User 3',
-            email: 'user3@example.com',
-            role: 'ADMIN',
-          },
-        ],
-        documents: [
-          {
-            id: '1',
-            title: 'Document 1',
-            projectId: '234',
-            sharedWith: [
-              {
-                id: '2',
-                name: 'User 2',
-                email: 'user2@example.com',
-                role: 'ADMIN',
-              },
-              {
-                id: '3',
-                name: 'User 3',
-                email: 'user3@example.com',
-                role: 'ADMIN',
-              },
-            ],
-            isTrashed: false,
-            lastModified: '2023-06-01',
-            description: 'Document 1 description',
-            transcriptionMetadata: {
-              speakersCount: 2,
-              dialects: ['Dialect 1', 'Dialect 2'],
-              language: 'English',
+        id: context.userId,
+        name: aut0Details.name,
+        email: aut0Details.email,
+      };
+    },
+    projects: async (_, __, context) => {
+      // Replace with your logic to fetch projects from the database
+      let projects = await prisma.project.findMany({
+        where: {
+          UsersOnProjects: {
+            every: {
+              userId: context.userId,
             },
-            transcriptionStatus: 'COMPLETED',
-            transcriptionType: 'MANUAL',
           },
-        ],
+        },
+        include: {
+          Documents: {},
+        },
+      });
+      const projectResponse: Project[] = [];
+      // for loop to iterate through projects and create output format
+      for (const projectEle of projects) {
+        var projectResponseObj: Project = {
+          id: projectEle.id,
+          name: projectEle.name,
+          description: projectEle.description,
+          documents: projectEle.Documents.map((doc) => {
+            return {
+              id: doc.id,
+              title: doc.title,
+              projectId: doc.projectId,
+              isTrashed: doc.isTrashed,
+              lastModified: doc.updatedAt.toISOString(),
+              transcriptionMetadata: {
+                language: doc.language,
+                speakersCount: doc.speakerCount,
+                dialects: [doc.dialect],
+              },
+              transcriptionStatus:
+                doc.transcriptionStatus as TranscriptionProcessStatus,
+              transcriptionType: doc.transcriptionType,
+            };
+          }),
+        };
+        projectResponse.push(projectResponseObj);
+      }
+      return projectResponse;
+    },
+    project: async (_, args, context) => {
+      // Replace with your logic to fetch a specific project by ID from the database
+      let project = await prisma.project.findFirst({
+        where: {
+          UsersOnProjects: {
+            every: {
+              userId: context.userId,
+            },
+          },
+          id: args.id,
+        },
+        include: {
+          Documents: {},
+        },
+      });
+      if (!project) {
+        return null;
+      }
+      return {
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        documents: project.Documents.map((doc) => {
+          return {
+            id: doc.id,
+            title: doc.title,
+            projectId: doc.projectId,
+            isTrashed: doc.isTrashed,
+            lastModified: doc.updatedAt.toISOString(),
+            transcriptionMetadata: {
+              language: doc.language,
+              speakersCount: doc.speakerCount,
+              dialects: [doc.dialect],
+            },
+            transcriptionStatus:
+              doc.transcriptionStatus as TranscriptionProcessStatus,
+            transcriptionType: doc.transcriptionType,
+          };
+        }),
       };
     },
   },
@@ -139,118 +135,106 @@ export const resolvers: Resolvers = {
       return { success: true };
     },
     createDocument: async () => {
-      return {
-        id: '1',
-        title: 'Document 1',
-        projectId: '234',
-        sharedWith: [
-          {
-            id: '2',
-            name: 'User 2',
-            email: 'user2@example.com',
-            role: 'ADMIN',
-          },
-          {
-            id: '3',
-            name: 'User 3',
-            email: 'user3@example.com',
-            role: 'ADMIN',
-          },
-        ],
-        isTrashed: false,
-        lastModified: '2023-06-01',
-        description: 'Document 1 description',
-        transcriptionMetadata: {
-          speakersCount: 2,
-          dialects: ['Dialect 1', 'Dialect 2'],
-          language: 'English',
+      return { success: true };
+    },
+    trashDocument: async (_, args, context) => {
+      const { documentId, projectId } = args;
+      let userRights = await prisma.userOnProject.findFirst({
+        where: {
+          userId: context.userId,
         },
-        transcriptionStatus: 'COMPLETED',
-        transcriptionType: 'MANUAL',
-      };
-    },
-    unshareDocument: async (parent, args) => {
-      const { documentId, userEmail } = args;
-      console.info(documentId, userEmail);
+      });
+      if (!userRights) {
+        return {
+          success: false,
+          message: 'Projectid not found or related to user',
+        };
+      }
+      if (userRights.role != ProjectRole.ADMIN) {
+        return {
+          success: false,
+          message: 'User not allowed to perform action',
+        };
+      }
+      let doc = prisma.document.update({
+        where: {
+          projectId: projectId,
+          id: documentId,
+        },
+        data: {
+          isTrashed: true,
+        },
+      });
+      if (!doc) {
+        return {
+          success: false,
+          message: 'Document project combination not found',
+        };
+      }
+
       return { success: true };
     },
-    deleteDocument: async (parent, args) => {
-      const { documentId } = args;
-      console.info(documentId);
-      return { success: true };
-    },
-    createProject: async (parent, args) => {
+    createProject: async (_, args, context) => {
       const { name, description } = args;
-      console.info(name, description);
-      return {
-        id: '1',
-        name: 'Project 1',
-        description: 'Project 1 description',
-        sharedWith: [
-          {
-            id: '2',
-            name: 'User 2',
-            email: 'user2@example.com',
-            role: 'ADMIN',
-          },
-          {
-            id: '3',
-            name: 'User 3',
-            email: 'user3@example.com',
-            role: 'ADMIN',
-          },
-        ],
-        documents: [
-          {
-            id: '1',
-            title: 'Document 1',
-            projectId: '234',
-            sharedWith: [
-              {
-                id: '2',
-                name: 'User 2',
-                email: 'user2@example.com',
-                role: 'ADMIN',
-              },
-              {
-                id: '3',
-                name: 'User 3',
-                email: 'user3@example.com',
-                role: 'ADMIN',
-              },
-            ],
-            isTrashed: false,
-            lastModified: '2023-06-01',
-            description: 'Document 1 description',
-            transcriptionMetadata: {
-              speakersCount: 2,
-              dialects: ['Dialect 1', 'Dialect 2'],
-              language: 'English',
+      await prisma.project.create({
+        data: {
+          name: name,
+          description: description,
+          UsersOnProjects: {
+            create: {
+              userId: context.userId,
+              role: 'ADMIN',
             },
-            transcriptionStatus: 'COMPLETED',
-            transcriptionType: 'MANUAL',
           },
-        ],
-      };
-    },
-    deleteProject: async (parent, args) => {
-      const { id } = args;
-      console.info(id);
+        },
+      });
       return { success: true };
     },
-    shareDocument: async (parent, args) => {
-      const { documentId, userEmail, role } = args;
-      console.info(documentId, userEmail, role);
+    deleteProject: async (parent, args, context) => {
+      let userId = context.userId;
+      let projectId = args.id;
+      let userRelation = await prisma.userOnProject.findFirst({
+        where: {
+          projectId: projectId,
+          userId: userId,
+        },
+      });
+      if (!userRelation) {
+        return {
+          success: false,
+          message: 'Projectid not found or related to user',
+        };
+      }
+      if (userRelation.role != ProjectRole.ADMIN) {
+        return {
+          success: false,
+          message: 'User not allowed to perform action',
+        };
+      }
+      console.log(`Deleting project: ${projectId}`);
+      await prisma.document.deleteMany({
+        where: {
+          projectId: projectId,
+        },
+      });
+      await prisma.project.delete({
+        where: {
+          id: projectId,
+        },
+      });
       return { success: true };
     },
     shareProject: async (parent, args) => {
       const { id, userEmail, role } = args;
-      console.info(id, userEmail, role);
+      // TODO: implement
+      /*
+      1. Create invitation link with code to accept
+      2. Send email with invitation that can be accepted through the sharing resolver
+      */
       return { success: true };
     },
-    updateDocument: async (parent, args) => {
-      const { documentId, title, description } = args;
-      console.info(documentId, title, description);
+    acceptProjectInvitation: async (_, args, contex) => {
+      const { id, token } = args;
       return { success: true };
     },
     uploadAudioFile: async (parent, args) => {
