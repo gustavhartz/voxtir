@@ -233,8 +233,9 @@ export const resolvers: Resolvers = {
       */
       return { success: true };
     },
-    acceptProjectInvitation: async (_, args, contex) => {
+    acceptProjectInvitation: async (_, args, context) => {
       const { id, token } = args;
+      const userId = context.userId;
       return { success: true };
     },
     uploadAudioFile: async (parent, args) => {

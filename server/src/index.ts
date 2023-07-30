@@ -60,7 +60,11 @@ async function main(): Promise<void> {
     cors<cors.CorsRequest>(),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
     expressMiddleware(gqlServer, {
-      context: async () => ({ prisma: prisma }),
+      context: async ({ req }) => ({
+        prisma: prisma,
+        req: req,
+        userId: req.auth?.payload.sub as string,
+      }),
     })
   );
 

@@ -33,7 +33,7 @@ export class Auth0Client {
   }
 }
 
-let isRunningDirectly = true;
+let isRunningDirectly = false;
 if (isRunningDirectly) {
   // When running the file standalone, you can create an instance of Auth0Client and call its methods here.
   const auth0Client = new Auth0Client();

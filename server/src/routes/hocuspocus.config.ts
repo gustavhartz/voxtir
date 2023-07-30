@@ -12,22 +12,24 @@ export default (): Partial<Configuration> => {
     Partial<Configuration> = {
     name: `${APP_NAME}_${uuidv4().slice(0, 4)}`,
     extensions: [],
-    async onConnect() {
+    async onConnect(data) {
       console.log('onConnect');
+      console.log(data);
     },
     // Only works with the token specified from the frontend configuration. Do own logic before handler
-    async onAuthenticate() {
+    async onAuthenticate(data) {
       console.log('onAuthenticate');
+      console.log(data);
     },
   };
 
   const database = new Database({
     // Return a Promise to retrieve data …
-    fetch: async ({ documentName }) => {
+    fetch: async (d) => {
       console.log('fetch');
-      const doc = await prisma.documents.findFirst({
+      const doc = await prisma.document.findFirst({
         where: {
-          documentId: documentName,
+          id: d.documentName,
         },
       });
       // Return the document
@@ -40,16 +42,20 @@ export default (): Partial<Configuration> => {
     // … and a Promise to store data:
     store: async ({ documentName, state }) => {
       console.log('store');
-      return prisma.documents.upsert({
+      return prisma.document.upsert({
         create: {
           data: state,
-          documentId: documentName,
+          id: documentName,
+          projectId: '1',
+          audioFileUrl: '',
+          transcriptionType: 'AUTOMATIC',
+          title: 'Document 2',
         },
         update: {
           data: state,
         },
         where: {
-          documentId: documentName,
+          id: documentName,
         },
       });
     },
