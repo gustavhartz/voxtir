@@ -7,32 +7,23 @@ export const typeDefs = gql`
     """
     Projects
     """
-    createProject(name: String!, description: String!): Project!
+    createProject(name: String!, description: String!): ActionResult!
     deleteProject(id: ID!): ActionResult!
     shareProject(id: ID!, userEmail: String!, role: Role!): ActionResult!
     unshareProject(id: ID!, userEmail: String!): ActionResult!
+    updateProject(id: ID!, name: String, description: String): ActionResult!
+    acceptProjectInvitation(id: ID!, token: String!): ActionResult!
 
     """
     Documents
     """
     createDocument(
       title: String!
-      description: String
-      language: String!
+      language: String
+      dialect: String
+      speakerCount: Int
       transcriptionType: TranscriptionType
-    ): Document!
-    updateDocument(
-      documentId: ID!
-      title: String
-      description: String
     ): ActionResult!
-    deleteDocument(documentId: ID!): ActionResult!
-    shareDocument(
-      documentId: ID!
-      userEmail: String!
-      role: Role!
-    ): ActionResult!
-    unshareDocument(documentId: ID!, userEmail: String!): ActionResult!
-    trashDocument(documentId: ID!): ActionResult!
+    trashDocument(documentId: ID!, projectId: ID!): ActionResult!
   }
 `;

@@ -9,6 +9,9 @@ import expressWebsockets from 'express-ws';
 import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import http from 'http';
 import morgan from 'morgan';
+import { accessControl, requestId, userInfoSync } from './middleware.js';
+import session from 'cookie-session';
+import cookieParser from 'cookie-parser';
 
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
@@ -16,11 +19,14 @@ import { app as routes } from './routes/index.js';
 
 console.timeEnd('deps');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-const { APP_PORT, NODE_ENV, APP_NAME } = process.env;
+const { APP_PORT, NODE_ENV, APP_NAME, COOKIE_SECRET } = process.env;
 
 console.time('startup');
 
 async function main(): Promise<void> {
+  if (!APP_PORT || !APP_NAME || !COOKIE_SECRET || !NODE_ENV) {
+    throw new Error('Missing env - not defined');
+  }
   // Setup the express server
   const { app } = expressWebsockets(express());
 
@@ -31,8 +37,18 @@ async function main(): Promise<void> {
   );
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(requestId);
+  app.use(cookieParser());
+  app.use(
+    session({
+      secret: COOKIE_SECRET,
+    })
+  );
 
-  // ws and http routes
+  app.use(accessControl);
+  app.use(userInfoSync);
+
+  // Client facing routes
   app.use(routes);
 
   const httpServer = http.createServer(app);
@@ -44,7 +60,11 @@ async function main(): Promise<void> {
     cors<cors.CorsRequest>(),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
     expressMiddleware(gqlServer, {
-      context: async () => ({ prisma: prisma }),
+      context: async ({ req }) => ({
+        prisma: prisma,
+        req: req,
+        userId: req.auth?.payload.sub as string,
+      }),
     })
   );
 

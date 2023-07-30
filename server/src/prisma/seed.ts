@@ -12,13 +12,13 @@ async function main() {
   // Create users
   const user1 = await prisma.user.create({
     data: {
-      auth0Id: 123456, // Replace with the desired Auth0 ID for user1
+      id: '123456', // Replace with the desired Auth0 ID for user1
     },
   });
 
   const user2 = await prisma.user.create({
     data: {
-      auth0Id: 789012, // Replace with the desired Auth0 ID for user2
+      id: '789012', // Replace with the desired Auth0 ID for user2
     },
   });
 
@@ -60,43 +60,23 @@ async function main() {
   const document1: Document = await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 1'),
-      documentUUID: uuidv4(),
+      id: uuidv4(),
       audioFileUrl: 'https://example.com/audio1.mp3',
       projectId: project1.id,
+      transcriptionType: 'AUTOMATIC',
+      title: 'Document 2',
     },
   });
 
   const document2: Document = await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 2'),
-      documentUUID: uuidv4(),
+      id: uuidv4(),
       audioFileUrl: 'https://example.com/audio2.mp3',
       projectId: project2.id,
+      transcriptionType: 'AUTOMATIC',
+      title: 'Document 2',
     },
-  });
-
-  // Create transcription processes
-  await prisma.transcriptionProcess.createMany({
-    data: [
-      {
-        status: TranscriptionProcessStatus.DONE,
-        doSpeakerDiarization: true,
-        documentId: document1.id,
-        rawAudioFileURL: 'https://example.com/raw1.wav',
-        transcriptionAudioFileURL: 'https://example.com/transcription1.wav',
-        speakerDiarizationFileURL: 'https://example.com/speaker1.txt',
-        whisperTranscriptionFileURL: 'https://example.com/whisper1.txt',
-      },
-      {
-        status: TranscriptionProcessStatus.PROCESSING,
-        doSpeakerDiarization: false,
-        documentId: document2.id,
-        rawAudioFileURL: 'https://example.com/raw2.wav',
-        transcriptionAudioFileURL: 'https://example.com/transcription2.wav',
-        speakerDiarizationFileURL: 'https://example.com/speaker2.txt',
-        whisperTranscriptionFileURL: 'https://example.com/whisper2.txt',
-      },
-    ],
   });
 }
 

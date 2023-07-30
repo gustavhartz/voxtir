@@ -7,5 +7,6 @@ export const typeDefs = gql`
     me: User
     projects: [Project]
     project(id: ID!): Project
+    projectSharedWith(id: ID!): [UserSharing]
   }
 `;

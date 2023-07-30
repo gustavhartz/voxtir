@@ -7,35 +7,38 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Document {
-    id                   Int                    @id @default(autoincrement())
-    data                 Bytes
-    documentUUID         String                 @unique
-    createdAt            DateTime               @default(now())
-    updatedAt            DateTime               @updatedAt
-    audioFileUrl         String
-    TranscriptionProcess TranscriptionProcess[]
-    project              Project                @relation(fields: [projectId], references: [id])
-    projectId            Int // relation scalar field (used in the `@relation` attribute above)    
-
-    @@index([documentUUID])
+enum TranscriptionType {
+    AUTOMATIC
+    MANUAL
 }
 
-// Trigger included with historic table
-model TranscriptionProcess {
-    id                          Int                        @id @default(autoincrement())
-    status                      TranscriptionProcessStatus
-    doSpeakerDiarization        Boolean
-    document                    Document                   @relation(fields: [documentId], references: [id])
-    documentId                  Int // relation scalar field (used in the `@relation` attribute above)
-    // S3 file locations
-    rawAudioFileURL             String
-    transcriptionAudioFileURL   String
-    speakerDiarizationFileURL   String
-    whisperTranscriptionFileURL String
+model Document {
+    id                String            @id @default(uuid())
+    title             String
+    data              Bytes
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
+    audioFileUrl      String
+    project           Project           @relation(fields: [projectId], references: [id])
+    projectId         String // relation scalar field (used in the `@relation` attribute above)  
+    // Transcription data
+    language          String?
+    speakerCount      Int?
+    dialect           String?
+    transcriptionType TranscriptionType
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    // Automatic transcription data
+    transcriptionStatus         TranscriptionProcessStatus?
+    doSpeakerDiarization        Boolean?
+    rawAudioFileURL             String?
+    transcriptionAudioFileURL   String?
+    speakerDiarizationFileURL   String?
+    whisperTranscriptionFileURL String?
+
+    // Other
+    isTrashed Boolean @default(false)
+
+    @@index([projectId])
 }
 
 enum TranscriptionProcessStatus {
@@ -47,14 +50,15 @@ enum TranscriptionProcessStatus {
 }
 
 model User {
-    id              Int             @id @default(autoincrement())
-    auth0Id         Int             @unique
-    UsersOnProjects UserOnProject[]
+    id                            String          @id
+    auth0ManagementApiUserDetails Json?
+    UsersOnProjects               UserOnProject[]
 }
 
 model Project {
-    id              Int             @id @default(autoincrement())
+    id              String          @id @default(uuid())
     name            String
+    description     String?
     createdAt       DateTime        @default(now())
     updatedAt       DateTime        @updatedAt
     UsersOnProjects UserOnProject[]
@@ -62,14 +66,16 @@ model Project {
 }
 
 model UserOnProject {
-    id        Int         @id @default(autoincrement())
+    id        String      @id @default(uuid())
     project   Project     @relation(fields: [projectId], references: [id])
-    projectId Int // relation scalar field (used in the `@relation` attribute above)
+    projectId String // relation scalar field (used in the `@relation` attribute above)
     user      User        @relation(fields: [userId], references: [id])
-    userId    Int // relation scalar field (used in the `@relation` attribute above)
+    userId    String // relation scalar field (used in the `@relation` attribute above)
     role      ProjectRole
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
+
+    @@index([projectId, userId])
 }
 
 enum ProjectRole {
