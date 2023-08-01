@@ -46,3 +46,8 @@ variable "github_api_token" {
   type        = string
   description = "Github api token to access github resources"
 }
+
+variable "resend_domain_key" {
+  type        = string
+  description = "Resend domain key api token to access email services"
+}

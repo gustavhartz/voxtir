@@ -105,6 +105,29 @@ resource "aws_ecs_service" "app_backend_server" {
   }
 }
 
+// resend cname records
+resource "cloudflare_record" "resend_bounce_mx" {
+  zone_id  = var.cloudflare_zone_id
+  name     = "bounces.staging"
+  value    = "feedback-smtp.eu-west-1.amazonses.com"
+  type     = "MX"
+  priority = 10
+}
+
+resource "cloudflare_record" "resend_bounce_txt" {
+  zone_id = var.cloudflare_zone_id
+  name    = "bounces.staging"
+  value   = "\"v=spf1 include:amazonses.com ~all\""
+  type    = "TXT"
+}
+
+resource "cloudflare_record" "resend_domain_key_txt" {
+  zone_id = var.cloudflare_zone_id
+  name    = "resend._domainkey.staging"
+  value   = var.resend_domain_key
+  type    = "TXT"
+}
+
 #TODO: Add a load balancer to the app server
 #TODO: Add VPC and subnets to the app server 
 #TODO: Create a security group for the app server
