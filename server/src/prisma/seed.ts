@@ -46,7 +46,7 @@ async function main() {
       {
         projectId: project1.id,
         userId: user2.id,
-        role: ProjectRole.USER,
+        role: ProjectRole.MEMBER,
       },
       {
         projectId: project2.id,
