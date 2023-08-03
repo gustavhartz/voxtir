@@ -1,5 +1,6 @@
 import aws from 'aws-sdk';
-import { FileAlreadyExistsError } from '../types/customErrors';
+import { logger } from './logger.js';
+import { FileAlreadyExistsError } from '../types/customErrors.js';
 // ENV
 const AWS_REGION = process.env.AWS_REGION;
 
@@ -25,9 +26,15 @@ export const uploadObject = async (
   if (!overwrite) {
     try {
       await s3.headObject({ Bucket: bucket, Key: key }).promise();
-      throw new FileAlreadyExistsError(`File already exists at ${key}`);
+      throw new FileAlreadyExistsError(`File ${key} already exists`);
     } catch (err: any) {
-      if (!(err instanceof FileAlreadyExistsError)) {
+      if (err.statusCode === 404 || err.code === 'NotFound') {
+        logger.info(`File ${key} not found, uploading`);
+      } else if (err.status === 409) {
+        logger.info(`file ${key} already exists, skipping upload`);
+        throw new FileAlreadyExistsError(`File ${key} already exists`);
+      } else {
+        logger.error(`Unexpected error in S3 checking if file exists`);
         throw err;
       }
     }
