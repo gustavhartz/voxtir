@@ -1,5 +1,4 @@
 import { GraphQLUpload } from 'graphql-upload-minimal';
-import type { Readable } from 'stream';
 import prisma from '../../../prisma/index.js';
 
 import { Resolvers, Project } from '../generated/graphql';
@@ -13,7 +12,11 @@ import {
 } from '../../../helpers/jwt.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import { logger } from '../../../services/logger.js';
-
+import {
+  uploadAudioFile,
+  getPresignedUrlForDocumentAudioFile,
+} from '../../../transcription/index.js';
+import { FileAlreadyExistsError } from '../../../types/customErrors.js';
 export const resolvers: Resolvers = {
   Upload: GraphQLUpload,
 
@@ -128,21 +131,39 @@ export const resolvers: Resolvers = {
   },
 
   Mutation: {
-    uploadDocuments: async (_, args) => {
-      const { docs } = args;
-      for (const doc of docs) {
-        const { createReadStream, filename } = await doc.file;
-        logger.info('uploading documents', doc.docType, filename);
-        const stream: Readable = createReadStream();
-        stream.on('error', function (err) {
-          logger.error('Failed uploading documents', err);
-          stream.destroy();
-          return { success: false, message: err.message };
-        });
+    createDocument: async (_, args, context) => {
+      const {
+        projectId,
+        title,
+        language,
+        dialect,
+        speakerCount,
+        transcriptionType,
+      } = args;
+      let userRights = await prisma.userOnProject.findFirst({
+        where: {
+          userId: context.userId,
+          projectId: projectId,
+        },
+      });
+
+      if (!userRights) {
+        return {
+          success: false,
+          message: 'Projectid not found or related to user',
+        };
       }
-      return { success: true };
-    },
-    createDocument: async () => {
+      await prisma.document.create({
+        data: {
+          title: title,
+          projectId: projectId,
+          language: language,
+          dialect: dialect,
+          speakerCount: speakerCount,
+          transcriptionType: transcriptionType,
+        },
+      });
+
       return { success: true };
     },
     trashDocument: async (_, args, context) => {
@@ -150,6 +171,7 @@ export const resolvers: Resolvers = {
       let userRights = await prisma.userOnProject.findFirst({
         where: {
           userId: context.userId,
+          projectId: projectId,
         },
       });
       if (!userRights) {
@@ -278,7 +300,7 @@ export const resolvers: Resolvers = {
       const { token } = args;
       const userId = context.userId;
 
-      var tokenVerificationRes: projectSharingJWTRes;
+      let tokenVerificationRes: projectSharingJWTRes;
       try {
         tokenVerificationRes = verifyProjectSharingToken(token);
       } catch (error) {
@@ -354,17 +376,90 @@ export const resolvers: Resolvers = {
       });
       return { success: true };
     },
-    uploadAudioFile: async (parent, args) => {
-      const { doc, documentId } = args;
+    uploadAudioFile: async (_, args, context) => {
+      logger.info('Uploading file');
+      const { doc, documentId, projectId } = args;
       const { createReadStream, filename } = await doc.file;
-      logger.info('Uploading file', doc.docType, filename, documentId);
-      const stream: Readable = createReadStream();
-      stream.on('error', function (err) {
-        logger.error(err);
-        stream.destroy();
-        return { success: false, message: err.message };
+      // assert user has permission
+      let userRelation = await prisma.userOnProject.findFirst({
+        where: {
+          projectId: projectId,
+          userId: context.userId,
+        },
       });
+      if (!userRelation) {
+        return {
+          success: false,
+          message: 'Projectid not found or related to user',
+        };
+      }
+      // Document is on project
+      let docRelation = await prisma.document.findFirst({
+        where: {
+          projectId: projectId,
+          id: documentId,
+        },
+      });
+
+      if (!docRelation) {
+        return {
+          success: false,
+          message: 'Document project combination not found',
+        };
+      }
+
+      logger.info('Uploading file', doc.docType, filename, documentId);
+      logger.info(doc);
+      const stream: Buffer = createReadStream();
+      try {
+        await uploadAudioFile(documentId, stream, filename, doc.docType);
+      } catch (error) {
+        if (error instanceof FileAlreadyExistsError) {
+          return {
+            success: false,
+            message: 'File already exists',
+          };
+        }
+        logger.error('error in raw fileupload to S3', error);
+        return {
+          success: false,
+          message: 'Error uploading file',
+        };
+      }
       return { success: true };
+    },
+    getPresignedUrlForAudioFile: async (_, args, context) => {
+      const { documentId, projectId } = args;
+      // assert user has permission
+      let userRelation = await prisma.userOnProject.findFirst({
+        where: {
+          projectId: projectId,
+          userId: context.userId,
+        },
+      });
+      if (!userRelation) {
+        return {
+          success: false,
+          message: 'Projectid not found or related to user',
+        };
+      }
+      // Document is on project
+      let docRelation = await prisma.document.findFirst({
+        where: {
+          projectId: projectId,
+          id: documentId,
+        },
+      });
+      if (!docRelation) {
+        return {
+          success: false,
+          message: 'Document project combination not found',
+        };
+      }
+      let signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
+        `${documentId}`
+      );
+      return signedUrlResponse;
     },
   },
 };

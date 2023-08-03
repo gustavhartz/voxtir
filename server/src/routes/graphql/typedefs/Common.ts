@@ -17,6 +17,13 @@ export const typeDefs = gql`
     message: String
   }
 
+  type PresignedUrlResponse {
+    url: String!
+    expiresAt: Int!
+  }
+
+  union AudioUploadResponse = PresignedUrlResponse | ActionResult
+
   interface IUser {
     id: ID!
     name: String!

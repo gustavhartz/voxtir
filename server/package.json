@@ -24,6 +24,7 @@
     "@hocuspocus/server": "^2.0.6",
     "@prisma/client": "^5.0.0",
     "access-token-jwt": "^0.1.2",
+    "aws-sdk": "^2.1428.0",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
     "chalk": "^4.1.2",

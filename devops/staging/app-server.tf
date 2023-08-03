@@ -128,6 +128,45 @@ resource "cloudflare_record" "resend_domain_key_txt" {
   type    = "TXT"
 }
 
+// S3 to store audiofiles and perform transcriptions
+resource "aws_s3_bucket" "voxtir_audiofiles" {
+  bucket = "voxtir-audiofiles-${var.environment}"
+}
+
+data "aws_iam_policy_document" "audio_bucket_sqs" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions   = ["sqs:SendMessage"]
+    resources = ["arn:aws:sqs:*:*:s3-event-notification-queue"]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = [aws_s3_bucket.voxtir_audiofiles.arn]
+    }
+  }
+}
+
+resource "aws_sqs_queue" "audio_bucket_queue" {
+  name   = "s3-event-notification-queue"
+  policy = data.aws_iam_policy_document.audio_bucket_sqs.json
+}
+
+resource "aws_s3_bucket_notification" "audio_bucket_notification" {
+  bucket = aws_s3_bucket.voxtir_audiofiles.id
+
+  queue {
+    queue_arn = aws_sqs_queue.audio_bucket_queue.arn
+    events    = ["s3:ObjectCreated:*"]
+  }
+}
+
 #TODO: Add a load balancer to the app server
 #TODO: Add VPC and subnets to the app server 
 #TODO: Create a security group for the app server
