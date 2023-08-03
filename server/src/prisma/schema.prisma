@@ -30,7 +30,8 @@ model Document {
     // Automatic transcription data
     transcriptionStatus         TranscriptionProcessStatus?
     doSpeakerDiarization        Boolean?
-    rawAudioFileURL             String?
+    uploadedAudioFileURL        String?
+    processedAudioFileURL       String?
     transcriptionAudioFileURL   String?
     speakerDiarizationFileURL   String?
     whisperTranscriptionFileURL String?
