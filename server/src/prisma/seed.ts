@@ -1,9 +1,4 @@
-import {
-  PrismaClient,
-  Document,
-  TranscriptionProcessStatus,
-  ProjectRole,
-} from '@prisma/client';
+import { PrismaClient, ProjectRole } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
 const prisma = new PrismaClient();
@@ -57,22 +52,20 @@ async function main() {
   });
 
   // Create documents
-  const document1: Document = await prisma.document.create({
+  await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 1'),
       id: uuidv4(),
-      audioFileUrl: 'https://example.com/audio1.mp3',
       projectId: project1.id,
       transcriptionType: 'AUTOMATIC',
       title: 'Document 2',
     },
   });
 
-  const document2: Document = await prisma.document.create({
+  await prisma.document.create({
     data: {
       data: Buffer.from('Sample data for document 2'),
       id: uuidv4(),
-      audioFileUrl: 'https://example.com/audio2.mp3',
       projectId: project2.id,
       transcriptionType: 'AUTOMATIC',
       title: 'Document 2',
@@ -80,11 +73,7 @@ async function main() {
   });
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
