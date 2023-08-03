@@ -13,25 +13,25 @@ enum TranscriptionType {
 }
 
 model Document {
-    id                String            @id @default(uuid())
-    title             String
-    data              Bytes
-    createdAt         DateTime          @default(now())
-    updatedAt         DateTime          @updatedAt
-    audioFileUrl      String
-    project           Project           @relation(fields: [projectId], references: [id])
-    projectId         String // relation scalar field (used in the `@relation` attribute above)  
+    id                          String                      @id @default(uuid())
+    title                       String
+    createdAt                   DateTime                    @default(now())
+    updatedAt                   DateTime                    @updatedAt
+    project                     Project                     @relation(fields: [projectId], references: [id])
+    projectId                   String // relation scalar field (used in the `@relation` attribute above)  
+    // TipTap document data
+    data                        Bytes?
+    // Audio file
+    uploadedAudioFileURL        String?
+    processedAudioFileURL       String?
     // Transcription data
-    language          String?
-    speakerCount      Int?
-    dialect           String?
-    transcriptionType TranscriptionType
-
+    language                    String?
+    speakerCount                Int?
+    dialect                     String?
+    transcriptionType           TranscriptionType
     // Automatic transcription data
     transcriptionStatus         TranscriptionProcessStatus?
     doSpeakerDiarization        Boolean?
-    uploadedAudioFileURL        String?
-    processedAudioFileURL       String?
     transcriptionAudioFileURL   String?
     speakerDiarizationFileURL   String?
     whisperTranscriptionFileURL String?
