@@ -58,7 +58,7 @@ async function main(): Promise<void> {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>(),
-    graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
+    graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({
         prisma: prisma,
@@ -79,6 +79,7 @@ async function main(): Promise<void> {
           `http://localhost:${APP_PORT}`
         )} (ctrl+click)
       `);
+    console.timeEnd('startup');
   });
 }
 
