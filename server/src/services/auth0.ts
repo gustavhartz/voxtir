@@ -54,7 +54,7 @@ export class Auth0Client {
         Auth0Client.systemToken = tokenData.access_token;
 
         let decodedToken = jwt.decode(tokenData.access_token, { json: true });
-        if (!decodedToken || !decodedToken?.exp) {
+        if (!decodedToken?.exp) {
           logger.error('Error decoding auth0 system token');
           throw new Error('Error decoding system token');
         }
@@ -95,7 +95,7 @@ let isRunningDirectly = false;
 if (isRunningDirectly) {
   // When running the file standalone, you can create an instance of Auth0Client and call its methods here.
   logger.info(Auth0Client.systemTokenExpiresAt());
-  let fse = await Auth0Client.getUserById('auth0|64c035be0b7eb7c5797264ca');
+  await Auth0Client.getUserById('auth0|64c035be0b7eb7c5797264ca');
   logger.info(Auth0Client.systemToken);
   logger.info(Auth0Client.systemTokenExpiresAt());
 }
