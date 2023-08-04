@@ -9,6 +9,7 @@ aws.config.update({
 });
 
 const s3 = new aws.S3({ apiVersion: '2006-03-01' });
+const sqs = new aws.SQS({ apiVersion: '2012-11-05' });
 
 export const uploadObject = async (
   bucket: string,
@@ -54,4 +55,73 @@ export const generatePresignedUrlForObject = async (
     Expires: expiration,
   };
   return s3.getSignedUrlPromise('getObject', params);
+};
+
+/**
+ * Poll SQS. Returns the promise from SQS. Basic params
+ {
+    AttributeNames: ['All'],
+    MaxNumberOfMessages: 1,
+    MessageAttributeNames: ['All'],
+    QueueUrl: queueUrl,
+    VisibilityTimeout: 100,
+    WaitTimeSeconds: 0,
+  };
+ * @param queueUrl 
+ * @param requestParams 
+ * @returns 
+ */
+export const pollSqs = async (
+  queueUrl: string,
+  requestParams?: aws.SQS.ReceiveMessageRequest
+) => {
+  const params = {
+    AttributeNames: ['All'],
+    MaxNumberOfMessages: 1,
+    MessageAttributeNames: ['All'],
+    QueueUrl: queueUrl,
+    VisibilityTimeout: 100,
+    WaitTimeSeconds: 0,
+    ...requestParams,
+  };
+  return sqs.receiveMessage(params).promise();
+};
+
+/**
+ * Poll SQS and delete a message. Returns the promise from SQS
+ * @param queueUrl
+ * @param receiptHandle
+ * @returns
+ */
+export const deleteMessageFromSqs = async (
+  queueUrl: string,
+  receiptHandle: string
+) => {
+  const params = {
+    QueueUrl: queueUrl,
+    ReceiptHandle: receiptHandle,
+  };
+  return sqs.deleteMessage(params).promise();
+};
+
+/**
+ * A helper function that polls SQS and deletes all messages. Returns the messages from SQS
+ * @param queueUrl
+ * @param requestParams
+ * @returns
+ */
+export const pollSqsAndDelete = async (
+  queueUrl: string,
+  requestParams?: aws.SQS.ReceiveMessageRequest
+) => {
+  const res = await pollSqs(queueUrl, requestParams);
+  if (res.Messages && res.Messages.length > 0) {
+    // delete all messages
+    const deletePromises = res.Messages.map((message) =>
+      deleteMessageFromSqs(queueUrl, message.ReceiptHandle as string)
+    );
+    await Promise.all(deletePromises);
+  }
+  logger.debug(`deleted ${res.Messages?.length} messages from SQS ${queueUrl}`);
+  return res;
 };
