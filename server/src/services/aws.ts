@@ -1,8 +1,8 @@
 import aws from 'aws-sdk';
 import { logger } from './logger.js';
 import { FileAlreadyExistsError } from '../types/customErrors.js';
+import { AWS_REGION } from '../helpers/env.js';
 // ENV
-const AWS_REGION = process.env.AWS_REGION;
 
 aws.config.update({
   region: AWS_REGION,
@@ -121,7 +121,9 @@ export const pollSqsAndDelete = async (
       deleteMessageFromSqs(queueUrl, message.ReceiptHandle as string)
     );
     await Promise.all(deletePromises);
+    logger.debug(
+      `deleted ${res.Messages?.length} messages from SQS ${queueUrl}`
+    );
   }
-  logger.debug(`deleted ${res.Messages?.length} messages from SQS ${queueUrl}`);
   return res;
 };
