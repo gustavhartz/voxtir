@@ -19,6 +19,7 @@
   "license": "None",
   "dependencies": {
     "@apollo/server": "^4.7.1",
+    "@aws-sdk/client-sagemaker": "^3.385.0",
     "@graphql-tools/schema": "^10.0.0",
     "@hocuspocus/extension-database": "^2.0.6",
     "@hocuspocus/server": "^2.0.6",
