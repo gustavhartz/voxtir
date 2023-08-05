@@ -35,6 +35,8 @@ model Document {
     mergedTranscriptionFileURL String?
     speakerDiarizationFileURL  String?
     speechToTextFileURL        String?
+    transcriptionStartedAt     DateTime?
+    transcriptionFinishedAt    DateTime?
 
     // Other
     isTrashed Boolean @default(false)
