@@ -16,6 +16,7 @@ export const {
   NODE_ENV,
   DATABASE_URL,
   SQS_TRANSCRIPTION_QUEUE_URL,
+  SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
 } = process.env as {
   AUTH0_CLIENT_ID: string;
   AUTH0_CLIENT_SECRET: string;
@@ -32,6 +33,7 @@ export const {
   NODE_ENV: string;
   DATABASE_URL: string;
   SQS_TRANSCRIPTION_QUEUE_URL: string;
+  SAGEMAKER_TRANSCRIPTION_MODEL_NAME: string;
 };
 // Assert defined
 if (
@@ -49,7 +51,8 @@ if (
   !APP_PORT ||
   !NODE_ENV ||
   !DATABASE_URL ||
-  !SQS_TRANSCRIPTION_QUEUE_URL
+  !SQS_TRANSCRIPTION_QUEUE_URL ||
+  !SAGEMAKER_TRANSCRIPTION_MODEL_NAME
 ) {
   throw new Error('Missing env');
 }
