@@ -57,6 +57,13 @@ export const generatePresignedUrlForObject = async (
   return s3.getSignedUrlPromise('getObject', params);
 };
 
+export const loadObject = async (bucket: string, key: string) => {
+  const params = {
+    Bucket: bucket,
+    Key: key,
+  };
+  return s3.getObject(params).promise();
+};
 /**
  * Poll SQS. Returns the promise from SQS. Basic params
  {
