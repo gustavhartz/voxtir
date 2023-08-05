@@ -13,28 +13,28 @@ enum TranscriptionType {
 }
 
 model Document {
-    id                          String                      @id @default(uuid())
-    title                       String
-    createdAt                   DateTime                    @default(now())
-    updatedAt                   DateTime                    @updatedAt
-    project                     Project                     @relation(fields: [projectId], references: [id])
-    projectId                   String // relation scalar field (used in the `@relation` attribute above)  
+    id                         String                      @id @default(uuid())
+    title                      String
+    createdAt                  DateTime                    @default(now())
+    updatedAt                  DateTime                    @updatedAt
+    project                    Project                     @relation(fields: [projectId], references: [id])
+    projectId                  String // relation scalar field (used in the `@relation` attribute above)  
     // TipTap document data
-    data                        Bytes                       @default("")
+    data                       Bytes                       @default("")
     // Audio file
-    uploadedAudioFileURL        String?
-    processedAudioFileURL       String?
+    audioFileURL               String?
+    audioFileExtension         String? //mpeg, wav, etc
     // Transcription data
-    language                    String?
-    speakerCount                Int?
-    dialect                     String?
-    transcriptionType           TranscriptionType
+    language                   String?
+    speakerCount               Int?
+    dialect                    String?
+    transcriptionType          TranscriptionType
     // Automatic transcription data
-    transcriptionStatus         TranscriptionProcessStatus?
-    doSpeakerDiarization        Boolean?
-    transcriptionAudioFileURL   String?
-    speakerDiarizationFileURL   String?
-    whisperTranscriptionFileURL String?
+    transcriptionStatus        TranscriptionProcessStatus?
+    doSpeakerDiarization       Boolean?
+    mergedTranscriptionFileURL String?
+    speakerDiarizationFileURL  String?
+    speechToTextFileURL        String?
 
     // Other
     isTrashed Boolean @default(false)
