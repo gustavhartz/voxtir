@@ -13,6 +13,55 @@ import {
   sagemakerOutputFilePrefix,
 } from './index.js';
 import { logger } from '../services/logger.js';
+import { languages } from './languages.js';
+
+interface TranscriptionJsonFile {
+  bucketName: string;
+  audioInputKey: string;
+  speakerDiarizationOutputKey: string;
+  speechToTextOutputKey: string;
+  modelOptions: modelOptions;
+}
+
+export interface modelOptions {
+  model: string;
+  language?: keyof typeof languages;
+  speakerCount?: number;
+}
+
+export const createTranscriptionJob = async (
+  documentId: string,
+  audioFileUri: string,
+  modelOptions: modelOptions = { model: 'medium' }
+) => {
+  logger.info(
+    `Creating uploading json file for sagemaker - documentId: ${documentId}`
+  );
+  let key = `${sagemakerJSONFilePrefix}/${documentId}.json`;
+  let jsonFile = createTranscriptionJsonFile(
+    documentId,
+    audioFileUri,
+    modelOptions
+  );
+  await uploadObject(
+    AWS_AUDIO_BUCKET_NAME,
+    key,
+    Buffer.from(JSON.stringify(jsonFile)),
+    'application/json',
+    true
+  );
+  let jsonInputFileUri = `s3://${AWS_AUDIO_BUCKET_NAME}/${key}`;
+
+  // Create jobPayload
+  let payload = createTranscriptionJobPayload(jsonInputFileUri, documentId);
+
+  // Create job
+  try {
+    await createBatchTransformJob(payload);
+  } catch (e) {
+    logger.error(`Error creating transcription job: ${e}`);
+  }
+};
 
 const createTranscriptionJobPayload = (
   jsonInputFileUri: string,
@@ -52,54 +101,6 @@ const createTranscriptionJobPayload = (
   };
   return params;
 };
-
-export interface modelOptions {
-  model: string;
-  language?: string;
-  speakerCount?: number;
-}
-
-export const createTranscriptionJob = async (
-  documentId: string,
-  audioFileUri: string,
-  modelOptions: modelOptions = { model: 'medium' }
-) => {
-  logger.info(
-    `Creating uploading json file for sagemaker - documentId: ${documentId}`
-  );
-  let key = `${sagemakerJSONFilePrefix}/${documentId}.json`;
-  let jsonFile = createTranscriptionJsonFile(
-    documentId,
-    audioFileUri,
-    modelOptions
-  );
-  await uploadObject(
-    AWS_AUDIO_BUCKET_NAME,
-    key,
-    Buffer.from(JSON.stringify(jsonFile)),
-    'application/json',
-    true
-  );
-  let jsonInputFileUri = `s3://${AWS_AUDIO_BUCKET_NAME}/${key}`;
-
-  // Create jobPayload
-  let payload = createTranscriptionJobPayload(jsonInputFileUri, documentId);
-
-  // Create job
-  try {
-    await createBatchTransformJob(payload);
-  } catch (e) {
-    logger.error(`Error creating transcription job: ${e}`);
-  }
-};
-
-interface TranscriptionJsonFile {
-  bucketName: string;
-  audioInputKey: string;
-  speakerDiarizationOutputKey: string;
-  speechToTextOutputKey: string;
-  modelOptions: modelOptions;
-}
 
 const createTranscriptionJsonFile = (
   documentId: string,
