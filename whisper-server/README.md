@@ -9,6 +9,10 @@ Compared to the typical approach in both of those links, our case does not use S
 
 Base image originates from [Podwhisperer](https://github.com/fourTheorem/podwhisperer)
 
+The docker container also performs speaker dizartation with [Pyannote](https://huggingface.co/pyannote/speaker-diarization). Currently it takes around 2.5 seconds pr. minute to perform it on a t4. Please be aware for the non commercial licence it has!!!
+
+Remember that the Server backend uses the output from this code so altering the format of the output data requires changes to the backend
+
 ## Development
 
 **Set the repository URI**
@@ -23,8 +27,11 @@ export REPOSITORY_URI=<YOUR_REPO_URI>
 **Push the container image to ECR**
 docker push $REPOSITORY_URI
 
+Remember that on m1 ypu need dockerx to target the platform like
 
 **Other**
+build
+`docker buildx build --platform linux/amd64 -t whisperserver .`
 
 Run the model locally:
 `docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm <IMAGE_ID> serve`
