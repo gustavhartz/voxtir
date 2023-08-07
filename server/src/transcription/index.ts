@@ -2,7 +2,7 @@ import aws from 'aws-sdk';
 import {
   uploadObject,
   generatePresignedUrlForObject,
-} from '../services/aws.js';
+} from '../services/aws-s3.js';
 import { logger } from '../services/logger.js';
 import { AWS_AUDIO_BUCKET_NAME } from '../helpers/env.js';
 

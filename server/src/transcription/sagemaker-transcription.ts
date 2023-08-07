@@ -4,7 +4,7 @@ import {
   AWS_AUDIO_BUCKET_NAME,
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
 } from '../helpers/env.js';
-import { uploadObject } from '../services/aws.js';
+import { uploadObject } from '../services/aws-s3.js';
 import { createBatchTransformJob } from '../services/aws-sagemaker.js';
 import {
   speechToTextFilePrefix,
@@ -18,6 +18,7 @@ import { languages } from './languages.js';
 interface TranscriptionJsonFile {
   bucketName: string;
   audioInputKey: string;
+  fileExtension: string;
   speakerDiarizationOutputKey: string;
   speechToTextOutputKey: string;
   modelOptions: modelOptions;
@@ -32,6 +33,7 @@ export interface modelOptions {
 export const createTranscriptionJob = async (
   documentId: string,
   audioFileUri: string,
+  fileExtension: string,
   modelOptions: modelOptions = { model: 'medium' }
 ) => {
   logger.info(
@@ -41,6 +43,7 @@ export const createTranscriptionJob = async (
   let jsonFile = createTranscriptionJsonFile(
     documentId,
     audioFileUri,
+    fileExtension,
     modelOptions
   );
   await uploadObject(
@@ -105,10 +108,12 @@ const createTranscriptionJobPayload = (
 const createTranscriptionJsonFile = (
   documentId: string,
   audioFileUrl: string,
+  fileExtension: string,
   modelOptions: modelOptions
 ) => {
   const jsonFile: TranscriptionJsonFile = {
     bucketName: AWS_AUDIO_BUCKET_NAME,
+    fileExtension: fileExtension,
     audioInputKey: audioFileUrl,
     speakerDiarizationOutputKey: `${speakerDiarizationFilePrefix}/${documentId}`,
     speechToTextOutputKey: `${speechToTextFilePrefix}/${documentId}`,
@@ -119,5 +124,5 @@ const createTranscriptionJsonFile = (
 
 let isRunningDirectly = false;
 if (isRunningDirectly) {
-  await createTranscriptionJob('input', 'raw-audio/input.wav');
+  await createTranscriptionJob('input', 'raw-audio/input', '.wav');
 }
