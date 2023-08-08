@@ -162,7 +162,7 @@ def transformation() -> flask.Response:
         for idx, (turn, _, speaker) in enumerate(
             diarization.itertracks(yield_label=True)
         ):
-            result["segment"].append(
+            result["segments"].append(
                 {
                     "start": turn.start,
                     "end": turn.end,
