@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { logger } from '../services/logger.js';
 
 interface WhisperSegment {
   id: number;
@@ -23,6 +24,10 @@ interface PyannoteSegment {
   end: number;
   idx: number;
   speaker: string;
+}
+
+interface PyannoteTranscript {
+  segments: PyannoteSegment[];
 }
 
 function convertSecondsToTimestamp(seconds: number): string {
@@ -52,13 +57,28 @@ function getTimestampHtml(timestamp: string) {
   return `<timestamp-button timestamp="${timestamp}"></timestamp-button>`;
 }
 
+/**
+ * This function takes a pyannote transcript and a whisper transcript and merges them into a single HTML document with speaker changes and timestamps
+ * it's based upon the https://github.com/fourTheorem/podwhisperer logic, but customized to work with the Pyannote transcript and our own pipeline
+ * The core idea is to iterate over the whisper transcript and insert speaker changes and timestamps from the Pyannote transcript and then merge the two
+ * into a single HTML document that can be used in the frontend editor. Thus this function is highly dependent on the HTML structure of the frontend editor
+ * @param pyannoteTranscript - The json format ml transcription pipeline for pyannote
+ * @param whisperTranscript - The json format of the ml transcription pipeline for whisper
+ * @param timestampEveryApproximateSeconds - The approximate number of seconds between timestamps
+ * @param minimumTimeBetweenTimestampsSeconds - The minimum number of seconds between timestamps
+ * @returns
+ */
 export const createSpeakerChangeTranscriptionDocument = (
-  PyannoteTranscript: PyannoteSegment[],
+  pyannoteTranscript: PyannoteTranscript,
   whisperTranscript: WhisperTranscript,
-  timestampEveryApproximateSeconds: number = 25
+  timestampEveryApproximateSeconds: number = 25,
+  minimumTimeBetweenTimestampsSeconds: number = 10
 ): string => {
+  logger.info(
+    `Creating speaker change transcription document based on ${pyannoteTranscript.segments.length} pyannote segments and ${whisperTranscript.segments.length} whisper segments`
+  );
   let pyannoteIdx = 0;
-  let pyannoteSegment = PyannoteTranscript[pyannoteIdx];
+  let pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
   let whisperIdx = 0;
   let whisperSegment = whisperTranscript.segments[whisperIdx];
   let speaker = pyannoteSegment.speaker;
@@ -71,17 +91,19 @@ export const createSpeakerChangeTranscriptionDocument = (
   )}</p><p>`;
 
   while (whisperIdx < whisperTranscript.segments.length) {
+    whisperSegment = whisperTranscript.segments[whisperIdx];
+    pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
     // move whisper segment forward
     if (
       whisperSegment.end < pyannoteSegment.start ||
-      pyannoteIdx === PyannoteTranscript.length - 1
+      pyannoteIdx === pyannoteTranscript.segments.length - 1
     ) {
       textCollector += whisperSegment.text;
       whisperIdx++;
       continue;
     } else {
       pyannoteIdx++;
-      pyannoteSegment = PyannoteTranscript[pyannoteIdx];
+      pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
       speaker = pyannoteSegment.speaker;
     }
 
@@ -92,11 +114,13 @@ export const createSpeakerChangeTranscriptionDocument = (
     }
 
     if (
-      setTimestamp ||
-      lastTimestampAt < whisperSegment.end - timestampEveryApproximateSeconds
+      (setTimestamp ||
+        lastTimestampAt <
+          whisperSegment.end - timestampEveryApproximateSeconds) &&
+      lastTimestampAt + minimumTimeBetweenTimestampsSeconds < whisperSegment.end
     ) {
       textCollector += ` ${getTimestampHtml(
-        convertSecondsToTimestamp(whisperSegment.start)
+        convertSecondsToTimestamp(whisperSegment.end)
       )}`;
       setTimestamp = false;
       lastTimestampAt = whisperSegment.end;
@@ -111,16 +135,10 @@ let isRunningDirectly = false;
 if (isRunningDirectly) {
   // load in files
   const pyannoteTranscript = JSON.parse(
-    fs.readFileSync(
-      '/Users/alex/Downloads/whisper-transcript/whisper-transcript.json',
-      'utf-8'
-    )
+    fs.readFileSync('./diarization.json', 'utf-8')
   );
   const whisperTranscript = JSON.parse(
-    fs.readFileSync(
-      '/Users/alex/Downloads/whisper-transcript/whisper-transcript.json',
-      'utf-8'
-    )
+    fs.readFileSync('./whisper.json', 'utf-8')
   );
   const mergedTranscript = createSpeakerChangeTranscriptionDocument(
     pyannoteTranscript,
