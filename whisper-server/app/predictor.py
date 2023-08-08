@@ -16,7 +16,7 @@ from json_logger import setup_logging
 
 
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
-HF_API_KEY = os.environ.get("HF_API_KEY")
+HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
 AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS", "[]"))
@@ -149,7 +149,7 @@ def transformation() -> flask.Response:
 
         # Run speaker diarization
         pipeline = Pipeline.from_pretrained(
-            "pyannote/speaker-diarization", use_auth_token=HF_API_KEY
+            "pyannote/speaker-diarization", use_auth_token=HF_AUTH_TOKEN
         )
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         pipeline = pipeline.to(device)
@@ -159,7 +159,9 @@ def transformation() -> flask.Response:
 
         # Create the result
         result = defaultdict(list)
-        for idx, turn, _, speaker in diarization.itertracks(yield_label=True):
+        for idx, (turn, _, speaker) in enumerate(
+            diarization.itertracks(yield_label=True)
+        ):
             result["segment"].append(
                 {
                     "start": turn.start,
@@ -179,11 +181,11 @@ def transformation() -> flask.Response:
         s3_client.upload_file(
             DIARIZATION_FILE_NAME, bucket_name, speaker_diarization_output_key
         )
-
+        logger.info(f"ML pipeline of {audio_input_key} complete")
         payload = {"message": "success", "error": None}
         status = 200
     except Exception as e:
-        logger.exception(f"An error occured while processing {filename}")
+        logger.exception(f"An error occured while processing {audio_input_key}")
         payload = {"error": str(e)}
         status = 500
     finally:
