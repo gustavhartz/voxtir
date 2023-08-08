@@ -13,35 +13,41 @@ enum TranscriptionType {
 }
 
 model Document {
-    id                         String                      @id @default(uuid())
-    title                      String
-    createdAt                  DateTime                    @default(now())
-    updatedAt                  DateTime                    @updatedAt
-    project                    Project                     @relation(fields: [projectId], references: [id])
-    projectId                  String // relation scalar field (used in the `@relation` attribute above)  
+    id                               String                            @id @default(uuid())
+    title                            String
+    createdAt                        DateTime                          @default(now())
+    updatedAt                        DateTime                          @updatedAt
+    project                          Project                           @relation(fields: [projectId], references: [id])
+    projectId                        String // relation scalar field (used in the `@relation` attribute above)  
     // TipTap document data
-    data                       Bytes                       @default("")
+    data                             Bytes                             @default("")
     // Audio file
-    audioFileURL               String?
-    audioFileExtension         String? //mpeg, wav, etc
+    audioFileURL                     String?
     // Transcription data
-    language                   String?
-    speakerCount               Int?
-    dialect                    String?
-    transcriptionType          TranscriptionType
+    language                         String?
+    speakerCount                     Int?
+    dialect                          String?
+    transcriptionType                TranscriptionType
     // Automatic transcription data
-    transcriptionStatus        TranscriptionProcessStatus?
-    doSpeakerDiarization       Boolean?
-    mergedTranscriptionFileURL String?
-    speakerDiarizationFileURL  String?
-    speechToTextFileURL        String?
-    transcriptionStartedAt     DateTime?
-    transcriptionFinishedAt    DateTime?
+    transcriptionStatus              TranscriptionProcessStatus?
+    doSpeakerDiarization             Boolean?
+    mergedTranscriptionFileURL       String?
+    speakerDiarizationFileURL        String?
+    speechToTextFileURL              String?
+    transcriptionStartedAt           DateTime?
+    transcriptionFinishedAt          DateTime?
+    // Since TipTap/Prosemirror enforces a very strict schema, we need to store which version of the transcript processing logic 
+    // was used to generate the transcript to be able to determine how to parse it when loading it into the editor in the frontend
+    transcriptProcessingLogicVersion TranscriptProcessingLogicVersion?
 
     // Other
     isTrashed Boolean @default(false)
 
     @@index([projectId])
+}
+
+enum TranscriptProcessingLogicVersion {
+    V1
 }
 
 enum TranscriptionProcessStatus {
