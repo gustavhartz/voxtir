@@ -1,7 +1,7 @@
 {
   "bucketName": "voxtir-audiofiles-staging",
   "audioInputKey": "raw-audio/input.wav",
-  "speakerDiarizationOutputKey": "speech-to-text/output.json",
+  "speakerDiarizationOutputKey": "speaker-diarization/output.json",
   "speechToTextOutputKey": "speech-to-text/output.json",
   "modelOptions": {
     "model": "medium"
