@@ -1,5 +1,6 @@
 import { GraphQLUpload } from 'graphql-upload-minimal';
 import prisma from '../../../prisma/index.js';
+import { logger } from '../../../services/logger.js';
 
 import { Resolvers, Project } from '../generated/graphql';
 import { TranscriptionProcessStatus, ProjectRole } from '@prisma/client';
@@ -11,12 +12,12 @@ import {
   verifyProjectSharingToken,
 } from '../../../helpers/jwt.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
-import { logger } from '../../../services/logger.js';
 import {
   uploadAudioFile,
   getPresignedUrlForDocumentAudioFile,
 } from '../../../transcription/index.js';
 import { FileAlreadyExistsError } from '../../../types/customErrors.js';
+import { LanguageCodePairs } from '../../../transcription/languages.js';
 export const resolvers: Resolvers = {
   Upload: GraphQLUpload,
 
@@ -127,6 +128,9 @@ export const resolvers: Resolvers = {
           };
         }),
       };
+    },
+    supportedLanguages: () => {
+      return Object.keys(LanguageCodePairs);
     },
   },
 
@@ -407,12 +411,31 @@ export const resolvers: Resolvers = {
           message: 'Document project combination not found',
         };
       }
+      if (docRelation.audioFileURL) {
+        return {
+          success: false,
+          message: 'Audio file already uploaded',
+        };
+      }
 
       logger.info('Uploading file', doc.docType, filename, documentId);
       logger.info(doc);
       const stream: Buffer = createReadStream();
       try {
-        await uploadAudioFile(documentId, stream, filename, doc.docType);
+        let data = await uploadAudioFile(
+          documentId,
+          stream,
+          filename,
+          doc.docType
+        );
+        prisma.document.update({
+          where: {
+            id: documentId,
+          },
+          data: {
+            audioFileURL: data.Key,
+          },
+        });
       } catch (error) {
         if (error instanceof FileAlreadyExistsError) {
           return {
