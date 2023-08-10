@@ -51,3 +51,9 @@ variable "resend_domain_key" {
   type        = string
   description = "Resend domain key api token to access email services"
 }
+
+variable "hf_auth_token" {
+  type        = string
+  description = "Hugging face auth token to access hugging face resources"
+
+}
