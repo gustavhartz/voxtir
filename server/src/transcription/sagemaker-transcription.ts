@@ -15,12 +15,6 @@ import {
 } from './common.js';
 import { logger } from '../services/logger.js';
 import { LanguageCodePairs } from './languages.js';
-import {
-  NODE_ENV,
-  SAGEMAKER_TRANSCRIPTION_MODEL_ENV_AVAILABLE_WHISPER_MODELS,
-  SAGEMAKER_TRANSCRIPTION_MODEL_ENV_HF_AUTH_TOKEN,
-  LOG_LEVEL,
-} from '../helpers/env.js';
 
 interface TranscriptionJsonFile {
   bucketName: string;
@@ -79,17 +73,6 @@ const createTranscriptionJobPayload = (
     // CreateTransformJobRequest
     TransformJobName: `${documentId}-${uuidv4()}`, // required
     ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
-    Environment: {
-      /* 
-      TransformEnvironmentMap. This is the environment variables for the sagemaker container. 
-      Currently, log level and environment are just passed through.
-      */
-      AVAILABLE_WHISPER_MODELS:
-        SAGEMAKER_TRANSCRIPTION_MODEL_ENV_AVAILABLE_WHISPER_MODELS,
-      HF_AUTH_TOKEN: SAGEMAKER_TRANSCRIPTION_MODEL_ENV_HF_AUTH_TOKEN,
-      LOG_LEVEL: LOG_LEVEL,
-      ENVIRONMENT: NODE_ENV,
-    },
     TransformInput: {
       // TransformInput
       DataSource: {
