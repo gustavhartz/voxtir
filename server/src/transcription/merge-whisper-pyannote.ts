@@ -68,7 +68,7 @@ function getTimestampHtml(timestamp: string) {
  * @param minimumTimeBetweenTimestampsSeconds - The minimum number of seconds between timestamps
  * @returns
  */
-export const createSpeakerChangeTranscriptionDocument = (
+export const createSpeakerChangeTranscriptionHTML = (
   pyannoteTranscript: PyannoteTranscript,
   whisperTranscript: WhisperTranscript,
   timestampEveryApproximateSeconds: number = 25,
@@ -140,7 +140,7 @@ if (isRunningDirectly) {
   const whisperTranscript = JSON.parse(
     fs.readFileSync('./whisper.json', 'utf-8')
   );
-  const mergedTranscript = createSpeakerChangeTranscriptionDocument(
+  const mergedTranscript = createSpeakerChangeTranscriptionHTML(
     pyannoteTranscript,
     whisperTranscript
   );
