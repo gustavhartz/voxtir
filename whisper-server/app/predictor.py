@@ -20,8 +20,9 @@ HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
 AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS", "[]"))
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
 
-logger = setup_logging()
+logger = setup_logging(LOG_LEVEL)
 
 app = flask.Flask(__name__)
 if ENVIRONMENT == "production":
