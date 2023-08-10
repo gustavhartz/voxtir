@@ -11,9 +11,16 @@ import {
   speakerDiarizationFilePrefix,
   sagemakerJSONFilePrefix,
   sagemakerOutputFilePrefix,
-} from './index.js';
+  splitAudioTranscriptionBucketKey,
+} from './common.js';
 import { logger } from '../services/logger.js';
-import { languages } from './languages.js';
+import { LanguageCodePairs } from './languages.js';
+import {
+  NODE_ENV,
+  SAGEMAKER_TRANSCRIPTION_MODEL_ENV_AVAILABLE_WHISPER_MODELS,
+  SAGEMAKER_TRANSCRIPTION_MODEL_ENV_HF_AUTH_TOKEN,
+  LOG_LEVEL,
+} from '../helpers/env.js';
 
 interface TranscriptionJsonFile {
   bucketName: string;
@@ -26,14 +33,13 @@ interface TranscriptionJsonFile {
 
 export interface modelOptions {
   model: string;
-  language?: keyof typeof languages;
+  language?: keyof typeof LanguageCodePairs;
   speakerCount?: number;
 }
 
 export const createTranscriptionJob = async (
   documentId: string,
   audioFileUri: string,
-  fileExtension: string,
   modelOptions: modelOptions = { model: 'medium' }
 ) => {
   logger.info(
@@ -43,7 +49,6 @@ export const createTranscriptionJob = async (
   let jsonFile = createTranscriptionJsonFile(
     documentId,
     audioFileUri,
-    fileExtension,
     modelOptions
   );
   await uploadObject(
@@ -75,8 +80,15 @@ const createTranscriptionJobPayload = (
     TransformJobName: `${documentId}-${uuidv4()}`, // required
     ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
     Environment: {
-      // TransformEnvironmentMap
-      env1: 'STRING_VALUE',
+      /* 
+      TransformEnvironmentMap. This is the environment variables for the sagemaker container. 
+      Currently, log level and environment are just passed through.
+      */
+      AVAILABLE_WHISPER_MODELS:
+        SAGEMAKER_TRANSCRIPTION_MODEL_ENV_AVAILABLE_WHISPER_MODELS,
+      HF_AUTH_TOKEN: SAGEMAKER_TRANSCRIPTION_MODEL_ENV_HF_AUTH_TOKEN,
+      LOG_LEVEL: LOG_LEVEL,
+      ENVIRONMENT: NODE_ENV,
     },
     TransformInput: {
       // TransformInput
@@ -108,15 +120,15 @@ const createTranscriptionJobPayload = (
 const createTranscriptionJsonFile = (
   documentId: string,
   audioFileUrl: string,
-  fileExtension: string,
   modelOptions: modelOptions
 ) => {
+  let keyInfo = splitAudioTranscriptionBucketKey(audioFileUrl);
   const jsonFile: TranscriptionJsonFile = {
     bucketName: AWS_AUDIO_BUCKET_NAME,
-    fileExtension: fileExtension,
     audioInputKey: audioFileUrl,
-    speakerDiarizationOutputKey: `${speakerDiarizationFilePrefix}/${documentId}`,
-    speechToTextOutputKey: `${speechToTextFilePrefix}/${documentId}`,
+    fileExtension: keyInfo.fileType, // Not really used as this is also the file extension of the audio file
+    speakerDiarizationOutputKey: `${speakerDiarizationFilePrefix}/${documentId}.json`,
+    speechToTextOutputKey: `${speechToTextFilePrefix}/${documentId}.json`,
     modelOptions: modelOptions,
   };
   return jsonFile;
@@ -124,5 +136,5 @@ const createTranscriptionJsonFile = (
 
 let isRunningDirectly = false;
 if (isRunningDirectly) {
-  await createTranscriptionJob('input', 'raw-audio/input', '.wav');
+  await createTranscriptionJob('input', 'raw-audio/input.wav');
 }

@@ -5,18 +5,10 @@ import {
 } from '../services/aws-s3.js';
 import { logger } from '../services/logger.js';
 import { AWS_AUDIO_BUCKET_NAME } from '../helpers/env.js';
-
-// CONSTANTS
-const AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION = 60 * 60 * 2; // 2 Hours in milliseconds
-
-// TRANSCRIPTION BUCKET SETUP
-export const audioFilePrefix = 'raw-audio';
-export const speechToTextFilePrefix = 'speech-to-text';
-export const speakerDiarizationFilePrefix = 'speaker-diarization';
-export const mergedTranscriptionFilePrefix = 'merged-transcription';
-export const sagemakerJSONFilePrefix = 'sagemaker-input';
-// NOTE: This is the prefix for the output of the sagemaker job. But the output is not used
-export const sagemakerOutputFilePrefix = 'sagemaker-output';
+import {
+  audioFilePrefix,
+  AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
+} from './common.js';
 
 /**
  * Basic function for uploading an audio file to S3 from user. Intended to be used for raw audio files
@@ -32,7 +24,7 @@ export const uploadAudioFile = async (
   documentId: string,
   body: Buffer,
   fileEnding: string = '',
-  contentType: string = 'audio/wav'
+  contentType: string = ''
 ): Promise<aws.S3.ManagedUpload.SendData> => {
   const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
   logger.info(`Uploading audio file to ${key}`);
