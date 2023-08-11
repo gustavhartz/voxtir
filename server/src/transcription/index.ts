@@ -4,7 +4,7 @@ import {
   generatePresignedUrlForObject,
 } from '../services/aws-s3.js';
 import { logger } from '../services/logger.js';
-import { AWS_AUDIO_BUCKET_NAME } from '../helpers/env.js';
+import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import {
   audioFilePrefix,
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,

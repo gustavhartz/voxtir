@@ -1,9 +1,9 @@
 import { CreateTransformJobCommandInput } from '@aws-sdk/client-sagemaker';
-import { v4 as uuidv4 } from 'uuid';
+import { getShortDateFormat } from '../common/date.js';
 import {
   AWS_AUDIO_BUCKET_NAME,
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
-} from '../helpers/env.js';
+} from '../common/env.js';
 import { uploadObject } from '../services/aws-s3.js';
 import { createBatchTransformJob } from '../services/aws-sagemaker.js';
 import {
@@ -71,7 +71,7 @@ const createTranscriptionJobPayload = (
 ): CreateTransformJobCommandInput => {
   const params = {
     // CreateTransformJobRequest
-    TransformJobName: `${documentId}-${uuidv4()}`, // required
+    TransformJobName: `${documentId}-${getShortDateFormat(new Date())}`, // required
     ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
     TransformInput: {
       // TransformInput

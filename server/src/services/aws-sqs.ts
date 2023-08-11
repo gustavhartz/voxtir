@@ -1,6 +1,6 @@
 import aws from 'aws-sdk';
 import { logger } from './logger.js';
-import { AWS_REGION } from '../helpers/env.js';
+import { AWS_REGION } from '../common/env.js';
 // ENV
 
 aws.config.update({

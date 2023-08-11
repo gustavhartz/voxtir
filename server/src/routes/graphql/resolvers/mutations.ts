@@ -7,7 +7,7 @@ import {
   generateProjectSharingToken,
   projectSharingJWTRes,
   verifyProjectSharingToken,
-} from '../../../helpers/jwt.js';
+} from '../../../common/jwt.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
   uploadAudioFile,
