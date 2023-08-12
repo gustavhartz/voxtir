@@ -3,6 +3,7 @@ import { getShortDateFormat } from '../common/date.js';
 import {
   AWS_AUDIO_BUCKET_NAME,
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
+  NODE_ENV,
 } from '../common/env.js';
 import { uploadObject } from '../services/aws-s3.js';
 import { createBatchTransformJob } from '../services/aws-sagemaker.js';
@@ -15,6 +16,7 @@ import {
 } from './common.js';
 import { logger } from '../services/logger.js';
 import { LanguageCodePairs } from './languages.js';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TranscriptionJsonFile {
   bucketName: string;
@@ -71,8 +73,12 @@ const createTranscriptionJobPayload = (
 ): CreateTransformJobCommandInput => {
   const params = {
     // CreateTransformJobRequest
-    TransformJobName: `${documentId}-${getShortDateFormat(new Date())}`, // required
+    TransformJobName: `${documentId}-${getShortDateFormat(
+      new Date()
+    )}-${uuidv4().substring(0, 4)}`, // required
     ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
+    MaxConcurrentTransforms: 1,
+    BatchStrategy: 'SingleRecord',
     TransformInput: {
       // TransformInput
       DataSource: {
@@ -83,6 +89,7 @@ const createTranscriptionJobPayload = (
           S3Uri: jsonInputFileUri, // required
         },
       },
+      ContentType: 'application/json',
       CompressionType: 'None',
       SplitType: 'None',
     },
@@ -96,6 +103,14 @@ const createTranscriptionJobPayload = (
       InstanceType: 'ml.g4dn.xlarge',
       InstanceCount: 1,
     },
+    Tags: [
+      // TagList
+      {
+        // Tag
+        Key: 'enviroment',
+        Value: NODE_ENV,
+      },
+    ],
   };
   return params;
 };
