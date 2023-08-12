@@ -5,11 +5,9 @@ import prisma from './prisma/index.js';
 import { Auth0Client } from './services/auth0.js';
 import { Prisma } from '@prisma/client';
 import { logger } from './services/logger.js';
+import { NODE_ENV, DEVELOPMENT_USER, AUTH0_DOMAIN } from './common/env.js';
 
 const VOXTIR_SEEN_USER_COOKIE = 'voxtir_seen_user';
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const DEVELOPMENT_USER = process.env.DEVELOPMENT_USER || '';
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
 
 /**
  * Standard auth0 logic except for in development where the user can be defined as an environment variable

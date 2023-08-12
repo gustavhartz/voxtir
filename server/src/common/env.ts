@@ -18,6 +18,7 @@ export const {
   SQS_TRANSCRIPTION_QUEUE_URL,
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
   ENABLE_SCHEDULER_JOBS,
+  AUTH0_DOMAIN,
 } = process.env as {
   AUTH0_CLIENT_ID: string;
   AUTH0_CLIENT_SECRET: string;
@@ -36,6 +37,7 @@ export const {
   SQS_TRANSCRIPTION_QUEUE_URL: string;
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME: string;
   ENABLE_SCHEDULER_JOBS: string;
+  AUTH0_DOMAIN: string;
 };
 // Assert defined
 if (
@@ -54,7 +56,8 @@ if (
   !NODE_ENV ||
   !DATABASE_URL ||
   !SQS_TRANSCRIPTION_QUEUE_URL ||
-  !SAGEMAKER_TRANSCRIPTION_MODEL_NAME
+  !SAGEMAKER_TRANSCRIPTION_MODEL_NAME ||
+  !AUTH0_DOMAIN
 ) {
   throw new Error('Missing env');
 }

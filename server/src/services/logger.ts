@@ -1,7 +1,6 @@
 import pino from 'pino';
+import { LOG_LEVEL, NODE_ENV } from '../common/env.js';
 export type Logger = pino.Logger;
-
-const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
 
 // Use pretty print for test environment
 const prettyPrint =
@@ -17,7 +16,7 @@ const prettyPrint =
     : {};
 
 function calculateLevel(): string {
-  if (process.env.NODE_ENV === 'test') {
+  if (NODE_ENV === 'test') {
     return 'error';
   }
   return LOG_LEVEL;
