@@ -9,7 +9,8 @@
     "codegen-generate": "graphql-codegen --config codegen.yml",
     "generate": "npm run prisma-generate && npm run codegen-generate",
     "prisma-generate": "npx prisma generate --schema src/prisma/schema.prisma",
-    "prisma-push-seed": "npx prisma db push --schema src/prisma/schema.prisma && npx prisma db seed",
+    "prisma-delete-seed": "npx prisma migrate reset --schema src/prisma/schema.prisma -f",
+    "prisma-push": "npx prisma db push --schema src/prisma/schema.prisma",
     "actenv": "export $(grep -v '^#' .env | xargs)"
   },
   "prisma": {
@@ -19,7 +20,9 @@
   "license": "None",
   "dependencies": {
     "@apollo/server": "^4.7.1",
+    "@aws-sdk/client-s3": "^3.388.0",
     "@aws-sdk/client-sagemaker": "^3.385.0",
+    "@aws-sdk/s3-request-presigner": "^3.388.0",
     "@graphql-tools/schema": "^10.0.0",
     "@hocuspocus/extension-database": "^2.0.6",
     "@hocuspocus/server": "^2.0.6",
