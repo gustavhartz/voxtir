@@ -12,20 +12,21 @@ from pyannote.audio import Pipeline
 import torch
 from collections import defaultdict
 import sys
-from json_logger import setup_logging
+from json_logger import logger
 
-
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
-HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
-AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS", "[]"))
-LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
+try:
+    ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
+    HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
+    AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS"))
+except KeyError as e:
+    logger.error(f"Missing environment variable {e}")
+    raise e
 
-logger = setup_logging(LOG_LEVEL)
 
 app = flask.Flask(__name__)
-if ENVIRONMENT == "production":
+if ENVIRONMENT != "development":
     session = boto3.Session()
 else:
     session = boto3.Session(

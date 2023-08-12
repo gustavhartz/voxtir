@@ -1,5 +1,8 @@
 import logging
 from pythonjsonlogger import jsonlogger
+import os
+
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
 
 
 def setup_logging(log_level=logging.INFO):
@@ -17,3 +20,6 @@ def setup_logging(log_level=logging.INFO):
     # Add additional handlers here if needed (e.g., file handler)
 
     return logger
+
+
+logger = setup_logging(LOG_LEVEL)

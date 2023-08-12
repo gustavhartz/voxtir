@@ -1,1 +1,3 @@
 *.ipynb
+local_test
+.env

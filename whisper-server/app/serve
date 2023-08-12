@@ -23,7 +23,7 @@ from json_logger import setup_logging
 logger = setup_logging()
 cpu_count = multiprocessing.cpu_count()
 
-model_server_timeout = os.environ.get("MODEL_SERVER_TIMEOUT", 3000)
+model_server_timeout = os.environ.get("MODEL_SERVER_TIMEOUT", 60 * 60 * 3)
 model_server_workers = int(os.environ.get("MODEL_SERVER_WORKERS", cpu_count))
 
 
