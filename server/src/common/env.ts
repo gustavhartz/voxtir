@@ -17,6 +17,7 @@ export const {
   DATABASE_URL,
   SQS_TRANSCRIPTION_QUEUE_URL,
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
+  ENABLE_SCHEDULER_JOBS,
 } = process.env as {
   AUTH0_CLIENT_ID: string;
   AUTH0_CLIENT_SECRET: string;
@@ -34,6 +35,7 @@ export const {
   DATABASE_URL: string;
   SQS_TRANSCRIPTION_QUEUE_URL: string;
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME: string;
+  ENABLE_SCHEDULER_JOBS: string;
 };
 // Assert defined
 if (
