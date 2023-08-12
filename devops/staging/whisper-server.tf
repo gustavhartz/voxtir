@@ -28,6 +28,29 @@ resource "aws_iam_role" "sagemaker_role" {
   assume_role_policy = data.aws_iam_policy_document.sagemaker_assume_policy.json
 }
 
+resource "aws_iam_role_policy_attachment" "sagemaker_audio_bucket_access_policy" {
+  role       = aws_iam_role.sagemaker_role.name
+  policy_arn = aws_iam_policy.audio_bucket_full_access_policy.arn
+}
+
+resource "aws_iam_policy" "audio_bucket_full_access_policy" {
+  name        = "audio-bucket-full-access-policy-${var.environment}"
+  description = "A policy that allows full access to the audio file bucket"
+  policy      = data.aws_iam_policy_document.audio_file_bucket_full_access.json
+}
+
+data "aws_iam_policy_document" "audio_file_bucket_full_access" {
+  statement {
+    effect  = "Allow"
+    actions = ["*"]
+    resources = [
+      aws_s3_bucket.voxtir_audiofiles.arn,
+      "${aws_s3_bucket.voxtir_audiofiles.arn}:*",
+      "${aws_s3_bucket.voxtir_audiofiles.arn}/*"
+    ]
+  }
+}
+
 resource "aws_sagemaker_model" "transcription_model" {
   name               = "voxtir-whisper-pyannote-model-${var.environment}"
   execution_role_arn = aws_iam_role.sagemaker_role.arn
@@ -37,7 +60,7 @@ resource "aws_sagemaker_model" "transcription_model" {
     image = "${aws_ecr_repository.voxtir_whisper.repository_url}:build-master"
     environment = {
       HF_AUTH_TOKEN            = var.hf_auth_token
-      AVAILABLE_WHISPER_MODELS = "[${"medium"}]"
+      AVAILABLE_WHISPER_MODELS = "[\"medium\"]"
       ENVIRONMENT              = var.environment
       LOG_LEVEL                = "INFO"
     }
