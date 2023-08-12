@@ -1,3 +1,5 @@
 AWS_ACCESS_KEY_ID=yourkey
 AWS_SECRET_ACCESS_KEY=youraccesskey
 ENVIRONMENT=development
+AVAILABLE_WHISPER_MODELS=["large", "large-v2", "tiny", "medium"]
+HF_AUTH_TOKEN=<YOUR_TOKEN>

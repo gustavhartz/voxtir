@@ -1,8 +1,8 @@
 import aws from 'aws-sdk';
 import { logger } from './logger.js';
 import { FileAlreadyExistsError } from '../types/customErrors.js';
+import { AWS_REGION } from '../common/env.js';
 // ENV
-const AWS_REGION = process.env.AWS_REGION;
 
 aws.config.update({
   region: AWS_REGION,
@@ -54,4 +54,12 @@ export const generatePresignedUrlForObject = async (
     Expires: expiration,
   };
   return s3.getSignedUrlPromise('getObject', params);
+};
+
+export const loadObject = async (bucket: string, key: string) => {
+  const params = {
+    Bucket: bucket,
+    Key: key,
+  };
+  return s3.getObject(params).promise();
 };

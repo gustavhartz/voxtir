@@ -1,30 +1,22 @@
 import { Resend } from 'resend';
 import { CreateEmailResponse } from 'resend/build/src/emails/interfaces';
-const resend_api_key = process.env.RESEND_API_KEY;
-const frontend_base_url = process.env.FRONTEND_BASE_URL;
-const resend_domain = process.env.RESEND_DOMAIN;
+import {
+  RESEND_DOMAIN,
+  FRONTEND_BASE_URL,
+  RESEND_API_KEY,
+} from '../common/env.js';
 
-if (!resend_api_key) {
-  throw new Error('RESEND_API_KEY not defined!');
-}
-if (!frontend_base_url) {
-  throw new Error('FRONTEND_BASE_URL not defined!');
-}
-if (!resend_domain) {
-  throw new Error('RESEND_DOMAIN not defined!');
-}
-
-const resend = new Resend(resend_api_key);
+const resend = new Resend(RESEND_API_KEY);
 
 export const sendProjectShareEmail = async (
   emailTo: string,
   token: string,
   projectName: string
 ): Promise<CreateEmailResponse> => {
-  let invitationLink = `https://${frontend_base_url}/accept-invitation?token=${token}`;
+  let invitationLink = `https://${FRONTEND_BASE_URL}/accept-invitation?token=${token}`;
 
   return resend.emails.send({
-    from: `Voxtir <no-reply@${resend_domain}>`,
+    from: `Voxtir <no-reply@${RESEND_DOMAIN}>`,
     to: emailTo,
     subject: `Inviation to join project: ${projectName}`,
     html: `<!DOCTYPE html>

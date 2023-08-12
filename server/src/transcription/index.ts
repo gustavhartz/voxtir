@@ -2,26 +2,13 @@ import aws from 'aws-sdk';
 import {
   uploadObject,
   generatePresignedUrlForObject,
-} from '../services/aws.js';
+} from '../services/aws-s3.js';
 import { logger } from '../services/logger.js';
-
-// CONSTANTS
-const AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION = 60 * 60 * 2; // 2 Hours in milliseconds
-const AWS_REGION = process.env.AWS_REGION;
-const AWS_AUDIO_BUCKET_NAME = process.env.AWS_AUDIO_BUCKET_NAME;
-
-// TRANSCRIPTION BUCKET SETUP
-export const uploadedAudioFilePrefix = 'raw-audio';
-export const processedAudioFilePrefix = 'processed-audio';
-export const transcriptionFilePrefix = 'transcription';
-export const speakerDiarizationFilePrefix = 'speaker-diarization';
-export const mergedTranscriptionFilePrefix = 'merged-transcription';
-
-export const processedFileFormat = 'wav';
-
-if (!AWS_REGION || !AWS_AUDIO_BUCKET_NAME) {
-  throw new Error('Missing env - not defined');
-}
+import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
+import {
+  audioFilePrefix,
+  AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
+} from './common.js';
 
 /**
  * Basic function for uploading an audio file to S3 from user. Intended to be used for raw audio files
@@ -37,9 +24,9 @@ export const uploadAudioFile = async (
   documentId: string,
   body: Buffer,
   fileEnding: string = '',
-  contentType: string = 'audio/wav'
+  contentType: string = ''
 ): Promise<aws.S3.ManagedUpload.SendData> => {
-  const key = `${uploadedAudioFilePrefix}/${documentId}.${fileEnding}`;
+  const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
   logger.info(`Uploading audio file to ${key}`);
   return uploadObject(AWS_AUDIO_BUCKET_NAME, key, body, contentType, false);
 };
@@ -55,7 +42,8 @@ export const uploadAudioFile = async (
 export const getPresignedUrlForDocumentAudioFile = async (
   documentId: string
 ): Promise<{ url: string; expiresAt: number }> => {
-  const key = `${processedAudioFilePrefix}/${documentId}.${processedFileFormat}`;
+  const key = `${audioFilePrefix}/${documentId}`;
+  //TODO: Get from database instead of hardcoding
   let url = await generatePresignedUrlForObject(
     AWS_AUDIO_BUCKET_NAME,
     key,

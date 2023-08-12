@@ -1,6 +1,9 @@
 {
-  "bucket_name": "testfse3r",
-  "object_key": "input.wav",
-  "model": "medium",
-  "language": "en"
+  "bucketName": "voxtir-audiofiles-staging",
+  "audioInputKey": "raw-audio/input.wav",
+  "speakerDiarizationOutputKey": "speaker-diarization/output.json",
+  "speechToTextOutputKey": "speech-to-text/output.json",
+  "modelOptions": {
+    "model": "medium"
+  }
 }

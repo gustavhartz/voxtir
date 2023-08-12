@@ -1,8 +1,9 @@
 import jwt, { VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { PROJECT_SHARING_EXPIRATION_TIME, JWT_SECRET } from './env.js';
 
 const envShareProjectTokenExpirationTime = parseInt(
-  process.env.PROJECT_SHARING_EXPIRATION_TIME || ''
+  PROJECT_SHARING_EXPIRATION_TIME
 );
 
 const projectTokenExpirationTime = Number.isInteger(
@@ -12,14 +13,11 @@ const projectTokenExpirationTime = Number.isInteger(
   : 604800;
 
 export const generateProjectSharingToken = (projectId: string) => {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET not defined');
-  }
   return jwt.sign(
     {
       projectId,
     },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     { expiresIn: projectTokenExpirationTime }
   );
 };
@@ -34,14 +32,7 @@ export function verifyProjectSharingToken(
   token: string,
   verifyOptions?: VerifyOptions
 ): projectSharingJWTRes {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET is not defined!');
-  }
-  return jwt.verify(
-    token,
-    process.env.JWT_SECRET,
-    verifyOptions
-  ) as projectSharingJWTRes;
+  return jwt.verify(token, JWT_SECRET, verifyOptions) as projectSharingJWTRes;
 }
 
 let isRunningDirectly = false;

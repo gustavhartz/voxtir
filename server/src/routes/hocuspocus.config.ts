@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import prisma from '../prisma/index.js';
 // Ripped from
 // docs-plus :) https://github.com/docs-plus/
-const { APP_NAME } = process.env;
+import { APP_NAME } from '../common/env.js';
 
 export default (): Partial<Configuration> => {
   const Serverconfigure: Pick<Configuration, 'name' | 'extensions'> &
@@ -47,7 +47,6 @@ export default (): Partial<Configuration> => {
           data: state,
           id: documentName,
           projectId: '1',
-          audioFileUrl: '',
           transcriptionType: 'AUTOMATIC',
           title: 'Document 2',
         },

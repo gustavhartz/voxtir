@@ -12,21 +12,33 @@ import morgan from 'morgan';
 import { accessControl, requestId, userInfoSync } from './middleware.js';
 import session from 'cookie-session';
 import cookieParser from 'cookie-parser';
+import { logger } from './services/logger.js';
+
+import { ToadScheduler } from 'toad-scheduler';
+import { addJobsToScheduler } from './scheduler-jobs/index.js';
 
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
 import { app as routes } from './routes/index.js';
+import {
+  APP_NAME,
+  APP_PORT,
+  COOKIE_SECRET,
+  NODE_ENV,
+  ENABLE_SCHEDULER_JOBS,
+} from './common/env.js';
 
 console.timeEnd('deps');
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-const { APP_PORT, NODE_ENV, APP_NAME, COOKIE_SECRET } = process.env;
 
 console.time('startup');
 
 async function main(): Promise<void> {
-  if (!APP_PORT || !APP_NAME || !COOKIE_SECRET || !NODE_ENV) {
-    throw new Error('Missing env - not defined');
+  if (ENABLE_SCHEDULER_JOBS === 'true') {
+    logger.info('Scheduler jobs enabled');
+    const scheduler = new ToadScheduler();
+    addJobsToScheduler(scheduler);
   }
+
   // Setup the express server
   const { app } = expressWebsockets(express());
 

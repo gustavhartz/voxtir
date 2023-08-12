@@ -2,13 +2,13 @@ import axios, { AxiosInstance } from 'axios';
 import { Auth0ManagementApiUser } from '../types/auth0';
 import { logger } from '../services/logger.js';
 import jwt from 'jsonwebtoken';
+import {
+  AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET,
+  AUTH0_DOMAIN,
+} from '../common/env.js';
 
-// get environment variables
-const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN;
-const AUT0_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
-const AUT0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
-
-const baseUrl = `https://${AUTH0_DOMAIN}/`;
+const baseUrl = `https://${AUTH0_DOMAIN}`;
 
 interface auth0TokenResponse {
   access_token: string;
@@ -24,7 +24,7 @@ interface auth0TokenResponse {
  */
 export class Auth0Client {
   static auth0: AxiosInstance = axios.create({
-    baseURL: `${baseUrl}`,
+    baseURL: `${baseUrl}/`,
     headers: { 'content-type': 'application/json' },
   });
   static systemToken: string = '';
@@ -44,9 +44,9 @@ export class Auth0Client {
       logger.info('System token expired, getting new one');
       try {
         let tokenResponse = await Auth0Client.auth0.post('oauth/token', {
-          client_id: AUT0_CLIENT_ID,
-          client_secret: AUT0_CLIENT_SECRET,
-          audience: `https://${AUTH0_DOMAIN}/api/v2/`,
+          client_id: AUTH0_CLIENT_ID,
+          client_secret: AUTH0_CLIENT_SECRET,
+          audience: `${baseUrl}/api/v2/`,
           grant_type: 'client_credentials',
         });
 
