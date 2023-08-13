@@ -5,7 +5,6 @@ import {
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
   NODE_ENV,
 } from '../common/env.js';
-import { uploadObject } from '../services/aws-s3.js';
 import { createBatchTransformJob } from '../services/aws-sagemaker.js';
 import {
   speechToTextFilePrefix,
@@ -17,6 +16,7 @@ import {
 import { logger } from '../services/logger.js';
 import { LanguageCodePairs } from './languages.js';
 import { v4 as uuidv4 } from 'uuid';
+import { StorageHandler } from '../services/storageHandler.js';
 
 interface TranscriptionJsonFile {
   bucketName: string;
@@ -33,106 +33,102 @@ export interface modelOptions {
   speakerCount?: number;
 }
 
-export const createTranscriptionJob = async (
-  documentId: string,
-  audioFileUri: string,
-  modelOptions: modelOptions = { model: 'medium' }
-) => {
-  logger.info(
-    `Creating uploading json file for sagemaker - documentId: ${documentId}`
-  );
-  let key = `${sagemakerJSONFilePrefix}/${documentId}.json`;
-  let jsonFile = createTranscriptionJsonFile(
-    documentId,
-    audioFileUri,
-    modelOptions
-  );
-  await uploadObject(
-    AWS_AUDIO_BUCKET_NAME,
-    key,
-    Buffer.from(JSON.stringify(jsonFile)),
-    'application/json',
-    true
-  );
-  let jsonInputFileUri = `s3://${AWS_AUDIO_BUCKET_NAME}/${key}`;
-
-  // Create jobPayload
-  let payload = createTranscriptionJobPayload(jsonInputFileUri, documentId);
-
-  // Create job
-  try {
-    await createBatchTransformJob(payload);
-  } catch (e) {
-    logger.error(`Error creating transcription job: ${e}`);
+export class SagemakerWhisperTranscription {
+  StorageHandler: StorageHandler;
+  documentId: string;
+  audioFileUrl: string;
+  modelOptions: modelOptions;
+  constructor(
+    StorageHandler: StorageHandler,
+    documentId: string,
+    audioFileUrl: string,
+    modelOptions: modelOptions
+  ) {
+    this.StorageHandler = StorageHandler;
+    this.documentId = documentId;
+    this.audioFileUrl = audioFileUrl;
+    this.modelOptions = modelOptions;
   }
-};
+  prepareBatchTransformJobPayload = async () => {
+    let key = this.getJsonFileKey();
+    let jsonFile = this.createTranscriptionJsonFile();
+    await this.StorageHandler.putObject(
+      key,
+      Buffer.from(JSON.stringify(jsonFile)),
+      'application/json',
+      true
+    );
+    return this.createTranscriptionJobPayload();
+  };
+  getJsonFileKey = () => {
+    return `${sagemakerJSONFilePrefix}/${this.documentId}.json`;
+  };
+  getJsonInputFileUri = () => {
+    return `s3://${AWS_AUDIO_BUCKET_NAME}/${this.getJsonFileKey()}`;
+  };
 
-const createTranscriptionJobPayload = (
-  jsonInputFileUri: string,
-  documentId: string
-): CreateTransformJobCommandInput => {
-  const params = {
-    // CreateTransformJobRequest
-    TransformJobName: `${documentId}-${getShortDateFormat(
-      new Date()
-    )}-${uuidv4().substring(0, 4)}`, // required
-    ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
-    MaxConcurrentTransforms: 1,
-    BatchStrategy: 'SingleRecord',
-    TransformInput: {
-      // TransformInput
-      DataSource: {
-        // TransformDataSource
-        S3DataSource: {
-          // TransformS3DataSource
-          S3DataType: 'S3Prefix',
-          S3Uri: jsonInputFileUri, // required
+  createTranscriptionJsonFile = () => {
+    let keyInfo = splitAudioTranscriptionBucketKey(this.audioFileUrl);
+    const jsonFile: TranscriptionJsonFile = {
+      bucketName: AWS_AUDIO_BUCKET_NAME,
+      audioInputKey: this.audioFileUrl,
+      fileExtension: keyInfo.fileType, // Not really used as this is also the file extension of the audio file
+      speakerDiarizationOutputKey: `${speakerDiarizationFilePrefix}/${this.documentId}.json`,
+      speechToTextOutputKey: `${speechToTextFilePrefix}/${this.documentId}.json`,
+      modelOptions: this.modelOptions,
+    };
+    return jsonFile;
+  };
+  triggerBatchTransformJob = async () => {
+    let payload = await this.prepareBatchTransformJobPayload();
+    try {
+      await createBatchTransformJob(payload);
+    } catch (e) {
+      logger.error(`Error creating transcription job: ${e}`);
+    }
+  };
+
+  createTranscriptionJobPayload = (): CreateTransformJobCommandInput => {
+    return {
+      // CreateTransformJobRequest
+      TransformJobName: `${this.documentId}-${getShortDateFormat(
+        new Date()
+      )}-${uuidv4().substring(0, 4)}`, // required
+      ModelName: SAGEMAKER_TRANSCRIPTION_MODEL_NAME, // required
+      MaxConcurrentTransforms: 1,
+      BatchStrategy: 'SingleRecord',
+      TransformInput: {
+        // TransformInput
+        DataSource: {
+          // TransformDataSource
+          S3DataSource: {
+            // TransformS3DataSource
+            S3DataType: 'S3Prefix',
+            S3Uri: this.getJsonInputFileUri(), // required
+          },
         },
+        ContentType: 'application/json',
+        CompressionType: 'None',
+        SplitType: 'None',
       },
-      ContentType: 'application/json',
-      CompressionType: 'None',
-      SplitType: 'None',
-    },
-    TransformOutput: {
-      // TransformOutput
-      S3OutputPath: `s3://${AWS_AUDIO_BUCKET_NAME}/${sagemakerOutputFilePrefix}/${documentId}`, // required
-      AssembleWith: 'None',
-    },
-    TransformResources: {
-      // TransformResources
-      InstanceType: 'ml.g4dn.xlarge',
-      InstanceCount: 1,
-    },
-    Tags: [
-      // TagList
-      {
-        // Tag
-        Key: 'enviroment',
-        Value: NODE_ENV,
+      TransformOutput: {
+        // TransformOutput
+        S3OutputPath: `s3://${AWS_AUDIO_BUCKET_NAME}/${sagemakerOutputFilePrefix}/${this.documentId}`, // required
+        AssembleWith: 'None',
       },
-    ],
+      TransformResources: {
+        // TransformResources
+        InstanceType: 'ml.g4dn.xlarge',
+        InstanceCount: 1,
+      },
+      Tags: [
+        // TagList
+        {
+          // Tag
+          Key: 'enviroment',
+          Value: NODE_ENV,
+        },
+      ],
+    };
   };
-  return params;
-};
-
-const createTranscriptionJsonFile = (
-  documentId: string,
-  audioFileUrl: string,
-  modelOptions: modelOptions
-) => {
-  let keyInfo = splitAudioTranscriptionBucketKey(audioFileUrl);
-  const jsonFile: TranscriptionJsonFile = {
-    bucketName: AWS_AUDIO_BUCKET_NAME,
-    audioInputKey: audioFileUrl,
-    fileExtension: keyInfo.fileType, // Not really used as this is also the file extension of the audio file
-    speakerDiarizationOutputKey: `${speakerDiarizationFilePrefix}/${documentId}.json`,
-    speechToTextOutputKey: `${speechToTextFilePrefix}/${documentId}.json`,
-    modelOptions: modelOptions,
-  };
-  return jsonFile;
-};
-
-let isRunningDirectly = false;
-if (isRunningDirectly) {
-  await createTranscriptionJob('input', 'raw-audio/input.wav');
 }
