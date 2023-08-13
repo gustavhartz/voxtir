@@ -1,5 +1,5 @@
 import { S3Event, S3EventRecord } from 'aws-lambda';
-import { ReceiveMessageCommandOutput } from '@aws-sdk/client-sqs'; // ES Mimport { logger } from '../services/logger.js';
+import { ReceiveMessageCommandOutput } from '@aws-sdk/client-sqs';
 import prisma from '../prisma/index.js';
 import { Document } from '@prisma/client';
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
@@ -91,6 +91,7 @@ export class AudioTranscriptionEventHandler {
           }
         );
         await TranscriptionProcessor.triggerBatchTransformJob();
+        break;
       case speakerDiarizationFilePrefix:
         this.#document = await prisma.document.update({
           where: {
@@ -101,6 +102,7 @@ export class AudioTranscriptionEventHandler {
             speakerDiarizationFileURL: this.getKeyFromEvent(),
           },
         });
+        break;
       case speechToTextFilePrefix:
         this.#document = await prisma.document.update({
           where: {
@@ -111,6 +113,7 @@ export class AudioTranscriptionEventHandler {
             speechToTextFileURL: this.getKeyFromEvent(),
           },
         });
+        break;
       default:
         logger.debug(
           `Received ${this.getEventTypeFromEvent()} event for ${this.getKeyFromEvent()}. Skipping.`
