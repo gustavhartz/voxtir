@@ -1,0 +1,6 @@
+mutation CreateProject($name: String!, $description: String!) {
+  createProject(name: $name, description: $description) {
+    message
+    success
+  }
+}
