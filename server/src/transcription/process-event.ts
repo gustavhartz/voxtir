@@ -17,16 +17,16 @@ import {
 } from '../services/storageHandler.js';
 import { LanguageCodePairs } from './languages.js';
 import { createSpeakerChangeTranscriptionHTML } from './merge-whisper-pyannote.js';
-import { logger } from '../services/logger.js';
+import { schedulerLogger as logger } from '../services/logger.js';
 
 export const processSQSMessage = (event: ReceiveMessageCommandOutput) => {
-  event.Messages?.forEach((message) => {
+  for (const message of event.Messages ?? []) {
     if (!message.Body) {
       return;
     }
     const body: S3Event = JSON.parse(message.Body);
     processS3Events(body);
-  });
+  }
 };
 
 const processS3Events = async (event: S3Event) => {
@@ -35,14 +35,12 @@ const processS3Events = async (event: S3Event) => {
     logger.info('Test event revieced in transcription processing, skipping');
     return;
   }
-  await Promise.all(
-    event.Records.map((record) => {
-      new AudioTranscriptionEventHandler(
-        record,
-        new S3StorageHandler(AWS_AUDIO_BUCKET_NAME)
-      ).process();
-    })
-  );
+  for (const record of event.Records) {
+    await new AudioTranscriptionEventHandler(
+      record,
+      new S3StorageHandler(AWS_AUDIO_BUCKET_NAME)
+    ).process();
+  }
 };
 
 export class AudioTranscriptionEventHandler {
@@ -189,7 +187,7 @@ export class AudioTranscriptionEventHandler {
   }
 
   shouldProcessEvent() {
-    if (this.event.eventName !== 'ObjectCreated:Put') {
+    if (this.getEventTypeFromEvent() !== 'ObjectCreated:Put') {
       logger.debug(
         `Received ${this.event.eventName} event for ${this.event.s3.object.key}. Skipping.`
       );
