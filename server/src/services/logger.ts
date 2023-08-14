@@ -28,11 +28,24 @@ export const logger = pino({
   ...prettyPrint,
   level: level,
   messageKey: 'message',
+  hooks: {
+    logMethod(inputArgs, method, level) {
+      if (inputArgs.length >= 2) {
+        const arg1 = inputArgs.shift();
+        const arg2 = inputArgs.shift();
+        return method.apply(this, [arg2, arg1, ...inputArgs]);
+      }
+      return method.apply(this, inputArgs);
+    },
+  },
 });
 
 // Add a request id to the logger. Accepts anything with a requestId property, but intended for express requests.
 export const requestLogger = (req: any) => {
-  return logger.child({ requestId: req.requestId });
+  return logger.child({ requestId: req.requestId, logType: 'request' });
+};
+export const schedulerLogger = () => {
+  return logger.child({ logType: 'scheduler' });
 };
 
 let runningDirectly = false;
