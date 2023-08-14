@@ -44,9 +44,8 @@ export const logger = pino({
 export const requestLogger = (req: any) => {
   return logger.child({ requestId: req.requestId, logType: 'request' });
 };
-export const schedulerLogger = () => {
-  return logger.child({ logType: 'scheduler' });
-};
+// For logging from the scheduler to identify it as such
+export const schedulerLogger = logger.child({ logType: 'scheduler' });
 
 let runningDirectly = false;
 if (runningDirectly) {
