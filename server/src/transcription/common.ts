@@ -26,7 +26,10 @@ interface audioTranscriptionKeyParts {
 export function splitAudioTranscriptionBucketKey(
   key: string
 ): audioTranscriptionKeyParts {
-  if (key.split('/').length !== 2 || key.split('.').length !== 2) {
+  if (
+    key.split('/').length !== 2 ||
+    !(key.split('.').length === 2 || key.split('.').length === 3)
+  ) {
     logger.error(
       `Unexpected key format for audio transcription file ${key}, expected <AUDIO_FOLDER_PREFIX>/<DOCUMENT_ID>.<FILE_TYPE>`
     );
