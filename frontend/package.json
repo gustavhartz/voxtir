@@ -16,6 +16,7 @@
     "@apollo/client": "^3.8.1",
     "@hocuspocus/provider": "^2.0.6",
     "@reduxjs/toolkit": "^1.9.5",
+    "@tanstack/react-table": "^8.9.3",
     "@tiptap/extension-collaboration": "^2.0.3",
     "@tiptap/extension-color": "^2.0.3",
     "@tiptap/extension-document": "^2.0.3",
