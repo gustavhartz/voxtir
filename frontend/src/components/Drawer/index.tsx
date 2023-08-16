@@ -51,7 +51,7 @@ const Drawer = () => {
     <>
       <aside
         id="default-sidebar"
-        className="absolute top-0 right-0 w-16 h-screen"
+        className="absolute top-0 right-0 w-16 min-h-screen h-full"
         aria-label="Sidebar"
       >
         <div className="space-y-6 flex flex-col items-center py-8 w-full h-full overflow-y-auto bg-white shadow-lg">
