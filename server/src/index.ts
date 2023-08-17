@@ -13,10 +13,6 @@ import { accessControl, requestId, userInfoSync } from './middleware.js';
 import session from 'cookie-session';
 import cookieParser from 'cookie-parser';
 import { logger } from './services/logger.js';
-
-import { ToadScheduler } from 'toad-scheduler';
-import { addJobsToScheduler } from './scheduler-jobs/index.js';
-
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
 import { app as routes } from './routes/index.js';
@@ -35,8 +31,6 @@ console.time('startup');
 async function main(): Promise<void> {
   if (ENABLE_SCHEDULER_JOBS === 'true') {
     logger.info('Scheduler jobs enabled');
-    const scheduler = new ToadScheduler();
-    addJobsToScheduler(scheduler);
   }
 
   // Setup the express server
