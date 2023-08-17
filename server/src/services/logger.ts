@@ -45,7 +45,9 @@ export const requestLogger = (req: any) => {
   return logger.child({ requestId: req.requestId, logType: 'request' });
 };
 // For logging from the scheduler to identify it as such
-export const schedulerLogger = logger.child({ logType: 'scheduler' });
+export const schedulerLogger = (schedulerNamer: String) => {
+  return logger.child({ logType: 'scheduler', schedulerNamer: schedulerNamer });
+};
 
 let runningDirectly = false;
 if (runningDirectly) {

@@ -13,8 +13,8 @@ import {
   sagemakerOutputFilePrefix,
   splitAudioTranscriptionBucketKey,
 } from './common.js';
-import { logger } from '../services/logger.js';
-import { LanguageCodePairs } from './languages.js';
+import { logger as coreLogger, Logger } from '../services/logger.js';
+import { LanguageCodePairs } from './common.js';
 import { v4 as uuidv4 } from 'uuid';
 import { StorageHandler } from '../services/storageHandler.js';
 
@@ -33,21 +33,24 @@ export interface modelOptions {
   speakerCount?: number;
 }
 
-export class SagemakerWhisperTranscription {
+export class SagemakerBatchTransformTranscription {
   StorageHandler: StorageHandler;
   documentId: string;
   audioFileUrl: string;
   modelOptions: modelOptions;
+  logger: Logger;
   constructor(
     StorageHandler: StorageHandler,
     documentId: string,
     audioFileUrl: string,
-    modelOptions: modelOptions
+    modelOptions: modelOptions,
+    logger?: Logger
   ) {
     this.StorageHandler = StorageHandler;
     this.documentId = documentId;
     this.audioFileUrl = audioFileUrl;
     this.modelOptions = modelOptions;
+    this.logger = logger || coreLogger;
   }
   prepareBatchTransformJobPayload = async () => {
     let key = this.getJsonFileKey();
@@ -84,7 +87,7 @@ export class SagemakerWhisperTranscription {
     try {
       await createBatchTransformJob(payload);
     } catch (e) {
-      logger.error(`Error creating transcription job: ${e}`);
+      this.logger.error(`Error creating transcription job: ${e}`);
     }
   };
 

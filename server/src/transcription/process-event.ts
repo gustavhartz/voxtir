@@ -7,51 +7,68 @@ import {
   audioFilePrefix,
   speakerDiarizationFilePrefix,
   speechToTextFilePrefix,
-  mergedTranscriptionFilePrefix,
+  generatedTranscriptionFilePrefix,
   splitAudioTranscriptionBucketKey,
 } from './common.js';
-import { SagemakerWhisperTranscription } from './sagemaker-transcription.js';
+import { SagemakerBatchTransformTranscription } from './sagemaker-transcription.js';
 import {
   S3StorageHandler,
   StorageHandler,
 } from '../services/storageHandler.js';
-import { LanguageCodePairs } from './languages.js';
-import { createSpeakerChangeTranscriptionHTML } from './merge-whisper-pyannote.js';
-import { schedulerLogger as logger } from '../services/logger.js';
+import { LanguageCodePairs } from './common.js';
+import { WhisperPyannoteMerger } from './whisper-pyannote-merger.js';
+import { Logger, logger as CoreLogger } from '../services/logger.js';
 
-export const processSQSMessage = (event: ReceiveMessageCommandOutput) => {
-  for (const message of event.Messages ?? []) {
-    if (!message.Body) {
+export class SQSTranscriptionMessageHandler {
+  private logger: Logger;
+  private event: ReceiveMessageCommandOutput;
+  constructor(event: ReceiveMessageCommandOutput, logger: Logger) {
+    this.logger = logger;
+    this.event = event;
+  }
+
+  async processSQSMessage() {
+    for (const message of this.event.Messages ?? []) {
+      if (!message.Body) {
+        return;
+      }
+      const body: S3Event = JSON.parse(message.Body);
+      await this.processS3Events(body);
+    }
+  }
+  private async processS3Events(event: S3Event) {
+    // Test events are different from real events
+    if (event.hasOwnProperty('Event')) {
+      this.logger.info(
+        'Test event revieced in transcription processing, skipping'
+      );
       return;
     }
-    const body: S3Event = JSON.parse(message.Body);
-    processS3Events(body);
+    for (const record of event.Records) {
+      await new S3AudioTranscriptionEventHandler(
+        record,
+        new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
+        this.logger
+      ).process();
+    }
   }
-};
+}
 
-const processS3Events = async (event: S3Event) => {
-  // Test events are different from real events
-  if (event.hasOwnProperty('Event')) {
-    logger.info('Test event revieced in transcription processing, skipping');
-    return;
-  }
-  for (const record of event.Records) {
-    await new AudioTranscriptionEventHandler(
-      record,
-      new S3StorageHandler(AWS_AUDIO_BUCKET_NAME)
-    ).process();
-  }
-};
-
-export class AudioTranscriptionEventHandler {
+export class S3AudioTranscriptionEventHandler {
   #document: Document | null = null;
   storageHandler: StorageHandler;
   event: S3EventRecord;
   setupComplete: boolean = false;
+  logger: Logger;
 
-  constructor(event: S3EventRecord, storageHandler: StorageHandler) {
+  constructor(
+    event: S3EventRecord,
+    storageHandler: StorageHandler,
+    logger?: Logger
+  ) {
     this.storageHandler = storageHandler;
     this.event = event;
+    this.logger = logger || CoreLogger;
   }
 
   async #setup() {
@@ -65,6 +82,15 @@ export class AudioTranscriptionEventHandler {
 
     this.setupComplete = true;
   }
+  shouldProcessDocumet(): boolean {
+    if (
+      this.#document?.transcriptionStatus === 'DONE' ||
+      this.#document?.transcriptionType === 'MANUAL'
+    ) {
+      return false;
+    }
+    return true;
+  }
 
   async process(): Promise<void> {
     if (!this.shouldProcessEvent()) {
@@ -73,20 +99,26 @@ export class AudioTranscriptionEventHandler {
     await this.#setup();
     // Get rid of ts error
     if (!this.#document) {
-      logger.error('this.#document is null');
+      this.logger.error('this.#document is null');
       return;
+    }
+    if (!this.shouldProcessDocumet()) {
+      this.logger.info(
+        `Document ${this.#document?.id} should not be processed. Skipping`
+      );
     }
     const { prefix } = splitAudioTranscriptionBucketKey(this.getKeyFromEvent());
     switch (prefix) {
       case audioFilePrefix:
-        let TranscriptionProcessor = new SagemakerWhisperTranscription(
+        let TranscriptionProcessor = new SagemakerBatchTransformTranscription(
           new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
           this.#document.id,
           this.getKeyFromEvent(),
           {
             model: 'medium',
             language: this.#document.language as keyof typeof LanguageCodePairs,
-          }
+          },
+          this.logger
         );
         await TranscriptionProcessor.triggerBatchTransformJob();
         break;
@@ -113,7 +145,7 @@ export class AudioTranscriptionEventHandler {
         });
         break;
       default:
-        logger.debug(
+        this.logger.debug(
           `Received ${this.getEventTypeFromEvent()} event for ${this.getKeyFromEvent()}. Skipping.`
         );
     }
@@ -145,28 +177,35 @@ export class AudioTranscriptionEventHandler {
       document.speechToTextFileURL
     );
     if (!whisperTranscriptObject) {
-      logger.error(
+      this.logger.error(
         `Error loading whisperTranscriptObject.Body for ${document.speechToTextFileURL}`
       );
       return;
     }
-    let whisperTranscript = JSON.parse(whisperTranscriptObject.toString());
+    let whisperTranscript = JSON.parse(
+      new TextDecoder().decode(whisperTranscriptObject)
+    );
     let pyannoteTranscriptObject = await this.storageHandler.getObject(
       //@ts-ignore
       document.speakerDiarizationFileURL
     );
     if (!pyannoteTranscriptObject) {
-      logger.error(
+      this.logger.error(
         `Error loading pyannoteTranscriptObject.Body for ${document.speakerDiarizationFileURL}`
       );
       return;
     }
-    let pyannoteTranscript = JSON.parse(pyannoteTranscriptObject.toString());
-    let mergedTranscript = createSpeakerChangeTranscriptionHTML(
-      pyannoteTranscript,
-      whisperTranscript
+    let pyannoteTranscript = JSON.parse(
+      new TextDecoder().decode(pyannoteTranscriptObject)
     );
-    let mergedTranscriptKey = `${mergedTranscriptionFilePrefix}/${document.id}.html`;
+    let mergedTranscript = new WhisperPyannoteMerger(
+      pyannoteTranscript,
+      whisperTranscript,
+      25,
+      15,
+      this.logger
+    ).createSpeakerChangeTranscriptionHTML();
+    let mergedTranscriptKey = `${generatedTranscriptionFilePrefix}/${document.id}.html`;
 
     await this.storageHandler.putObject(
       mergedTranscriptKey,
@@ -188,13 +227,13 @@ export class AudioTranscriptionEventHandler {
 
   shouldProcessEvent() {
     if (this.getEventTypeFromEvent() !== 'ObjectCreated:Put') {
-      logger.debug(
+      this.logger.debug(
         `Received ${this.event.eventName} event for ${this.event.s3.object.key}. Skipping.`
       );
       return false;
     }
     if (this.getBucketFromEvent() !== AWS_AUDIO_BUCKET_NAME) {
-      logger.error(
+      this.logger.error(
         `Unexpected bucket ${this.getBucketFromEvent()} in transcription processing, expected ${AWS_AUDIO_BUCKET_NAME}`
       );
       return false;
@@ -205,7 +244,7 @@ export class AudioTranscriptionEventHandler {
     let key = this.getKeyFromEvent();
     const { prefix, documentId } = splitAudioTranscriptionBucketKey(key);
 
-    logger.info(
+    this.logger.info(
       `Processing ${this.getEventTypeFromEvent()} event for ${prefix}/${key}`
     );
 
@@ -217,14 +256,14 @@ export class AudioTranscriptionEventHandler {
 
     // Error handling
     if (!document) {
-      logger.error(
+      this.logger.error(
         `Recieved event for unknown document. Could not find document for audio file ${key}`
       );
       return false;
     }
 
     if (document.transcriptionType === 'MANUAL') {
-      logger.info(
+      this.logger.info(
         `Skipping processing of ${key} because transcription type is MANUAL`
       );
       return false;
