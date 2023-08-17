@@ -1,11 +1,11 @@
-import { S3StorageHandler } from '../services/storageHandler.js';
-import { logger } from '../services/logger.js';
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
+import prisma from '../prisma/index.js';
+import { logger } from '../services/logger.js';
+import { S3StorageHandler } from '../services/storageHandler.js';
 import {
   audioFilePrefix,
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
 } from './common.js';
-import prisma from '../prisma/index.js';
 
 const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 
@@ -22,8 +22,8 @@ const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 export const uploadAudioFile = async (
   documentId: string,
   body: Buffer,
-  fileEnding: string = '',
-  contentType: string = ''
+  fileEnding = '',
+  contentType = ''
 ): Promise<string> => {
   const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
   logger.info(`Uploading audio file to ${key}`);
@@ -43,7 +43,7 @@ export const uploadAudioFile = async (
 export const getPresignedUrlForDocumentAudioFile = async (
   documentId: string
 ): Promise<{ url: string; expiresAt: number }> => {
-  let doc = await prisma.document.findUnique({
+  const doc = await prisma.document.findUnique({
     where: {
       id: documentId,
     },
@@ -53,7 +53,7 @@ export const getPresignedUrlForDocumentAudioFile = async (
       `Document with id ${documentId} not found with audio file key`
     );
   }
-  let url = await s3.generatePresignedUrlForObject(
+  const url = await s3.generatePresignedUrlForObject(
     doc.audioFileURL,
     AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION
   );
@@ -66,14 +66,14 @@ export const getPresignedUrlForDocumentAudioFile = async (
   return { url, expiresAt: expiration.getTime() };
 };
 
-let isRunningDirectly = false;
+const isRunningDirectly = false;
 if (isRunningDirectly) {
-  let documentId = 'tawefwaefcsdfsffsefssdvfsesefsst';
-  let body = Buffer.from('girglpershjg');
-  let fileEnding = 'txt';
-  let t2 = await uploadAudioFile(documentId, body, fileEnding, 'text/plain');
+  const documentId = 'tawefwaefcsdfsffsefssdvfsesefsst';
+  const body = Buffer.from('girglpershjg');
+  const fileEnding = 'txt';
+  const t2 = await uploadAudioFile(documentId, body, fileEnding, 'text/plain');
   console.log(t2);
   console.log('Uploaded audio file');
-  let t3 = await getPresignedUrlForDocumentAudioFile(documentId);
+  const t3 = await getPresignedUrlForDocumentAudioFile(documentId);
   console.log(t3);
 }

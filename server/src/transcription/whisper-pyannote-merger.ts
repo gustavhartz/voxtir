@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+
 import { Logger, logger as coreLogger } from '../services/logger.js';
 
 interface WhisperSegment {
@@ -48,8 +49,8 @@ export class WhisperPyannoteMerger {
   constructor(
     pyannoteTranscript: PyannoteTranscript,
     whisperTranscript: WhisperTranscript,
-    timestampEveryApproximateSeconds: number = 25,
-    minimumTimeBetweenTimestampsSeconds: number = 10,
+    timestampEveryApproximateSeconds = 25,
+    minimumTimeBetweenTimestampsSeconds = 10,
     logger?: Logger
   ) {
     this.whisperTranscript = whisperTranscript;

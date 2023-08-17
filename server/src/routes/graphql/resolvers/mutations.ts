@@ -1,19 +1,20 @@
-import { MutationResolvers } from '../generated/graphql';
-import prisma from '../../../prisma/index.js';
-import { logger } from '../../../services/logger.js';
 import { ProjectRole } from '@prisma/client';
 import { GraphQLError } from 'graphql';
+
 import {
   generateProjectSharingToken,
   projectSharingJWTRes,
   verifyProjectSharingToken,
 } from '../../../common/jwt.js';
+import prisma from '../../../prisma/index.js';
+import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
-  uploadAudioFile,
   getPresignedUrlForDocumentAudioFile,
+  uploadAudioFile,
 } from '../../../transcription/index.js';
 import { FileAlreadyExistsError } from '../../../types/customErrors.js';
+import { MutationResolvers } from '../generated/graphql';
 
 // Use the generated `MutationResolvers` type
 // to type check our mutations!
@@ -27,7 +28,7 @@ const mutations: MutationResolvers = {
       speakerCount,
       transcriptionType,
     } = args;
-    let userRights = await prisma.userOnProject.findFirst({
+    const userRights = await prisma.userOnProject.findFirst({
       where: {
         userId: context.userId,
         projectId: projectId,
@@ -55,7 +56,7 @@ const mutations: MutationResolvers = {
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;
-    let userRights = await prisma.userOnProject.findFirst({
+    const userRights = await prisma.userOnProject.findFirst({
       where: {
         userId: context.userId,
         projectId: projectId,
@@ -73,7 +74,7 @@ const mutations: MutationResolvers = {
         message: 'User not allowed to perform action',
       };
     }
-    let doc = await prisma.document.update({
+    const doc = await prisma.document.update({
       where: {
         projectId: projectId,
         id: documentId,
@@ -108,9 +109,9 @@ const mutations: MutationResolvers = {
     return { success: true };
   },
   deleteProject: async (_, args, context) => {
-    let userId = context.userId;
-    let projectId = args.id;
-    let userRelation = await prisma.userOnProject.findFirst({
+    const userId = context.userId;
+    const projectId = args.id;
+    const userRelation = await prisma.userOnProject.findFirst({
       where: {
         projectId: projectId,
         userId: userId,
@@ -145,7 +146,7 @@ const mutations: MutationResolvers = {
     const { id, userEmail, role } = args;
     const userId = context.userId;
     // Assert user has permission
-    let userRelation = await prisma.userOnProject.findFirst({
+    const userRelation = await prisma.userOnProject.findFirst({
       where: {
         projectId: id,
         userId: userId,
@@ -163,7 +164,7 @@ const mutations: MutationResolvers = {
         message: 'User not allowed to perform action',
       };
     }
-    let token = generateProjectSharingToken(id);
+    const token = generateProjectSharingToken(id);
 
     await prisma.projectInvitation.create({
       data: {
@@ -176,7 +177,7 @@ const mutations: MutationResolvers = {
       },
     });
 
-    let response = await sendProjectShareEmail(userEmail, token, id);
+    const response = await sendProjectShareEmail(userEmail, token, id);
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },
       'Sent project share email'
@@ -195,7 +196,7 @@ const mutations: MutationResolvers = {
       throw new GraphQLError('Token invalid or expired');
     }
 
-    let invitation = await prisma.projectInvitation.findFirst({
+    const invitation = await prisma.projectInvitation.findFirst({
       where: {
         token: token,
       },
@@ -207,7 +208,7 @@ const mutations: MutationResolvers = {
         message: 'Invitation not found',
       };
     }
-    let id = invitation.projectId;
+    const id = invitation.projectId;
 
     if (id != tokenVerificationRes.projectId) {
       logger.error(
@@ -222,7 +223,7 @@ const mutations: MutationResolvers = {
       };
     }
 
-    let project = await prisma.userOnProject.findFirst({
+    const project = await prisma.userOnProject.findFirst({
       where: {
         projectId: id,
         userId: userId,
@@ -268,7 +269,7 @@ const mutations: MutationResolvers = {
     const { doc, documentId, projectId } = args;
     const { createReadStream, filename } = await doc.file;
     // assert user has permission
-    let userRelation = await prisma.userOnProject.findFirst({
+    const userRelation = await prisma.userOnProject.findFirst({
       where: {
         projectId: projectId,
         userId: context.userId,
@@ -281,7 +282,7 @@ const mutations: MutationResolvers = {
       };
     }
     // Document is on project
-    let docRelation = await prisma.document.findFirst({
+    const docRelation = await prisma.document.findFirst({
       where: {
         projectId: projectId,
         id: documentId,
@@ -305,7 +306,7 @@ const mutations: MutationResolvers = {
     logger.info(doc);
     const stream: Buffer = createReadStream();
     try {
-      let key = await uploadAudioFile(
+      const key = await uploadAudioFile(
         documentId,
         stream,
         filename,
@@ -337,7 +338,7 @@ const mutations: MutationResolvers = {
   getPresignedUrlForAudioFile: async (_, args, context) => {
     const { documentId, projectId } = args;
     // assert user has permission
-    let userRelation = await prisma.userOnProject.findFirst({
+    const userRelation = await prisma.userOnProject.findFirst({
       where: {
         projectId: projectId,
         userId: context.userId,
@@ -350,7 +351,7 @@ const mutations: MutationResolvers = {
       };
     }
     // Document is on project
-    let docRelation = await prisma.document.findFirst({
+    const docRelation = await prisma.document.findFirst({
       where: {
         projectId: projectId,
         id: documentId,
@@ -362,7 +363,7 @@ const mutations: MutationResolvers = {
         message: 'Document project combination not found',
       };
     }
-    let signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
+    const signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
       `${documentId}`
     );
     return signedUrlResponse;

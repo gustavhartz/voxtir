@@ -1,9 +1,10 @@
 import { Resend } from 'resend';
 import { CreateEmailResponse } from 'resend/build/src/emails/interfaces';
+
 import {
-  RESEND_DOMAIN,
   FRONTEND_BASE_URL,
   RESEND_API_KEY,
+  RESEND_DOMAIN,
 } from '../common/env.js';
 
 const resend = new Resend(RESEND_API_KEY);
@@ -13,7 +14,7 @@ export const sendProjectShareEmail = async (
   token: string,
   projectName: string
 ): Promise<CreateEmailResponse> => {
-  let invitationLink = `https://${FRONTEND_BASE_URL}/accept-invitation?token=${token}`;
+  const invitationLink = `https://${FRONTEND_BASE_URL}/accept-invitation?token=${token}`;
 
   return resend.emails.send({
     from: `Voxtir <no-reply@${RESEND_DOMAIN}>`,
@@ -98,7 +99,7 @@ export const sendProjectShareEmail = async (
   });
 };
 
-let isRunningDirectly = false;
+const isRunningDirectly = false;
 if (isRunningDirectly) {
   sendProjectShareEmail('gsh@voxtir.com', 'testtoken', 'testproject')
     .then((res) => {

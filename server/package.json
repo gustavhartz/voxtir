@@ -11,7 +11,9 @@
     "prisma-generate": "npx prisma generate --schema src/prisma/schema.prisma",
     "prisma-delete-seed": "npx prisma migrate reset --schema src/prisma/schema.prisma -f",
     "prisma-push": "npx prisma db push --schema src/prisma/schema.prisma",
-    "actenv": "export $(grep -v '^#' .env | xargs)"
+    "actenv": "export $(grep -v '^#' .env | xargs)",
+    "prepare": "cd .. && husky install server/.husky",
+    "lint-server": "lint-staged"
   },
   "prisma": {
     "seed": "ts-node --esm --transpile-only src/prisma/seed.ts"
@@ -74,12 +76,14 @@
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
     "dotenv": "^16.0.3",
-    "eslint": "^8.42.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
     "nodemon": "^3.0.1",
     "pino-pretty": "^10.2.0",
-    "prettier": "^2.8.8",
+    "prettier": "2.8.8",
     "prisma": "^5.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
@@ -88,6 +92,14 @@
   "engines": {
     "npm": "9.5.1",
     "node": "18.16.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx, jsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,md,html,js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
   },
   "prettier": "../.prettierrc.json"
 }

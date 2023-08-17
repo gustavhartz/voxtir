@@ -3,27 +3,28 @@ console.time('deps');
 import { expressMiddleware } from '@apollo/server/express4';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
+import cookieParser from 'cookie-parser';
+import session from 'cookie-session';
 import cors from 'cors';
 import express from 'express';
 import expressWebsockets from 'express-ws';
 import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import http from 'http';
 import morgan from 'morgan';
-import { accessControl, requestId, userInfoSync } from './middleware.js';
-import session from 'cookie-session';
-import cookieParser from 'cookie-parser';
-import { logger } from './services/logger.js';
-import prisma from './prisma/index.js';
-import { getGqlServer } from './routes/apollo.js';
-import { app as routes } from './routes/index.js';
+
 import {
   APP_NAME,
   APP_PORT,
   COOKIE_SECRET,
-  NODE_ENV,
   ENABLE_SCHEDULER_JOBS,
+  NODE_ENV,
 } from './common/env.js';
+import { accessControl, requestId, userInfoSync } from './middleware.js';
+import prisma from './prisma/index.js';
+import { getGqlServer } from './routes/apollo.js';
+import { app as routes } from './routes/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
+import { logger } from './services/logger.js';
 
 console.timeEnd('deps');
 

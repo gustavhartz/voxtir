@@ -1,11 +1,12 @@
+import { Prisma } from '@prisma/client';
+import { Handler, NextFunction, Request, Response } from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 import { v4 as uuidv4 } from 'uuid';
-import { Request, Response, NextFunction, Handler } from 'express';
+
+import { AUTH0_DOMAIN, DEVELOPMENT_USER, NODE_ENV } from './common/env.js';
 import prisma from './prisma/index.js';
 import { Auth0Client } from './services/auth0.js';
-import { Prisma } from '@prisma/client';
 import { logger } from './services/logger.js';
-import { NODE_ENV, DEVELOPMENT_USER, AUTH0_DOMAIN } from './common/env.js';
 
 const VOXTIR_SEEN_USER_COOKIE = 'voxtir_seen_user';
 
@@ -81,7 +82,7 @@ export const userInfoSync = async (
       sameSite: 'none',
     });
     try {
-      let auth0UserData = await Auth0Client.getUserById(req.auth.payload.sub);
+      const auth0UserData = await Auth0Client.getUserById(req.auth.payload.sub);
       await prisma.user.upsert({
         create: {
           id: req.auth.payload.sub,
