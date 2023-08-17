@@ -305,7 +305,7 @@ const mutations: MutationResolvers = {
     logger.info(doc);
     const stream: Buffer = createReadStream();
     try {
-      let data = await uploadAudioFile(
+      let key = await uploadAudioFile(
         documentId,
         stream,
         filename,
@@ -316,7 +316,7 @@ const mutations: MutationResolvers = {
           id: documentId,
         },
         data: {
-          audioFileURL: data.Key,
+          audioFileURL: key,
         },
       });
     } catch (error) {

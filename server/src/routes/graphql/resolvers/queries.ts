@@ -4,7 +4,7 @@ import { logger } from '../../../services/logger.js';
 import { TranscriptionProcessStatus } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
-import { LanguageCodePairs } from '../../../transcription/languages.js';
+import { LanguageCodePairs } from '../../../transcription/common.js';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!

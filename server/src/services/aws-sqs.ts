@@ -1,13 +1,14 @@
-import aws from 'aws-sdk';
 import { logger } from './logger.js';
 import { AWS_REGION } from '../common/env.js';
-// ENV
+import {
+  SQSClient,
+  DeleteMessageCommand,
+  ReceiveMessageCommand,
+  ReceiveMessageRequest,
+  ReceiveMessageResult,
+} from '@aws-sdk/client-sqs'; // ES Modules import
 
-aws.config.update({
-  region: AWS_REGION,
-});
-
-const sqs = new aws.SQS({ apiVersion: '2012-11-05' });
+const client = new SQSClient({ region: AWS_REGION });
 
 /**
  * Poll SQS. Returns the promise from SQS. Basic params
@@ -25,23 +26,24 @@ const sqs = new aws.SQS({ apiVersion: '2012-11-05' });
  */
 export const pollSqs = async (
   queueUrl: string,
-  requestParams?: aws.SQS.ReceiveMessageRequest
+  requestParams?: ReceiveMessageRequest
 ) => {
   const params = {
     AttributeNames: ['All'],
     MaxNumberOfMessages: 1,
     MessageAttributeNames: ['All'],
     QueueUrl: queueUrl,
-    VisibilityTimeout: 100,
+    VisibilityTimeout: 45,
     WaitTimeSeconds: 0,
     ...requestParams,
   };
-  return sqs.receiveMessage(params).promise();
+  const command = new ReceiveMessageCommand(params);
+  return await client.send(command);
 };
 
 export const deleteMessageFromSqsRecivedMessageResult = async (
   queueUrl: string,
-  messageResult: aws.SQS.ReceiveMessageResult
+  messageResult: ReceiveMessageResult
 ) => {
   if (messageResult.Messages && messageResult.Messages.length > 0) {
     // delete all messages
@@ -68,11 +70,13 @@ export const deleteMessageFromSqsReciptHandle = async (
   queueUrl: string,
   receiptHandle: string
 ) => {
-  const params = {
-    QueueUrl: queueUrl,
-    ReceiptHandle: receiptHandle,
+  const input = {
+    // DeleteMessageRequest
+    QueueUrl: queueUrl, // required
+    ReceiptHandle: receiptHandle, // required
   };
-  return sqs.deleteMessage(params).promise();
+  const command = new DeleteMessageCommand(input);
+  await client.send(command);
 };
 
 /**
@@ -83,7 +87,7 @@ export const deleteMessageFromSqsReciptHandle = async (
  */
 export const pollSqsAndDelete = async (
   queueUrl: string,
-  requestParams?: aws.SQS.ReceiveMessageRequest
+  requestParams?: ReceiveMessageRequest
 ) => {
   const res = await pollSqs(queueUrl, requestParams);
   await deleteMessageFromSqsRecivedMessageResult(queueUrl, res);

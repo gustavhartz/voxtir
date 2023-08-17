@@ -162,8 +162,21 @@ resource "aws_s3_bucket_notification" "audio_bucket_notification" {
   bucket = aws_s3_bucket.voxtir_audiofiles.id
 
   queue {
-    queue_arn = aws_sqs_queue.audio_bucket_queue.arn
-    events    = ["s3:ObjectCreated:*"]
+    queue_arn     = aws_sqs_queue.audio_bucket_queue.arn
+    events        = ["s3:ObjectCreated:*"]
+    filter_prefix = "speaker-diarization/"
+
+  }
+  queue {
+    queue_arn     = aws_sqs_queue.audio_bucket_queue.arn
+    events        = ["s3:ObjectCreated:*"]
+    filter_prefix = "raw-audio/"
+
+  }
+  queue {
+    queue_arn     = aws_sqs_queue.audio_bucket_queue.arn
+    events        = ["s3:ObjectCreated:*"]
+    filter_prefix = "speech-to-text/"
   }
 }
 
