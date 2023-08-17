@@ -1,23 +1,25 @@
-import { S3Event, S3EventRecord } from 'aws-lambda';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { ReceiveMessageCommandOutput } from '@aws-sdk/client-sqs';
-import prisma from '../prisma/index.js';
 import { Document } from '@prisma/client';
+import { S3Event, S3EventRecord } from 'aws-lambda';
+
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
-import {
-  audioFilePrefix,
-  speakerDiarizationFilePrefix,
-  speechToTextFilePrefix,
-  generatedTranscriptionFilePrefix,
-  splitAudioTranscriptionBucketKey,
-} from './common.js';
-import { SagemakerBatchTransformTranscription } from './sagemaker-transcription.js';
+import prisma from '../prisma/index.js';
+import { Logger, logger as CoreLogger } from '../services/logger.js';
 import {
   S3StorageHandler,
   StorageHandler,
 } from '../services/storageHandler.js';
+import {
+  audioFilePrefix,
+  generatedTranscriptionFilePrefix,
+  speakerDiarizationFilePrefix,
+  speechToTextFilePrefix,
+  splitAudioTranscriptionBucketKey,
+} from './common.js';
 import { LanguageCodePairs } from './common.js';
+import { SagemakerBatchTransformTranscription } from './sagemaker-transcription.js';
 import { WhisperPyannoteMerger } from './whisper-pyannote-merger.js';
-import { Logger, logger as CoreLogger } from '../services/logger.js';
 
 export class SQSTranscriptionMessageHandler {
   private logger: Logger;
@@ -27,7 +29,7 @@ export class SQSTranscriptionMessageHandler {
     this.event = event;
   }
 
-  async processSQSMessage() {
+  async processSQSMessage(): Promise<void> {
     for (const message of this.event.Messages ?? []) {
       if (!message.Body) {
         return;
@@ -36,9 +38,9 @@ export class SQSTranscriptionMessageHandler {
       await this.processS3Events(body);
     }
   }
-  private async processS3Events(event: S3Event) {
+  private async processS3Events(event: S3Event): Promise<void> {
     // Test events are different from real events
-    if (event.hasOwnProperty('Event')) {
+    if (Object.prototype.hasOwnProperty.call(event, 'Event')) {
       this.logger.info(
         'Test event revieced in transcription processing, skipping'
       );
@@ -58,7 +60,7 @@ export class S3AudioTranscriptionEventHandler {
   #document: Document | null = null;
   storageHandler: StorageHandler;
   event: S3EventRecord;
-  setupComplete: boolean = false;
+  setupComplete = false;
   logger: Logger;
 
   constructor(
@@ -71,11 +73,11 @@ export class S3AudioTranscriptionEventHandler {
     this.logger = logger || CoreLogger;
   }
 
-  async #setup() {
+  async #setup(): Promise<void> {
     if (this.setupComplete) {
       return;
     }
-    let success = await this.#validateAndSetDocument();
+    const success = await this.#validateAndSetDocument();
     if (!success || !this.#document) {
       throw new Error('Could not validate and set document');
     }
@@ -109,8 +111,8 @@ export class S3AudioTranscriptionEventHandler {
     }
     const { prefix } = splitAudioTranscriptionBucketKey(this.getKeyFromEvent());
     switch (prefix) {
-      case audioFilePrefix:
-        let TranscriptionProcessor = new SagemakerBatchTransformTranscription(
+      case audioFilePrefix: {
+        const TranscriptionProcessor = new SagemakerBatchTransformTranscription(
           new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
           this.#document.id,
           this.getKeyFromEvent(),
@@ -122,6 +124,7 @@ export class S3AudioTranscriptionEventHandler {
         );
         await TranscriptionProcessor.triggerBatchTransformJob();
         break;
+      }
       case speakerDiarizationFilePrefix:
         this.#document = await prisma.document.update({
           where: {
@@ -170,9 +173,9 @@ export class S3AudioTranscriptionEventHandler {
     return true;
   }
 
-  async #createAndPutSpeakerChangeHTMLDocument() {
+  async #createAndPutSpeakerChangeHTMLDocument(): Promise<void> {
     const document = this.#document as any as Document;
-    let whisperTranscriptObject = await this.storageHandler.getObject(
+    const whisperTranscriptObject = await this.storageHandler.getObject(
       //@ts-ignore
       document.speechToTextFileURL
     );
@@ -182,10 +185,10 @@ export class S3AudioTranscriptionEventHandler {
       );
       return;
     }
-    let whisperTranscript = JSON.parse(
+    const whisperTranscript = JSON.parse(
       new TextDecoder().decode(whisperTranscriptObject)
     );
-    let pyannoteTranscriptObject = await this.storageHandler.getObject(
+    const pyannoteTranscriptObject = await this.storageHandler.getObject(
       //@ts-ignore
       document.speakerDiarizationFileURL
     );
@@ -195,17 +198,17 @@ export class S3AudioTranscriptionEventHandler {
       );
       return;
     }
-    let pyannoteTranscript = JSON.parse(
+    const pyannoteTranscript = JSON.parse(
       new TextDecoder().decode(pyannoteTranscriptObject)
     );
-    let mergedTranscript = new WhisperPyannoteMerger(
+    const mergedTranscript = new WhisperPyannoteMerger(
       pyannoteTranscript,
       whisperTranscript,
       25,
       15,
       this.logger
     ).createSpeakerChangeTranscriptionHTML();
-    let mergedTranscriptKey = `${generatedTranscriptionFilePrefix}/${document.id}.html`;
+    const mergedTranscriptKey = `${generatedTranscriptionFilePrefix}/${document.id}.html`;
 
     await this.storageHandler.putObject(
       mergedTranscriptKey,
@@ -225,7 +228,7 @@ export class S3AudioTranscriptionEventHandler {
     });
   }
 
-  shouldProcessEvent() {
+  shouldProcessEvent(): boolean {
     if (this.getEventTypeFromEvent() !== 'ObjectCreated:Put') {
       this.logger.debug(
         `Received ${this.event.eventName} event for ${this.event.s3.object.key}. Skipping.`
@@ -240,8 +243,8 @@ export class S3AudioTranscriptionEventHandler {
     }
     return true;
   }
-  async #validateAndSetDocument() {
-    let key = this.getKeyFromEvent();
+  async #validateAndSetDocument(): Promise<boolean> {
+    const key = this.getKeyFromEvent();
     const { prefix, documentId } = splitAudioTranscriptionBucketKey(key);
 
     this.logger.info(
@@ -272,15 +275,15 @@ export class S3AudioTranscriptionEventHandler {
     return true;
   }
 
-  getBucketFromEvent() {
+  getBucketFromEvent(): string {
     return this.event.s3.bucket.name;
   }
 
-  getKeyFromEvent() {
+  getKeyFromEvent(): string {
     return this.event.s3.object.key;
   }
 
-  getEventTypeFromEvent() {
+  getEventTypeFromEvent(): string {
     return this.event.eventName;
   }
 }

@@ -1,21 +1,22 @@
 import { v4 as uuidv4 } from 'uuid';
-import { schedulerLogger, Logger } from '../services/logger.js';
+
+import { Logger, schedulerLogger } from '../services/logger.js';
 
 export class ScheduledAsyncTask {
   private handler: (
-    executionId: String,
+    executionId: string,
     executionLogger: Logger
   ) => Promise<void>;
   private intervalTime: number;
-  private isRunning: boolean = false;
+  private isRunning = false;
   private runningUUID: string | null = null;
   private intervalId: NodeJS.Timeout | null = null;
-  private taskName: String;
+  private taskName: string;
   logger: Logger;
 
   constructor(
-    taskName: String,
-    handler: (executionId: String, executionLogger: Logger) => Promise<void>,
+    taskName: string,
+    handler: (executionId: string, executionLogger: Logger) => Promise<void>,
     intervalTime: number
   ) {
     this.handler = handler;
@@ -33,7 +34,7 @@ export class ScheduledAsyncTask {
     }
 
     this.intervalId = setInterval(async () => {
-      let executionId = uuidv4();
+      const executionId = uuidv4();
       await this.executeTask(executionId);
     }, this.intervalTime);
 

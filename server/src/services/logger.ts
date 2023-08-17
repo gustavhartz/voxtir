@@ -1,4 +1,5 @@
 import pino from 'pino';
+
 import { LOG_LEVEL, NODE_ENV } from '../common/env.js';
 export type Logger = pino.Logger;
 
@@ -45,11 +46,11 @@ export const requestLogger = (req: any) => {
   return logger.child({ requestId: req.requestId, logType: 'request' });
 };
 // For logging from the scheduler to identify it as such
-export const schedulerLogger = (schedulerNamer: String) => {
+export const schedulerLogger = (schedulerNamer: string) => {
   return logger.child({ logType: 'scheduler', schedulerNamer: schedulerNamer });
 };
 
-let runningDirectly = false;
+const runningDirectly = false;
 if (runningDirectly) {
   logger.info('my test');
   logger.error('my error');

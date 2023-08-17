@@ -1,6 +1,7 @@
 import jwt, { VerifyOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { PROJECT_SHARING_EXPIRATION_TIME, JWT_SECRET } from './env.js';
+
+import { JWT_SECRET, PROJECT_SHARING_EXPIRATION_TIME } from './env.js';
 
 const envShareProjectTokenExpirationTime = parseInt(
   PROJECT_SHARING_EXPIRATION_TIME
@@ -35,7 +36,7 @@ export function verifyProjectSharingToken(
   return jwt.verify(token, JWT_SECRET, verifyOptions) as projectSharingJWTRes;
 }
 
-let isRunningDirectly = false;
+const isRunningDirectly = false;
 if (isRunningDirectly) {
   const token = generateProjectSharingToken(uuidv4());
   console.log(token);

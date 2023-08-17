@@ -1,10 +1,11 @@
-import { QueryResolvers, Project } from '../generated/graphql';
-import prisma from '../../../prisma/index.js';
-import { logger } from '../../../services/logger.js';
 import { TranscriptionProcessStatus } from '@prisma/client';
 import { GraphQLError } from 'graphql';
-import { Auth0ManagementApiUser } from '../../../types/auth0.js';
+
+import prisma from '../../../prisma/index.js';
+import { logger } from '../../../services/logger.js';
 import { LanguageCodePairs } from '../../../transcription/common.js';
+import { Auth0ManagementApiUser } from '../../../types/auth0.js';
+import { Project, QueryResolvers } from '../generated/graphql';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!
@@ -13,7 +14,7 @@ const queries: QueryResolvers = {
     return { success: true, message: 'ok' };
   },
   me: async (_, __, context) => {
-    let user = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         id: context.userId,
       },
@@ -22,7 +23,7 @@ const queries: QueryResolvers = {
       logger.error('User query for unknown user');
       throw new GraphQLError('User not known');
     }
-    let aut0Details =
+    const aut0Details =
       user?.auth0ManagementApiUserDetails as any as Auth0ManagementApiUser;
     return {
       id: context.userId,
@@ -32,7 +33,7 @@ const queries: QueryResolvers = {
   },
   projects: async (_, __, context) => {
     // Replace with your logic to fetch projects from the database
-    let projects = await prisma.project.findMany({
+    const projects = await prisma.project.findMany({
       where: {
         UsersOnProjects: {
           every: {
@@ -47,7 +48,7 @@ const queries: QueryResolvers = {
     const projectResponse: Project[] = [];
     // for loop to iterate through projects and create output format
     for (const projectEle of projects) {
-      let projectResponseObj: Project = {
+      const projectResponseObj: Project = {
         id: projectEle.id,
         name: projectEle.name,
         description: projectEle.description,
@@ -75,7 +76,7 @@ const queries: QueryResolvers = {
   },
   project: async (_, args, context) => {
     // Replace with your logic to fetch a specific project by ID from the database
-    let project = await prisma.project.findFirst({
+    const project = await prisma.project.findFirst({
       where: {
         UsersOnProjects: {
           every: {
