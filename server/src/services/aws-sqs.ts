@@ -33,7 +33,7 @@ export const pollSqs = async (
     MaxNumberOfMessages: 1,
     MessageAttributeNames: ['All'],
     QueueUrl: queueUrl,
-    VisibilityTimeout: 100,
+    VisibilityTimeout: 45,
     WaitTimeSeconds: 0,
     ...requestParams,
   };
