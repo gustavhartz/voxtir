@@ -23,6 +23,7 @@ import {
   NODE_ENV,
   ENABLE_SCHEDULER_JOBS,
 } from './common/env.js';
+import { sqsPollAsyncTask } from './scheduler/index.js';
 
 console.timeEnd('deps');
 
@@ -31,6 +32,7 @@ console.time('startup');
 async function main(): Promise<void> {
   if (ENABLE_SCHEDULER_JOBS === 'true') {
     logger.info('Scheduler jobs enabled');
+    sqsPollAsyncTask.start();
   }
 
   // Setup the express server

@@ -32,5 +32,3 @@ export const sqsPollAsyncTask = new ScheduledAsyncTask(
   whisperPyannoteTranscriptionTasks,
   POLL_INTERVAL_MS
 );
-
-sqsPollAsyncTask.start();
