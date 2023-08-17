@@ -11,13 +11,13 @@ import { createBatchTransformJob } from '../services/aws-sagemaker.js';
 import { Logger, logger as coreLogger } from '../services/logger.js';
 import { StorageHandler } from '../services/storageHandler.js';
 import {
+  LanguageCodePairs,
   sagemakerJSONFilePrefix,
   sagemakerOutputFilePrefix,
   speakerDiarizationFilePrefix,
   speechToTextFilePrefix,
   splitAudioTranscriptionBucketKey,
 } from './common.js';
-import { LanguageCodePairs } from './common.js';
 
 interface TranscriptionJsonFile {
   bucketName: string;
