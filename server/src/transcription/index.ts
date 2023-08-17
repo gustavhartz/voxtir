@@ -1,14 +1,13 @@
-import aws from 'aws-sdk';
-import {
-  uploadObject,
-  generatePresignedUrlForObject,
-} from '../services/aws-s3.js';
+import { S3StorageHandler } from '../services/storageHandler.js';
 import { logger } from '../services/logger.js';
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import {
   audioFilePrefix,
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
 } from './common.js';
+import prisma from '../prisma/index.js';
+
+const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 
 /**
  * Basic function for uploading an audio file to S3 from user. Intended to be used for raw audio files
@@ -25,10 +24,12 @@ export const uploadAudioFile = async (
   body: Buffer,
   fileEnding: string = '',
   contentType: string = ''
-): Promise<aws.S3.ManagedUpload.SendData> => {
+): Promise<string> => {
   const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
   logger.info(`Uploading audio file to ${key}`);
-  return uploadObject(AWS_AUDIO_BUCKET_NAME, key, body, contentType, false);
+
+  await s3.putObject(key, body, contentType, false);
+  return key;
 };
 
 /**
@@ -42,11 +43,18 @@ export const uploadAudioFile = async (
 export const getPresignedUrlForDocumentAudioFile = async (
   documentId: string
 ): Promise<{ url: string; expiresAt: number }> => {
-  const key = `${audioFilePrefix}/${documentId}`;
-  //TODO: Get from database instead of hardcoding
-  let url = await generatePresignedUrlForObject(
-    AWS_AUDIO_BUCKET_NAME,
-    key,
+  let doc = await prisma.document.findUnique({
+    where: {
+      id: documentId,
+    },
+  });
+  if (!doc || !doc.audioFileURL) {
+    throw new Error(
+      `Document with id ${documentId} not found with audio file key`
+    );
+  }
+  let url = await s3.generatePresignedUrlForObject(
+    doc.audioFileURL,
     AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION
   );
   // calculate expiration for client
