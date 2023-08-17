@@ -22,10 +22,8 @@ const queries: QueryResolvers = {
       logger.error('User query for unknown user');
       throw new GraphQLError('User not known');
     }
-    let aut0Details: Auth0ManagementApiUser = JSON.parse(
-      user?.auth0ManagementApiUserDetails as string
-    );
-
+    let aut0Details =
+      user?.auth0ManagementApiUserDetails as any as Auth0ManagementApiUser;
     return {
       id: context.userId,
       name: aut0Details.name,

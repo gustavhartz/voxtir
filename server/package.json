@@ -50,14 +50,11 @@
     "yjs": "^13.6.1"
   },
   "devDependencies": {
-    "@apollo/client": "^3.7.14",
-    "@graphql-codegen/cli": "^4.0.0",
+    "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/graphql-modules-preset": "^4.0.0",
     "@graphql-codegen/introspection": "^4.0.0",
-    "@graphql-codegen/typescript": "^4.0.0",
-    "@graphql-codegen/typescript-operations": "^4.0.0",
-    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
-    "@graphql-codegen/typescript-resolvers": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@graphql-eslint/eslint-plugin": "^3.19.1",
     "@types/async-lock": "^1.4.0",
     "@types/aws-lambda": "^8.10.119",

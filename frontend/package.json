@@ -9,9 +9,11 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.1",
     "@hocuspocus/provider": "^2.0.6",
     "@reduxjs/toolkit": "^1.9.5",
     "@tiptap/extension-collaboration": "^2.0.3",
@@ -27,6 +29,7 @@
     "@tiptap/extension-text-style": "^2.0.3",
     "@tiptap/react": "^2.0.3",
     "@tiptap/suggestion": "^2.0.3",
+    "apollo-upload-client": "^17.0.0",
     "browser-or-node": "^2.1.1",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
@@ -42,6 +45,12 @@
     "use-double-click": "^1.0.5"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/introspection": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@storybook/addon-essentials": "^7.0.13",
     "@storybook/addon-interactions": "^7.0.13",
     "@storybook/addon-links": "^7.0.13",
@@ -50,6 +59,7 @@
     "@storybook/react-vite": "^7.0.13",
     "@storybook/testing-library": "^0.0.14-next.2",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/apollo-upload-client": "^17.0.2",
     "@types/file-saver": "^2.0.5",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
