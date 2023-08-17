@@ -1,12 +1,13 @@
-import { logger } from './logger.js';
-import { AWS_REGION } from '../common/env.js';
 import {
-  SQSClient,
   DeleteMessageCommand,
   ReceiveMessageCommand,
   ReceiveMessageRequest,
   ReceiveMessageResult,
+  SQSClient,
 } from '@aws-sdk/client-sqs'; // ES Modules import
+
+import { AWS_REGION } from '../common/env.js';
+import { logger } from './logger.js';
 
 const client = new SQSClient({ region: AWS_REGION });
 

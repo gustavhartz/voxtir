@@ -1,14 +1,15 @@
 import {
-  S3Client,
-  PutObjectCommandInput,
   GetObjectCommand,
   PutObjectCommand,
+  PutObjectCommandInput,
+  S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { AWS_REGION } from '../common/env.js';
 import { Readable } from 'stream';
-import { logger } from './logger.js';
+
+import { AWS_REGION } from '../common/env.js';
 import { FileAlreadyExistsError } from '../types/customErrors.js';
+import { logger } from './logger.js';
 
 /**
  * Generic storage handler class
@@ -80,7 +81,7 @@ export class S3StorageHandler extends StorageHandler {
   ): Promise<string> {
     const command = new PutObjectCommand({ Bucket: this.bucket, Key: key });
 
-    let response = await getSignedUrl(this.s3, command, {
+    const response = await getSignedUrl(this.s3, command, {
       expiresIn: expiration,
     });
     return response;

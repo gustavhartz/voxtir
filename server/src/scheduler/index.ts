@@ -1,20 +1,20 @@
+import { SQS_TRANSCRIPTION_QUEUE_URL as QUEUE_URL } from '../common/env.js';
 import {
-  pollSqs,
   deleteMessageFromSqsRecivedMessageResult,
+  pollSqs,
 } from '../services/aws-sqs.js';
 import { Logger } from '../services/logger.js';
-import { SQS_TRANSCRIPTION_QUEUE_URL as QUEUE_URL } from '../common/env.js';
 import { SQSTranscriptionMessageHandler } from '../transcription/process-event.js';
 import { ScheduledAsyncTask } from './scheduler.js';
 
 export const POLL_INTERVAL_MS = 15000;
 
 async function whisperPyannoteTranscriptionTasks(
-  _: String,
+  _: string,
   executionLogger: Logger
 ): Promise<void> {
   try {
-    let res = await pollSqs(QUEUE_URL);
+    const res = await pollSqs(QUEUE_URL);
     executionLogger.debug(`Processing SQS event`, res);
     await new SQSTranscriptionMessageHandler(
       res,

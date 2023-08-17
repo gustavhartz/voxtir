@@ -1,22 +1,23 @@
 import { CreateTransformJobCommandInput } from '@aws-sdk/client-sagemaker';
+import { v4 as uuidv4 } from 'uuid';
+
 import { getShortDateFormat } from '../common/date.js';
 import {
   AWS_AUDIO_BUCKET_NAME,
-  SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
   NODE_ENV,
+  SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
 } from '../common/env.js';
 import { createBatchTransformJob } from '../services/aws-sagemaker.js';
+import { Logger, logger as coreLogger } from '../services/logger.js';
+import { StorageHandler } from '../services/storageHandler.js';
 import {
-  speechToTextFilePrefix,
-  speakerDiarizationFilePrefix,
   sagemakerJSONFilePrefix,
   sagemakerOutputFilePrefix,
+  speakerDiarizationFilePrefix,
+  speechToTextFilePrefix,
   splitAudioTranscriptionBucketKey,
 } from './common.js';
-import { logger as coreLogger, Logger } from '../services/logger.js';
 import { LanguageCodePairs } from './common.js';
-import { v4 as uuidv4 } from 'uuid';
-import { StorageHandler } from '../services/storageHandler.js';
 
 interface TranscriptionJsonFile {
   bucketName: string;
@@ -53,8 +54,8 @@ export class SagemakerBatchTransformTranscription {
     this.logger = logger || coreLogger;
   }
   prepareBatchTransformJobPayload = async () => {
-    let key = this.getJsonFileKey();
-    let jsonFile = this.createTranscriptionJsonFile();
+    const key = this.getJsonFileKey();
+    const jsonFile = this.createTranscriptionJsonFile();
     await this.StorageHandler.putObject(
       key,
       Buffer.from(JSON.stringify(jsonFile)),
@@ -71,7 +72,7 @@ export class SagemakerBatchTransformTranscription {
   };
 
   createTranscriptionJsonFile = () => {
-    let keyInfo = splitAudioTranscriptionBucketKey(this.audioFileUrl);
+    const keyInfo = splitAudioTranscriptionBucketKey(this.audioFileUrl);
     const jsonFile: TranscriptionJsonFile = {
       bucketName: AWS_AUDIO_BUCKET_NAME,
       audioInputKey: this.audioFileUrl,
@@ -83,7 +84,7 @@ export class SagemakerBatchTransformTranscription {
     return jsonFile;
   };
   triggerBatchTransformJob = async () => {
-    let payload = await this.prepareBatchTransformJobPayload();
+    const payload = await this.prepareBatchTransformJobPayload();
     try {
       await createBatchTransformJob(payload);
     } catch (e) {
