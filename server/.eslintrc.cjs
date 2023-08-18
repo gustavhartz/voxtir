@@ -10,6 +10,7 @@ module.exports = {
     '**/generated/*',
     '**/*.local.*',
     '.eslintrc.cjs',
+    '*config.ts',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
