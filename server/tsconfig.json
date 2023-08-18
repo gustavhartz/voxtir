@@ -14,7 +14,7 @@
     "outDir": "dist",
     "allowJs": true,
     "lib": ["esnext", "dom"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
@@ -27,5 +27,5 @@
     "src/routes/graphql/schema.ts",
     "src/routes/graphql/context.ts"
   ],
-  "exclude": ["**/node_modules", "**/dist", "**/*.local.*"]
+  "exclude": ["**/node_modules", "**/dist", "**/*.local.*", "jest.config.js"]
 }
