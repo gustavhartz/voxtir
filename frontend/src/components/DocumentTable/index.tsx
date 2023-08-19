@@ -5,3 +5,4 @@ const DocumentTable = () => {
         <div>Document Table</div>
     )
 }
+export default DocumentTable;
