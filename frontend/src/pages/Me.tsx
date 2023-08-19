@@ -1,6 +1,6 @@
 import React from 'react';
 
-import withAccessToken from '../components/Auth0/with-access-token.tsx';
+import withAccessToken from '../components/Auth/with-access-token.tsx';
 import { useGetMeQuery } from '../graphql/generated/graphql.ts';
 
 function Me({ token }: { token: string }) {

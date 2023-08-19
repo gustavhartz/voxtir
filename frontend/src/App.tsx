@@ -1,8 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Route, Routes } from 'react-router-dom';
 
-import { AuthenticationGuard } from './components/Auth0/authentication-guard';
-import { PageLoader } from './components/Auth0/page-loader';
+import { AuthenticationGuard } from './components/Auth/authentication-guard';
+import { PageLoader } from './components/Auth/page-loader';
 import Import from './components/Import';
 import ImportModal from './components/ImportModal';
 import KeyboardModal from './components/KeyboardModal';
