@@ -4,7 +4,7 @@ export function getMHTdocument(htmlSource: string) {
   const ref = _prepareImageParts(htmlSource);
   const imageContentPartsString = ref.imageContentParts.join('\n');
   htmlSource = convertTimestampsToSpans(htmlSource);
-  htmlSource = ref.htmlSource.replace(/\=/g, '=3D');
+  htmlSource = ref.htmlSource.replace(/=/g, '=3D');
   return mhtDocumentTemplate(htmlSource, imageContentPartsString);
 }
 
@@ -28,7 +28,7 @@ function _prepareImageParts(htmlSource: string) {
         encodedContent
       )
     );
-    return `\"${contentLocation}\"`;
+    return `"${contentLocation}"`;
   };
   if (!/<img/g.test(htmlSource)) {
     return { htmlSource, imageContentParts };

@@ -1,18 +1,19 @@
+import { saveAs } from 'file-saver';
 import React from 'react';
 import {
+  TbFileExport,
+  TbFileImport,
   TbInfoCircle,
   TbKeyboard,
-  TbFileExport,
   TbTrash,
-  TbFileImport,
 } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
-import { asBlob } from '../../utils/html-to-docx';
-import { saveAs } from 'file-saver';
-import { getEditorInstance } from '../Editor';
+
 import { useAppDispatch } from '../../hooks';
 import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
 import { toggleModal as ToggleImportModal } from '../../state/track';
+import { asBlob } from '../../utils/html-to-docx';
+import { getEditorInstance } from '../Editor';
 
 const Drawer = () => {
   // Update this function to export the document as a docx file based on the redux context

@@ -1,17 +1,18 @@
-import React from 'react';
-import { useEditor, EditorContent, Editor as ttEditor } from '@tiptap/react';
 import { Color } from '@tiptap/extension-color';
-import History from '@tiptap/extension-history';
 import Document from '@tiptap/extension-document';
-import Paragraph from '@tiptap/extension-paragraph';
-import Text from '@tiptap/extension-text';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Heading from '@tiptap/extension-heading';
+import History from '@tiptap/extension-history';
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Mention from '@tiptap/extension-mention';
-import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
-import suggestion from '../Extensions/Custom/Speakers/Suggestion';
-import TextStyle from '@tiptap/extension-text-style';
+import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
+import Text from '@tiptap/extension-text';
+import TextStyle from '@tiptap/extension-text-style';
+import { Editor as ttEditor,EditorContent, useEditor } from '@tiptap/react';
+import React from 'react';
+
+import suggestion from '../Extensions/Custom/Speakers/Suggestion';
+import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import { PlaceholderText } from './placeholder-text';
 let editorInstance: ttEditor | null = null;
 

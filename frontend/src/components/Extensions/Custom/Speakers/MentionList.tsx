@@ -87,8 +87,8 @@ type Props = {
   range: Range;
   query: string;
   text: string;
-  items: String[];
-  command: (props: { id: String }) => void;
+  items: string[];
+  command: (props: { id: string }) => void;
   decorationNode: Element | null;
   clientRect?: (() => DOMRect | null) | null;
 };

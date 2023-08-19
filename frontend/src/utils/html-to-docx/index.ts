@@ -1,5 +1,6 @@
-import { addFiles, generateDocument, DocumentOptions } from './internal';
 import JSZip from 'jszip';
+
+import { addFiles, DocumentOptions,generateDocument } from './internal';
 
 export async function asBlob(
   html: string,

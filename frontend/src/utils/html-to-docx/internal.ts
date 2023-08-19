@@ -1,8 +1,9 @@
-import JSZip from 'jszip';
-import { getMHTdocument } from './utils';
-import { contentTypesXml, documentXmlRels, relsXml } from './assets';
-import { documentTemplate, Orient, Margins, defaultMargins } from './templates';
 import { isBrowser } from 'browser-or-node';
+import JSZip from 'jszip';
+
+import { contentTypesXml, documentXmlRels, relsXml } from './assets';
+import { defaultMargins,documentTemplate, Margins, Orient } from './templates';
+import { getMHTdocument } from './utils';
 
 export type DocumentOptions = typeof defaultDocumentOptions;
 
@@ -75,7 +76,7 @@ export function addFiles(
 }
 // Create folder or raise error if folder null
 function createFolder(zip: JSZip, name: string) {
-  let folder = zip.folder(name);
+  const folder = zip.folder(name);
   if (folder === null) {
     throw new Error(`Cannot create folder ${name}`);
   }

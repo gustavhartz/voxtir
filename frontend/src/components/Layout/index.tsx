@@ -1,6 +1,7 @@
 import React from 'react';
-import Track from '../Track';
+
 import Drawer from '../Drawer';
+import Track from '../Track';
 
 interface LayoutProps {
   children: React.ReactNode | React.ReactNode[];

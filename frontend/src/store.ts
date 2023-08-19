@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import track from './state/track';
+
 import keyboard from './state/keyboard';
+import track from './state/track';
 export const store = configureStore({
   reducer: {
     track: track,

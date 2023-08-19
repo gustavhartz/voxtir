@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../hooks';
+
+import { useAppDispatch,useAppSelector } from '../../hooks';
 import {
-  setPlayPause,
-  setSkipForward,
-  setSkipBackward,
-  setPlaybackUp,
+  setMute,
   setPlaybackDown,
+  setPlaybackUp,
+  setPlayPause,
+  setSkipBackward,
+  setSkipForward,
   setVolumeDown,
   setVolumeUp,
-  setMute,
 } from '../../state/keyboard';
 
 export type KeyFunction =

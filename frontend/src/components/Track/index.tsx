@@ -1,11 +1,13 @@
+import 'react-h5-audio-player/lib/styles.css';
+
 import React from 'react';
 import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
-import { useAppSelector } from '../../hooks';
-import { useDispatch } from 'react-redux';
-import { setToSkipped, setCurrentPosition } from '../../state/track';
 import { GrBackTen, GrForwardTen } from 'react-icons/gr';
+import { useDispatch } from 'react-redux';
+
 import useKeyPress from '../../hook/useKeyPress';
+import { useAppSelector } from '../../hooks';
+import { setCurrentPosition,setToSkipped } from '../../state/track';
 import { toggleModal } from '../../state/track';
 
 const Track = () => {
