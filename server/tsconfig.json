@@ -14,7 +14,11 @@
     "outDir": "dist",
     "allowJs": true,
     "lib": ["esnext", "dom"],
+<<<<<<< HEAD
     "types": ["node", "vite/client", "jest"],
+=======
+    "types": ["node", "vite/client"],
+>>>>>>> 11114e9 (Layout re-work and routing system)
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
