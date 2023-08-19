@@ -1,5 +1,13 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Server 
 cd server 
 npm run lint-server
+
+# cleanup
+cd ..
+
+# Frontend
+cd frontend
+npm run lint-front
