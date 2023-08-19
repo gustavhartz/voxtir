@@ -52,10 +52,10 @@ const Drawer = () => {
     <>
       <aside
         id="default-sidebar"
-        className="absolute top-0 right-0 w-16 min-h-screen h-full"
+        className="w-24 min-h-full overflow-x-hidden"
         aria-label="Sidebar"
       >
-        <div className="space-y-6 flex flex-col items-center py-8 w-full h-full overflow-y-auto bg-white shadow-lg">
+        <div className="overflow-x-hidden space-y-6 flex flex-col items-center py-8 w-full h-full overflow-y-auto bg-white border-solid border-l-2 border-gray-100">
           <button
             onClick={handleOpenKeyboardModal}
             data-tooltip-id="document-sidebar"

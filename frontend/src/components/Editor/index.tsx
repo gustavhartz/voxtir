@@ -14,6 +14,7 @@ import React from 'react';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import { PlaceholderText } from './placeholder-text';
+import Drawer from '../Drawer';
 let editorInstance: ttEditor | null = null;
 
 export const setEditorInstance = (editor: ttEditor | null) => {
@@ -64,7 +65,14 @@ function Editor() {
     autofocus: true,
   });
   setEditorInstance(editor);
-  return <EditorContent className="w-full !pr-14" editor={editor} />;
+  return ( 
+    <div className="w-full h-full flex flex-row items-center">
+      <div className="w-full">
+        <EditorContent className="w-full p-6" editor={editor} />
+      </div>
+      <Drawer />
+    </div>
+  )
 }
 
 export default Editor;
