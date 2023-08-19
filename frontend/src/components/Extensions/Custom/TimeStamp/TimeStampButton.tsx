@@ -1,7 +1,8 @@
-import { NodeViewWrapper, NodeConfig } from '@tiptap/react';
+import { NodeConfig,NodeViewWrapper } from '@tiptap/react';
 import React, { useState } from 'react';
-import useDoubleClick from 'use-double-click';
 import { useDispatch } from 'react-redux';
+import useDoubleClick from 'use-double-click';
+
 import { skipToPosition } from '../../../../state/track';
 export default (props: NodeConfig) => {
   const dispatch = useDispatch();

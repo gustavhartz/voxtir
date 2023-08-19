@@ -1,4 +1,4 @@
-export const PlaceholderText: string = `<h1>Welcome to Voxtir</h1>
+export const PlaceholderText = `<h1>Welcome to Voxtir</h1>
 <p>
   This is a the first edition of the Voxtir editor. It is a WYSIWYG editor that
   is optimised for transcription. Think of it as a new version of Otranscribe.

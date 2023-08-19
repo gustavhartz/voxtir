@@ -3,15 +3,13 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 
 import Component from './TimeStampButton.tsx';
 
-export default Node.create({
+const node = Node.create({
   name: 'timeStampButton',
   priority: 1000,
 
   atom: true,
   inline: true,
   group: 'inline',
-
-  onCreate() {},
 
   addAttributes() {
     return {
@@ -56,3 +54,5 @@ export default Node.create({
     return ReactNodeViewRenderer(Component);
   },
 });
+
+export default node;

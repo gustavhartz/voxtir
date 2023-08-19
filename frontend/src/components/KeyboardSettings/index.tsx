@@ -1,7 +1,8 @@
 import React from 'react';
+
+import { useAppSelector } from '../../hooks';
 import KeySetting from './KeySetting';
 import { KeySettingProps } from './KeySetting';
-import { useAppSelector } from '../../hooks';
 const controlKeys: KeySettingProps[] = [
   {
     text: 'Play/Pause',

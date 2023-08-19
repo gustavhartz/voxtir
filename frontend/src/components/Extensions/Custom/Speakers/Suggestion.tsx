@@ -2,7 +2,7 @@ import { ReactRenderer } from '@tiptap/react';
 import { SuggestionOptions } from '@tiptap/suggestion';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 
-import { MentionListRef, MentionList } from './MentionList';
+import { MentionList,MentionListRef } from './MentionList';
 
 const suggestion: Omit<SuggestionOptions, 'editor'> = {
   items: ({ query, editor }) => {

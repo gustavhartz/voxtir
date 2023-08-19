@@ -1,7 +1,8 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect,useRef } from 'react';
+
 import { useAppDispatch } from '../../hooks';
-import { toggleModal } from '../../state/track';
 import { useAppSelector } from '../../hooks';
+import { toggleModal } from '../../state/track';
 
 interface ModalProps {
   children: React.ReactNode | React.ReactNode[];

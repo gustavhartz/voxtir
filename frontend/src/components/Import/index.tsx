@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import useFileUpload from '../../hook/useFileUpload';
 import { useDispatch } from 'react-redux';
+
+import useFileUpload from '../../hook/useFileUpload';
 import { setTrack } from '../../state/track';
 import { getEditorInstance } from '../Editor';
 
@@ -50,7 +51,7 @@ const Import: React.FC = () => {
   };
 
   const handleUploadContent = () => {
-    let editor = getEditorInstance();
+    const editor = getEditorInstance();
     if (!editor) {
       console.error('Editor instance not found');
       return;
