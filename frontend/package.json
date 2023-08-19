@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.1",
+    "@auth0/auth0-react": "^2.2.0",
     "@hocuspocus/provider": "^2.0.6",
     "@reduxjs/toolkit": "^1.9.5",
     "@tiptap/extension-collaboration": "^2.0.3",
@@ -51,6 +52,7 @@
     "@graphql-codegen/typescript-operations": "^4.0.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@graphql-eslint/eslint-plugin": "^3.20.1",
     "@storybook/addon-essentials": "^7.0.13",
     "@storybook/addon-interactions": "^7.0.13",
     "@storybook/addon-links": "^7.0.13",
@@ -69,14 +71,22 @@
     "@vitejs/plugin-react-swc": "^3.0.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.38.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
     "postcss": "^8.4.23",
+    "prettier": "^3.0.2",
     "prop-types": "^15.8.1",
     "storybook": "^7.0.13",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
+  },
+  "engines": {
+    "npm": "9.5.1",
+    "node": "18.16.0"
   }
 }

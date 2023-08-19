@@ -1,11 +1,13 @@
 import React from 'react';
+
+import withAccessToken from '../components/Auth/with-access-token.tsx';
 import { useGetMeQuery } from '../graphql/generated/graphql.ts';
 
-function App() {
+function Me({ token }: { token: string }) {
   const { data, loading } = useGetMeQuery({
     context: {
       headers: {
-        authorization: `Bearer ${'<AUTH0_TOKEN>'}`,
+        authorization: `Bearer ${token}`,
       },
     },
   });
@@ -25,4 +27,6 @@ function App() {
   );
 }
 
-export default App;
+const MeWithAccessToken = withAccessToken(Me);
+
+export default MeWithAccessToken;
