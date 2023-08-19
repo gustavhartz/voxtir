@@ -1,5 +1,6 @@
-node_modules
-dist
-.env
-.idea
-README.md
+**/node_modules
+**/dist
+**/.env
+**/README.md
+**/*\.config\.(ts,js,cjs,mjs,cts,mts)
+**/\.eslintrc\.*

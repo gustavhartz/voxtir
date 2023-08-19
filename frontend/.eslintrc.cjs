@@ -9,7 +9,7 @@ module.exports = {
     '**/generated/*',
     '**/*.local.*',
     '.eslintrc.cjs',
-    '*config.ts',
+    '*config.*',
   ],
   extends: [
     'eslint:recommended',
