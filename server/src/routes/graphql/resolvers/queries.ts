@@ -121,6 +121,46 @@ const queries: QueryResolvers = {
       languageName: key,
     }));
   },
+  document: async (_, args, context) => {
+    const documentId = args.id;
+    const document = await prisma.document.findFirst({
+      where: {
+        id: documentId,
+      },
+      include: {
+        project: {
+          include: {
+            UsersOnProjects: true,
+          },
+        },
+      },
+    });
+    if (!document) {
+      throw new GraphQLError('Document not found');
+    }
+    if (
+      document.project.UsersOnProjects.some(
+        (userOnProject) => userOnProject.userId === context.userId
+      )
+    ) {
+      throw new GraphQLError('User not on project');
+    }
+    return {
+      id: document.id,
+      isTrashed: document.isTrashed,
+      lastModified: document.updatedAt.toISOString(),
+      projectId: document.projectId,
+      title: document.title,
+      transcriptionMetadata: {
+        speakersCount: document.speakerCount,
+        language: document.language,
+        dialects: [document.dialect],
+      },
+      transcriptionStatus:
+        document.transcriptionStatus as TranscriptionProcessStatus,
+      transcriptionType: document.transcriptionType,
+    };
+  },
 };
 
 export default queries;

@@ -9,5 +9,6 @@ export const typeDefs = gql`
     project(id: ID!): Project
     projectSharedWith(id: ID!): [UserSharing]
     supportedLanguages: [LanguageCodePairs]
+    document(id: ID!): Document
   }
 `;
