@@ -31,4 +31,9 @@ export const typeDefs = gql`
     dialects: [String]
     language: String
   }
+
+  type LanguageCodePairs {
+    languageCode: String
+    languageName: String
+  }
 `;

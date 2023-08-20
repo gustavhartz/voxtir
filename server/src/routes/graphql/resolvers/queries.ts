@@ -116,7 +116,10 @@ const queries: QueryResolvers = {
     };
   },
   supportedLanguages: () => {
-    return Object.keys(LanguageCodePairs);
+    return Object.keys(LanguageCodePairs).map((key) => ({
+      languageCode: LanguageCodePairs[key as keyof typeof LanguageCodePairs],
+      languageName: key,
+    }));
   },
 };
 
