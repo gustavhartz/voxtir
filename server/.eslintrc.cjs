@@ -29,21 +29,4 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
   },
-  overrides: [
-    {
-      files: ['*.ts'],
-      processor: '@graphql-eslint/graphql',
-    },
-    {
-      files: ['*.graphql'],
-      parser: '@graphql-eslint/eslint-plugin',
-      plugins: ['@graphql-eslint'],
-      rules: {
-        '@graphql-eslint/known-type-names': 'error',
-      },
-      parserOptions: {
-        schema: './src/routes/graphql/**/*.ts',
-      },
-    },
-  ],
 };
