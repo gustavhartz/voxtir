@@ -58,7 +58,6 @@
     "@graphql-codegen/introspection": "^4.0.0",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
-    "@graphql-eslint/eslint-plugin": "^3.19.1",
     "@types/async-lock": "^1.4.0",
     "@types/aws-lambda": "^8.10.119",
     "@types/cookie-parser": "^1.4.3",
