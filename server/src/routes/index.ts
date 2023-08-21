@@ -14,12 +14,23 @@ const hocusPocusServer = Server.configure(HocuspocusConfig());
 // Note: make sure to include a parameter for the document name.
 // You can set any contextual data like in the onConnect hook
 // and pass it to the handleConnection method.
-app.ws('/document', (websocket: WebSocket, req: Request) => {
-  hocusPocusServer.handleConnection(websocket, req);
+app.ws('/document/:documentId', (websocket: WebSocket, req: Request) => {
+  const context = {
+    documentId: req.params.documentId,
+    user: req.auth?.payload.sub,
+  };
+
+  hocusPocusServer.handleConnection(websocket, req, context);
 });
 
 app.get('/', (_request, response) => {
   response.send({ message: 'Hello World!' });
+});
+
+app.ws('/echo', function (ws, req) {
+  ws.on('message', function (msg) {
+    ws.send(msg);
+  });
 });
 
 export default app;
