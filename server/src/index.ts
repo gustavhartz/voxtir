@@ -22,7 +22,7 @@ import {
 import { accessControl, requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
-import { app as routes } from './routes/index.js';
+import routes from './routes/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
 import { logger } from './services/logger.js';
 
@@ -36,11 +36,11 @@ async function main(): Promise<void> {
     sqsPollAsyncTask.start();
   }
 
-  // Setup the express server
-  const { app } = expressWebsockets(express());
+  const expressApp = express();
+  const httpServer = http.createServer(expressApp);
+  const app = expressWebsockets(expressApp, httpServer).app;
 
-  // Logging setup and middleware
-  // TODO: Move to separate file
+  // Middelware
   app.use(
     morgan(`${chalk.green(APP_NAME)} :method :url :status - :response-time ms`)
   );
@@ -57,12 +57,9 @@ async function main(): Promise<void> {
   app.use(accessControl);
   app.use(userInfoSync);
 
-  // Client facing routes
+  // Routes
   app.use(routes);
 
-  const httpServer = http.createServer(app);
-
-  // Graphql setup
   const gqlServer = await getGqlServer(httpServer);
   app.use(
     '/graphql',
