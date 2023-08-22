@@ -1,4 +1,7 @@
 // Desc: This file contains all the environment variables used in the application and asserts that they are defined.
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const {
   AUTH0_CLIENT_ID,
@@ -39,6 +42,7 @@ export const {
   ENABLE_SCHEDULER_JOBS: string;
   AUTH0_DOMAIN: string;
 };
+
 // Assert defined
 if (
   !AUTH0_CLIENT_ID ||
@@ -61,5 +65,6 @@ if (
 ) {
   throw new Error('Missing env');
 }
+
 export const DEVELOPMENT_USER = process.env.DEVELOPMENT_USER || '';
 export const LOG_LEVEL = process.env.LOG_LEVEL || 'info';
