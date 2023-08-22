@@ -6,8 +6,9 @@ const GQL_BASE_URL = 'http://localhost:80/graphql';
 const fileUploadLink = createUploadLink({
   uri: GQL_BASE_URL,
   headers: {
-    'Apollo-Require-Preflight': 'true',
-  },
+    'Content-Type': `application/json`,
+    'Accept': `application/json`
+  }
 });
 
 export const client = new ApolloClient({

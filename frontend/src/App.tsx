@@ -1,8 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Route,Routes } from 'react-router-dom';
 
-import { AuthenticationGuard } from './components/Auth/authentication-guard';
 import { PageLoader } from './components/Auth/page-loader';;
+
 import Import from './components/Import';
 import ImportModal from './components/ImportModal';
 import KeyboardModal from './components/KeyboardModal';
@@ -19,9 +19,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="page-layout">
-        <PageLoader />
-      </div>
+      <PageLoader />
     );
   }
   return (
@@ -32,7 +30,7 @@ function App() {
           <Route index element={<Projects />} />
           <Route path="document/:documentID" element={<Home />} />
           <Route path="documents" element={<Documents />} />
-          <Route path="me" element={<AuthenticationGuard component={Me} />} />
+          <Route path="me" element={<Me />} />
         </Route>
       </Routes>
       <KeyboardModal>

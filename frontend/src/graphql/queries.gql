@@ -5,3 +5,17 @@ query GetMe {
     name
   }
 }
+
+query Projects {
+  projects {
+    name
+    id
+    description
+    documents {
+      description
+      id
+      title
+      lastModified
+    }
+  }
+}
