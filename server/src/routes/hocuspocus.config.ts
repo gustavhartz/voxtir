@@ -12,47 +12,30 @@ export default (): Partial<Configuration> => {
   const Serverconfigure: Pick<Configuration, 'name' | 'extensions'> &
     Partial<Configuration> = {
     name: `${APP_NAME}_${uuidv4().slice(0, 4)}`,
-    extensions: [],
+    extensions: [
+      new Database({
+        // Return a Promise to retrieve data …
+        fetch: async (d) => {
+          const doc = await prisma.document.findFirst({
+            where: {
+              id: d.context.documentId,
+            },
+          });
+          return doc?.data || null;
+        },
+        // … and a Promise to store data:
+        store: async (d) => {
+          return prisma.document.update({
+            where: {
+              id: d.context.documentId,
+            },
+            data: {
+              data: d.state,
+            },
+          });
+        },
+      }),
+    ],
   };
-
-  const database = new Database({
-    // Return a Promise to retrieve data …
-    fetch: async (d) => {
-      logger.info('fetch');
-      const doc = await prisma.document.findFirst({
-        where: {
-          id: d.documentName,
-        },
-      });
-      // Return the document
-      if (doc != null) {
-        return doc.data;
-      }
-      // Return
-      return null;
-    },
-    // … and a Promise to store data:
-    store: async ({ documentName, state }) => {
-      logger.info('store');
-      return prisma.document.upsert({
-        create: {
-          data: state,
-          id: documentName,
-          projectId: '1',
-          transcriptionType: 'AUTOMATIC',
-          title: 'Document 2',
-        },
-        update: {
-          data: state,
-        },
-        where: {
-          id: documentName,
-        },
-      });
-    },
-  });
-
-  Serverconfigure.extensions.push(database);
-
   return Serverconfigure;
 };
