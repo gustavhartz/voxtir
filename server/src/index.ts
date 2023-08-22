@@ -56,7 +56,10 @@ async function main(): Promise<void> {
 
   app.use(accessControl);
   app.use(userInfoSync);
-
+  app.use(cors<cors.CorsRequest>({
+    origin: 'http://localhost:5173',
+    credentials: true
+  }));
   // Client facing routes
   app.use(routes);
 
@@ -66,7 +69,6 @@ async function main(): Promise<void> {
   const gqlServer = await getGqlServer(httpServer);
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({
@@ -80,13 +82,13 @@ async function main(): Promise<void> {
   httpServer.listen({ port: APP_PORT }, () => {
     console.info(`
         Server "${chalk.magentaBright(
-          'APP_NAME'
-        )}" started. Port: ${chalk.blue.bold(
+      'APP_NAME'
+    )}" started. Port: ${chalk.blue.bold(
       APP_PORT
     )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
         Open Project: ${chalk.bold.underline.yellow(
-          `http://localhost:${APP_PORT}`
-        )} (ctrl+click)
+      `http://localhost:${APP_PORT}`
+    )} (ctrl+click)
       `);
     console.timeEnd('startup');
   });
