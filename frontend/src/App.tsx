@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { AuthenticationGuard } from './components/Auth/authentication-guard';
 import { PageLoader } from './components/Auth/page-loader';
+import Drawer from './components/Drawer';
 import Import from './components/Import';
 import ImportModal from './components/ImportModal';
 import KeyboardModal from './components/KeyboardModal';
@@ -10,6 +11,7 @@ import KeyboardSettings from './components/KeyboardSettings';
 import { CallbackPage } from './pages/Callback';
 import Home from './pages/Home';
 import Me from './pages/Me';
+
 function App() {
   const { isLoading } = useAuth0();
 
@@ -26,6 +28,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/me" element={<AuthenticationGuard component={Me} />} />
         <Route path="/callback" element={<CallbackPage />} />
+        <Route path="/test" element={<Drawer />} />
       </Routes>
       <KeyboardModal>
         <KeyboardSettings />
