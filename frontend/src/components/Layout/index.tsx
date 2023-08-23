@@ -1,24 +1,19 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import Drawer from '../Drawer';
-import Track from '../Track';
+import { AuthenticationGuard } from '../Auth/authentication-guard';
+import Nav from '../Nav';
 
-interface LayoutProps {
-  children: React.ReactNode | React.ReactNode[];
-}
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
-    <div className="flex flex-col w-full h-full">
-      <div className="flex flex-row">
-        <div className="flex flex-col w-full max-h-fit h-full p-6">
-          {children}
+    <div className="flex flex-row w-full h-full max-h-screen">
+      <div className="flex flex-row w-full min-h-screen">
+        <Nav />
+        <div className="flex flex-row w-full max-h-screen h-full">
+          <div className="overflow-y-scroll w-full">
+            <AuthenticationGuard component={Outlet} />
+          </div>
         </div>
-        <div>
-          <Drawer />
-        </div>
-      </div>
-      <div className="fixed bottom-0 h-18 w-full">
-        <Track />
       </div>
     </div>
   );

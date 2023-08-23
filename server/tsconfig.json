@@ -14,7 +14,7 @@
     "outDir": "dist",
     "allowJs": true,
     "lib": ["esnext", "dom"],
-    "types": ["node", "jest"],
+    "types": ["node", "vite/client", "jest"],
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
