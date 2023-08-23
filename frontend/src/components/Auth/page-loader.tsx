@@ -1,11 +1,13 @@
 import React from 'react';
+import { FaRegFileAudio } from 'react-icons/fa';
 
 export const PageLoader: React.FC = () => {
-  const loadingImg = 'https://cdn.auth0.com/blog/hello-auth0/loader.svg';
-
   return (
-    <div className="loader">
-      <img src={loadingImg} alt="Loading..." />
+    <div className="w-screen h-screen flex justify-center items-center">
+      <div className="animate-bounce flex items-center flex-col">
+        <FaRegFileAudio size={80} />
+        <p className="font-bold text-4xl">Voxtir</p>
+      </div>
     </div>
   );
 };

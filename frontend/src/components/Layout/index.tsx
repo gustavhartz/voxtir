@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { AuthenticationGuard } from '../Auth/authentication-guard';
 import Nav from '../Nav';
 
 const Layout: React.FC = () => {
@@ -10,7 +11,7 @@ const Layout: React.FC = () => {
         <Nav />
         <div className="flex flex-row w-full max-h-screen h-full">
           <div className="overflow-y-scroll w-full">
-            <Outlet />
+            <AuthenticationGuard component={Outlet} />
           </div>
         </div>
       </div>
