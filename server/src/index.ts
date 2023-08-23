@@ -54,6 +54,9 @@ async function main(): Promise<void> {
       secret: COOKIE_SECRET,
     })
   );
+  // allow pre-flight requests
+  app.options('*', cors());
+
   // Health check
   app.get('/health', (req, res) => {
     res.status(200).send('OK');
