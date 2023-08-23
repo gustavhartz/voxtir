@@ -22,6 +22,11 @@ phases:
       - echo Installing source NPM dependencies frontend...
       - cd frontend
       - npm install
+      - npm run generate
+      - echo Installing source NPM dependencies backend
+      - cd .. && cd server
+      - npm install
+      - npm run generate
 
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ${aws_region} | docker login --username AWS --password-stdin ${ecr_repository_base}
@@ -30,7 +35,11 @@ phases:
     commands:
       - echo Build started on 'date'
 
+      - echo Building server
+      - npm run build
+      - echo Done building server
       - echo Building frontend
+      - cd .. && cd frontend
       - npm run build
       # Build docker image if altered
       - echo Done building frontend
