@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
+const DOMAIN_BASE = import.meta.env.VITE_BACKEND_HTTP_URL_BASE;
 
-const GQL_BASE_URL = 'http://localhost:80/graphql';
-
+const GQL_BASE_URL = `${DOMAIN_BASE}/graphql`;
 const fileUploadLink = createUploadLink({
   uri: GQL_BASE_URL,
   headers: {

@@ -1,20 +1,21 @@
+import { HocuspocusProvider } from '@hocuspocus/provider';
+import Collaboration from '@tiptap/extension-collaboration';
 import { Color } from '@tiptap/extension-color';
 import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
-import History from '@tiptap/extension-history';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Mention from '@tiptap/extension-mention';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
-import { Editor as ttEditor,EditorContent, useEditor } from '@tiptap/react';
+import { Editor as ttEditor, EditorContent, useEditor } from '@tiptap/react';
 import React from 'react';
 
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
-import { PlaceholderText } from './placeholder-text';
 let editorInstance: ttEditor | null = null;
+const DOMAIN = import.meta.env.VITE_BACKEND_WS_URL_BASE;
 
 export const setEditorInstance = (editor: ttEditor | null) => {
   editorInstance = editor;
@@ -24,17 +25,24 @@ export const getEditorInstance = (): ttEditor | null => {
   return editorInstance;
 };
 
-function Editor() {
+function Editor({ documentID, token }: { documentID: string; token: string }) {
+  const provider = new HocuspocusProvider({
+    url: `${DOMAIN}/document/${documentID}`,
+    name: `${documentID}`,
+    token: `${token}`,
+  });
   const editor = useEditor({
     extensions: [
       Document,
       Paragraph,
       Text,
-      History,
       HorizontalRule,
       Heading,
       Color,
       TextStyle,
+      Collaboration.configure({
+        document: provider.document,
+      }),
       Placeholder.configure({
         placeholder: 'Start typing here...',
         emptyNodeClass:
@@ -52,10 +60,6 @@ function Editor() {
         show: false,
       }),
     ],
-    content: localStorage.getItem('document') ?? PlaceholderText,
-    onTransaction: (editor) => {
-      localStorage.setItem('document', editor.editor.getHTML());
-    },
     editorProps: {
       attributes: {
         class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`,

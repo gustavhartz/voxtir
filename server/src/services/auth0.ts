@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
-import jwt from 'jsonwebtoken';
+import { auth } from 'express-oauth2-jwt-bearer';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import Jwks from 'jwks-rsa';
 
 import {
   AUTH0_CLIENT_ID,
@@ -90,6 +92,39 @@ export class Auth0Client {
       throw new Error('Error getting user from Auth0');
     }
   }
+}
+
+/**
+ * Middleware for authenticating requests with Auth0
+ */
+export const auth0Middleware = auth({
+  audience: [
+    `https://${AUTH0_DOMAIN}/api/v2/`,
+    `https://${AUTH0_DOMAIN}/userinfo`,
+  ],
+  issuerBaseURL: `https://${AUTH0_DOMAIN}/`,
+  tokenSigningAlg: 'RS256',
+});
+
+const client = Jwks({
+  jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+  cache: true,
+  cacheMaxAge: 1000 * 60 * 60 * 10,
+});
+
+/**
+ * Simple wrapper around jwt.verify that uses jwks-rsa to verify the token for the Auth0 domain
+ * @param token
+ * @returns
+ */
+export async function verifyToken(token: string): Promise<string | JwtPayload> {
+  const decoded = jwt.decode(token, { complete: true });
+  if (!decoded) {
+    throw new Error('Invalid token');
+  }
+  const kid = decoded.header.kid;
+  const publicKey = await client.getSigningKey(kid);
+  return jwt.verify(token, publicKey.getPublicKey());
 }
 
 const isRunningDirectly = false;

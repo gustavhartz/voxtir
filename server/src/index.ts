@@ -19,11 +19,12 @@ import {
   ENABLE_SCHEDULER_JOBS,
   NODE_ENV,
 } from './common/env.js';
-import { accessControl, requestId, userInfoSync } from './middleware.js';
+import { requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
-import { getGqlServer } from './routes/apollo.js';
-import { app as routes } from './routes/index.js';
+import { getGqlServer } from './routes/graphql/index.js';
+import wsRoutes from './routes/websocket/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
+import { auth0Middleware } from './services/auth0.js';
 import { logger } from './services/logger.js';
 
 console.timeEnd('deps');
@@ -36,11 +37,11 @@ async function main(): Promise<void> {
     sqsPollAsyncTask.start();
   }
 
-  // Setup the express server
-  const { app } = expressWebsockets(express());
+  const expressApp = express();
+  const httpServer = http.createServer(expressApp);
+  const app = expressWebsockets(expressApp, httpServer).app;
 
-  // Logging setup and middleware
-  // TODO: Move to separate file
+  // Common Middelware
   app.use(
     morgan(`${chalk.green(APP_NAME)} :method :url :status - :response-time ms`)
   );
@@ -53,18 +54,22 @@ async function main(): Promise<void> {
       secret: COOKIE_SECRET,
     })
   );
+  // allow pre-flight requests
+  app.options('*', cors());
 
-  app.use(accessControl);
+  // Health check
+  app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+  });
+
+  // Socket related routes
+  app.use(wsRoutes);
+
+  app.use(auth0Middleware);
   app.use(userInfoSync);
 
-  // Client facing routes
-  app.use(routes);
-
-  const httpServer = http.createServer(app);
-
-  // Graphql setup
   const gqlServer = await getGqlServer(httpServer);
-  app.use(
+  expressApp.use(
     '/graphql',
     cors<cors.CorsRequest>(),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),

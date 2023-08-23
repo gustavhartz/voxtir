@@ -46,6 +46,7 @@
     "graphql-tag": "^2.12.6",
     "graphql-upload-minimal": "^1.5.4",
     "jsonwebtoken": "^9.0.1",
+    "jwks-rsa": "^3.0.1",
     "morgan": "^1.10.0",
     "pino": "^8.12.1",
     "resend": "^0.17.2",
