@@ -1,11 +1,10 @@
 import { Prisma } from '@prisma/client';
 import { Handler, NextFunction, Request, Response } from 'express';
-import { auth } from 'express-oauth2-jwt-bearer';
 import { v4 as uuidv4 } from 'uuid';
 
 import { AUTH0_DOMAIN, DEVELOPMENT_USER, NODE_ENV } from './common/env.js';
 import prisma from './prisma/index.js';
-import { Auth0Client } from './services/auth0.js';
+import { Auth0Client, auth0Middleware } from './services/auth0.js';
 import { logger } from './services/logger.js';
 
 const VOXTIR_SEEN_USER_COOKIE = 'voxtir_seen_user';
@@ -43,14 +42,7 @@ export const accessControl: Handler = (
     logger.info(`development user set to: ${DEVELOPMENT_USER}`);
     return next();
   }
-  auth({
-    audience: [
-      `https://${AUTH0_DOMAIN}/api/v2/`,
-      `https://${AUTH0_DOMAIN}/userinfo`,
-    ],
-    issuerBaseURL: `https://${AUTH0_DOMAIN}/`,
-    tokenSigningAlg: 'RS256',
-  })(req, res, next);
+  auth0Middleware(req, res, next);
 };
 
 /**
@@ -111,7 +103,11 @@ export const userInfoSync = async (
  * @param next
  * @returns
  */
-export const requestId = (req: Request, res: Response, next: NextFunction) => {
+export const requestId = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   req.requestId = uuidv4();
   return next();
 };
