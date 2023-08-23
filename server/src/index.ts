@@ -22,7 +22,7 @@ import {
 import { requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
-import routes from './routes/index.js';
+import wsRoutes from './routes/websocket/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
 import { auth0Middleware } from './services/auth0.js';
 import { logger } from './services/logger.js';
@@ -41,7 +41,7 @@ async function main(): Promise<void> {
   const httpServer = http.createServer(expressApp);
   const app = expressWebsockets(expressApp, httpServer).app;
 
-  // Middelware
+  // Common Middelware
   app.use(
     morgan(`${chalk.green(APP_NAME)} :method :url :status - :response-time ms`)
   );
@@ -54,17 +54,22 @@ async function main(): Promise<void> {
       secret: COOKIE_SECRET,
     })
   );
+  // Health check
+  app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+  });
 
+  // Socket related routes
+  app.use(wsRoutes);
+
+  // GraphQL and HTTP Routes
+  app.use(auth0Middleware);
   app.use(userInfoSync);
-  app.use(routes);
-
-  // Routes
 
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
     '/graphql',
     cors<cors.CorsRequest>(),
-    auth0Middleware,
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({

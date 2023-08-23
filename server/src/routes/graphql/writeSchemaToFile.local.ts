@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { schema } from './graphql/schema.js';
+import { schema } from './schema.js';
 import { printSchema } from 'graphql';
 
 const schemaString = printSchema(schema);

@@ -1,14 +1,14 @@
 import { Database } from '@hocuspocus/extension-database';
 import { Configuration } from '@hocuspocus/server';
 import { v4 as uuidv4 } from 'uuid';
-import { logger } from '../services/logger.js';
-import { verifyToken } from '../services/auth0.js';
+import { logger } from '../../services/logger.js';
+import { verifyToken } from '../../services/auth0.js';
 
 // Ripped from
 // docs-plus :) https://github.com/docs-plus/
-import { APP_NAME } from '../common/env.js';
-import prisma from '../prisma/index.js';
-import { HocuspocusContext } from '../types/hocuspocus.js';
+import { APP_NAME } from '../../common/env.js';
+import prisma from '../../prisma/index.js';
+import { HocuspocusContext } from '../../types/hocuspocus.js';
 
 export default (): Partial<Configuration> => {
   const Serverconfigure: Pick<Configuration, 'name' | 'extensions'> &

@@ -3,7 +3,7 @@ import express, { Request } from 'express';
 import expressWebsockets from 'express-ws';
 import type WebSocket from 'ws';
 
-import { HocuspocusContext } from '../types/hocuspocus.js';
+import { HocuspocusContext } from '../../types/hocuspocus.js';
 import HocuspocusConfig from './hocuspocus.config.js';
 
 // Configure Hocuspocus backend
@@ -21,10 +21,6 @@ app.ws('/document/:documentId', (websocket: WebSocket, req: Request) => {
   };
 
   hocusPocusServer.handleConnection(websocket, req, context);
-});
-
-app.get('/', (_request, response) => {
-  response.send({ message: 'Hello World!' });
 });
 
 app.ws('/echo', function (ws, req) {
