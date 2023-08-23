@@ -61,5 +61,4 @@ if (
 ) {
   throw new Error('Missing env');
 }
-export const DEVELOPMENT_USER = process.env.DEVELOPMENT_USER || '';
 export const LOG_LEVEL = process.env.LOG_LEVEL || 'info';

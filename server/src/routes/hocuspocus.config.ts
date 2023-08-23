@@ -53,10 +53,6 @@ export default (): Partial<Configuration> => {
       let jwtPayload = await verifyToken(token);
       let userId = jwtPayload.sub;
 
-      logger.debug(
-        `User ${userId} attempting access to document ${documentId}`
-      );
-
       let doc = await prisma.document.findFirst({
         where: {
           id: documentId,

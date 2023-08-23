@@ -19,11 +19,12 @@ import {
   ENABLE_SCHEDULER_JOBS,
   NODE_ENV,
 } from './common/env.js';
-import { accessControl, requestId, userInfoSync } from './middleware.js';
+import { requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/apollo.js';
 import routes from './routes/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
+import { auth0Middleware } from './services/auth0.js';
 import { logger } from './services/logger.js';
 
 console.timeEnd('deps');
@@ -54,16 +55,16 @@ async function main(): Promise<void> {
     })
   );
 
-  app.use(accessControl);
   app.use(userInfoSync);
-
-  // Routes
   app.use(routes);
 
+  // Routes
+
   const gqlServer = await getGqlServer(httpServer);
-  app.use(
+  expressApp.use(
     '/graphql',
     cors<cors.CorsRequest>(),
+    auth0Middleware,
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({

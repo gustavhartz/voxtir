@@ -140,6 +140,8 @@ docker buildx build --platform linux/amd64 -t voxtir-app-backend .
 docker run -p 3000:3000 -e APP_PORT=3000 voxtir-backend
 ```
 
+If you wan't to access the /graphql endpoint in the browser for the sandbox - then you need to modify your headers to include the auth0 token. It can be obtained by modifying the frontend code and logging the token. The could be simpler ways of doing this too.
+
 **Database**
 
 ```
