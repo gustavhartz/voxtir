@@ -1,5 +1,5 @@
 import React from 'react';
 
 const DocumentTable = () => {
-  return <></>;
+  return <div>Document Table</div>;
 };

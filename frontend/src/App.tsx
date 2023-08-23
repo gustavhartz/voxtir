@@ -3,14 +3,16 @@ import { Route, Routes } from 'react-router-dom';
 
 import { AuthenticationGuard } from './components/Auth/authentication-guard';
 import { PageLoader } from './components/Auth/page-loader';
-import Drawer from './components/Drawer';
 import Import from './components/Import';
 import ImportModal from './components/ImportModal';
 import KeyboardModal from './components/KeyboardModal';
 import KeyboardSettings from './components/KeyboardSettings';
+import Layout from './components/Layout';
 import { CallbackPage } from './pages/Callback';
+import Documents from './pages/Documents';
 import Home from './pages/Home';
 import Me from './pages/Me';
+import Projects from './pages/Projects';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -25,10 +27,13 @@ function App() {
   return (
     <div className="w-screen">
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/me" element={<AuthenticationGuard component={Me} />} />
         <Route path="/callback" element={<CallbackPage />} />
-        <Route path="/test" element={<Drawer />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Projects />} />
+          <Route path="document/:documentID" element={<Home />} />
+          <Route path="documents" element={<Documents />} />
+          <Route path="me" element={<AuthenticationGuard component={Me} />} />
+        </Route>
       </Routes>
       <KeyboardModal>
         <KeyboardSettings />

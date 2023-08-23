@@ -12,8 +12,10 @@ import TextStyle from '@tiptap/extension-text-style';
 import { Editor as ttEditor, EditorContent, useEditor } from '@tiptap/react';
 import React from 'react';
 
+import Drawer from '../Drawer';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
+
 let editorInstance: ttEditor | null = null;
 const DOMAIN = import.meta.env.VITE_BACKEND_WS_URL_BASE;
 
@@ -68,7 +70,14 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
     autofocus: true,
   });
   setEditorInstance(editor);
-  return <EditorContent className="w-full !pr-14" editor={editor} />;
+  return (
+    <div className="w-full h-full flex flex-row items-center">
+      <div className="w-full">
+        <EditorContent className="w-full p-6" editor={editor} />
+      </div>
+      <Drawer />
+    </div>
+  );
 }
 
 export default Editor;
