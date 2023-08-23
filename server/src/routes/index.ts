@@ -3,6 +3,7 @@ import express, { Request } from 'express';
 import expressWebsockets from 'express-ws';
 import type WebSocket from 'ws';
 
+import { HocuspocusContext } from '../types/hocuspocus.js';
 import HocuspocusConfig from './hocuspocus.config.js';
 
 // Configure Hocuspocus backend
@@ -15,9 +16,8 @@ const hocusPocusServer = Server.configure(HocuspocusConfig());
 // You can set any contextual data like in the onConnect hook
 // and pass it to the handleConnection method.
 app.ws('/document/:documentId', (websocket: WebSocket, req: Request) => {
-  const context = {
+  const context: HocuspocusContext = {
     documentId: req.params.documentId,
-    user: req.auth?.payload.sub,
   };
 
   hocusPocusServer.handleConnection(websocket, req, context);

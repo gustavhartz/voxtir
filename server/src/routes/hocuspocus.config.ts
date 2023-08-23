@@ -2,11 +2,13 @@ import { Database } from '@hocuspocus/extension-database';
 import { Configuration } from '@hocuspocus/server';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../services/logger.js';
+import { verifyToken } from '../services/auth0.js';
 
 // Ripped from
 // docs-plus :) https://github.com/docs-plus/
 import { APP_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
+import { HocuspocusContext } from '../types/hocuspocus.js';
 
 export default (): Partial<Configuration> => {
   const Serverconfigure: Pick<Configuration, 'name' | 'extensions'> &
@@ -25,7 +27,7 @@ export default (): Partial<Configuration> => {
         },
         // … and a Promise to store data:
         store: async (d) => {
-          return prisma.document.update({
+          await prisma.document.update({
             where: {
               id: d.context.documentId,
             },
@@ -36,6 +38,52 @@ export default (): Partial<Configuration> => {
         },
       }),
     ],
+    async onAuthenticate(data) {
+      //@ts-ignore - The context is not typed in the hocuspocus server
+      let context = data.context as HocuspocusContext;
+      let token = data.token;
+      let documentId = context.documentId;
+
+      if (!documentId) {
+        throw new Error('Document not specified');
+      }
+      if (!token) {
+        throw new Error('Token not specified');
+      }
+      let jwtPayload = await verifyToken(token);
+      let userId = jwtPayload.sub;
+
+      logger.debug(
+        `User ${userId} attempting access to document ${documentId}`
+      );
+
+      let doc = await prisma.document.findFirst({
+        where: {
+          id: documentId,
+        },
+        include: {
+          project: {
+            include: {
+              UsersOnProjects: {},
+            },
+          },
+        },
+      });
+      if (!doc) {
+        throw new Error('Document not found');
+      }
+
+      let access = doc.project.UsersOnProjects.some(
+        (userOnProject) => userOnProject.userId === userId
+      );
+
+      if (!access) {
+        logger.debug(
+          `User ${userId} not authorized for document ${documentId} and tried to access it`
+        );
+        throw new Error('User not authorized');
+      }
+    },
   };
   return Serverconfigure;
 };
