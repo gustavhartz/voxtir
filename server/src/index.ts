@@ -21,7 +21,7 @@ import {
 } from './common/env.js';
 import { requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
-import { getGqlServer } from './routes/apollo.js';
+import { getGqlServer } from './routes/graphql/index.js';
 import wsRoutes from './routes/websocket/index.js';
 import { sqsPollAsyncTask } from './scheduler/index.js';
 import { auth0Middleware } from './services/auth0.js';
@@ -62,7 +62,6 @@ async function main(): Promise<void> {
   // Socket related routes
   app.use(wsRoutes);
 
-  // GraphQL and HTTP Routes
   app.use(auth0Middleware);
   app.use(userInfoSync);
 
