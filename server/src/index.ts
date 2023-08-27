@@ -54,6 +54,11 @@ async function main(): Promise<void> {
       secret: COOKIE_SECRET,
     })
   );
+
+  app.use(cors({
+    origin: 'http://localhost:5173'
+  }));
+
   // allow pre-flight requests
   app.options('*', cors());
 
@@ -64,14 +69,15 @@ async function main(): Promise<void> {
 
   // Socket related routes
   app.use(wsRoutes);
-
   app.use(auth0Middleware);
   app.use(userInfoSync);
 
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>({
+      origin: 'http://localhost:5173'
+    }),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({
@@ -85,13 +91,13 @@ async function main(): Promise<void> {
   httpServer.listen({ port: APP_PORT }, () => {
     console.info(`
         Server "${chalk.magentaBright(
-          'APP_NAME'
-        )}" started. Port: ${chalk.blue.bold(
+      'APP_NAME'
+    )}" started. Port: ${chalk.blue.bold(
       APP_PORT
     )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
         Open Project: ${chalk.bold.underline.yellow(
-          `http://localhost:${APP_PORT}`
-        )} (ctrl+click)
+      `http://localhost:${APP_PORT}`
+    )} (ctrl+click)
       `);
     console.timeEnd('startup');
   });

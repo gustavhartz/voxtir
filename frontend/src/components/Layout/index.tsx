@@ -7,12 +7,10 @@ import Nav from '../Nav';
 const Layout: React.FC = () => {
   return (
     <div className="flex flex-row w-full h-full max-h-screen">
-      <div className="flex flex-row w-full min-h-screen">
+      <div className="flex flex-row w-full max-w-screen min-h-screen">
         <Nav />
-        <div className="flex flex-row w-full max-h-screen h-full">
-          <div className="overflow-y-scroll w-full">
-            <AuthenticationGuard component={Outlet} />
-          </div>
+        <div className="flex flex-row w-full max-w-full max-h-screen h-full overflow-y-scroll">
+          <AuthenticationGuard component={Outlet} />
         </div>
       </div>
     </div>

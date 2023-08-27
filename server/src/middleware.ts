@@ -53,6 +53,7 @@ export const userInfoSync = async (
         },
       });
     } catch (err) {
+      console.log(err);
       return res.status(401).send('Unauthorized');
     }
   }
