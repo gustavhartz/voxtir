@@ -53,7 +53,10 @@ export const userInfoSync = async (
         },
       });
     } catch (err) {
-      console.log(err);
+      logger.debug(
+        'VOXTIR_SEEN_USER_COOKIE set for user, but issue occured',
+        err
+      );
       return res.status(401).send('Unauthorized');
     }
   }
