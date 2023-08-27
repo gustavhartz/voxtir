@@ -5,6 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { ChangeEvent, MouseEvent,useEffect, useState } from "react";
+
 type Student = {
   studentId: number;
   name: string;
@@ -41,6 +42,7 @@ const defaultData: Student[] = [
     major: "Psychology",
   },
 ];
+
 const TableCell = ({ getValue, row, column, table }: any) => {
   const initialValue = getValue();
   const columnMeta = column.columnDef.meta;
@@ -74,6 +76,7 @@ const TableCell = ({ getValue, row, column, table }: any) => {
   }
   return <span>{value}</span>;
 };
+
 const EditCell = ({ row, table }: any) => {
   const meta = table.options.meta;
   const setEditedRows = (e: MouseEvent<HTMLButtonElement>) => {
@@ -86,6 +89,7 @@ const EditCell = ({ row, table }: any) => {
       meta?.revertData(row.index, e.currentTarget.name === "cancel");
     }
   };
+
   return (
     <div className="edit-cell-container">
       {meta?.editedRows[row.id] ? (
@@ -105,7 +109,9 @@ const EditCell = ({ row, table }: any) => {
     </div>
   );
 };
+
 const columnHelper = createColumnHelper<Student>();
+
 const columns = [
   columnHelper.accessor("studentId", {
     header: "Student ID",
@@ -121,6 +127,7 @@ const columns = [
       type: "text",
     },
   }),
+
   columnHelper.accessor("dateOfBirth", {
     header: "Date Of Birth",
     cell: TableCell,
@@ -128,6 +135,7 @@ const columns = [
       type: "date",
     },
   }),
+
   columnHelper.accessor("major", {
     header: "Major",
     cell: TableCell,
@@ -141,6 +149,7 @@ const columns = [
       ],
     },
   }),
+
   columnHelper.display({
     id: "edit",
     cell: EditCell,

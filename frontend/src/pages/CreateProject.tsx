@@ -46,7 +46,7 @@ const CreateProject = ({ token }: { token: string }) => {
     return <PageLoader />;
   }
 
-  if (data) {
+  if (data && !loading) {
     navigate(`/`)
   }
 
@@ -57,7 +57,7 @@ const CreateProject = ({ token }: { token: string }) => {
         <div className="flex flex-col w-full mb-8">
           
           <span className="flex flex-row items-center mb-4">
-            <span className="bg-gray-500 px-2 mr-2 rounded-full text-white">1</span>
+            <span className="bg-gray-700 px-2 mr-2 rounded-full text-white">1</span>
             <label className="text-xl font-semibold text-black" htmlFor="name">Project title</label>
           </span>
           <input
@@ -77,7 +77,7 @@ const CreateProject = ({ token }: { token: string }) => {
 
         <div>
         <span className="flex flex-row items-center mb-4">
-            <span className="bg-gray-500 px-2 mr-2 rounded-full text-white">2</span>
+            <span className="bg-gray-700 px-2 mr-2 rounded-full text-white">2</span>
             <label className="text-xl font-semibold text-black" htmlFor="description">Description</label>
           </span>
           <textarea
