@@ -1,4 +1,7 @@
 // Desc: This file contains all the environment variables used in the application and asserts that they are defined.
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const {
   AUTH0_CLIENT_ID,

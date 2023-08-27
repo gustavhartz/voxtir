@@ -5,7 +5,7 @@ import { FaRegFileAudio, FaRegUserCircle, FaUserCircle } from 'react-icons/fa';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
-import { useLocation } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 interface Route {
   name: string;
   path: string;
@@ -30,30 +30,25 @@ const routes: Route[] = [
 
 const SidebarRoutes = () => {
   const location = useLocation();
-  const [currentRoute, setCurrentRoute] = React.useState(location.pathname);
 
-  const handleRouteClick = (path: string) => {
-    setCurrentRoute(path);
-  };
 
   return (
     <div className="px-3">
       {routes.map((route, index) => (
-        <a
+        <Link
           key={index}
-          href={route.path}
+          to={route.path}
           className={`flex items-center py-2 px-4 mb-2 font-normal transition-all hover:font-medium hover:bg-gray-100 text-gray-900 rounded-xl ${
-            currentRoute === route.path ? '!font-medium bg-gray-100' : ''
+            location.pathname === route.path ? '!font-medium bg-gray-100' : ''
           }`}
-          onClick={() => handleRouteClick(route.path)}
         >
-          {currentRoute === route.path ? (
+          {location.pathname === route.path ? (
             <route.activeIcon size={30} className="mr-3" />
           ) : (
             <route.icon size={30} className="mr-3" />
           )}
           <span className="text-lg">{route.name}</span>
-        </a>
+        </Link>
       ))}
     </div>
   );
@@ -89,14 +84,14 @@ const Nav = () => {
         </div>
         <div className="flex flex-col items-center py-4 px-4">
           <div className="bg-gray-800 w-full h-14 flex justify-between px-4 items-center mb-4 rounded-lg drop-shadow-sm">
-            <p className="text-lg text-white font-medium">
+            <p className="text-md text-white font-medium">
               Upgrade to{' '}
-              <span className="bg-black text-white px-2 py-1 rounded-lg ml-1">
+              <span className="text-md bg-black text-white px-2 py-1 rounded-lg ml-1">
                 PRO
               </span>
             </p>
             <div className="bg-white p-1 rounded-full shadow-sm">
-              <FiArrowUpRight size={28} />
+              <FiArrowUpRight size={24} />
             </div>
           </div>
           <button

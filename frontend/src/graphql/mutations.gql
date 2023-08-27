@@ -4,3 +4,10 @@ mutation CreateProject($name: String!, $description: String!) {
     success
   }
 }
+
+mutation DeleteProject($id: ID!) {
+  deleteProject(id: $id) {
+    message
+    success
+  }
+}
