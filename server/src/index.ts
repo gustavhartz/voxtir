@@ -17,6 +17,7 @@ import {
   APP_PORT,
   COOKIE_SECRET,
   ENABLE_SCHEDULER_JOBS,
+  FRONTEND_BASE_URL,
   NODE_ENV,
 } from './common/env.js';
 import { requestId, userInfoSync } from './middleware.js';
@@ -55,9 +56,23 @@ async function main(): Promise<void> {
     })
   );
 
-  app.use(cors({
-    origin: 'http://localhost:5173'
-  }));
+  const corsOptions: { [key: string]: cors.CorsOptions } = {
+    development: {
+      origin: '*', // Allow all origins (not recommended for production)
+      credentials: true,
+      preflightContinue: true,
+    },
+    production: {
+      // Add your production frontend URL here
+      // Example: 'https://yourapp.com'
+      origin: FRONTEND_BASE_URL,
+      credentials: true,
+      preflightContinue: true,
+    },
+  };
+
+  // Set up CORS middleware based on NODE_ENV
+  app.use(cors(corsOptions[process.env.NODE_ENV || 'development']));
 
   // allow pre-flight requests
   app.options('*', cors());
@@ -75,9 +90,6 @@ async function main(): Promise<void> {
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
     '/graphql',
-    cors<cors.CorsRequest>({
-      origin: 'http://localhost:5173'
-    }),
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({
@@ -91,13 +103,13 @@ async function main(): Promise<void> {
   httpServer.listen({ port: APP_PORT }, () => {
     console.info(`
         Server "${chalk.magentaBright(
-      'APP_NAME'
-    )}" started. Port: ${chalk.blue.bold(
+          'APP_NAME'
+        )}" started. Port: ${chalk.blue.bold(
       APP_PORT
     )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
         Open Project: ${chalk.bold.underline.yellow(
-      `http://localhost:${APP_PORT}`
-    )} (ctrl+click)
+          `http://localhost:${APP_PORT}`
+        )} (ctrl+click)
       `);
     console.timeEnd('startup');
   });
