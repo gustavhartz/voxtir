@@ -12,7 +12,6 @@ import { Tooltip } from 'react-tooltip';
 import { useAppDispatch } from '../../hooks';
 import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
 import { toggleModal as ToggleImportModal } from '../../state/track';
-import { asBlob } from '../../utils/html-to-docx';
 import { getEditorInstance } from '../Editor';
 
 const Drawer = () => {
@@ -23,14 +22,12 @@ const Drawer = () => {
       console.error('Editor instance not found');
       return;
     }
-    const data = await asBlob(editor.getHTML(), {
-      orientation: 'portrait',
+    const data = await editor.getHTML();
+    // create html blob
+    const htmlBlob = new Blob([data], {
+      type: 'text/html',
     });
-    // if buffer convert to string
-    const blob = new Blob([data], {
-      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    });
-    saveAs(blob, 'voxtir-export.docx');
+    saveAs(htmlBlob, `VoxtirExport.html`);
   };
 
   const dispatch = useAppDispatch();
