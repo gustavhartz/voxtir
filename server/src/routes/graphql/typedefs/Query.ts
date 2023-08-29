@@ -10,5 +10,6 @@ export const typeDefs = gql`
     projectSharedWith(id: ID!): [UserSharing]
     supportedLanguages: [LanguageCodePairs]
     document(id: ID!): Document
+    generateWordFileFromHTML(html: String!): PresignedUrlResponse
   }
 `;
