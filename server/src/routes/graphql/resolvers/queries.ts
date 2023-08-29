@@ -1,10 +1,14 @@
 import { TranscriptionProcessStatus } from '@prisma/client';
 import { GraphQLError } from 'graphql';
+import { v4 as uuidv4 } from 'uuid';
 
+import { AWS_AUDIO_BUCKET_NAME } from '../../../common/env.js';
 import prisma from '../../../prisma/index.js';
 import { logger } from '../../../services/logger.js';
+import { S3StorageHandler } from '../../../services/storageHandler.js';
 import { LanguageCodePairs } from '../../../transcription/common.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
+import { generateWordFileFromHTML } from '../../../utilities/tiptap-word-exporter.js';
 import { Project, QueryResolvers } from '../generated/graphql';
 
 // Use the generated `QueryResolvers`
@@ -159,6 +163,44 @@ const queries: QueryResolvers = {
       transcriptionStatus:
         document.transcriptionStatus as TranscriptionProcessStatus,
       transcriptionType: document.transcriptionType,
+    };
+  },
+  /**
+   * The purpose of this query is to convert an HTML representation of the tiptap editor to a word file.
+   * This file is then placed in S3 and a presigned url is returned to the user. The HTML is generated from the TipTap editor
+   * and thus adheres to a strict schema. Thus there a multiple preprocessing steps that need to be done to give a nice word file.
+   * @param _
+   * @param args
+   * @param context
+   * @returns
+   */
+  generateWordFileFromHTML: async (_, args, context) => {
+    const htmlString = args.html;
+    logger.info(`Generating word file from HTML for user ${context.userId}`);
+    const doc = await generateWordFileFromHTML(htmlString);
+    // Should be a separate bucket
+    const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
+
+    const key = `wordexport/${uuidv4() + '-' + context.userId}.docx`;
+    await s3.putObject(
+      key,
+      doc,
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    );
+
+    const expiration = new Date();
+    const accessPeriodSeconds = 60 * 5; // 5 minutes
+
+    expiration.setTime(expiration.getTime() + accessPeriodSeconds * 1000);
+
+    const presignedUrl = await s3.generatePresignedUrlForObject(
+      key,
+      accessPeriodSeconds
+    );
+
+    return {
+      url: presignedUrl,
+      expiresAt: Math.floor(expiration.getTime() / 1000),
     };
   },
 };
