@@ -1,4 +1,4 @@
-FROM node:18.16
+FROM node:18.16.0
 
 LABEL version="1.0"
 LABEL description="This is the base docker image for voxtir transcription app backend"
@@ -15,7 +15,8 @@ RUN npm run generate
 RUN npx tsc
 
 # Install production dependencies - hopefully this removes the dev dependencies
-RUN npm install --production
+RUN npm pkg delete scripts.prepare && npm ci --omit=dev
+RUN npm run prisma-generate
 
 RUN cp -r ./dist/. .
 
