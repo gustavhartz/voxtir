@@ -14,7 +14,7 @@ export const getGqlServer = async (
   const server = new ApolloServer<Context>({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    introspection: NODE_ENV === 'production',
+    introspection: NODE_ENV !== 'production',
   });
   // Disable the landing page in production
   if (NODE_ENV === 'production') {
