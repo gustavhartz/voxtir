@@ -9,6 +9,12 @@ import {
 } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
 
+import { client } from '../../graphql/client';
+import {
+  GenerateWordFileFromHtmlDocument,
+  GenerateWordFileFromHtmlQueryResult,
+  GenerateWordFileFromHtmlQueryVariables,
+} from '../../graphql/generated/graphql';
 import { useAppDispatch } from '../../hooks';
 import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
 import { toggleModal as ToggleImportModal } from '../../state/track';
@@ -23,11 +29,28 @@ const Drawer = () => {
       return;
     }
     const data = await editor.getHTML();
-    // create html blob
-    const htmlBlob = new Blob([data], {
-      type: 'text/html',
-    });
-    saveAs(htmlBlob, `VoxtirExport.html`);
+
+    const variables: GenerateWordFileFromHtmlQueryVariables = {
+      html: data,
+    };
+
+    const response = (await client.query({
+      query: GenerateWordFileFromHtmlDocument,
+      variables: variables,
+    })) as GenerateWordFileFromHtmlQueryResult;
+    console.log(response);
+    if (response.error) {
+      console.error(response.error);
+      return;
+    }
+    if (!response.data?.generateWordFileFromHTML) {
+      console.error('No data returned');
+      return;
+    }
+    console.log(response.data?.generateWordFileFromHTML?.url);
+    const s3Reponse = await fetch(response.data?.generateWordFileFromHTML?.url);
+    const wordBlob = await s3Reponse.blob();
+    saveAs(wordBlob, 'VoxtirDocument.docx');
   };
 
   const dispatch = useAppDispatch();
