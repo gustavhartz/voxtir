@@ -22,20 +22,12 @@ export const typeDefs = gql`
     expiresAt: Int!
   }
 
-  union AudioUploadResponse = PresignedUrlResponse | ActionResult
-
-  interface IUser {
+  type User {
     id: ID!
     name: String!
     email: String!
   }
-
-  type User implements IUser {
-    id: ID!
-    name: String!
-    email: String!
-  }
-  type UserSharing implements IUser {
+  type UserSharing {
     id: ID!
     name: String!
     email: String!
