@@ -79,7 +79,7 @@ export class S3StorageHandler extends StorageHandler {
     key: string,
     expiration: number
   ): Promise<string> {
-    const command = new PutObjectCommand({ Bucket: this.bucket, Key: key });
+    const command = new GetObjectCommand({ Bucket: this.bucket, Key: key });
 
     const response = await getSignedUrl(this.s3, command, {
       expiresIn: expiration,
