@@ -22,6 +22,10 @@ const Projects = ({ token }: { token: string }) => {
     (project) => project?.name.toLowerCase().includes(filter.toLowerCase())
   );
 
+  const handleDeleteCallback = () => {
+    refetch();
+  };
+
   React.useEffect(() => {
     refetch();
   });
