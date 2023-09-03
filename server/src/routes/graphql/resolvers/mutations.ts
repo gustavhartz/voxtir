@@ -345,10 +345,7 @@ const mutations: MutationResolvers = {
       },
     });
     if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
+      throw new GraphQLError('Projectid not found or related to user');
     }
     // Document is on project
     const docRelation = await prisma.document.findFirst({
@@ -358,10 +355,7 @@ const mutations: MutationResolvers = {
       },
     });
     if (!docRelation) {
-      return {
-        success: false,
-        message: 'Document project combination not found',
-      };
+      throw new GraphQLError('Document project combination not found');
     }
     const signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
       `${documentId}`
