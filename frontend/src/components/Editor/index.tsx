@@ -72,8 +72,8 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
   setEditorInstance(editor);
   return (
     <div className="w-full h-full flex flex-row items-center">
-      <div className="w-full">
-        <EditorContent className="w-full p-6" editor={editor} />
+      <div className="w-full h-full">
+        <EditorContent className="w-full h-full p-8 overflow-y-scroll" editor={editor} />
       </div>
       <Drawer />
     </div>

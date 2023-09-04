@@ -23,10 +23,6 @@ const Projects = ({ token }: { token: string }) => {
     project?.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const handleDeleteCallback = () => {
-    refetch();
-  }
-
   React.useEffect(() => {
     refetch();
   })
@@ -35,7 +31,7 @@ const Projects = ({ token }: { token: string }) => {
     return <PageLoader />
   }
 
-  if (data?.projects?.length === 0) {
+  if (!loading && data?.projects?.length === 0) {
     return (
       <div className="p-6 bg-gray-100 w-full drop-shadow-sm flex flex-col justify-center items-center">
         <div className="bg-gray-900 p-6 rounded-lg shadow-md">
@@ -51,9 +47,10 @@ const Projects = ({ token }: { token: string }) => {
     <div className="w-full h-full py-8 px-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-row items-center">
-          <h1 className="text-3xl font-bold text-gray-900">Projects ({data && filteredProjects?.length})</h1>
+          <AiOutlineAudit size={40}  />
+          <h1 className="text-3xl font-bold px-2 text-gray-900">Projects ({data && filteredProjects?.length})</h1>
         </div>
-        <Link className="bg-gray-900 text-white px-3 py-2 rounded-md text-md border-gray-900 transition-colors font-semibold flex items-center" to="/new"><AiOutlinePlus size={18} className="mr-1 text-gray-900 fill-white stroke-gray-900" /> Add</Link>
+        <Link className="bg-gray-900 text-white px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center" to="/new"><AiOutlinePlus size={20} className="mr-1 text-gray-900 fill-white stroke-gray-900" /> Add</Link>
       </div>
       <div className="mb-4">
         <input
@@ -69,8 +66,8 @@ const Projects = ({ token }: { token: string }) => {
           if (project?.id || project?.name) {
             return (
               <ProjectCard
-                onDeleteCallback={handleDeleteCallback}
                 token={token}
+                onDeleteCallback={() => refetch()}
                 key={project?.id}
                 project={{
                   id: project.id,

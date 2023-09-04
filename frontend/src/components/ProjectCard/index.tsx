@@ -1,11 +1,13 @@
+import { useFormik } from "formik";
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit3 } from "react-icons/fi";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Popover } from 'react-tiny-popover'
+import * as Yup from "yup";
 
-import { useDeleteProjectMutation } from "../../graphql/generated/graphql";
+import { useDeleteProjectMutation,useUpdateProjectMutation  } from "../../graphql/generated/graphql";
 
 interface ProjectCardProps {
     project: {
@@ -20,6 +22,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallback }): JSX.Element => {
+    const [checkDelete, setCheckDelete] = React.useState(false);
+    const [isEdit, setIsEdit] = React.useState(false);  
     const [deleteProject, { loading }] = useDeleteProjectMutation({
         context: {
             headers: {
@@ -28,11 +32,51 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallb
           },
     });
 
+    const [updateProject] = useUpdateProjectMutation({
+        context: {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          },
+    });
+
+    const initialValues = {
+        name: project.name,
+        description: project.description || "",
+      };
+    
+      const validationSchema = Yup.object({
+        name: Yup.string().required("Required"),
+        description: Yup.string().required("Required"),
+      });
+    
+      const onSubmit = async (values: { name: string; description: string;}) => {
+        updateProject({
+          variables: {
+            id: project.id,
+            name: values.name,
+            description: values.description,
+          },
+        })
+
+        setIsEdit(false);
+        onDeleteCallback();
+
+      };
+    
+      const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit,
+      });
+
+
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const handleTogglePopover = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
         setIsPopoverOpen(!isPopoverOpen);
+        setCheckDelete(false);
     }
 
     const handleDeleteProject = async (e: React.MouseEvent) => {
@@ -44,9 +88,87 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallb
                 id: project.id
             }
         }).then(() => {
+            setCheckDelete(false);
             onDeleteCallback();
         })
     }
+
+    const handleToggleDelete = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setCheckDelete(!checkDelete);
+    }
+
+    const openEdit = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsEdit(true);
+    }
+
+    const cancelEdit = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsEdit(false);
+        setIsPopoverOpen(false);
+    }
+
+
+    if (isEdit) {
+        return (
+            <div className={` ${loading && "animate-pulse"}
+            border-gray-200 border-[1px] 
+            
+            hover:border-gray-300 text-gray-900 
+            hover:bg-gradient-to-tl hover:from-white hover:to-gray-100 flex flex-col justify-betweem
+            duration-600
+            transition-all 
+            drop-shadow-sm rounded-lg`}>
+                 <form onSubmit={formik.handleSubmit} className="drop-shadow-sm p-6 bg-white w-full rounded-md text-black">
+                    <div className="flex flex-col w-full mb-8">
+                    
+                    <span className="flex flex-row items-center mb-4">
+                        <label className="text-xl font-semibold text-black" htmlFor="name">Project title</label>
+                    </span>
+                    <input
+                        placeholder="Interview with John Doe"
+                        className={`px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2
+                        ${formik.errors.name && formik.touched.name ? "border-red-800" : "border-gray-300"}
+                        `}
+                        type="text"
+                        id="name"
+                        name="name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.name}
+                    />
+                    {formik.touched.name && formik.errors.name ? <div className="text-red-800 px-1 py-2"> {formik.errors.name}</div> : null}
+                    </div>
+
+                    <div>
+                    <span className="flex flex-row items-center mb-4">
+                        <label className="text-xl font-semibold text-black" htmlFor="description">Description</label>
+                    </span>
+                    <textarea
+                        className={`px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md w-full focus:outline-gray-400 focus:outline-2
+                            ${formik.errors.name && formik.touched.name ? "border-red-800" : "border-gray-300"}
+                        `}
+                        id="description"
+                        name="description"
+                        placeholder="Exploring the future of work with John Doe and John Doe inc."
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.description}
+                    />
+                        {formik.touched.description && formik.errors.description ? <div className="text-red-800 px-1"> {formik.errors.description}</div> : null}
+                    </div>
+
+                    <button onClick={cancelEdit} className="disabled:cursor-not-allowed bg-gray-600 opacity-100 hover:black disabled:opacity-20 duration-500 transition-opacity py-2 mt-4 mr-2 rounded-lg text-white disabled:text-gray-300 font-medium w-24">Cancel</button>
+                    <button disabled={!formik.isValid || !formik.dirty} type="submit" className="disabled:cursor-not-allowed bg-gray-900 opacity-100 hover:black disabled:opacity-20 duration-500 transition-opacity w-64 py-2 mt-4 rounded-lg text-white disabled:text-gray-300 font-medium max-w-md">Update</button>
+                </form>
+            </div>
+        )
+    }
+
     return (
         <Link to={`/documents/${project.id}`}>
             <div className={` ${loading && "animate-pulse"}
@@ -58,20 +180,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallb
             drop-shadow-sm rounded-lg`}>
                 <div className="flex items-center justify-between">
                     <span className="text-2xl font-medium">{project?.name}</span>
-                    <Popover onClickOutside={() => setIsPopoverOpen(false)} isOpen={isPopoverOpen} positions={["bottom"]} content={
-                        <div className="mr-8 -mt-11 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
-                            <div className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer border-r-2">
-                                <FiEdit3 size={20} className="mr-2"/> 
-                                <span className="pr-2">Edit</span>
+                    <Popover onClickOutside={() => setIsPopoverOpen(false)} isOpen={isPopoverOpen} positions={["left"]} content={
+                        <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
+                            <div onClick={openEdit} className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer">
+                                <FiEdit3 size={20} /> 
                             </div>
-                            <div onClick={handleDeleteProject} className="bg-red-600 text-white flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 transition-all cursor-pointer">
-                                <AiOutlineDelete size={20} className="mr-2"/>
-                                <span>Delete</span>
-                            </div>
+                            {!checkDelete && <div onClick={handleToggleDelete} className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer">
+                                <AiOutlineDelete size={20} />
+                            </div>}
+                            {checkDelete && <div onClick={handleDeleteProject} className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 bg-red-600 text-white transition-all cursor-pointer">
+                                <AiOutlineDelete size={20} className="mr-2" />
+                                <span>Delete Project</span>
+                            </div>}
                         </div>
                     }>
                         <div className="react-tiny-popover-container">
-                            <HiDotsHorizontal onClick={handleTogglePopover} size={20} className="fill-gray-400" />
+                            <HiDotsHorizontal onClick={handleTogglePopover} size={20} className="fill-gray-400 hover:scale-110 transition-all" />
                         </div>
                     </Popover>
                 </div>
@@ -80,7 +204,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallb
                 </div>
                 <div className="flex justify-between">
                     <span className="text-gray-400 text-sm font-medium">{project.createdAt.toDateString()}</span> 
-                    {project.documentLength > 0 && <span className="text-gray-400 text-sm">{project.documentLength} documents</span>}
+                    {project.documentLength > 0 && <span className="text-gray-400 text-sm">{project.documentLength} document {project.documentLength > 1 && "s"} </span>}
                     {project.documentLength === 0 && <span className="text-gray-400 text-sm">No documents.</span>}
                 </div>
             </div>

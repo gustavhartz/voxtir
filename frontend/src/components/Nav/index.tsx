@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
-import { AiFillFolderOpen, AiOutlineFolder } from 'react-icons/ai';
+import { AiFillFolderOpen, AiOutlineFolder, AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { FaRegFileAudio, FaRegUserCircle, FaUserCircle } from 'react-icons/fa';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdLogOut } from 'react-icons/io';
@@ -66,8 +66,8 @@ const Nav = () => {
 
   if (!isOpen) {
     return (
-      <div>
-        <button onClick={handleToggleOpen}>Open</button>
+      <div onClick={handleToggleOpen} className="px-4 py-8 cursor-pointer border-r-2 border-gray-100">
+        <AiOutlineMenuUnfold className="text-2xl" />
       </div>
     );
   }
@@ -75,9 +75,12 @@ const Nav = () => {
   if (isOpen) {
     return (
       <div className="w-96 flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
-        <div className="p-6 mb-2 flex items-center bg-gray-900 text-white">
-          <FaRegFileAudio className="text-4xl mr-1 0" />
-          <p className="text-2xl font-semibold ">Voxtir</p>
+        <div className="p-6 mb-2 flex items-center justify-between bg-gray-900 text-white">
+          <div className="flex flex-row items-center ">
+            <FaRegFileAudio className="text-4xl mr-1 0" />
+            <p className="text-2xl font-semibold ">Voxtir</p>
+          </div>
+          <AiOutlineMenuFold onClick={handleToggleOpen} className="text-2xl hover:scale-105 cursor-pointer"/>
         </div>
         <div className="flex-grow my-4">
           <SidebarRoutes />
