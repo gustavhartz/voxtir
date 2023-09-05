@@ -1,20 +1,20 @@
-import { NodeConfig,NodeViewWrapper } from '@tiptap/react';
+import { NodeConfig, NodeViewWrapper } from '@tiptap/react';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import useDoubleClick from 'use-double-click';
 
 import { skipToPosition } from '../../../../state/track';
-export default (props: NodeConfig) => {
+
+const TimestampButton = (props: NodeConfig): JSX.Element => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(props.node.attrs.show);
   const [timeStamp, setTimeStamp] = useState<string>(
     props.node.attrs.timestamp
   );
   const buttonRef = React.useRef(null);
-
   const timeRegex = new RegExp('^[0-9]{2}:[0-9]{2}:[0-5]{1}[0-9]{1}$');
 
-  const triggerButton = () => {
+  const triggerButton = (): void => {
     if (!show) {
       dispatch(skipToPosition(timeStamp));
     }
@@ -22,15 +22,17 @@ export default (props: NodeConfig) => {
     console.log('triggered');
   };
 
-  const toggleShowInput = () => {
+  const toggleShowInput = (): void => {
     setShow(true);
   };
 
-  const toggleCloseInput = () => {
+  const toggleCloseInput = (): void => {
     setShow(false);
   };
 
-  const changeTimeStamp = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeTimeStamp = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const { value } = event.currentTarget;
     setTimeStamp(value);
     props.updateAttributes({
@@ -56,16 +58,19 @@ export default (props: NodeConfig) => {
       <button
         ref={buttonRef}
         className={`
-        text-white text-md px-1 mx-1 rounded-lg hover:shadow-lg focus:outline-none
-        ${timeRegex.test(timeStamp) ? 'bg-[#07BF5C]' : 'bg-red-500'}
+        ${
+          show
+            ? 'text-white text-md px-1 mx-1 rounded-lg hover:shadow-lg focus:outline-none'
+            : 'inline-block w-3 h-3 mx-0.5 rounded-full cursor-pointer'
+        }
+        ${timeRegex.test(timeStamp) ? 'bg-[#659b80]' : 'bg-red-500'}
         `}
       >
-        {!show && (timeRegex.test(timeStamp) ? timeStamp : 'Invalid Timestamp')}
         {show && (
           <input
             autoFocus={show}
             onBlur={toggleCloseInput}
-            onKeyDown={(e) => {
+            onKeyDown={(e): void => {
               if (e.key === 'Escape' || e.key === 'Enter') {
                 toggleCloseInput();
               }
@@ -80,3 +85,5 @@ export default (props: NodeConfig) => {
     </NodeViewWrapper>
   );
 };
+
+export default TimestampButton;
