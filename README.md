@@ -1,6 +1,6 @@
 # Voxtir 🎤
 
-This project is the source code for the [Voxtir app](app.voxtir.com). The voxtir app is a solution built for AWS that 
+This project is the source code for the **Voxtir app** (expected launch ultimo september 2023). The voxtir app is a solution built for AWS that 
 that can be self-hosted as a cheaper alternative to public solutions for larger scale operations, but primarly  to ensure
 that there is full transparancy in how the data is stored.
 
@@ -20,7 +20,7 @@ then you also get it a lot cheaper.
 
 ## The app
 
-Screenshots - here
+Screenshots will be added here
 
 ## The costs
 
@@ -67,6 +67,11 @@ Technologies
 * AWS S3
 * AWS Sagemaker
 * AWS SQS
+* AWS Amplify
+* AWS Fargate (ECS)
+* Resend
+* RDS
+* PostgreSQL
 * Prisma
 
 **Database**
