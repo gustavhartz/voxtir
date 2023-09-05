@@ -9,7 +9,7 @@ Compared to the typical approach in both of those links, our case does not use S
 
 Base image originates from [Podwhisperer](https://github.com/fourTheorem/podwhisperer)
 
-The docker container also performs speaker dizartation with [Pyannote](https://huggingface.co/pyannote/speaker-diarization). Currently it takes around 2.5 seconds pr. minute to perform it on a t4. Please be aware for the non commercial licence it has!!!
+The docker container also performs speaker dizartation with [Pyannote](https://huggingface.co/pyannote/speaker-diarization). Currently it takes around 2.5 seconds pr. minute to perform it on a t4.
 
 Remember that the Server backend uses the output from this code so altering the format of the output data requires changes to the backend
 
@@ -56,6 +56,6 @@ chmod +x predict.sh
 ```
 
 ## Known issues and bugs
-* Don't push an image built on ARM (M1 mac) to the container registry as it will not run
+* Don't push an image built with ARM (M1 mac) target to the container registry as it will not run
 * Don't push stuff built on windows either due to the difference in data formats or edit it. [Reason](https://askubuntu.com/questions/896860/usr-bin-env-python3-r-no-such-file-or-directory)
 
