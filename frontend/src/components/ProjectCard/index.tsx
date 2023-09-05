@@ -57,11 +57,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, token, onDeleteCallb
             name: values.name,
             description: values.description,
           },
+        }).then(() => {
+            onDeleteCallback();
+            setIsEdit(false);
         })
-
-        setIsEdit(false);
-        onDeleteCallback();
-
       };
     
       const formik = useFormik({

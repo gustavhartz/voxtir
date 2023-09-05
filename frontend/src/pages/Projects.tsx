@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineAudit,AiOutlinePlus } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 import { PageLoader } from '../components/Auth/page-loader';
@@ -90,8 +90,8 @@ const Projects = ({ token }: { token: string }) => {
           }
         })}
       </div>
-    )
-  );
+    </div>
+  )
 };
 
 const ProjectsWithAccessToken = withAccessToken(Projects);

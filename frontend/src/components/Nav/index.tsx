@@ -98,7 +98,7 @@ const Nav = () => {
             </div>
           </div>
           <button
-            onClick={() => logout()}
+            onClick={() => logout({ logoutParams: { returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI }})}
             className="text-black font-medium flex items-center text-lg"
           >
             <IoMdLogOut size={26} className="mr-2" /> Sign Out
