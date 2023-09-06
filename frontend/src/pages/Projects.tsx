@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AiOutlineAudit,AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlineAudit, AiOutlinePlus } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
 import { PageLoader } from '../components/Auth/page-loader';
@@ -22,9 +22,6 @@ const Projects = ({ token }: { token: string }) => {
     (project) => project?.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const handleDeleteCallback = () => {
-    refetch();
-  };
   React.useEffect(() => {
     refetch();
   });
@@ -56,10 +53,21 @@ const Projects = ({ token }: { token: string }) => {
     <div className="w-full h-full py-8 px-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-row items-center">
-          <AiOutlineAudit size={40}  />
-          <h1 className="text-3xl font-bold px-2 text-gray-900">Projects ({data && filteredProjects?.length})</h1>
+          <AiOutlineAudit size={40} />
+          <h1 className="text-3xl font-bold px-2 text-gray-900">
+            Projects ({data && filteredProjects?.length})
+          </h1>
         </div>
-        <Link className="bg-gray-900 text-white px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center" to="/new"><AiOutlinePlus size={20} className="mr-1 text-gray-900 fill-white stroke-gray-900" /> Add</Link>
+        <Link
+          className="bg-gray-900 text-white px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center"
+          to="/new"
+        >
+          <AiOutlinePlus
+            size={20}
+            className="mr-1 text-gray-900 fill-white stroke-gray-900"
+          />{' '}
+          Add
+        </Link>
       </div>
       <div className="mb-4">
         <input
@@ -67,7 +75,7 @@ const Projects = ({ token }: { token: string }) => {
           placeholder="Search.."
           className="w-full px-2 py-2 border rounded-md focus:outline-none hover:bg-gray-100 focus:bg-gray-100"
           value={filter}
-          onChange={e => setFilter(e.target.value)}
+          onChange={(e) => setFilter(e.target.value)}
         />
       </div>
       <div className="grid grid-cols-1 gap-6">
@@ -91,7 +99,7 @@ const Projects = ({ token }: { token: string }) => {
         })}
       </div>
     </div>
-  )
+  );
 };
 
 const ProjectsWithAccessToken = withAccessToken(Projects);
