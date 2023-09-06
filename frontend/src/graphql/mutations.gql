@@ -11,3 +11,10 @@ mutation DeleteProject($id: ID!) {
     success
   }
 }
+
+mutation UpdateProject($id: ID!, $name: String, $description: String) {
+  updateProject(id: $id, name: $name, description: $description) {
+    message
+    success
+  }
+}

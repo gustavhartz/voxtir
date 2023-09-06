@@ -92,6 +92,49 @@ const mutations: MutationResolvers = {
 
     return { success: true };
   },
+  updateProject: async (_, args, context) => {
+    const { id, name, description } = args;
+    const userId = context.userId;
+    const userRelation = await prisma.userOnProject.findFirst({
+      where: {
+        projectId: id,
+        userId: userId,
+      },
+    });
+    if (!userRelation) {
+      return {
+        success: false,
+        message: 'Projectid not found or related to user',
+      };
+    }
+    if (userRelation.role != ProjectRole.ADMIN) {
+      return {
+        success: false,
+        message: 'User not allowed to perform action',
+      };
+    }
+    if (name !== null) {
+      await prisma.project.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: name,
+          description: description,
+        },
+      });
+    } else {
+      await prisma.project.update({
+        where: {
+          id: id,
+        },
+        data: {
+          description: description,
+        },
+      });
+    }
+    return { success: true };
+  },
   createProject: async (_, args, context) => {
     const { name, description } = args;
     await prisma.project.create({

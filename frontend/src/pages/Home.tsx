@@ -1,15 +1,14 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token.tsx';
 import Editor from '../components/Editor';
 
 function Home({ token }: { token: string }) {
+  const documentID = useParams().documentID;
   return (
     <div className="w-full h-full">
-      <Editor
-        documentID={'2a3137c7-d384-4ccf-b988-1fba8b959b9b'}
-        token={token}
-      />
+      {documentID && <Editor documentID={documentID} token={token} />}
     </div>
   );
 }
