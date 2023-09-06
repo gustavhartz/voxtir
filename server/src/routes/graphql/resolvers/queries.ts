@@ -203,6 +203,55 @@ const queries: QueryResolvers = {
       expiresAt: Math.floor(expiration.getTime() / 1000),
     };
   },
+
+  pinnedProjects: async (_, __, context) => {
+    const userId = context.userId;
+    const pinnedProjects = await prisma.pinnedProjects.findMany({
+      where: {
+        userId: userId,
+        pinned: true,
+      },
+      include: {
+        project: {
+          include: {
+            Documents: true,
+          },
+        },
+      },
+    });
+    const projectList = pinnedProjects.map(
+      (pinnedProject) => pinnedProject.project
+    );
+
+    const projectResponse: Project[] = [];
+    // for loop to iterate through projects and create output format
+    for (const projectEle of projectList) {
+      const projectResponseObj: Project = {
+        id: projectEle.id,
+        name: projectEle.name,
+        description: projectEle.description,
+        documents: projectEle.Documents.map((doc) => {
+          return {
+            id: doc.id,
+            title: doc.title,
+            projectId: doc.projectId,
+            isTrashed: doc.isTrashed,
+            lastModified: doc.updatedAt.toISOString(),
+            transcriptionMetadata: {
+              language: doc.language,
+              speakersCount: doc.speakerCount,
+              dialects: [doc.dialect],
+            },
+            transcriptionStatus:
+              doc.transcriptionStatus as TranscriptionProcessStatus,
+            transcriptionType: doc.transcriptionType,
+          };
+        }),
+      };
+      projectResponse.push(projectResponseObj);
+    }
+    return projectResponse;
+  },
 };
 
 export default queries;

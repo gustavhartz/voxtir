@@ -11,5 +11,6 @@ export const typeDefs = gql`
     supportedLanguages: [LanguageCodePairs]
     document(id: ID!): Document
     generateWordFileFromHTML(html: String!): PresignedUrlResponse
+    pinnedProjects: [Project]
   }
 `;

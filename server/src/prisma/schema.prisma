@@ -59,9 +59,10 @@ enum TranscriptionProcessStatus {
 }
 
 model User {
-    id                            String          @id
+    id                            String           @id
     auth0ManagementApiUserDetails Json?
     UsersOnProjects               UserOnProject[]
+    PinnedProjects                PinnedProjects[]
 }
 
 model Project {
@@ -73,6 +74,7 @@ model Project {
     UsersOnProjects   UserOnProject[]
     Documents         Document[]
     ProjectInvitation ProjectInvitation[]
+    PinnedProjects    PinnedProjects[]
 }
 
 model UserOnProject {
@@ -106,4 +108,18 @@ model ProjectInvitation {
     updatedAt DateTime    @updatedAt
 
     @@index([projectId, email, token])
+}
+
+model PinnedProjects {
+    id        String   @id @default(uuid())
+    project   Project  @relation(fields: [projectId], references: [id])
+    projectId String // relation scalar field (used in the `@relation` attribute above)
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String // relation scalar field (used in the `@relation` attribute above)
+    pinned    Boolean  @default(true)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([projectId, userId])
+    @@index([projectId, userId])
 }
