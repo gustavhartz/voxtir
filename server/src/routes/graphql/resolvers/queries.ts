@@ -209,6 +209,7 @@ const queries: QueryResolvers = {
     const pinnedProjects = await prisma.pinnedProjects.findMany({
       where: {
         userId: userId,
+        pinned: true,
       },
       include: {
         project: {
