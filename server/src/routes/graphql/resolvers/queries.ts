@@ -203,6 +203,22 @@ const queries: QueryResolvers = {
       expiresAt: Math.floor(expiration.getTime() / 1000),
     };
   },
+
+  pinnedProjects: async (_, __, context) => {
+    const userId = context.userId;
+    const pinnedProjects = await prisma.pinnedProjects.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        project: true,
+      },
+    });
+    const projectList = pinnedProjects.map(
+      (pinnedProject) => pinnedProject.project
+    );
+    return projectList;
+  },
 };
 
 export default queries;
