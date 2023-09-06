@@ -405,6 +405,39 @@ const mutations: MutationResolvers = {
     );
     return signedUrlResponse;
   },
+  pinnedProject: async (_, args, context) => {
+    const { projectId, pin } = args;
+    const userId = context.userId;
+    const userRelation = await prisma.userOnProject.findFirst({
+      where: {
+        projectId: projectId,
+        userId: userId,
+      },
+    });
+    if (!userRelation) {
+      return {
+        success: false,
+        message: 'Projectid not found or related to user',
+      };
+    }
+    await prisma.pinnedProjects.upsert({
+      where: {
+        projectId_userId: {
+          projectId: projectId,
+          userId: userId,
+        },
+      },
+      update: {
+        pinned: pin,
+      },
+      create: {
+        pinned: pin,
+        userId: userId,
+        projectId: projectId,
+      },
+    });
+    return { success: true };
+  },
 };
 
 export default mutations;
