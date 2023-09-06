@@ -33,5 +33,6 @@ export const typeDefs = gql`
       transcriptionType: TranscriptionType!
     ): ActionResult!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!
+    pinProject(projectId: ID!): ActionResult!
   }
 `;
