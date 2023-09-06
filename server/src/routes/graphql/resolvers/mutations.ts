@@ -122,7 +122,16 @@ const mutations: MutationResolvers = {
           name: name,
           description: description,
         },
-      })
+      });
+    } else {
+      await prisma.project.update({
+        where: {
+          id: id,
+        },
+        data: {
+          description: description,
+        },
+      });
     }
     return { success: true };
   },

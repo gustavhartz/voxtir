@@ -8,10 +8,7 @@ function Home({ token }: { token: string }) {
   const documentID = useParams().documentID;
   return (
     <div className="w-full h-full">
-      {documentID && <Editor
-        documentID={documentID}
-        token={token}
-      />}
+      {documentID && <Editor documentID={documentID} token={token} />}
     </div>
   );
 }
