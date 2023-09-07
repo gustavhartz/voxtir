@@ -20,7 +20,7 @@ export const typeDefs = gql`
     shareProject(id: ID!, userEmail: String!, role: Role!): ActionResult!
     unshareProject(id: ID!, userEmail: String!): ActionResult!
     updateProject(id: ID!, name: String, description: String): ActionResult!
-    acceptProjectInvitation(id: ID!, token: String!): ActionResult!
+    acceptProjectInvitation(token: String!): ActionResult!
 
     """
     Documents
