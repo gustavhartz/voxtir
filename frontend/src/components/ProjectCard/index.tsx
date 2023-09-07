@@ -78,13 +78,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [shareProject, { data, error, loading: shareLoading }] = useShareProjectMutation({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
+  const [shareProject, { data, error, loading: shareLoading }] =
+    useShareProjectMutation({
+      context: {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
     },
-  });
+    );
   const initialValues = {
     name: project.name,
     description: project.description || '',
