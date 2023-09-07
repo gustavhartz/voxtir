@@ -25,7 +25,7 @@ export abstract class StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
-    contentLength: number,
+    contentLength?: number,
     overwrite?: boolean
   ): Promise<void>;
   abstract getObject(key: string): Promise<Uint8Array | undefined>;
@@ -45,7 +45,7 @@ export class S3StorageHandler extends StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
-    contentLength: number,
+    contentLength?: number,
     overwrite?: boolean
   ): Promise<void> {
     if (!overwrite) {
@@ -103,7 +103,7 @@ export class MemoryStorageHandler extends StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
-    contentLength: number,
+    contentLength?: number,
     overwrite?: boolean
   ): Promise<void> {
     if (!overwrite) {
