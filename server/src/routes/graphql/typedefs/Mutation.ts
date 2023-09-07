@@ -6,6 +6,7 @@ export const typeDefs = gql`
       doc: DocumentUploadInput!
       documentId: ID!
       projectId: ID!
+      contentLength: Int!
     ): ActionResult
     getPresignedUrlForAudioFile(
       documentId: ID!
