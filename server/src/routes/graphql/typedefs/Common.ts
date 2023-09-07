@@ -28,10 +28,9 @@ export const typeDefs = gql`
     email: String!
   }
   type UserSharing {
-    id: ID!
-    name: String!
     email: String!
     role: Role!
+    used: Boolean!
   }
   enum Role {
     ADMIN
