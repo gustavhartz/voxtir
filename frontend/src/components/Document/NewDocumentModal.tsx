@@ -4,15 +4,16 @@ import {
   useCreateDocumentMutation,
   useUploadAudioFileMutation,
 } from '../../graphql/generated/graphql';
-
 interface DocumentCreationModalProps {
   token: string;
   defaultProjectId: string;
+  onClose: () => void;
 }
 
 const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   token,
   defaultProjectId,
+  onClose
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [language, setLanguage] = useState<string>('');
@@ -68,7 +69,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     // Example: fetch('/api/upload', { method: 'POST', body: formData });
     const documentResponse = await createDocument({
       variables: {
-        projectId: '78d05d3f-9c76-43ec-a30e-bf95013028b6',
+        projectId: defaultProjectId,
         title: documentName,
         transcriptionType: transcriptionType,
         language: language,
@@ -100,12 +101,14 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     if (audioUploadResponse.errors) {
       console.error(audioUploadResponse.errors);
     }
+
+    onClose();
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Create a new document</h2>
+    <div onClick={onClose} className="cursor-pointer fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-50">
+      <div onClick={(e) => e.stopPropagation()} className="cursor-default bg-white p-6 sm:rounded-lg shadow-lg w-full h-full sm:w-2/3 md:w-3/5 sm:h-fit relative z-60">
+        <h2 className="text-3xl font-bold mb-4">Create a new document</h2>
         <div
           className="border-dashed border-2 border-gray-300 p-4 mb-4 cursor-pointer"
           onDragOver={(e) => e.preventDefault()}
@@ -129,7 +132,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         />
         <label
           htmlFor="fileInput"
-          className="bg-blue-500 text-white py-2 px-4 rounded cursor-pointer"
+          className="bg-gray-900 text-white py-2 px-4 rounded cursor-pointer"
         >
           Browse
         </label>
@@ -142,7 +145,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             id="documentName"
             value={documentName}
             onChange={(e) => setDocumentName(e.target.value)}
-            className="w-full border border-gray-300 rounded py-1 px-2"
+            className="w-full mt-2 px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
           />
         </div>
         <div className="mt-4">
@@ -154,7 +157,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             id="language"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="w-full border border-gray-300 rounded py-1 px-2"
+            className="w-full mt-2 px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
           />
         </div>
         <div className="mt-4">
@@ -166,7 +169,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             id="speakerCount"
             value={speakerCount}
             onChange={(e) => setSpeakerCount(parseInt(e.target.value) || '')}
-            className="w-full border border-gray-300 rounded py-1 px-2"
+            className="w-full mt-2 px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
           />
         </div>
         <div className="mt-4">
@@ -178,21 +181,27 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             value={transcriptionType}
             onChange={(e) => {
               if (
-                e.target.value === 'AUTOMATIC' ||
-                e.target.value === 'MANUAL'
+                e.currentTarget.value === 'AUTOMATIC' ||
+                e.currentTarget.value === 'MANUAL'
               ) {
-                setTranscriptionType(e.target.value);
+                setTranscriptionType(e.currentTarget.value);
               }
             }}
-            className="w-full border border-gray-300 rounded py-1 px-2"
+            className="h-10 mt-2 w-full rounded border-r-8 border-transparent font-normal px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
           >
-            <option value="automatic">Automatic</option>
-            <option value="manual">Manual</option>
+            <option value="AUTOMATIC">Automatic</option>
+            <option value="MANUAL">Manual</option>
           </select>
         </div>
         <button
+          onClick={onClose}
+          className="mt-6 bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded"
+        >
+          Close
+        </button>
+        <button
           onClick={handleSubmit}
-          className="mt-6 bg-blue-500 text-white py-2 px-4 rounded"
+          className="mt-6 bg-gray-900 text-white py-2 px-4 rounded"
         >
           Submit
         </button>

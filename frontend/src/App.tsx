@@ -11,7 +11,6 @@ import Documents from './pages/Documents';
 import Home from './pages/Home';
 import Me from './pages/Me';
 import Projects from './pages/Projects';
-
 function App() {
 
   return (
@@ -20,9 +19,9 @@ function App() {
         <Route path="/callback" element={<CallbackPage />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Projects />} />
-          <Route path="/new" element={<CreateProject />} />
           <Route path="document/:documentID" element={<Home />} />
-          <Route path="documents/:projectID" element={<Documents />} />
+          <Route path="project/new" element={<CreateProject />} />
+          <Route path="project/:projectID" element={<Documents />} />
           <Route path="me" element={<Me />} />
         </Route>
       </Routes>
