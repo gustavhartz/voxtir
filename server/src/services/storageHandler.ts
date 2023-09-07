@@ -25,6 +25,7 @@ export abstract class StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
+    contentLength?: number,
     overwrite?: boolean
   ): Promise<void>;
   abstract getObject(key: string): Promise<Uint8Array | undefined>;
@@ -44,8 +45,9 @@ export class S3StorageHandler extends StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
+    contentLength?: number,
     overwrite?: boolean
-  ) {
+  ): Promise<void> {
     if (!overwrite) {
       try {
         await this.getObject(key);
@@ -60,12 +62,13 @@ export class S3StorageHandler extends StorageHandler {
       Key: key,
       Body: object,
       ContentType: contentType,
+      ContentLength: contentLength,
     });
 
     await this.s3.send(command);
   }
 
-  async getObject(key: string) {
+  async getObject(key: string): Promise<Uint8Array | undefined> {
     const params = {
       Bucket: this.bucket,
       Key: key,
@@ -100,8 +103,9 @@ export class MemoryStorageHandler extends StorageHandler {
     key: string,
     object: PutObjectCommandInput['Body'],
     contentType: string,
+    contentLength?: number,
     overwrite?: boolean
-  ) {
+  ): Promise<void> {
     if (!overwrite) {
       try {
         this.storage.get(key);
@@ -114,7 +118,7 @@ export class MemoryStorageHandler extends StorageHandler {
     this.storage.set(key, object);
   }
 
-  async getObject(key: string) {
+  async getObject(key: string): Promise<Uint8Array | undefined> {
     return convertToByteArray(this.storage.get(key));
   }
 }

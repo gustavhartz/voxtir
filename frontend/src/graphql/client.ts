@@ -7,6 +7,7 @@ const fileUploadLink = createUploadLink({
   uri: GQL_BASE_URL,
   headers: {
     'Apollo-Require-Preflight': 'true',
+    'keep-alive': 'true',
   },
 });
 

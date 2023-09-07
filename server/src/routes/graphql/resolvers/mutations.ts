@@ -36,12 +36,9 @@ const mutations: MutationResolvers = {
     });
 
     if (!userRights) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
+      throw new GraphQLError('Projectid not found or related to user');
     }
-    await prisma.document.create({
+    const doc = await prisma.document.create({
       data: {
         title: title,
         projectId: projectId,
@@ -51,8 +48,10 @@ const mutations: MutationResolvers = {
         transcriptionType: transcriptionType,
       },
     });
-
-    return { success: true };
+    logger.debug(
+      `Created document: ${doc.id} for project: ${projectId}. User by ${context.userId}`
+    );
+    return doc.id;
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;
@@ -309,7 +308,7 @@ const mutations: MutationResolvers = {
   },
   uploadAudioFile: async (_, args, context) => {
     logger.info('Uploading file');
-    const { doc, documentId, projectId } = args;
+    const { doc, documentId, projectId, contentLength } = args;
     const { createReadStream, filename } = await doc.file;
     // assert user has permission
     const userRelation = await prisma.userOnProject.findFirst({
@@ -352,9 +351,11 @@ const mutations: MutationResolvers = {
       const key = await uploadAudioFile(
         documentId,
         stream,
+        contentLength,
         filename,
         doc.docType
       );
+
       prisma.document.update({
         where: {
           id: documentId,

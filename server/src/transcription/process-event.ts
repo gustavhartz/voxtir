@@ -214,6 +214,7 @@ export class S3AudioTranscriptionEventHandler {
       mergedTranscriptKey,
       Buffer.from(mergedTranscript),
       'text/html',
+      undefined,
       true
     );
 

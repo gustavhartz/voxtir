@@ -22,13 +22,14 @@ const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 export const uploadAudioFile = async (
   documentId: string,
   body: Buffer,
+  contentLength: number,
   fileEnding = '',
   contentType = ''
 ): Promise<string> => {
   const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
   logger.info(`Uploading audio file to ${key}`);
 
-  await s3.putObject(key, body, contentType, false);
+  await s3.putObject(key, body, contentType, contentLength, false);
   return key;
 };
 
@@ -65,15 +66,3 @@ export const getPresignedUrlForDocumentAudioFile = async (
   );
   return { url, expiresAt: expiration.getTime() };
 };
-
-const isRunningDirectly = false;
-if (isRunningDirectly) {
-  const documentId = 'tawefwaefcsdfsffsefssdvfsesefsst';
-  const body = Buffer.from('girglpershjg');
-  const fileEnding = 'txt';
-  const t2 = await uploadAudioFile(documentId, body, fileEnding, 'text/plain');
-  console.log(t2);
-  console.log('Uploaded audio file');
-  const t3 = await getPresignedUrlForDocumentAudioFile(documentId);
-  console.log(t3);
-}

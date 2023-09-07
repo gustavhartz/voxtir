@@ -6,6 +6,7 @@ export const typeDefs = gql`
       doc: DocumentUploadInput!
       documentId: ID!
       projectId: ID!
+      contentLength: Int!
     ): ActionResult
     getPresignedUrlForAudioFile(
       documentId: ID!
@@ -31,7 +32,7 @@ export const typeDefs = gql`
       dialect: String
       speakerCount: Int
       transcriptionType: TranscriptionType!
-    ): ActionResult!
+    ): ID!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!
     pinnedProject(projectId: ID!, pin: Boolean!): ActionResult!
   }
