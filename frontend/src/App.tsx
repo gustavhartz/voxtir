@@ -6,12 +6,12 @@ import KeyboardModal from './components/KeyboardModal';
 import KeyboardSettings from './components/KeyboardSettings';
 import Layout from './components/Layout';
 import { CallbackPage } from './pages/Callback';
+import CreateDocument from './pages/CreateDocument';
 import CreateProject from './pages/CreateProject';
 import Documents from './pages/Documents';
 import Home from './pages/Home';
 import Me from './pages/Me';
 import Projects from './pages/Projects';
-
 function App() {
 
   return (
@@ -23,6 +23,7 @@ function App() {
           <Route path="/new" element={<CreateProject />} />
           <Route path="document/:documentID" element={<Home />} />
           <Route path="documents/:projectID" element={<Documents />} />
+          <Route path="new/:projectID" element={<CreateDocument />} />
           <Route path="me" element={<Me />} />
         </Route>
       </Routes>

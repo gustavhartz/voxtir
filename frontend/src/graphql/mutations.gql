@@ -19,6 +19,7 @@ mutation UpdateProject($id: ID!, $name: String, $description: String) {
   }
 }
 
+<<<<<<< HEAD
 mutation UploadAudioFile(
   $fileInput: DocumentUploadInput!
   $documentId: ID!
@@ -51,3 +52,11 @@ mutation CreateDocument(
     speakerCount: $speakerCount
   )
 }
+=======
+mutation CreateDocument($title: String!) {
+  createDocument(title: $title) {
+    message
+    success
+  }
+}
+>>>>>>> 39e03d3 (Initial documents page setup)
