@@ -2,7 +2,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { useFormik } from 'formik';
 import React from 'react';
-import { AiFillPushpin,AiOutlineDelete, AiOutlinePushpin } from 'react-icons/ai';
+import {
+  AiFillPushpin,
+  AiOutlineDelete,
+  AiOutlinePushpin,
+} from 'react-icons/ai';
 import { BiShareAlt } from 'react-icons/bi';
 import { BsFillShareFill } from 'react-icons/bs';
 import { FiEdit3 } from 'react-icons/fi';
@@ -18,7 +22,7 @@ import {
   useDeleteProjectMutation,
   usePinProjectMutation,
   useShareProjectMutation,
-  useUpdateProjectMutation
+  useUpdateProjectMutation,
 } from '../../graphql/generated/graphql';
 
 interface ProjectCardProps {
@@ -45,9 +49,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [checkDelete, setCheckDelete] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [showShare, setShowShare] = React.useState(false);
-  const [email, setEmail] = React.useState<string | undefined>("");
+  const [email, setEmail] = React.useState<string | undefined>('');
   const [role, setRole] = React.useState<Role | undefined>();
-  const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => pinnedProject?.id === project.id);
+  const isPinned = pinnedProjects?.pinnedProjects?.find(
+    (pinnedProject) => pinnedProject?.id === project.id
+  );
 
   const [pinProject] = usePinProjectMutation({
     context: {
@@ -55,7 +61,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         authorization: `Bearer ${token}`,
       },
     },
-  })
+  });
   const [deleteProject, { loading }] = useDeleteProjectMutation({
     context: {
       headers: {
@@ -72,13 +78,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [shareProject, { data, error, loading: shareLoading }] = useShareProjectMutation({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
+  const [shareProject, { data, error, loading: shareLoading }] =
+    useShareProjectMutation({
+      context: {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
-    },
-  })
+    });
   const initialValues = {
     name: project.name,
     description: project.description || '',
@@ -95,26 +102,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         variables: {
           role: role,
           shareProjectId: project.id,
-          userEmail: email
-        }
+          userEmail: email,
+        },
       }).then((res) => {
         toast(res.data?.shareProject.message, {
-          type: "success",
-          toastId: "shareProjectSuccess",
-          position: "bottom-right"
-        })
+          type: 'success',
+          toastId: 'shareProjectSuccess',
+          position: 'bottom-right',
+        });
         toggleShowShareList();
-      })
+      });
 
       if (error) {
         toast(error?.message, {
-          type: "error",
-          toastId: "shareProjectError",
-          position: "bottom-right"
-        })
+          type: 'error',
+          toastId: 'shareProjectError',
+          position: 'bottom-right',
+        });
       }
     }
-  }
+  };
 
   const onSubmit = async (values: { name: string; description: string }) => {
     updateProject({
@@ -154,10 +161,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       },
     }).then(() => {
       toast(`Deleted project: ${projectToDelete.name}`, {
-        type: "success",
-        toastId: "deleteProject",
-        position: "bottom-right"
-      })
+        type: 'success',
+        toastId: 'deleteProject',
+        position: 'bottom-right',
+      });
       setCheckDelete(false);
       onDeleteCallback();
     });
@@ -179,7 +186,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     e?.preventDefault();
     e?.stopPropagation();
     setShowShare(!showShare);
-  }
+  };
 
   const cancelEdit = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -192,19 +199,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(isPinned, isPinned !== undefined)
+    console.log(isPinned, isPinned !== undefined);
     pinProject({
       variables: {
         projectId: project.id,
-        pin: isPinned !== undefined ?? true
-      }
-    }).then(() => {
-      handleUpdate();
-    }).catch(() => {
-      handleUpdate();
+        pin: isPinned !== undefined ?? true,
+      },
     })
-
-  }
+      .then(() => {
+        handleUpdate();
+      })
+      .catch(() => {
+        handleUpdate();
+      });
+  };
 
   if (isEdit) {
     return (
@@ -311,25 +319,50 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       {showShare && (
         <div className="fixed top-0 left-0 w-full h-full bg-black/30 z-[200] flex justify-center items-center p-4">
           <div className="sm:w-2/4 sm:h-fit bg-white w-full h-1/2 rounded-md p-8">
-            <span className="text-3xl mb-4 font-semibold flex flex-row items-center justify-between">Share<BsFillShareFill size={30} className="ml-4" /></span>
-            <span className="text-gray-600">Enter a email address of a current user and assign project access.</span>
+            <span className="text-3xl mb-4 font-semibold flex flex-row items-center justify-between">
+              Share
+              <BsFillShareFill size={30} className="ml-4" />
+            </span>
+            <span className="text-gray-600">
+              Enter a email address of a current user and assign project access.{' '}
+              <strong>Admin</strong> can create new documents in a project and{' '}
+              <strong>Member</strong> can only contribute to existing documents
+            </span>
+
             <input
-            autoFocus
-            type="text"
-            id="documentName"
-            value={email}
-            placeholder="john@doe.com"
-            onChange={(e) => setEmail(e.currentTarget.value)}
-            className="mt-6 w-full px-5 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
-          />
-            <select defaultValue="none" onChange={(e) => setRole(e.currentTarget.value as Role)} className="h-10 mt-4 w-full rounded border-r-8 border-transparent font-normal px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2">
-              <option value="none" disabled>Assign access</option>
+              autoFocus
+              type="text"
+              id="documentName"
+              value={email}
+              placeholder="john@doe.com"
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              className="mt-6 w-full px-5 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
+            />
+            <select
+              defaultValue="none"
+              onChange={(e) => setRole(e.currentTarget.value as Role)}
+              className="h-10 mt-4 w-full rounded border-r-8 border-transparent font-normal px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
+            >
+              <option value="none" disabled>
+                Assign access
+              </option>
               <option value="ADMIN">Admin</option>
               <option value="MEMBER">Member</option>
             </select>
             <div className="mt-6 flex flex-row justify-end">
-              <button onClick={toggleShowShareList} className=" bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded">Cancel</button>
-              <button onClick={handleShare} disabled={!email || !role} className="disabled:bg-gray-300 bg-gray-900 text-white py-2 px-4 rounded">Send Invite</button>
+              <button
+                onClick={toggleShowShareList}
+                className=" bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleShare}
+                disabled={!email || !role}
+                className="disabled:bg-gray-300 bg-gray-900 text-white py-2 px-4 rounded"
+              >
+                Send Invite
+              </button>
             </div>
           </div>
         </div>
@@ -352,19 +385,23 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               positions={['left']}
               content={
                 <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
-                    <div
+                  <div
                     onClick={handlePinProject}
                     className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
                   >
-                    {isPinned !== undefined ? <AiFillPushpin size={20} /> : <AiOutlinePushpin size={20} />}
+                    {isPinned !== undefined ? (
+                      <AiFillPushpin size={20} />
+                    ) : (
+                      <AiOutlinePushpin size={20} />
+                    )}
                   </div>
-                    <div
-                      onClick={toggleShowShareList}
-                      className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
-                      >
-                        <BiShareAlt size={20} />
-                      </div>
-                    <div
+                  <div
+                    onClick={toggleShowShareList}
+                    className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
+                  >
+                    <BiShareAlt size={20} />
+                  </div>
+                  <div
                     onClick={openEdit}
                     className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
                   >
@@ -401,7 +438,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
           <div>
             {project.description && (
-              <p className="text-ellipsis overflow-hidden whitespace-nowrap text-md text-gray-400">{project.description}</p>
+              <p className="text-ellipsis overflow-hidden whitespace-nowrap text-md text-gray-400">
+                {project.description}
+              </p>
             )}
           </div>
           <div className="flex justify-between">
