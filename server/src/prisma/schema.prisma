@@ -59,10 +59,11 @@ enum TranscriptionProcessStatus {
 }
 
 model User {
-    id                            String           @id
+    id                            String              @id
     auth0ManagementApiUserDetails Json?
     UsersOnProjects               UserOnProject[]
     PinnedProjects                PinnedProjects[]
+    ProjectInvitation             ProjectInvitation[]
 }
 
 model Project {
@@ -103,6 +104,8 @@ model ProjectInvitation {
     role      ProjectRole
     token     String      @unique
     used      Boolean     @default(false)
+    usedBy    User?       @relation(fields: [usedById], references: [id])
+    usedById  String? // relation scalar field (used in the `@relation` attribute above)
     expiresAt DateTime
     createdAt DateTime    @default(now())
     updatedAt DateTime    @updatedAt
