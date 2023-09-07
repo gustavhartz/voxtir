@@ -70,7 +70,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [updateProject] = useUpdateProjectMutation({
+  const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [shareProject] = useShareProjectMutation({
+  const [shareProject, { data, error, loading: shareLoading }] = useShareProjectMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -214,7 +214,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     pinProject({
       variables: {
         projectId: project.id,
-        pin: isPinned !== undefined ?? true,
+        pin: isPinned !== undefined ? false : true,
       },
     })
       .then(() => {
