@@ -36,12 +36,9 @@ const mutations: MutationResolvers = {
     });
 
     if (!userRights) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
+      throw new GraphQLError('Projectid not found or related to user');
     }
-    await prisma.document.create({
+    const doc = await prisma.document.create({
       data: {
         title: title,
         projectId: projectId,
@@ -51,8 +48,7 @@ const mutations: MutationResolvers = {
         transcriptionType: transcriptionType,
       },
     });
-
-    return { success: true };
+    return doc.id;
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;

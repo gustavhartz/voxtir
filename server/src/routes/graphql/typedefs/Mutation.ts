@@ -31,7 +31,7 @@ export const typeDefs = gql`
       dialect: String
       speakerCount: Int
       transcriptionType: TranscriptionType!
-    ): ActionResult!
+    ): ID!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!
     pinnedProject(projectId: ID!, pin: Boolean!): ActionResult!
   }
