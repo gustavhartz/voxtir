@@ -6,7 +6,6 @@ import KeyboardModal from './components/KeyboardModal';
 import KeyboardSettings from './components/KeyboardSettings';
 import Layout from './components/Layout';
 import { CallbackPage } from './pages/Callback';
-import CreateDocument from './pages/CreateDocument';
 import CreateProject from './pages/CreateProject';
 import Documents from './pages/Documents';
 import Home from './pages/Home';
@@ -20,10 +19,9 @@ function App() {
         <Route path="/callback" element={<CallbackPage />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Projects />} />
-          <Route path="/new" element={<CreateProject />} />
           <Route path="document/:documentID" element={<Home />} />
-          <Route path="documents/:projectID" element={<Documents />} />
-          <Route path="new/:projectID" element={<CreateDocument />} />
+          <Route path="project/new" element={<CreateProject />} />
+          <Route path="project/:projectID" element={<Documents />} />
           <Route path="me" element={<Me />} />
         </Route>
       </Routes>

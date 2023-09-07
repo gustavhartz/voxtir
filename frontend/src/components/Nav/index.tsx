@@ -1,11 +1,12 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import { AiFillFolderOpen, AiOutlineFolder, AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
-import { FaRegFileAudio, FaRegUserCircle, FaUserCircle } from 'react-icons/fa';
+import { FaRegFileAudio } from 'react-icons/fa';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
-import { Link,useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 interface Route {
   name: string;
   path: string;
@@ -19,13 +20,7 @@ const routes: Route[] = [
     path: '/',
     icon: AiOutlineFolder,
     activeIcon: AiFillFolderOpen,
-  },
-  {
-    name: 'Profile',
-    path: '/me',
-    icon: FaRegUserCircle,
-    activeIcon: FaUserCircle,
-  },
+  }
 ];
 
 const SidebarRoutes = () => {
