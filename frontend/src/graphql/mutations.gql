@@ -51,31 +51,3 @@ mutation CreateDocument(
     speakerCount: $speakerCount
   )
 }
-
-mutation shareProject($shareProjectId: ID!, $userEmail: String!, $role: Role!) {
-  shareProject(id: $shareProjectId, userEmail: $userEmail, role: $role) {
-    message
-    success
-  }
-}
-
-mutation unShareProject($unshareProjectId: ID!, $userEmail: String!) {
-  unshareProject(id: $unshareProjectId, userEmail: $userEmail) {
-    message
-    success
-  }
-}
-
-mutation pinProject($projectId: ID!, $pin: Boolean!) {
-  pinnedProject(projectId: $projectId, pin: $pin) {
-    message
-    success
-  }
-}
-
-query pinnedProjects{
-  pinnedProjects {
-    id
-    name
-  }
-}
