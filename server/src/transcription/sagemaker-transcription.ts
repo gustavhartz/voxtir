@@ -60,6 +60,7 @@ export class SagemakerBatchTransformTranscription {
       key,
       Buffer.from(JSON.stringify(jsonFile)),
       'application/json',
+      undefined,
       true
     );
     return this.createTranscriptionJobPayload();
