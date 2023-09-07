@@ -265,7 +265,7 @@ const queries: QueryResolvers = {
       throw new GraphQLError('Project not found');
     }
     if (
-      project.UsersOnProjects.some(
+      !project.UsersOnProjects.some(
         (userOnProject) =>
           userOnProject.userId === context.userId &&
           userOnProject.role === 'ADMIN'
