@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import { PageLoader } from '../components/Auth/page-loader';
 import withAccessToken from '../components/Auth/with-access-token';
 import ProjectCard from '../components/ProjectCard';
-import { usePinnedProjectsQuery,useProjectsQuery } from '../graphql/generated/graphql';
+import { useProjectsQuery } from '../graphql/generated/graphql';
+
 const Projects = ({ token }: { token: string }) => {
   const { data, loading, refetch } = useProjectsQuery({
     context: {
@@ -15,23 +16,12 @@ const Projects = ({ token }: { token: string }) => {
     },
   });
 
-  const { data: pinnedProjects } = usePinnedProjectsQuery({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    },
-  })
-
   const [filter, setFilter] = useState('');
 
   const filteredProjects = data?.projects?.filter(
     (project) => project?.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const handleUpdate = () => {
-    refetch();
-  }
   React.useEffect(() => {
     refetch();
   });
@@ -49,7 +39,7 @@ const Projects = ({ token }: { token: string }) => {
           </h1>
           <Link
             className="bg-white text-gray-900 px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center justify-center"
-            to="/project/new"
+            to="/new"
           >
             {' '}
             Create new project
@@ -70,7 +60,7 @@ const Projects = ({ token }: { token: string }) => {
         </div>
         <Link
           className="bg-gray-900 text-white px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center"
-          to="/project/new"
+          to="/new"
         >
           <AiOutlinePlus
             size={20}
@@ -88,14 +78,12 @@ const Projects = ({ token }: { token: string }) => {
           onChange={(e) => setFilter(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-6">
         {filteredProjects?.map((project) => {
           if (project?.id || project?.name) {
             return (
               <ProjectCard
-                handleUpdate={handleUpdate}
                 token={token}
-                pinnedProjects={pinnedProjects}
                 onDeleteCallback={() => refetch()}
                 key={project?.id}
                 project={{
