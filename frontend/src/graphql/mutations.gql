@@ -19,6 +19,7 @@ mutation UpdateProject($id: ID!, $name: String, $description: String) {
   }
 }
 
+
 mutation UploadAudioFile(
   $fileInput: DocumentUploadInput!
   $documentId: ID!
@@ -51,6 +52,7 @@ mutation CreateDocument(
     speakerCount: $speakerCount
   )
 }
+
 
 mutation shareProject($shareProjectId: ID!, $userEmail: String!, $role: Role!) {
   shareProject(id: $shareProjectId, userEmail: $userEmail, role: $role) {
