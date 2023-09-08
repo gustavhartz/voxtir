@@ -10,7 +10,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
 import { Editor as ttEditor, EditorContent, useEditor } from '@tiptap/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Drawer from '../Drawer';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
@@ -28,10 +28,36 @@ export const getEditorInstance = (): ttEditor | null => {
 };
 
 function Editor({ documentID, token }: { documentID: string; token: string }) {
+  // is synced and is authenticated
+  const [editorSyncState, setEditorSyncState] = useState({
+    isAuthenticated: false,
+    isAuthenticatedComplete: false,
+    isAuthenticatedErrorMessage: '',
+  });
+
   const provider = new HocuspocusProvider({
     url: `${DOMAIN}/document/${documentID}`,
     name: `${documentID}`,
     token: `${token}`,
+    onAuthenticated() {
+      if (!editorSyncState.isAuthenticatedComplete) {
+        setEditorSyncState({
+          ...editorSyncState,
+          isAuthenticated: true,
+          isAuthenticatedComplete: true,
+        });
+      }
+    },
+    onAuthenticationFailed(d) {
+      if (!editorSyncState.isAuthenticatedComplete) {
+        setEditorSyncState({
+          ...editorSyncState,
+          isAuthenticated: false,
+          isAuthenticatedComplete: true,
+          isAuthenticatedErrorMessage: d.reason,
+        });
+      }
+    },
   });
   const editor = useEditor({
     extensions: [
@@ -73,7 +99,17 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
   return (
     <div className="w-full h-full flex flex-row items-center">
       <div className="w-full h-full">
-        <EditorContent className="w-full h-full p-8 overflow-y-scroll" editor={editor} />
+        {editorSyncState.isAuthenticated && editorSyncState.isSynced && (
+          <EditorContent
+            className="w-full h-full p-8 overflow-y-scroll"
+            editor={editor}
+          />
+        )}
+        {!editorSyncState.isAuthenticated &&
+          editorSyncState.isAuthenticatedComplete && (
+            <p>{editorSyncState.isAuthenticatedErrorMessage}</p>
+          )}
+        {!editorSyncState.isAuthenticatedComplete && <p>Loading</p>}
       </div>
       <Drawer />
     </div>

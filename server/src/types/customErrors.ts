@@ -13,3 +13,14 @@ export class FileAlreadyExistsError extends Error {
     return this.status;
   }
 }
+
+export class HocuspocusError extends Error {
+  reason: string; // Add the 'reason' property here
+  constructor(message: string, reason?: string) {
+    super(message);
+    Error.captureStackTrace(this, this.constructor);
+
+    this.name = this.constructor.name;
+    this.reason = reason || message;
+  }
+}
