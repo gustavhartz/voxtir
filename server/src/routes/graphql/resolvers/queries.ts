@@ -9,7 +9,7 @@ import { S3StorageHandler } from '../../../services/storageHandler.js';
 import { LanguageCodePairs } from '../../../transcription/common.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { generateWordFileFromHTML } from '../../../utilities/tiptap-word-exporter.js';
-import { Project, QueryResolvers } from '../generated/graphql';
+import { Project, QueryResolvers, UserSharing } from '../generated/graphql';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!
@@ -251,6 +251,41 @@ const queries: QueryResolvers = {
       projectResponse.push(projectResponseObj);
     }
     return projectResponse;
+  },
+  projectSharedWith: async (_, args, context) => {
+    const project = await prisma.project.findFirst({
+      where: {
+        id: args.id,
+      },
+      include: {
+        UsersOnProjects: true,
+      },
+    });
+    if (!project) {
+      throw new GraphQLError('Project not found');
+    }
+    if (
+      !project.UsersOnProjects.some(
+        (userOnProject) =>
+          userOnProject.userId === context.userId &&
+          userOnProject.role === 'ADMIN'
+      )
+    ) {
+      throw new GraphQLError('User not on project or not admin');
+    }
+
+    const sharingList = await prisma.projectInvitation.findMany({
+      where: {
+        projectId: args.id,
+      },
+    });
+    return sharingList.map((sharing) => {
+      return {
+        email: sharing.email,
+        role: sharing.role,
+        used: sharing.used,
+      } as UserSharing;
+    });
   },
 };
 
