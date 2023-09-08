@@ -3,8 +3,6 @@ console.time('deps');
 import { expressMiddleware } from '@apollo/server/express4';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
-import cookieParser from 'cookie-parser';
-import session from 'cookie-session';
 import cors from 'cors';
 import express from 'express';
 import expressWebsockets from 'express-ws';
@@ -49,12 +47,6 @@ async function main(): Promise<void> {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
   app.use(requestId);
-  app.use(cookieParser());
-  app.use(
-    session({
-      secret: COOKIE_SECRET,
-    })
-  );
 
   const corsOptions: cors.CorsOptions = {
     origin: FRONTEND_BASE_URL,
