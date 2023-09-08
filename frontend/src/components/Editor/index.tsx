@@ -30,7 +30,6 @@ export const getEditorInstance = (): ttEditor | null => {
 function Editor({ documentID, token }: { documentID: string; token: string }) {
   // is synced and is authenticated
   const [editorSyncState, setEditorSyncState] = useState({
-    isSynced: false,
     isAuthenticated: false,
     isAuthenticatedComplete: false,
     isAuthenticatedErrorMessage: '',
@@ -40,26 +39,24 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
     url: `${DOMAIN}/document/${documentID}`,
     name: `${documentID}`,
     token: `${token}`,
-    onSynced: (data) => {
-      setEditorSyncState({
-        ...editorSyncState,
-        isSynced: true,
-      });
-    },
     onAuthenticated() {
-      setEditorSyncState({
-        ...editorSyncState,
-        isAuthenticated: true,
-        isAuthenticatedComplete: true,
-      });
+      if (!editorSyncState.isAuthenticatedComplete) {
+        setEditorSyncState({
+          ...editorSyncState,
+          isAuthenticated: true,
+          isAuthenticatedComplete: true,
+        });
+      }
     },
     onAuthenticationFailed(d) {
-      setEditorSyncState({
-        ...editorSyncState,
-        isAuthenticated: false,
-        isAuthenticatedComplete: true,
-        isAuthenticatedErrorMessage: d.reason,
-      });
+      if (!editorSyncState.isAuthenticatedComplete) {
+        setEditorSyncState({
+          ...editorSyncState,
+          isAuthenticated: false,
+          isAuthenticatedComplete: true,
+          isAuthenticatedErrorMessage: d.reason,
+        });
+      }
     },
   });
   const editor = useEditor({
@@ -112,8 +109,7 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
           editorSyncState.isAuthenticatedComplete && (
             <p>{editorSyncState.isAuthenticatedErrorMessage}</p>
           )}
-        {!editorSyncState.isAuthenticatedComplete &&
-          !editorSyncState.isSynced && <p>Loading</p>}
+        {!editorSyncState.isAuthenticatedComplete && <p>Loading</p>}
       </div>
       <Drawer />
     </div>
