@@ -13,7 +13,6 @@ import morgan from 'morgan';
 import {
   APP_NAME,
   APP_PORT,
-  COOKIE_SECRET,
   ENABLE_SCHEDULER_JOBS,
   FRONTEND_BASE_URL,
   NODE_ENV,
