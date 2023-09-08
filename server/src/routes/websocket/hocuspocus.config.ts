@@ -79,15 +79,6 @@ export default (): Partial<Configuration> => {
         );
         throw new HocuspocusError('Transcription not done');
       }
-      if (
-        doc.transcriptionType === TranscriptionType.AUTOMATIC &&
-        doc.transcriptionStatus !== TranscriptionProcessStatus.DONE
-      ) {
-        logger.debug(
-          `Attempting to access to transcription that is not done for document ${documentId}`
-        );
-        throw new Error('Transcription not done');
-      }
 
       let access = doc.project.UsersOnProjects.some(
         (userOnProject) => userOnProject.userId === userId
