@@ -8,7 +8,9 @@ import { verifyToken } from '../../services/auth0.js';
 // docs-plus :) https://github.com/docs-plus/
 import { APP_NAME } from '../../common/env.js';
 import prisma from '../../prisma/index.js';
+import { TranscriptionProcessStatus, TranscriptionType } from '@prisma/client';
 import { HocuspocusContext } from '../../types/hocuspocus.js';
+import { HocuspocusError } from '../../types/customErrors.js';
 
 export default (): Partial<Configuration> => {
   const Serverconfigure: Pick<Configuration, 'name' | 'extensions'> &
@@ -45,10 +47,10 @@ export default (): Partial<Configuration> => {
       let documentId = context.documentId;
 
       if (!documentId) {
-        throw new Error('Document not specified');
+        throw new HocuspocusError('Document not specified');
       }
       if (!token) {
-        throw new Error('Token not specified');
+        throw new HocuspocusError('Token not specified');
       }
       let jwtPayload = await verifyToken(token);
       let userId = jwtPayload.sub;
@@ -66,7 +68,16 @@ export default (): Partial<Configuration> => {
         },
       });
       if (!doc) {
-        throw new Error('Document not found');
+        throw new HocuspocusError('Document not found');
+      }
+      if (
+        doc.transcriptionType === TranscriptionType.AUTOMATIC &&
+        doc.transcriptionStatus !== TranscriptionProcessStatus.DONE
+      ) {
+        logger.debug(
+          `Attempting to access to transcription that is not done for document ${documentId}`
+        );
+        throw new HocuspocusError('Transcription not done');
       }
 
       let access = doc.project.UsersOnProjects.some(
@@ -77,8 +88,9 @@ export default (): Partial<Configuration> => {
         logger.debug(
           `User ${userId} not authorized for document ${documentId} and tried to access it`
         );
-        throw new Error('User not authorized');
+        throw new HocuspocusError('User not authorized');
       }
+      logger.debug(`User ${userId} authorized for document ${documentId}`);
     },
   };
   return Serverconfigure;
