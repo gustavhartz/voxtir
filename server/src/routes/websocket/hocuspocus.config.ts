@@ -8,6 +8,7 @@ import { verifyToken } from '../../services/auth0.js';
 // docs-plus :) https://github.com/docs-plus/
 import { APP_NAME } from '../../common/env.js';
 import prisma from '../../prisma/index.js';
+import { TranscriptionProcessStatus, TranscriptionType } from '@prisma/client';
 import { HocuspocusContext } from '../../types/hocuspocus.js';
 
 export default (): Partial<Configuration> => {
@@ -67,6 +68,15 @@ export default (): Partial<Configuration> => {
       });
       if (!doc) {
         throw new Error('Document not found');
+      }
+      if (
+        doc.transcriptionType === TranscriptionType.AUTOMATIC &&
+        doc.transcriptionStatus !== TranscriptionProcessStatus.DONE
+      ) {
+        logger.debug(
+          `Attempting to access to transcription that is not done for document ${documentId}`
+        );
+        throw new Error('Transcription not done');
       }
 
       let access = doc.project.UsersOnProjects.some(
