@@ -42,7 +42,7 @@ export class Auth0Client {
   }
 
   static async getSystemToken(): Promise<string> {
-    logger.info('Getting system token from Auth0');
+    logger.debug('Loading system token');
     if (Auth0Client.isSystemTokenExpired()) {
       logger.info('System token expired, getting new one');
       try {
