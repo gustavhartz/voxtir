@@ -26,6 +26,7 @@ import {
 } from '../../graphql/generated/graphql';
 
 interface ProjectCardProps {
+  handleUpdatePinned: () => void;
   handleUpdate: () => void;
   pinnedProjects: PinnedProjectsQuery | undefined;
   project: {
@@ -40,7 +41,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  handleUpdate,
+  handleUpdatePinned,
   pinnedProjects,
   project,
   token,
@@ -51,9 +52,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showShare, setShowShare] = React.useState(false);
   const [email, setEmail] = React.useState<string | undefined>('');
   const [role, setRole] = React.useState<Role | undefined>();
-  const isPinned = pinnedProjects?.pinnedProjects?.find(
-    (pinnedProject) => pinnedProject?.id === project.id
-  );
+  console.log(pinnedProjects);
+  const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => {
+    console.log(pinnedProject, project);
+    return pinnedProject?.id === project.id;
+  });
 
   const [pinProject] = usePinProjectMutation({
     context: {
@@ -62,6 +65,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       },
     },
   });
+
   const [deleteProject, { loading }] = useDeleteProjectMutation({
     context: {
       headers: {
@@ -216,14 +220,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     pinProject({
       variables: {
         projectId: project.id,
-        pin: isPinned !== undefined ? false : true,
+        pin: isPinned === undefined ? true : false,
       },
     })
       .then(() => {
-        handleUpdate();
+        handleUpdatePinned();
       })
       .catch(() => {
-        handleUpdate();
+        handleUpdatePinned();
       });
   };
 

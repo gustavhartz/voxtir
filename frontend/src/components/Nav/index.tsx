@@ -1,12 +1,18 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
-import { AiFillFolderOpen, AiOutlineFolder, AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
+import {
+  AiFillFolderOpen,
+  AiOutlineFolder,
+  AiOutlineMenuFold,
+  AiOutlineMenuUnfold,
+} from 'react-icons/ai';
 import { FaRegFileAudio } from 'react-icons/fa';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
 import { Link, useLocation } from 'react-router-dom';
 
+import { usePinnedProjectsQuery } from '../../graphql/generated/graphql';
 interface Route {
   name: string;
   path: string;
@@ -20,12 +26,11 @@ const routes: Route[] = [
     path: '/',
     icon: AiOutlineFolder,
     activeIcon: AiFillFolderOpen,
-  }
+  },
 ];
 
 const SidebarRoutes = () => {
   const location = useLocation();
-
 
   return (
     <div className="px-3">
@@ -59,9 +64,14 @@ const Nav = () => {
     localStorage.setItem('sidebar', (!isOpen).toString());
   };
 
+  const { data: pinnedProjects } = usePinnedProjectsQuery();
+
   if (!isOpen) {
     return (
-      <div onClick={handleToggleOpen} className="px-4 py-8 cursor-pointer border-r-2 border-gray-100">
+      <div
+        onClick={handleToggleOpen}
+        className="px-4 py-8 cursor-pointer border-r-2 border-gray-100"
+      >
         <AiOutlineMenuUnfold className="text-2xl" />
       </div>
     );
@@ -75,9 +85,25 @@ const Nav = () => {
             <FaRegFileAudio className="text-4xl mr-1 0" />
             <p className="text-2xl font-semibold ">Voxtir</p>
           </div>
-          <AiOutlineMenuFold onClick={handleToggleOpen} className="text-2xl hover:scale-105 cursor-pointer"/>
+          <AiOutlineMenuFold
+            onClick={handleToggleOpen}
+            className="text-2xl hover:scale-105 cursor-pointer"
+          />
         </div>
         <div className="flex-grow my-4">
+          {pinnedProjects?.pinnedProjects?.map((project) => (
+            <Link
+              key={project?.id}
+              to={`/project/${project?.id}`}
+              className={`flex items-center py-2 px-4 mb-2 font-normal transition-all hover:font-medium hover:bg-gray-100 text-gray-900 rounded-xl ${
+                location.pathname === `/project/${project?.id}`
+                  ? '!font-medium bg-gray-100'
+                  : ''
+              }`}
+            >
+              <span className="text-lg">{project?.name}</span>
+            </Link>
+          ))}
           <SidebarRoutes />
         </div>
         <div className="flex flex-col items-center py-4 px-4">
@@ -93,7 +119,13 @@ const Nav = () => {
             </div>
           </div>
           <button
-            onClick={() => logout({ logoutParams: { returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI }})}
+            onClick={() =>
+              logout({
+                logoutParams: {
+                  returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI,
+                },
+              })
+            }
             className="text-black font-medium flex items-center text-lg"
           >
             <IoMdLogOut size={26} className="mr-2" /> Sign Out

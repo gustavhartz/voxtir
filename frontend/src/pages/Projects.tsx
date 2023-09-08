@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom';
 import { PageLoader } from '../components/Auth/page-loader';
 import withAccessToken from '../components/Auth/with-access-token';
 import ProjectCard from '../components/ProjectCard';
-import { usePinnedProjectsQuery,useProjectsQuery } from '../graphql/generated/graphql';
+import {
+  usePinnedProjectsQuery,
+  useProjectsQuery,
+} from '../graphql/generated/graphql';
 const Projects = ({ token }: { token: string }) => {
   const { data, loading, refetch } = useProjectsQuery({
     context: {
@@ -15,13 +18,14 @@ const Projects = ({ token }: { token: string }) => {
     },
   });
 
-  const { data: pinnedProjects } = usePinnedProjectsQuery({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
+  const { data: pinnedProjects, refetch: refetchPinned } =
+    usePinnedProjectsQuery({
+      context: {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
-    },
-  })
+    });
 
   const [filter, setFilter] = useState('');
 
@@ -31,7 +35,12 @@ const Projects = ({ token }: { token: string }) => {
 
   const handleUpdate = () => {
     refetch();
-  }
+  };
+
+  const handleUpdatePinned = () => {
+    refetchPinned();
+  };
+
   React.useEffect(() => {
     refetch();
   });
@@ -93,6 +102,7 @@ const Projects = ({ token }: { token: string }) => {
           if (project?.id || project?.name) {
             return (
               <ProjectCard
+                handleUpdatePinned={handleUpdatePinned}
                 handleUpdate={handleUpdate}
                 token={token}
                 pinnedProjects={pinnedProjects}
