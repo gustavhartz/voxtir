@@ -56,26 +56,14 @@ async function main(): Promise<void> {
     })
   );
 
-  const corsOptions: { [key: string]: cors.CorsOptions } = {
-    development: {
-      origin: '*', // Allow all origins (not recommended for production)
-      credentials: true,
-      preflightContinue: true,
-    },
-    production: {
-      // Add your production frontend URL here
-      // Example: 'https://yourapp.com'
-      origin: FRONTEND_BASE_URL,
-      credentials: true,
-      preflightContinue: true,
-    },
+  const corsOptions: cors.CorsOptions = {
+    origin: FRONTEND_BASE_URL,
+    credentials: false,
+    preflightContinue: false,
   };
 
   // Set up CORS middleware based on NODE_ENV
-  app.use(cors(corsOptions[process.env.NODE_ENV || 'development']));
-
-  // allow pre-flight requests
-  app.options('*', cors());
+  app.use(cors(corsOptions));
 
   // Health check
   app.get('/health', (req, res) => {
