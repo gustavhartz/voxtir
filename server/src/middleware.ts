@@ -29,7 +29,6 @@ export const userInfoSync = async (
     return res.status(500).send('Auth not found on request');
   }
   if (!seenUsers.has(req.auth.payload.sub)) {
-    seenUsers.add(req.auth.payload.sub);
     const auth0UserData = await Auth0Client.getUserById(req.auth.payload.sub);
     await prisma.user.upsert({
       create: {
@@ -46,6 +45,7 @@ export const userInfoSync = async (
       },
     });
   }
+  seenUsers.add(req.auth.payload.sub);
   next();
 };
 
