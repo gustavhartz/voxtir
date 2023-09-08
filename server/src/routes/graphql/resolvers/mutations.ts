@@ -226,6 +226,52 @@ const mutations: MutationResolvers = {
     );
     return { success: true };
   },
+  unshareProject: async (_, args, context) => {
+    const { id, userEmail } = args;
+    const userId = context.userId;
+
+    const userRelation = await prisma.userOnProject.findFirst({
+      where: {
+        projectId: id,
+        userId: userId,
+      },
+    });
+    if (!userRelation || userRelation.role != ProjectRole.ADMIN) {
+      return {
+        success: false,
+        message: 'Projectid not found or related to user',
+      };
+    }
+    // If not accepted, delete invitation
+    const invitation = await prisma.projectInvitation.findFirst({
+      where: {
+        projectId: id,
+        email: userEmail,
+      },
+    });
+    if (!invitation) {
+      return {
+        success: false,
+        message: 'Invitation not found',
+      };
+    }
+    await prisma.projectInvitation.deleteMany({
+      where: {
+        projectId: id,
+        email: userEmail,
+      },
+    });
+    logger.info(`Deleted project invitation for ${userEmail} on project ${id}`);
+    if (invitation.usedById) {
+      await prisma.userOnProject.deleteMany({
+        where: {
+          projectId: id,
+          userId: invitation.usedById,
+        },
+      });
+    }
+    return { success: true };
+  },
   acceptProjectInvitation: async (_, args, context) => {
     const { token } = args;
     const userId = context.userId;
@@ -251,7 +297,9 @@ const mutations: MutationResolvers = {
       };
     }
     const id = invitation.projectId;
-
+    logger.info(
+      `User ${userId} attempting to accept invitation for project ${id}`
+    );
     if (id != tokenVerificationRes.projectId) {
       logger.error(
         'Mismatch between token in database and project sharing validation'
@@ -302,6 +350,7 @@ const mutations: MutationResolvers = {
       },
       data: {
         used: true,
+        usedById: userId,
       },
     });
     return { success: true };
