@@ -156,19 +156,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     e.preventDefault();
     e.stopPropagation();
 
-    await deleteProject({
+    deleteProject({
       variables: {
         id: project.id,
       },
-    }).then(() => {
-      toast(`Deleted project: ${projectToDelete.name}`, {
-        type: 'success',
-        toastId: 'deleteProject',
-        position: 'bottom-right',
+    })
+      .then(() => {
+        toast(`Deleted project: ${projectToDelete.name}`, {
+          type: 'success',
+          toastId: 'deleteProject',
+          position: 'bottom-right',
+        });
+        setCheckDelete(false);
+        onDeleteCallback();
+      })
+      .catch((error) => {
+        if (error) {
+          toast(error?.message, {
+            type: 'error',
+            toastId: 'deleteProjectError',
+            position: 'bottom-right',
+          });
+        }
       });
-      setCheckDelete(false);
-      onDeleteCallback();
-    });
   };
 
   const handleToggleDelete = (e: React.MouseEvent) => {
