@@ -151,6 +151,10 @@ const mutations: MutationResolvers = {
     return { success: true };
   },
   deleteProject: async (_, args, context) => {
+    /*
+    If user is admin we delete the project and all documents
+    if user is not admin we delete the user from the project
+    */
     const userId = context.userId;
     const projectId = args.id;
     const userRelation = await prisma.userOnProject.findFirst({
@@ -166,22 +170,25 @@ const mutations: MutationResolvers = {
       };
     }
     if (userRelation.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'User not allowed to perform action',
-      };
+      await prisma.userOnProject.deleteMany({
+        where: {
+          projectId: projectId,
+          userId: userId,
+        },
+      });
+    } else {
+      logger.info(`Deleting project: ${projectId}`);
+      await prisma.document.deleteMany({
+        where: {
+          projectId: projectId,
+        },
+      });
+      await prisma.project.delete({
+        where: {
+          id: projectId,
+        },
+      });
     }
-    logger.info(`Deleting project: ${projectId}`);
-    await prisma.document.deleteMany({
-      where: {
-        projectId: projectId,
-      },
-    });
-    await prisma.project.delete({
-      where: {
-        id: projectId,
-      },
-    });
     return { success: true };
   },
   shareProject: async (_, args, context) => {
