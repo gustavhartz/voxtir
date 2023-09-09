@@ -70,7 +70,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
+  const [updateProject] = useUpdateProjectMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -78,14 +78,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [shareProject, { data, error, loading: shareLoading }] =
-    useShareProjectMutation({
-      context: {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
+  const [shareProject] = useShareProjectMutation({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
       },
-    });
+    },
+  });
   const initialValues = {
     name: project.name,
     description: project.description || '',
@@ -104,22 +103,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           shareProjectId: project.id,
           userEmail: email,
         },
-      }).then((res) => {
-        toast(res.data?.shareProject.message, {
-          type: 'success',
-          toastId: 'shareProjectSuccess',
-          position: 'bottom-right',
+      })
+        .then((res) => {
+          toast(res.data?.shareProject.message, {
+            type: 'success',
+            toastId: 'shareProjectSuccess',
+            position: 'bottom-right',
+          });
+          toggleShowShareList();
+        })
+        .catch((error) => {
+          if (error) {
+            toast(error?.message, {
+              type: 'error',
+              toastId: 'shareProjectError',
+              position: 'bottom-right',
+            });
+          }
         });
-        toggleShowShareList();
-      });
-
-      if (error) {
-        toast(error?.message, {
-          type: 'error',
-          toastId: 'shareProjectError',
-          position: 'bottom-right',
-        });
-      }
     }
   };
 
