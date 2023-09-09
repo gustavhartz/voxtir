@@ -99,7 +99,7 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
   return (
     <div className="w-full h-full flex flex-row items-center">
       <div className="w-full h-full">
-        {editorSyncState.isAuthenticated && editorSyncState.isSynced && (
+        {editorSyncState.isAuthenticated && (
           <EditorContent
             className="w-full h-full p-8 overflow-y-scroll"
             editor={editor}

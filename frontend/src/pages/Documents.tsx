@@ -24,22 +24,26 @@ const Documents = ({ token }: { token: string }) => {
     return <div>Loading...</div>;
   }
 
-  if (!project?.documents || project?.documents?.length === 0) {
+  if (project && !project?.documents || project?.documents?.length === 0) {
     return (
+      <>
       <div className="p-6 bg-gray-100 w-full drop-shadow-sm flex flex-col justify-center items-center">
         <div className="bg-gray-900 p-6 rounded-lg shadow-md">
           <h1 className="text-xl text-white font-semibold mb-4">
-            There are now documents in this project
+            There are no documents in this project
           </h1>
-          <Link
-            className="bg-white text-gray-900 px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center justify-center"
-            to="/new"
-          >
+          <button
+            onClick={() => setIsModalOpen(!isModalOpen)}
+            className="w-full bg-white text-gray-900 px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center justify-center">
             {' '}
             Create new document
-          </Link>
+          </button>
         </div>
       </div>
+      {isModalOpen && project && (
+        <DocumentCreationModal onClose={() => setIsModalOpen(!isModalOpen)} token={token} defaultProjectId={project.id} />
+      )}
+      </>
     );
   }
 
@@ -49,7 +53,7 @@ const Documents = ({ token }: { token: string }) => {
         <div className="flex flex-row items-center">
           <CgFileDocument size={40} />
           <h1 className="text-3xl font-bold px-2 text-gray-900">
-            Documents ({data && project.documents?.length})
+            Documents ({data && project && project.documents?.length})
           </h1>
         </div>
         <button
@@ -87,8 +91,8 @@ const Documents = ({ token }: { token: string }) => {
           );
         })}
       </div>
-      {isModalOpen && (
-        <DocumentCreationModal token={token} defaultProjectId={project.id} />
+      {isModalOpen && project && (
+        <DocumentCreationModal onClose={() => setIsModalOpen(!isModalOpen)} token={token} defaultProjectId={project.id} />
       )}
     </div>
   );

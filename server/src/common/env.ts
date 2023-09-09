@@ -1,8 +1,8 @@
 // Desc: This file contains all the environment variables used in the application and asserts that they are defined.
 
 // For development, we can use the dotenv package to load the environment variables from the .env file.
-// import dotenv from 'dotenv';
-// dotenv.config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const {
   AUTH0_CLIENT_ID,

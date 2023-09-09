@@ -1,18 +1,33 @@
+import 'react-toastify/dist/ReactToastify.css';
+
 import { useFormik } from 'formik';
 import React from 'react';
-import { AiOutlineDelete } from 'react-icons/ai';
+import {
+  AiFillPushpin,
+  AiOutlineDelete,
+  AiOutlinePushpin,
+} from 'react-icons/ai';
+import { BiShareAlt } from 'react-icons/bi';
+import { BsFillShareFill } from 'react-icons/bs';
 import { FiEdit3 } from 'react-icons/fi';
 import { HiDotsHorizontal } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { Popover } from 'react-tiny-popover';
+import { toast, ToastContainer } from 'react-toastify';
 import * as Yup from 'yup';
 
+import type { Role } from '../../graphql/generated/graphql';
 import {
+  PinnedProjectsQuery,
   useDeleteProjectMutation,
+  usePinProjectMutation,
+  useShareProjectMutation,
   useUpdateProjectMutation,
 } from '../../graphql/generated/graphql';
 
 interface ProjectCardProps {
+  handleUpdate: () => void;
+  pinnedProjects: PinnedProjectsQuery | undefined;
   project: {
     name: string;
     id: string;
@@ -25,12 +40,28 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
+  handleUpdate,
+  pinnedProjects,
   project,
   token,
   onDeleteCallback,
 }): JSX.Element => {
   const [checkDelete, setCheckDelete] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
+  const [showShare, setShowShare] = React.useState(false);
+  const [email, setEmail] = React.useState<string | undefined>('');
+  const [role, setRole] = React.useState<Role | undefined>();
+  const isPinned = pinnedProjects?.pinnedProjects?.find(
+    (pinnedProject) => pinnedProject?.id === project.id
+  );
+
+  const [pinProject] = usePinProjectMutation({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
   const [deleteProject, { loading }] = useDeleteProjectMutation({
     context: {
       headers: {
@@ -47,6 +78,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
+  const [shareProject] = useShareProjectMutation({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
   const initialValues = {
     name: project.name,
     description: project.description || '',
@@ -56,6 +94,35 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     name: Yup.string().required('Required'),
     description: Yup.string().required('Required'),
   });
+
+  const handleShare = () => {
+    if (role && email && project?.id) {
+      shareProject({
+        variables: {
+          role: role,
+          shareProjectId: project.id,
+          userEmail: email,
+        },
+      })
+        .then((res) => {
+          toast(res.data?.shareProject.message, {
+            type: 'success',
+            toastId: 'shareProjectSuccess',
+            position: 'bottom-right',
+          });
+          toggleShowShareList();
+        })
+        .catch((error) => {
+          if (error) {
+            toast(error?.message, {
+              type: 'error',
+              toastId: 'shareProjectError',
+              position: 'bottom-right',
+            });
+          }
+        });
+    }
+  };
 
   const onSubmit = async (values: { name: string; description: string }) => {
     updateProject({
@@ -85,17 +152,33 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   const handleDeleteProject = async (e: React.MouseEvent) => {
+    const projectToDelete = project;
     e.preventDefault();
     e.stopPropagation();
 
-    await deleteProject({
+    deleteProject({
       variables: {
         id: project.id,
       },
-    }).then(() => {
-      setCheckDelete(false);
-      onDeleteCallback();
-    });
+    })
+      .then(() => {
+        toast(`Deleted project: ${projectToDelete.name}`, {
+          type: 'success',
+          toastId: 'deleteProject',
+          position: 'bottom-right',
+        });
+        setCheckDelete(false);
+        onDeleteCallback();
+      })
+      .catch((error) => {
+        if (error) {
+          toast(error?.message, {
+            type: 'error',
+            toastId: 'deleteProjectError',
+            position: 'bottom-right',
+          });
+        }
+      });
   };
 
   const handleToggleDelete = (e: React.MouseEvent) => {
@@ -110,11 +193,36 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     setIsEdit(true);
   };
 
+  const toggleShowShareList = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setShowShare(!showShare);
+  };
+
   const cancelEdit = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsEdit(false);
     setIsPopoverOpen(false);
+  };
+
+  const handlePinProject = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log(isPinned, isPinned !== undefined);
+    pinProject({
+      variables: {
+        projectId: project.id,
+        pin: isPinned !== undefined ?? true,
+      },
+    })
+      .then(() => {
+        handleUpdate();
+      })
+      .catch(() => {
+        handleUpdate();
+      });
   };
 
   if (isEdit) {
@@ -217,80 +325,152 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   }
 
   return (
-    <Link to={`/documents/${project.id}`}>
-      <div
-        className={` ${loading && 'animate-pulse'}
-            border-gray-200 border-[1px] 
-            hover:border-gray-300 text-gray-900 
-            hover:bg-gradient-to-tl hover:from-white hover:to-gray-100 flex flex-col justify-between
-            duration-600 px-6 py-4 h-36
-            bg-white transition-all 
-            drop-shadow-sm rounded-lg`}
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-2xl font-medium">{project?.name}</span>
-          <Popover
-            onClickOutside={() => setIsPopoverOpen(false)}
-            isOpen={isPopoverOpen}
-            positions={['left']}
-            content={
-              <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
-                <div
-                  onClick={openEdit}
-                  className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
-                >
-                  <FiEdit3 size={20} />
-                </div>
-                {!checkDelete && (
+    <>
+      <ToastContainer />
+      {showShare && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black/30 z-[200] flex justify-center items-center p-4">
+          <div className="sm:w-2/4 sm:h-fit bg-white w-full h-1/2 rounded-md p-8">
+            <span className="text-3xl mb-4 font-semibold flex flex-row items-center justify-between">
+              Share
+              <BsFillShareFill size={30} className="ml-4" />
+            </span>
+            <span className="text-gray-600">
+              Enter a email address of a current user and assign project access.{' '}
+              <strong>Admin</strong> can create new documents in a project and{' '}
+              <strong>Member</strong> can only contribute to existing documents
+            </span>
+
+            <input
+              autoFocus
+              type="text"
+              id="documentName"
+              value={email}
+              placeholder="john@doe.com"
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              className="mt-6 w-full px-5 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
+            />
+            <select
+              defaultValue="none"
+              onChange={(e) => setRole(e.currentTarget.value as Role)}
+              className="h-10 mt-4 w-full rounded border-r-8 border-transparent font-normal px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
+            >
+              <option value="none" disabled>
+                Assign access
+              </option>
+              <option value="ADMIN">Admin</option>
+              <option value="MEMBER">Member</option>
+            </select>
+            <div className="mt-6 flex flex-row justify-end">
+              <button
+                onClick={toggleShowShareList}
+                className=" bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleShare}
+                disabled={!email || !role}
+                className="disabled:bg-gray-300 bg-gray-900 text-white py-2 px-4 rounded"
+              >
+                Send Invite
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <Link to={`/project/${project.id}`}>
+        <div
+          className={` ${loading && 'animate-pulse'}
+              border-gray-200 border-[1px] 
+              hover:border-gray-300 text-gray-900 
+              hover:bg-gradient-to-tl hover:from-white hover:to-gray-100 flex flex-col justify-between
+              duration-600 px-6 py-4 h-36
+              bg-white transition-all 
+              drop-shadow-sm rounded-lg`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-2xl font-medium">{project?.name}</span>
+            <Popover
+              onClickOutside={() => setIsPopoverOpen(false)}
+              isOpen={isPopoverOpen}
+              positions={['left']}
+              content={
+                <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
                   <div
-                    onClick={handleToggleDelete}
+                    onClick={handlePinProject}
                     className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
                   >
-                    <AiOutlineDelete size={20} />
+                    {isPinned !== undefined ? (
+                      <AiFillPushpin size={20} />
+                    ) : (
+                      <AiOutlinePushpin size={20} />
+                    )}
                   </div>
-                )}
-                {checkDelete && (
                   <div
-                    onClick={handleDeleteProject}
-                    className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 bg-red-600 text-white transition-all cursor-pointer"
+                    onClick={toggleShowShareList}
+                    className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
                   >
-                    <AiOutlineDelete size={20} className="mr-2" />
-                    <span>Delete Project</span>
+                    <BiShareAlt size={20} />
                   </div>
-                )}
+                  <div
+                    onClick={openEdit}
+                    className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
+                  >
+                    <FiEdit3 size={20} />
+                  </div>
+                  {!checkDelete && (
+                    <div
+                      onClick={handleToggleDelete}
+                      className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
+                    >
+                      <AiOutlineDelete size={20} />
+                    </div>
+                  )}
+                  {checkDelete && (
+                    <div
+                      onClick={handleDeleteProject}
+                      className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 bg-red-600 text-white transition-all cursor-pointer"
+                    >
+                      <AiOutlineDelete size={20} className="mr-2" />
+                      <span>Delete Project</span>
+                    </div>
+                  )}
+                </div>
+              }
+            >
+              <div className="react-tiny-popover-container">
+                <HiDotsHorizontal
+                  onClick={handleTogglePopover}
+                  size={20}
+                  className="fill-gray-400 hover:scale-110 transition-all"
+                />
               </div>
-            }
-          >
-            <div className="react-tiny-popover-container">
-              <HiDotsHorizontal
-                onClick={handleTogglePopover}
-                size={20}
-                className="fill-gray-400 hover:scale-110 transition-all"
-              />
-            </div>
-          </Popover>
-        </div>
-        <div>
-          {project.description && (
-            <p className="text-md text-gray-400">{project.description}</p>
-          )}
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-400 text-sm font-medium">
-            {project.createdAt.toDateString()}
-          </span>
-          {project.documentLength > 0 && (
-            <span className="text-gray-400 text-sm">
-              {project.documentLength} document{' '}
-              {project.documentLength > 1 && 's'}{' '}
+            </Popover>
+          </div>
+          <div>
+            {project.description && (
+              <p className="text-ellipsis overflow-hidden whitespace-nowrap text-md text-gray-400">
+                {project.description}
+              </p>
+            )}
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-400 text-sm font-medium">
+              {project.createdAt.toDateString()}
             </span>
-          )}
-          {project.documentLength === 0 && (
-            <span className="text-gray-400 text-sm">No documents.</span>
-          )}
+            {project.documentLength > 0 && (
+              <span className="text-gray-400 text-sm">
+                {project.documentLength} document{' '}
+                {project.documentLength > 1 && 's'}{' '}
+              </span>
+            )}
+            {project.documentLength === 0 && (
+              <span className="text-gray-400 text-sm">No documents.</span>
+            )}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </>
   );
 };
 
