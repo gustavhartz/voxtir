@@ -3,8 +3,6 @@ console.time('deps');
 import { expressMiddleware } from '@apollo/server/express4';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
-import cookieParser from 'cookie-parser';
-import session from 'cookie-session';
 import cors from 'cors';
 import express from 'express';
 import expressWebsockets from 'express-ws';
@@ -15,7 +13,6 @@ import morgan from 'morgan';
 import {
   APP_NAME,
   APP_PORT,
-  COOKIE_SECRET,
   ENABLE_SCHEDULER_JOBS,
   FRONTEND_BASE_URL,
   NODE_ENV,
@@ -49,33 +46,15 @@ async function main(): Promise<void> {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
   app.use(requestId);
-  app.use(cookieParser());
-  app.use(
-    session({
-      secret: COOKIE_SECRET,
-    })
-  );
 
-  const corsOptions: { [key: string]: cors.CorsOptions } = {
-    development: {
-      origin: '*', // Allow all origins (not recommended for production)
-      credentials: true,
-      preflightContinue: true,
-    },
-    production: {
-      // Add your production frontend URL here
-      // Example: 'https://yourapp.com'
-      origin: FRONTEND_BASE_URL,
-      credentials: true,
-      preflightContinue: true,
-    },
+  const corsOptions: cors.CorsOptions = {
+    origin: FRONTEND_BASE_URL,
+    credentials: false,
+    preflightContinue: false,
   };
 
   // Set up CORS middleware based on NODE_ENV
-  app.use(cors(corsOptions[process.env.NODE_ENV || 'development']));
-
-  // allow pre-flight requests
-  app.options('*', cors());
+  app.use(cors(corsOptions));
 
   // Health check
   app.get('/health', (req, res) => {
@@ -103,13 +82,13 @@ async function main(): Promise<void> {
   httpServer.listen({ port: APP_PORT }, () => {
     console.info(`
         Server "${chalk.magentaBright(
-      'APP_NAME'
-    )}" started. Port: ${chalk.blue.bold(
+          'APP_NAME'
+        )}" started. Port: ${chalk.blue.bold(
       APP_PORT
     )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
         Open Project: ${chalk.bold.underline.yellow(
-      `http://localhost:${APP_PORT}`
-    )} (ctrl+click)
+          `http://localhost:${APP_PORT}`
+        )} (ctrl+click)
       `);
     console.timeEnd('startup');
   });

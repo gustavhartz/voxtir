@@ -14,7 +14,6 @@ export const {
   RESEND_API_KEY,
   JWT_SECRET,
   PROJECT_SHARING_EXPIRATION_TIME,
-  COOKIE_SECRET,
   APP_NAME,
   APP_PORT,
   NODE_ENV,
@@ -33,7 +32,6 @@ export const {
   RESEND_API_KEY: string;
   JWT_SECRET: string;
   PROJECT_SHARING_EXPIRATION_TIME: string;
-  COOKIE_SECRET: string;
   APP_NAME: string;
   APP_PORT: string;
   NODE_ENV: string;
@@ -54,7 +52,6 @@ if (
   !RESEND_API_KEY ||
   !JWT_SECRET ||
   !PROJECT_SHARING_EXPIRATION_TIME ||
-  !COOKIE_SECRET ||
   !APP_NAME ||
   !APP_PORT ||
   !NODE_ENV ||

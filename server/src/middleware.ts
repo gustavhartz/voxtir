@@ -2,11 +2,12 @@ import { Prisma } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
+import { FIFOSet } from './common/data-structures.js';
 import prisma from './prisma/index.js';
 import { Auth0Client } from './services/auth0.js';
 import { logger } from './services/logger.js';
 
-const VOXTIR_SEEN_USER_COOKIE = 'voxtir_seen_user';
+const seenUsers = new FIFOSet<string>(1000);
 
 /**
  * This is a middleware that will check if the user has an active session. 
@@ -23,43 +24,28 @@ export const userInfoSync = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!(req.cookies[VOXTIR_SEEN_USER_COOKIE] === 'seen')) {
-    if (!req.auth?.payload?.sub) {
-      logger.error('Sub not found on request that passed auth0 middleware');
-      return res.status(500).send('Internal server error');
-    }
-    logger.info(
-      `User not seen before or cookie expired, setting cookie and updating user data`
-    );
-    res.cookie(VOXTIR_SEEN_USER_COOKIE, 'seen', {
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      secure: true,
-      sameSite: 'none',
-    });
-    try {
-      const auth0UserData = await Auth0Client.getUserById(req.auth.payload.sub);
-      await prisma.user.upsert({
-        create: {
-          id: req.auth.payload.sub,
-          auth0ManagementApiUserDetails:
-            auth0UserData as unknown as Prisma.JsonObject,
-        },
-        update: {
-          auth0ManagementApiUserDetails:
-            auth0UserData as unknown as Prisma.JsonObject,
-        },
-        where: {
-          id: req.auth.payload.sub,
-        },
-      });
-    } catch (err) {
-      logger.debug(
-        'VOXTIR_SEEN_USER_COOKIE set for user, but issue occured',
-        err
-      );
-      return res.status(401).send('Unauthorized');
-    }
+  if (!req.auth?.payload?.sub) {
+    logger.error('Sub not found on request that passed auth0 middleware');
+    return res.status(500).send('Auth not found on request');
   }
+  if (!seenUsers.has(req.auth.payload.sub)) {
+    const auth0UserData = await Auth0Client.getUserById(req.auth.payload.sub);
+    await prisma.user.upsert({
+      create: {
+        id: req.auth.payload.sub,
+        auth0ManagementApiUserDetails:
+          auth0UserData as unknown as Prisma.JsonObject,
+      },
+      update: {
+        auth0ManagementApiUserDetails:
+          auth0UserData as unknown as Prisma.JsonObject,
+      },
+      where: {
+        id: req.auth.payload.sub,
+      },
+    });
+  }
+  seenUsers.add(req.auth.payload.sub);
   next();
 };
 
