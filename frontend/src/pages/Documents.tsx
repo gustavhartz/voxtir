@@ -124,7 +124,7 @@ const Documents = ({ token }: { token: string }) => {
 
   return (
     <div className="p-6 w-full flex flex-col space-y-12">
-      <div className="text-gray-900 bg-gray-100 p-5 rounded-md mt-4 rounded-md  flex flex-col space-y-4">
+      <div className="text-gray-900 bg-gray-100 p-5 mt-4 rounded-md flex flex-col space-y-4">
         <h1 className="text-3xl text-gray-900 font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
           {project?.name}
         </h1>
@@ -140,8 +140,18 @@ const Documents = ({ token }: { token: string }) => {
           </div>
           <div className="flex flex-row max-[600px]:flex-col min-[600px]:items-center min-[600px]:space-x-4 max-[600px]:space-y-2">
             <select
+              disabled={
+                [
+                  completedStatus,
+                  processingStatus,
+                  queuedStatus,
+                  failedStatus,
+                  createdStatus,
+                ].filter((status) => (status ? status?.length > 0 : false))
+                  .length <= 1
+              }
               id="transcriptionFilter"
-              className="h-10 w-30 text-white rounded border-r-8 border-transparent font-medium bg-gray-900 px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
+              className="disabled:hidden h-10 w-30 text-white rounded border-r-8 border-transparent font-medium bg-gray-900 px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
               value={selectedFilter}
               onChange={(e) =>
                 handleFilterChange(e.target.value as TranscriptionStatusFilter)
@@ -163,6 +173,11 @@ const Documents = ({ token }: { token: string }) => {
               )}
               {failedStatus && failedStatus?.length > 0 && (
                 <option value="FAILED">Failed ({failedStatus.length})</option>
+              )}
+              {createdStatus && createdStatus?.length > 0 && (
+                <option value="CREATED">
+                  Created ({createdStatus.length})
+                </option>
               )}
             </select>
             <button
