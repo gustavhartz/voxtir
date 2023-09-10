@@ -402,7 +402,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               drop-shadow-sm rounded-lg`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-medium">{project?.name}</span>
+            <span className="text-2xl font-medium text-ellipsis overflow-hidden whitespace-nowrap">
+              {project?.name}
+            </span>
             <Popover
               onClickOutside={() => setIsPopoverOpen(false)}
               isOpen={isPopoverOpen}
@@ -476,7 +478,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </span>
             {project.documentLength > 0 && (
               <span className="text-gray-400 text-sm">
-                {project.documentLength} document{' '}
+                {project.documentLength} document
                 {project.documentLength > 1 && 's'}{' '}
               </span>
             )}

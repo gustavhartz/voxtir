@@ -13,7 +13,7 @@ interface DocumentCreationModalProps {
 const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   token,
   defaultProjectId,
-  onClose
+  onClose,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [language, setLanguage] = useState<string>('');
@@ -106,11 +106,17 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   };
 
   return (
-    <div onClick={onClose} className="cursor-pointer fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-50">
-      <div onClick={(e) => e.stopPropagation()} className="cursor-default bg-white p-6 sm:rounded-lg shadow-lg w-full h-full sm:w-2/3 md:w-3/5 sm:h-fit relative z-60">
+    <div
+      onClick={onClose}
+      className="cursor-pointer fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50 z-50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="cursor-default bg-white p-6 sm:rounded-lg shadow-lg w-full h-full sm:w-2/3 md:w-3/5 sm:h-fit relative z-60"
+      >
         <h2 className="text-3xl font-bold mb-4">Create a new document</h2>
         <div
-          className="border-dashed border-2 border-gray-300 p-4 mb-4 cursor-pointer"
+          className="flex flex-col justify-center items-center border-dashed border-2 border-gray-300 p-4 mb-4 cursor-pointer"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleFileDrop}
         >
@@ -120,27 +126,32 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
               <button onClick={() => setSelectedFile(null)}>Remove</button>
             </div>
           ) : (
-            <p>Drag and drop an audio file here or click to browse.</p>
+            <p className="text-center mb-3 text-gray-500 text-sm flex flex-col">
+              Drag and drop an audio file{' '}
+              <span className="w-full font-bold text-sm">-- or --</span>
+            </p>
           )}
-        </div>
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileInputChange}
-          className="hidden"
-          id="fileInput"
-        />
-        <label
-          htmlFor="fileInput"
-          className="bg-gray-900 text-white py-2 px-4 rounded cursor-pointer"
-        >
-          Browse
-        </label>
-        <div className="mt-4">
-          <label htmlFor="documentName" className="block font-semibold">
-            Document Name:
-          </label>
           <input
+            type="file"
+            accept="audio/*"
+            onChange={handleFileInputChange}
+            className="hidden"
+            id="fileInput"
+          />
+          <label
+            htmlFor="fileInput"
+            className="bg-gray-100 hover:bg-gray-200 transition-colors text-center text-gray-900 font-semibold py-1 px-4 rounded cursor-pointer"
+          >
+            Browse
+          </label>
+        </div>
+        <div className="mt-8">
+          <label htmlFor="documentName" className="block font-semibold">
+            Document Name
+          </label>
+          <p className="text-gray-400 pb-2">The name of the document.</p>
+          <input
+            placeholder="Interview with John Doe"
             type="text"
             id="documentName"
             value={documentName}
@@ -150,9 +161,13 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         </div>
         <div className="mt-4">
           <label htmlFor="language" className="block font-semibold">
-            Language:
+            Language
           </label>
+          <p className="text-gray-400 pb-2">
+            Choose the target audio transcription language.
+          </p>
           <input
+            placeholder="Language in audio"
             type="text"
             id="language"
             value={language}
@@ -162,9 +177,13 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         </div>
         <div className="mt-4">
           <label htmlFor="speakerCount" className="block font-semibold">
-            Speaker Count:
+            Speaker Count
           </label>
+          <p className="text-gray-400 pb-2">
+            The amount of people speaking in the audio.
+          </p>
           <input
+            placeholder="Number of speakers"
             type="number"
             id="speakerCount"
             value={speakerCount}
@@ -176,6 +195,10 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           <label htmlFor="transcriptionType" className="block font-semibold">
             Transcription Type:
           </label>
+          <p className="text-gray-400 pb-2">
+            Choose whether you want to automatically make the transcription or
+            manually.
+          </p>
           <select
             id="transcriptionType"
             value={transcriptionType}

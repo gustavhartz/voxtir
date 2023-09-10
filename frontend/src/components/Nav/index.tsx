@@ -8,7 +8,6 @@ import {
   AiOutlineMenuUnfold,
 } from 'react-icons/ai';
 import { FaRegFileAudio } from 'react-icons/fa';
-import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
 import { Link, useLocation } from 'react-router-dom';
@@ -106,7 +105,7 @@ const PinnedRoutes = ({
               ) : (
                 <AiOutlineFolder size={30} className="mr-3" />
               )}
-              <span className="w-full px-2 text-md font-inherit bg-inherit">
+              <span className="px-2 w-3/4 text-md font-inherit bg-inherit overflow-hidden whitespace-nowrap text-ellipsis">
                 {project?.name}
               </span>
             </Link>
@@ -160,7 +159,7 @@ const Nav = ({ token }: { token: string }) => {
 
   if (isOpen) {
     return (
-      <div className="w-96 flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
+      <div className="w-80 flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
         <div className="p-6 mb-2 flex items-center justify-between bg-gray-900 text-white">
           <div className="flex flex-row items-center ">
             <FaRegFileAudio className="text-4xl mr-1 0" />
@@ -176,17 +175,6 @@ const Nav = ({ token }: { token: string }) => {
           <PinnedRoutes pinnedProp={data} latestProject={latestProject} />
         </div>
         <div className="flex flex-col items-center py-4 px-4">
-          <div className="bg-gray-800 w-full h-14 flex justify-between px-4 items-center mb-4 rounded-lg drop-shadow-sm">
-            <p className="text-md text-white font-medium">
-              Upgrade to{' '}
-              <span className="text-md bg-black text-white px-2 py-1 rounded-lg ml-1">
-                PRO
-              </span>
-            </p>
-            <div className="bg-white p-1 rounded-full shadow-sm">
-              <FiArrowUpRight size={24} />
-            </div>
-          </div>
           <button
             onClick={() =>
               logout({
@@ -195,7 +183,7 @@ const Nav = ({ token }: { token: string }) => {
                 },
               })
             }
-            className="text-black font-medium flex items-center text-lg"
+            className="text-black font-medium flex items-center text-lg pb-8"
           >
             <IoMdLogOut size={26} className="mr-2" /> Sign Out
           </button>

@@ -11,7 +11,7 @@ import { useAppDispatch } from '../hooks';
 import { setLatestProject } from '../state/client';
 
 const Documents = ({ token }: { token: string }) => {
-  const { data, loading } = useProjectsQuery({
+  const { data, loading, error } = useProjectsQuery({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -26,6 +26,11 @@ const Documents = ({ token }: { token: string }) => {
   useEffect(() => {
     if (project && projectID) {
       dispatch(setLatestProject(projectID));
+    }
+  });
+  useEffect(() => {
+    if (error) {
+      console.log(error);
     }
   });
 
@@ -65,13 +70,13 @@ const Documents = ({ token }: { token: string }) => {
     <div className="p-6 w-full">
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-row items-center">
-          <CgFileDocument size={40} />
-          <h1 className="text-3xl font-bold px-2 text-gray-900">
+          <CgFileDocument size={30} />
+          <h1 className="text-xl font-bold px-2 text-gray-900">
             Documents ({data && project && project.documents?.length})
           </h1>
         </div>
         <button
-          className="bg-gray-900 text-white px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center"
+          className="bg-gray-900 text-white px-3 py-2 rounded-md text-md border-gray-900 transition-colors font-semibold flex items-center"
           onClick={(): void => setIsModalOpen(!isModalOpen)}
         >
           <AiOutlinePlus
@@ -83,20 +88,39 @@ const Documents = ({ token }: { token: string }) => {
       </div>
       <div className="grid grid-cols-1 gap-4 w-full">
         {project?.documents?.map((document) => {
+          const isNotDoneAutomatic =
+            document?.transcriptionType === 'AUTOMATIC' &&
+            document?.transcriptionStatus !== 'DONE';
+
           return (
-            <Link to={`/document/${document?.id}`} key={document?.id}>
+            <Link
+              to={`/document/${document?.id}`}
+              key={document?.id}
+              className={`${isNotDoneAutomatic && 'pointer-events-none'}`}
+            >
               <div
-                className="hover:scale-[1.03] hover:bg-slate-800 bg-slate-900 text-white duration-500 transition-all w-full cursor-pointer shadow-md rounded-md flex flex-row justify-between items-center px-4 py-4 font-semibold
-                "
+                className={`border-2 
+                ${
+                  isNotDoneAutomatic
+                    ? 'bg-slate-50 !text-gray-600 cursor-not-allowed'
+                    : 'hover:scale-[1.01] hover:shadow-md cursor-pointer'
+                }  border-slate-100
+shadow-sm text-gray-900 duration-500 transition-all w-full rounded-md flex flex-row justify-between items-center px-4 py-4 font-semibold`}
               >
                 <div className="flex flex-row items-center w-full">
-                  <CgFileDocument className="text-inherit text-4xl mr-4" />
-                  <span className=" w-full text-start text-2xl font-bold">
+                  {document?.transcriptionStatus === 'DONE' && (
+                    <CgFileDocument className="text-inherit text-4xl mr-4" />
+                  )}
+                  {document?.transcriptionStatus === 'CREATED' &&
+                    document.transcriptionType === 'AUTOMATIC' && (
+                      <span className="w-6 h-5 bg-gradient-to-b from-gray-400 to-gray-500 rounded-full ml-2 mr-6"></span>
+                    )}
+                  <span className="w-full text-start text-lg font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                     {document?.title}
                   </span>
                 </div>
                 {document?.lastModified && (
-                  <div className="text-end">
+                  <div className="text-end text-md w-full">
                     {new Date(document?.lastModified).toDateString()}
                   </div>
                 )}

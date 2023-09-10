@@ -16,6 +16,9 @@ query Projects {
       id
       title
       lastModified
+      isTrashed
+      transcriptionType
+      transcriptionStatus
     }
   }
 }

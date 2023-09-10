@@ -46,6 +46,8 @@ const mutations: MutationResolvers = {
         dialect: dialect,
         speakerCount: speakerCount,
         transcriptionType: transcriptionType,
+        transcriptionStatus:
+          transcriptionType === 'MANUAL' ? 'DONE' : 'CREATED',
       },
     });
     logger.debug(
