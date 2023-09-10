@@ -29,6 +29,10 @@ export abstract class StorageHandler {
     overwrite?: boolean
   ): Promise<void>;
   abstract getObject(key: string): Promise<Uint8Array | undefined>;
+  abstract generatePresignedUrlForObject(
+    key: string,
+    expiration: number
+  ): Promise<string>;
 }
 
 export class S3StorageHandler extends StorageHandler {
@@ -92,6 +96,13 @@ export class S3StorageHandler extends StorageHandler {
 }
 
 export class MemoryStorageHandler extends StorageHandler {
+  /**
+   * This class is used for testing purposes only to avoid using S3 and simulate a storage handler
+   *
+   * @private
+   * @type {Map<string, PutObjectCommandInput['Body']>}
+   * @memberof MemoryStorageHandler
+   */
   private storage: Map<string, PutObjectCommandInput['Body']>;
 
   constructor() {
@@ -120,6 +131,15 @@ export class MemoryStorageHandler extends StorageHandler {
 
   async getObject(key: string): Promise<Uint8Array | undefined> {
     return convertToByteArray(this.storage.get(key));
+  }
+  async generatePresignedUrlForObject(
+    key: string,
+    expiration: number
+  ): Promise<string> {
+    logger.info(
+      'Generating presigned URL is not supported in memory storage handler'
+    );
+    return 'https://www.cnn.com/interactive/uploads/20230626-trump_audio.mp3';
   }
 }
 
