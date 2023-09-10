@@ -41,7 +41,7 @@ const SidebarRoutes = () => {
   const location = useLocation();
 
   return (
-    <div className="px-3">
+    <div className="px-3 pt-4">
       {routes.map((route, index) => (
         <Link
           key={index}
@@ -170,11 +170,11 @@ const Nav = ({ token }: { token: string }) => {
             className="text-2xl hover:scale-105 cursor-pointer"
           />
         </div>
-        <div className="flex-grow my-4 flex flex-col h-full justify-between">
+        <div className="flex-grow flex flex-col h-full justify-between">
           <SidebarRoutes />
           <PinnedRoutes pinnedProp={data} latestProject={latestProject} />
         </div>
-        <div className="flex flex-col items-center py-4 px-4">
+        <div className="flex flex-col items-center px-4">
           <button
             onClick={() =>
               logout({
@@ -183,7 +183,7 @@ const Nav = ({ token }: { token: string }) => {
                 },
               })
             }
-            className="text-black font-medium flex items-center text-lg pb-8"
+            className="-mt-4 pb-8 text-black font-medium flex items-center text-lg"
           >
             <IoMdLogOut size={26} className="mr-2" /> Sign Out
           </button>

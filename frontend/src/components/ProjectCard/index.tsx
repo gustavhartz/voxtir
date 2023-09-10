@@ -297,7 +297,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </label>
             </span>
             <textarea
-              className={`px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md w-full focus:outline-gray-400 focus:outline-2
+              className={`px-2 py-2 max-h-[400px] text-gray-900 outline-gray-300 font-normal text-md outline rounded-md w-full focus:outline-gray-400 focus:outline-2
                             ${
                               formik.errors.name && formik.touched.name
                                 ? 'border-red-800'
