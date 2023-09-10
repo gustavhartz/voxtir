@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { CgFileDocument } from 'react-icons/cg';
 import { useParams } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import withAccessToken from '../components/Auth/with-access-token';
 import DocumentCreationModal from '../components/Document/NewDocumentModal';
 import { useProjectsQuery } from '../graphql/generated/graphql';
+import { useAppDispatch } from '../hooks';
+import { setLatestProject } from '../state/client';
 
 const Documents = ({ token }: { token: string }) => {
   const { data, loading } = useProjectsQuery({
@@ -16,33 +18,45 @@ const Documents = ({ token }: { token: string }) => {
       },
     },
   });
+  const dispatch = useAppDispatch();
   const projectID = useParams().projectID;
   const project = data?.projects?.find((project) => project?.id === projectID);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (project && projectID) {
+      dispatch(setLatestProject(projectID));
+    }
+  });
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (project && !project?.documents || project?.documents?.length === 0) {
+  if ((project && !project?.documents) || project?.documents?.length === 0) {
     return (
       <>
-      <div className="p-6 bg-gray-100 w-full drop-shadow-sm flex flex-col justify-center items-center">
-        <div className="bg-gray-900 p-6 rounded-lg shadow-md">
-          <h1 className="text-xl text-white font-semibold mb-4">
-            There are no documents in this project
-          </h1>
-          <button
-            onClick={() => setIsModalOpen(!isModalOpen)}
-            className="w-full bg-white text-gray-900 px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center justify-center">
-            {' '}
-            Create new document
-          </button>
+        <div className="p-6 bg-gray-100 w-full drop-shadow-sm flex flex-col justify-center items-center">
+          <div className="bg-gray-900 p-6 rounded-lg shadow-md">
+            <h1 className="text-xl text-white font-semibold mb-4">
+              There are no documents in this project
+            </h1>
+            <button
+              onClick={() => setIsModalOpen(!isModalOpen)}
+              className="w-full bg-white text-gray-900 px-3 py-2 rounded-md text-lg border-gray-900 transition-colors font-semibold flex items-center justify-center"
+            >
+              {' '}
+              Create new document
+            </button>
+          </div>
         </div>
-      </div>
-      {isModalOpen && project && (
-        <DocumentCreationModal onClose={() => setIsModalOpen(!isModalOpen)} token={token} defaultProjectId={project.id} />
-      )}
+        {isModalOpen && project && (
+          <DocumentCreationModal
+            onClose={() => setIsModalOpen(!isModalOpen)}
+            token={token}
+            defaultProjectId={project.id}
+          />
+        )}
       </>
     );
   }
@@ -92,7 +106,11 @@ const Documents = ({ token }: { token: string }) => {
         })}
       </div>
       {isModalOpen && project && (
-        <DocumentCreationModal onClose={() => setIsModalOpen(!isModalOpen)} token={token} defaultProjectId={project.id} />
+        <DocumentCreationModal
+          onClose={() => setIsModalOpen(!isModalOpen)}
+          token={token}
+          defaultProjectId={project.id}
+        />
       )}
     </div>
   );

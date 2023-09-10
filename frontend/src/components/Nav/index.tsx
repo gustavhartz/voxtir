@@ -65,8 +65,10 @@ const SidebarRoutes = () => {
 
 const PinnedRoutes = ({
   pinnedProp,
+  latestProject,
 }: {
   pinnedProp: MePinnedProjectsQuery | undefined;
+  latestProject: string;
 }) => {
   const location = useLocation();
   const [pinned, setPinned] = React.useState<MePinnedProjectsQuery | undefined>(
@@ -81,7 +83,7 @@ const PinnedRoutes = ({
     <>
       {pinned?.pinnedProjects && pinned?.pinnedProjects.length > 0 && (
         <div className="mb-8 border-t-2 border-b-2 border-gray-100 py-4 bg-white overflow-y-scroll">
-          <h1 className="px-4 text-md font-medium flex flex-row items-center mb-2 mt-4">
+          <h1 className="px-4 text-lg font-medium flex flex-row items-center mb-2 mt-4">
             <AiFillPushpin className="mr-2" size={20} />
             Pinned Projects
           </h1>
@@ -90,12 +92,16 @@ const PinnedRoutes = ({
               key={project?.id}
               to={`/project/${project?.id}`}
               className={`flex items-center py-2 mx-3 px-4 mb-2 font-normal transition-all hover:font-medium hover:bg-gray-200 text-gray-900 rounded-xl ${
-                location.pathname === `/project/${project?.id}`
+                location.pathname === `/project/${project?.id}` ||
+                (location.pathname.includes('document') &&
+                  project?.id === latestProject)
                   ? '!font-semibold bg-gray-50'
                   : ''
               }`}
             >
-              {location.pathname === `/project/${project?.id}` ? (
+              {location.pathname === `/project/${project?.id}` ||
+              (location.pathname.includes('document') &&
+                project?.id === latestProject) ? (
                 <AiFillFolderOpen size={30} className="mr-3" />
               ) : (
                 <AiOutlineFolder size={30} className="mr-3" />
@@ -116,8 +122,11 @@ const Nav = ({ token }: { token: string }) => {
     localStorage.getItem('sidebar') === 'true' ? true : false
   );
   const { logout } = useAuth0();
-  const refetchPinned = useAppSelector((state) => state.client.refetchPinned);
+  const { refetchPinned, latestProject } = useAppSelector(
+    (state) => state.client
+  );
   const dispatch = useAppDispatch();
+
   const handleToggleOpen = () => {
     setOpen(!isOpen);
     localStorage.setItem('sidebar', (!isOpen).toString());
@@ -164,7 +173,7 @@ const Nav = ({ token }: { token: string }) => {
         </div>
         <div className="flex-grow my-4 flex flex-col h-full justify-between">
           <SidebarRoutes />
-          <PinnedRoutes pinnedProp={data} />
+          <PinnedRoutes pinnedProp={data} latestProject={latestProject} />
         </div>
         <div className="flex flex-col items-center py-4 px-4">
           <div className="bg-gray-800 w-full h-14 flex justify-between px-4 items-center mb-4 rounded-lg drop-shadow-sm">
