@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import {
   AiFillFolderOpen,
+  AiFillPushpin,
   AiOutlineFolder,
   AiOutlineMenuFold,
   AiOutlineMenuUnfold,
@@ -12,7 +13,12 @@ import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
 import { Link, useLocation } from 'react-router-dom';
 
-import { usePinnedProjectsQuery } from '../../graphql/generated/graphql';
+import {
+  PinnedProjectsQuery,
+  usePinnedProjectsQuery,
+} from '../../graphql/generated/graphql';
+import withAccessToken from '../Auth/with-access-token';
+
 interface Route {
   name: string;
   path: string;
@@ -54,7 +60,55 @@ const SidebarRoutes = () => {
   );
 };
 
-const Nav = () => {
+const PinnedRoutes = ({
+  pinnedProp,
+}: {
+  pinnedProp: PinnedProjectsQuery | undefined;
+}) => {
+  const location = useLocation();
+  const [pinned, setPinned] = React.useState<PinnedProjectsQuery | undefined>(
+    undefined
+  );
+
+  React.useEffect(() => {
+    setPinned(pinnedProp);
+  }, [pinnedProp]);
+
+  return (
+    <>
+      {pinned?.pinnedProjects && pinned?.pinnedProjects.length > 0 && (
+        <div className="mb-8 border-t-2 border-b-2 border-gray-100 py-4 bg-white overflow-y-scroll">
+          <h1 className="px-4 text-md font-medium flex flex-row items-center mb-2">
+            <AiFillPushpin className="mr-2" size={20} />
+            Pinned Projects
+          </h1>
+          {pinned?.pinnedProjects?.map((project) => (
+            <Link
+              key={project?.id}
+              to={`/project/${project?.id}`}
+              className={`flex items-center py-2 mx-3 px-4 mb-2 font-normal transition-all hover:font-medium hover:bg-gray-200 text-gray-900 rounded-xl ${
+                location.pathname === `/project/${project?.id}`
+                  ? '!font-semibold bg-gray-50'
+                  : ''
+              }`}
+            >
+              {location.pathname === `/project/${project?.id}` ? (
+                <AiFillFolderOpen size={30} className="mr-3" />
+              ) : (
+                <AiOutlineFolder size={30} className="mr-3" />
+              )}
+              <span className="w-full px-2 text-md font-inherit bg-inherit">
+                {project?.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
+
+const Nav = ({ token }: { token: string }) => {
   const [isOpen, setOpen] = React.useState(
     localStorage.getItem('sidebar') === 'true' ? true : false
   );
@@ -64,7 +118,13 @@ const Nav = () => {
     localStorage.setItem('sidebar', (!isOpen).toString());
   };
 
-  const { data: pinnedProjects } = usePinnedProjectsQuery();
+  const { data, loading } = usePinnedProjectsQuery({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
 
   if (!isOpen) {
     return (
@@ -90,21 +150,9 @@ const Nav = () => {
             className="text-2xl hover:scale-105 cursor-pointer"
           />
         </div>
-        <div className="flex-grow my-4">
-          {pinnedProjects?.pinnedProjects?.map((project) => (
-            <Link
-              key={project?.id}
-              to={`/project/${project?.id}`}
-              className={`flex items-center py-2 px-4 mb-2 font-normal transition-all hover:font-medium hover:bg-gray-100 text-gray-900 rounded-xl ${
-                location.pathname === `/project/${project?.id}`
-                  ? '!font-medium bg-gray-100'
-                  : ''
-              }`}
-            >
-              <span className="text-lg">{project?.name}</span>
-            </Link>
-          ))}
+        <div className="flex-grow my-4 flex flex-col h-full justify-between">
           <SidebarRoutes />
+          <PinnedRoutes pinnedProp={data} />
         </div>
         <div className="flex flex-col items-center py-4 px-4">
           <div className="bg-gray-800 w-full h-14 flex justify-between px-4 items-center mb-4 rounded-lg drop-shadow-sm">
@@ -135,34 +183,9 @@ const Nav = () => {
     );
   }
 
-  if (!isOpen) {
-    return (
-      <div>
-        <button onClick={handleToggleOpen}>Open</button>
-      </div>
-    );
-  }
-
-  if (isOpen) {
-    return (
-      <div className="w-64 flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
-        <div className="p-4 mb-2">
-          <p className="text-2xl font-semibold text-gray-700">Voxtir</p>
-        </div>
-        <div className="flex-grow">
-          <SidebarRoutes />
-        </div>
-        <div className="flex flex-col items-center py-4 px-2">
-          <div className="bg-gradient-to-br from-purple-400 to-indigo-900 text-white px-4 py-6 rounded-xl mb-4">
-            <p className="text-sm">Upgrade to PRO access all features</p>
-          </div>
-          <button className="text-black">Sign Out</button>
-        </div>
-      </div>
-    );
-  }
-
   return <div>Error</div>;
 };
 
-export default Nav;
+const NavWithAccessToken = withAccessToken(Nav);
+
+export default NavWithAccessToken;
