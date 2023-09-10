@@ -78,7 +78,7 @@ const PinnedRoutes = ({
     <>
       {pinned?.pinnedProjects && pinned?.pinnedProjects.length > 0 && (
         <div className="mb-8 border-t-2 border-b-2 border-gray-100 py-4 bg-white overflow-y-scroll">
-          <h1 className="px-4 text-md font-medium flex flex-row items-center mb-2">
+          <h1 className="px-4 text-md font-medium flex flex-row items-center mb-2 mt-4">
             <AiFillPushpin className="mr-2" size={20} />
             Pinned Projects
           </h1>

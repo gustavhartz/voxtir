@@ -52,7 +52,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showShare, setShowShare] = React.useState(false);
   const [email, setEmail] = React.useState<string | undefined>('');
   const [role, setRole] = React.useState<Role | undefined>();
-  console.log(pinnedProjects);
+
   const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => {
     console.log(pinnedProject, project);
     return pinnedProject?.id === project.id;
@@ -229,6 +229,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       });
   };
 
+  const handleAutoClose = () => {
+    setIsPopoverOpen(false);
+  };
+
   if (isEdit) {
     return (
       <div
@@ -399,7 +403,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               isOpen={isPopoverOpen}
               positions={['left']}
               content={
-                <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
+                <div
+                  onMouseLeave={handleAutoClose}
+                  className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row"
+                >
                   <div
                     onClick={handlePinProject}
                     className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
