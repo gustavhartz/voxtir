@@ -14,9 +14,12 @@ import { IconType } from 'react-icons/lib';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
-  PinnedProjectsQuery,
-  usePinnedProjectsQuery,
+  MePinnedProjectsQuery,
+  useMePinnedProjectsQuery,
 } from '../../graphql/generated/graphql';
+import { useAppSelector } from '../../hooks';
+import { useAppDispatch } from '../../hooks';
+import { refetchPinnedComplete } from '../../state/client';
 import withAccessToken from '../Auth/with-access-token';
 
 interface Route {
@@ -63,10 +66,10 @@ const SidebarRoutes = () => {
 const PinnedRoutes = ({
   pinnedProp,
 }: {
-  pinnedProp: PinnedProjectsQuery | undefined;
+  pinnedProp: MePinnedProjectsQuery | undefined;
 }) => {
   const location = useLocation();
-  const [pinned, setPinned] = React.useState<PinnedProjectsQuery | undefined>(
+  const [pinned, setPinned] = React.useState<MePinnedProjectsQuery | undefined>(
     undefined
   );
 
@@ -113,18 +116,27 @@ const Nav = ({ token }: { token: string }) => {
     localStorage.getItem('sidebar') === 'true' ? true : false
   );
   const { logout } = useAuth0();
+  const refetchPinned = useAppSelector((state) => state.client.refetchPinned);
+  const dispatch = useAppDispatch();
   const handleToggleOpen = () => {
     setOpen(!isOpen);
     localStorage.setItem('sidebar', (!isOpen).toString());
   };
 
-  const { data, loading } = usePinnedProjectsQuery({
+  const { data, refetch } = useMePinnedProjectsQuery({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
       },
     },
   });
+
+  React.useEffect(() => {
+    if (refetchPinned) {
+      refetch();
+      dispatch(refetchPinnedComplete());
+    }
+  }, [refetchPinned, refetch, dispatch]);
 
   if (!isOpen) {
     return (

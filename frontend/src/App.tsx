@@ -11,8 +11,8 @@ import Documents from './pages/Documents';
 import Home from './pages/Home';
 import Me from './pages/Me';
 import Projects from './pages/Projects';
-function App() {
 
+function App() {
   return (
     <div className="w-screen">
       <Routes>

@@ -72,11 +72,3 @@ mutation pinProject($projectId: ID!, $pin: Boolean!) {
     success
   }
 }
-
-query pinnedProjects{
-  pinnedProjects {
-    id
-    name
-    lastModified
-  }
-}

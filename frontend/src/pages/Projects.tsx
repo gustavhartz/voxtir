@@ -6,9 +6,10 @@ import { PageLoader } from '../components/Auth/page-loader';
 import withAccessToken from '../components/Auth/with-access-token';
 import ProjectCard from '../components/ProjectCard';
 import {
-  usePinnedProjectsQuery,
+  useMePinnedProjectsQuery,
   useProjectsQuery,
 } from '../graphql/generated/graphql';
+
 const Projects = ({ token }: { token: string }) => {
   const { data, loading, refetch } = useProjectsQuery({
     context: {
@@ -19,7 +20,7 @@ const Projects = ({ token }: { token: string }) => {
   });
 
   const { data: pinnedProjects, refetch: refetchPinned } =
-    usePinnedProjectsQuery({
+    useMePinnedProjectsQuery({
       context: {
         headers: {
           authorization: `Bearer ${token}`,

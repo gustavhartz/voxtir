@@ -16,19 +16,23 @@ import { Popover } from 'react-tiny-popover';
 import { toast, ToastContainer } from 'react-toastify';
 import * as Yup from 'yup';
 
-import type { Role } from '../../graphql/generated/graphql';
+import type {
+  MePinnedProjectsQuery,
+  Role,
+} from '../../graphql/generated/graphql';
 import {
-  PinnedProjectsQuery,
   useDeleteProjectMutation,
   usePinProjectMutation,
   useShareProjectMutation,
   useUpdateProjectMutation,
 } from '../../graphql/generated/graphql';
+import { useAppDispatch } from '../../hooks';
+import { refetchPinned } from '../../state/client';
 
 interface ProjectCardProps {
   handleUpdatePinned: () => void;
   handleUpdate: () => void;
-  pinnedProjects: PinnedProjectsQuery | undefined;
+  pinnedProjects: MePinnedProjectsQuery | undefined;
   project: {
     name: string;
     id: string;
@@ -53,6 +57,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [email, setEmail] = React.useState<string | undefined>('');
   const [role, setRole] = React.useState<Role | undefined>();
 
+  const dispatch = useAppDispatch();
   const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => {
     console.log(pinnedProject, project);
     return pinnedProject?.id === project.id;
@@ -166,9 +171,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       },
     })
       .then(() => {
+        dispatch(refetchPinned());
         toast(`Deleted project: ${projectToDelete.name}`, {
           type: 'success',
-          toastId: 'deleteProject',
           position: 'bottom-right',
         });
         setCheckDelete(false);

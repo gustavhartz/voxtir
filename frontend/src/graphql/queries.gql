@@ -26,3 +26,13 @@ query GenerateWordFileFromHTML($html: String!) {
     url
   }
 }
+
+query mePinnedProjects{
+  pinnedProjects {
+    id
+    name
+    documents {
+      id
+    }
+  }
+}
