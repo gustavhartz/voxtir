@@ -16,6 +16,9 @@ query Projects {
       id
       title
       lastModified
+      isTrashed
+      transcriptionType
+      transcriptionStatus
     }
   }
 }
@@ -24,5 +27,21 @@ query GenerateWordFileFromHTML($html: String!) {
   generateWordFileFromHTML(html: $html) {
     expiresAt
     url
+  }
+}
+
+query mePinnedProjects{
+  pinnedProjects {
+    id
+    name
+    documents {
+      id
+    }
+  }
+}
+
+query SupportedLanguages {
+  supportedLanguages {
+    languageName
   }
 }

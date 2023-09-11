@@ -73,9 +73,17 @@ mutation pinProject($projectId: ID!, $pin: Boolean!) {
   }
 }
 
-query pinnedProjects{
-  pinnedProjects {
-    id
-    name
+mutation trashDocument($documentId: ID!, $projectId: ID!) {
+  trashDocument(documentId: $documentId, projectId: $projectId) {
+    message
+    success
   }
 }
+
+mutation UpdateDocument($documentId: ID!, $title: String!) {
+  updateDocument(documentId: $documentId, title: $title) {
+    message
+    success
+  }
+}
+

@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom';
 import { PageLoader } from '../components/Auth/page-loader';
 import withAccessToken from '../components/Auth/with-access-token';
 import ProjectCard from '../components/ProjectCard';
-import { usePinnedProjectsQuery,useProjectsQuery } from '../graphql/generated/graphql';
+import {
+  useMePinnedProjectsQuery,
+  useProjectsQuery,
+} from '../graphql/generated/graphql';
+
 const Projects = ({ token }: { token: string }) => {
   const { data, loading, refetch } = useProjectsQuery({
     context: {
@@ -15,13 +19,14 @@ const Projects = ({ token }: { token: string }) => {
     },
   });
 
-  const { data: pinnedProjects } = usePinnedProjectsQuery({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
+  const { data: pinnedProjects, refetch: refetchPinned } =
+    useMePinnedProjectsQuery({
+      context: {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
-    },
-  })
+    });
 
   const [filter, setFilter] = useState('');
 
@@ -31,9 +36,15 @@ const Projects = ({ token }: { token: string }) => {
 
   const handleUpdate = () => {
     refetch();
-  }
+  };
+
+  const handleUpdatePinned = () => {
+    refetchPinned();
+  };
+
   React.useEffect(() => {
     refetch();
+    document.title = 'Voxtir - Projects';
   });
 
   if (loading) {
@@ -93,6 +104,7 @@ const Projects = ({ token }: { token: string }) => {
           if (project?.id || project?.name) {
             return (
               <ProjectCard
+                handleUpdatePinned={handleUpdatePinned}
                 handleUpdate={handleUpdate}
                 token={token}
                 pinnedProjects={pinnedProjects}
@@ -101,7 +113,10 @@ const Projects = ({ token }: { token: string }) => {
                 project={{
                   id: project.id,
                   name: project.name,
-                  documentLength: project.documents?.length || 0,
+                  documentLength:
+                    project.documents?.filter(
+                      (document) => !document?.isTrashed
+                    ).length || 0,
                   createdAt: new Date(),
                   description: project.description || '',
                 }}
