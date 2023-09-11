@@ -1,9 +1,9 @@
-interface TextContent {
+export interface TextContent {
   type: 'text';
   text: string;
 }
 
-interface MentionContent {
+export interface MentionContent {
   type: 'mention';
   attrs: {
     id: string;
@@ -11,7 +11,7 @@ interface MentionContent {
   };
 }
 
-interface TimeStampButtonContent {
+export interface TimeStampButtonContent {
   type: 'timeStampButton';
   attrs: {
     timestamp: string;
@@ -24,11 +24,18 @@ type ParagraphContent = (
   | TimeStampButtonContent
 )[];
 
-interface Paragraph {
+export interface Paragraph {
   type: 'paragraph';
   content?: ParagraphContent;
 }
 
+export interface Heading {
+  type: 'heading';
+  attrs: {
+    level: 1 | 2 | 3 | 4 | 5;
+  };
+  content?: ParagraphContent;
+}
 export interface Doc {
   type: 'doc';
   content: Paragraph[];
