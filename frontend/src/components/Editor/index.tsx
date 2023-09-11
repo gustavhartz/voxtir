@@ -94,23 +94,27 @@ function Editor(props: EditorProps): JSX.Element {
   });
   return (
     <div className="w-full h-full flex flex-row">
-      <div className="w-full flex flex-col">
+      <div className="flex flex-row w-full">
         {editorSyncState.isAuthenticated && (
-          <>
-            <div className="flex-grow">
-              <EditorContent
-                className="w-full h-full p-8 overflow-y-scroll"
-                editor={editor}
-              />
+          <div className="flex flex-col w-full">
+            <EditorContent
+              className="w-full h-full p-8 overflow-y-scroll"
+              editor={editor}
+            />
+            <div className="w-full">
+              <Track />
             </div>
-            <Track />
-          </>
+          </div>
         )}
         {!editorSyncState.isAuthenticated &&
           editorSyncState.isAuthenticatedComplete && (
-            <p>{editorSyncState.isAuthenticatedErrorMessage}</p>
+            <p className="w-full">
+              {editorSyncState.isAuthenticatedErrorMessage}
+            </p>
           )}
-        {!editorSyncState.isAuthenticatedComplete && <p>Loading</p>}
+        {!editorSyncState.isAuthenticatedComplete && (
+          <p className="w-full">Loading</p>
+        )}
         <Drawer editor={editor} />
       </div>
     </div>

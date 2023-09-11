@@ -182,7 +182,7 @@ const Track = () => {
       }}
       layout="horizontal"
       showFilledProgress={true}
-      className="bg-white w-full h-20 border-none px-8"
+      className="bg-white w-full h-20 border-none !px-12"
     />
   );
 };
