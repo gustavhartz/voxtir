@@ -38,8 +38,9 @@ export interface Heading {
 }
 export interface Doc {
   type: 'doc';
-  content: Paragraph[];
+  content: DocContent;
 }
+type DocContent = (Paragraph | Heading)[];
 
 export interface TipTapTransformerDocument {
   default: Doc;

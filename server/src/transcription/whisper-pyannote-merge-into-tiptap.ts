@@ -1,5 +1,6 @@
 import { Logger, logger as coreLogger } from '../services/logger.js';
 import {
+  Heading,
   MentionContent,
   Paragraph,
   TextContent,
@@ -108,6 +109,33 @@ export class WhisperPyannoteMerger {
   }
 
   /**
+   * This function generates the TipTapJsonDoc template for a heading node
+   * @param text
+   * @param level
+   * @returns
+   */
+  static getHeadingTemplate(level: 1 | 2 | 3 | 4 | 5): Heading {
+    return {
+      type: 'heading',
+      attrs: {
+        level: level,
+      },
+      content: [],
+    };
+  }
+
+  /**
+   * This function generates the TipTapJsonDoc template for a paragraph node
+   * @returns
+   */
+  static getParagraphTemplate(): Paragraph {
+    return {
+      type: 'paragraph',
+      content: [],
+    };
+  }
+
+  /**
    * This function takes a pyannote transcript and a whisper transcript and merges them into a TipTapJSONDoc as used by the tiptap transformer with speaker changes and timestamps
    * it's based upon the https://github.com/fourTheorem/podwhisperer logic, but customized to work with the Pyannote transcript and our own pipeline
    * The core idea is to iterate over the whisper transcript and insert speaker changes and timestamps from the Pyannote transcript and then merge the two
@@ -144,11 +172,13 @@ export class WhisperPyannoteMerger {
         content: [],
       },
     };
-    //TODO: Add title
-    TipTapJSONDoc.default.content.push({
-      type: 'paragraph',
-      content: [{ type: 'text', text: this.documentTitle }],
-    });
+
+    const heading = WhisperPyannoteMerger.getHeadingTemplate(2);
+    heading.content?.push(
+      WhisperPyannoteMerger.getTextTemplate(this.documentTitle)
+    );
+    TipTapJSONDoc.default.content.push(heading);
+
     let currentParagraph: Paragraph = {
       type: 'paragraph',
       content: [],
@@ -182,10 +212,7 @@ export class WhisperPyannoteMerger {
 
       if (speaker !== prevSpeaker) {
         TipTapJSONDoc.default.content.push(currentParagraph);
-        currentParagraph = {
-          type: 'paragraph',
-          content: [],
-        };
+        currentParagraph = WhisperPyannoteMerger.getParagraphTemplate();
         currentParagraph.content?.push(
           WhisperPyannoteMerger.getSpeakerTemplate(speaker)
         );
