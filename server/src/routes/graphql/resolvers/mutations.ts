@@ -1,4 +1,5 @@
 import { ProjectRole } from '@prisma/client';
+import { TranscriptionType } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -38,27 +39,17 @@ const mutations: MutationResolvers = {
     if (!doc?.project.UsersOnProjects.some((user) => user.userId === userId)) {
       return {
         success: false,
-        message: 'User not allowed to perform action',
       };
     }
 
-    if (!doc) {
-      return {
-        success: false,
-        message: 'Document not found',
-      };
-    }
-
-    if (doc) {
-      await prisma.document.update({
-        where: {
-          id: documentId,
-        },
-        data: {
-          title: title,
-        },
-      });
-    }
+    await prisma.document.update({
+      where: {
+        id: documentId,
+      },
+      data: {
+        title: title,
+      },
+    });
 
     return { success: true };
   },
@@ -90,7 +81,7 @@ const mutations: MutationResolvers = {
         speakerCount: speakerCount,
         transcriptionType: transcriptionType,
         transcriptionStatus:
-          transcriptionType === 'MANUAL' ? 'DONE' : 'CREATED',
+          transcriptionType === TranscriptionType.MANUAL ? 'DONE' : 'CREATED',
       },
     });
     logger.debug(
