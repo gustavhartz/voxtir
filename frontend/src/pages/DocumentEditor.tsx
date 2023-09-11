@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token.tsx';
-import Editor from '../components/Editor';
-import { useGeneratePresignedUrlForAudioMutation } from '../graphql/generated/graphql';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { setTrack } from '../state/track';
+import Editor from '../components/Editor/index.tsx';
+import { useGeneratePresignedUrlForAudioMutation } from '../graphql/generated/graphql.ts';
+import { useAppDispatch, useAppSelector } from '../hooks.ts';
+import { setTrack } from '../state/track/index.tsx';
 
-function Home({ token }: { token: string }): JSX.Element {
+function DocumentEditor({ token }: { token: string }): JSX.Element {
+  // Setup the required hooks
   const documentID = useParams().documentID as string;
   const navigate = useNavigate();
   const [createProjectMutation, { loading }] =
@@ -19,6 +20,7 @@ function Home({ token }: { token: string }): JSX.Element {
         },
       },
     });
+
   // Get the track state from the store
   const {
     presignedFileURL,
@@ -29,17 +31,10 @@ function Home({ token }: { token: string }): JSX.Element {
 
   // Needed time left in presigned URL
   const requiredTimeLeftInPresignedURL = 60 * 60 * 1000; // 1 hour
-  const requiredExpirationTime = new Date();
-  requiredExpirationTime.setTime(
-    requiredExpirationTime.getTime() + requiredTimeLeftInPresignedURL
+  const requiredExpirationTime = new Date(
+    Date.now() + requiredTimeLeftInPresignedURL
   );
-  const testDate = new Date();
-  testDate.setTime(presignedFileURLExpiresAtUnixMS);
-  console.log(
-    presignedFileURL,
-    presignedFileURLExpiresAtUnixMS,
-    requiredExpirationTime.getTime()
-  );
+
   if (
     !presignedFileURL ||
     !presignedFileURLExpiresAtUnixMS ||
@@ -85,6 +80,6 @@ function Home({ token }: { token: string }): JSX.Element {
   );
 }
 
-const HomeWithAccessToken = withAccessToken(Home);
+const DocumentEditorWithAccessToken = withAccessToken(DocumentEditor);
 
-export default HomeWithAccessToken;
+export default DocumentEditorWithAccessToken;
