@@ -78,7 +78,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [updateProject, { loading: updateLoading }] = useUpdateProjectMutation({
+  const [updateProject] = useUpdateProjectMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,

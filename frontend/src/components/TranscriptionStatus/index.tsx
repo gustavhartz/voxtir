@@ -8,7 +8,6 @@ interface TranscriptionStatusProps {
 
 const TranscriptionStatus: React.FC<TranscriptionStatusProps> = ({
   status,
-  type,
 }) => {
   const classes = () => {
     if (status === 'CREATED') {

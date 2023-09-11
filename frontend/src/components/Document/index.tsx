@@ -42,7 +42,7 @@ const Document: React.FC<DocumentProps> = (props) => {
     document?.transcriptionType === 'AUTOMATIC' &&
     document?.transcriptionStatus !== 'DONE';
 
-  const handleEditDocument = (e: React.MouseEvent) => {
+  const handleEditDocument = (_: React.MouseEvent) => {
     if (document?.id) {
       updateDocument({
         variables: {
@@ -85,7 +85,7 @@ const Document: React.FC<DocumentProps> = (props) => {
     setShowEdit(!showEdit);
   };
 
-  const navigateToDocument = (e: React.MouseEvent) => {
+  const navigateToDocument = (_: React.MouseEvent) => {
     if (document?.id && !isNotDoneAutomatic) {
       navigate(`/document/${document?.id}`);
     }

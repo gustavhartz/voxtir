@@ -2,15 +2,12 @@ import { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { BsChevronLeft } from 'react-icons/bs';
 import { CgFileDocument } from 'react-icons/cg';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token';
 import Document from '../components/Document';
 import DocumentCreationModal from '../components/Document/NewDocumentModal';
-import {
-  useProjectsQuery,
-  useTrashDocumentMutation,
-} from '../graphql/generated/graphql';
+import { useProjectsQuery } from '../graphql/generated/graphql';
 import { useAppDispatch } from '../hooks';
 import { setLatestProject } from '../state/client';
 
@@ -34,13 +31,6 @@ const Documents = ({ token }: { token: string }) => {
     },
   });
 
-  const [trashDocument] = useTrashDocumentMutation({
-    context: {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    },
-  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const projectID = useParams().projectID;
