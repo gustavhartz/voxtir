@@ -7,18 +7,19 @@ import { useDispatch } from 'react-redux';
 
 import useKeyPress from '../../hook/useKeyPress';
 import { useAppSelector } from '../../hooks';
-import { setCurrentPosition,setToSkipped } from '../../state/track';
-import { toggleModal } from '../../state/track';
+import { setCurrentPosition, setToSkipped } from '../../state/track';
 
 const Track = () => {
   const audioRef = React.useRef<AudioPlayer>(null);
   const dispatch = useDispatch();
-  const { hasSkipped, skipToPosition, settings, fileUrl, currentPosition } =
-    useAppSelector((state) => state.track);
+  const {
+    hasSkipped,
+    skipToPosition,
+    settings,
+    currentPosition,
+    presignedFileURL: fileUrl,
+  } = useAppSelector((state) => state.track);
 
-  const handleUploadAudio = () => {
-    dispatch(toggleModal());
-  };
   const {
     mute,
     playPause,
@@ -163,18 +164,6 @@ const Track = () => {
     'timeupdate',
     handleTimeUpdate
   );
-
-  if (!fileUrl) {
-    localStorage.setItem('currentPosition', '00:00:00');
-    return (
-      <button
-        onClick={handleUploadAudio}
-        className="p-3 font-medium text-white shadow-md transition-colors hover:bg-blue-500 bg-blue-400 w-full text-center"
-      >
-        Upload audio to start
-      </button>
-    );
-  }
 
   return (
     <AudioPlayer
