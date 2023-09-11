@@ -43,7 +43,7 @@ export const uploadAudioFile = async (
  */
 export const getPresignedUrlForDocumentAudioFile = async (
   documentId: string
-): Promise<{ url: string; expiresAt: number }> => {
+): Promise<{ url: string; expiresAtUnixSeconds: number }> => {
   const doc = await prisma.document.findUnique({
     where: {
       id: documentId,
@@ -64,5 +64,5 @@ export const getPresignedUrlForDocumentAudioFile = async (
   expiration.setTime(
     expiration.getTime() + AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION * 1000
   );
-  return { url, expiresAt: expiration.getTime() };
+  return { url, expiresAtUnixSeconds: expiration.getTime() };
 };

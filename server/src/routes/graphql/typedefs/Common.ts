@@ -19,7 +19,7 @@ export const typeDefs = gql`
 
   type PresignedUrlResponse {
     url: String!
-    expiresAt: Int!
+    expiresAtUnixSeconds: Int!
   }
 
   type User {

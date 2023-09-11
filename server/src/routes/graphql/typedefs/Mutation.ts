@@ -8,10 +8,7 @@ export const typeDefs = gql`
       projectId: ID!
       contentLength: Int!
     ): ActionResult
-    getPresignedUrlForAudioFile(
-      documentId: ID!
-      projectId: ID!
-    ): PresignedUrlResponse
+    getPresignedUrlForAudioFile(documentId: ID!): PresignedUrlResponse
     """
     Projects
     """
