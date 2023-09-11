@@ -113,7 +113,10 @@ const Projects = ({ token }: { token: string }) => {
                 project={{
                   id: project.id,
                   name: project.name,
-                  documentLength: project.documents?.length || 0,
+                  documentLength:
+                    project.documents?.filter(
+                      (document) => !document?.isTrashed
+                    ).length || 0,
                   createdAt: new Date(),
                   description: project.description || '',
                 }}

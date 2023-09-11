@@ -115,7 +115,11 @@ const Documents = ({ token }: { token: string }) => {
     return <div>Loading...</div>;
   }
 
-  if ((project && !project?.documents) || project?.documents?.length === 0) {
+  if (
+    (project &&
+      !project?.documents?.filter((document) => !document?.isTrashed)) ||
+    project?.documents?.filter((document) => !document?.isTrashed).length === 0
+  ) {
     return (
       <>
         <div className="p-6 bg-gray-100 w-full drop-shadow-sm flex flex-col justify-center items-center">

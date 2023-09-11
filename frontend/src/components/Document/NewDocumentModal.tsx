@@ -4,6 +4,7 @@ import { BsFillFileEarmarkMusicFill } from 'react-icons/bs';
 
 import {
   useCreateDocumentMutation,
+  useSupportedLanguagesQuery,
   useUploadAudioFileMutation,
 } from '../../graphql/generated/graphql';
 import useFileUpload from '../../hook/useFileUpload';
@@ -28,8 +29,10 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     'audio/x-m4a', // Apple audio
   ];
   const maxSizeInMB = 100; // Specify the max size in MB here
-  const { error, fileUrl, fileName, fileSize, fileType, handleFileChange } =
-    useFileUpload(supportedAudioFileTypes, maxSizeInMB);
+  const { fileUrl, file, fileName, fileSize, handleFileChange } = useFileUpload(
+    supportedAudioFileTypes,
+    maxSizeInMB
+  );
   const [language, setLanguage] = useState<string>('');
   const [documentName, setDocumentName] = useState<string>('');
   const [speakerCount, setSpeakerCount] = useState<number | ''>('');
@@ -37,20 +40,29 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     'AUTOMATIC' | 'MANUAL'
   >('MANUAL');
 
-  const [createDocument] = useCreateDocumentMutation({
+  const { data } = useSupportedLanguagesQuery({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
       },
     },
   });
-  const [uploadAudioFile] = useUploadAudioFileMutation({
+
+  const [createDocument, { loading }] = useCreateDocumentMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
       },
     },
   });
+  const [uploadAudioFile, { loading: audioLoading }] =
+    useUploadAudioFileMutation({
+      context: {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      },
+    });
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -73,7 +85,8 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
       !language ||
       !documentName ||
       speakerCount === '' ||
-      fileSize === null
+      file === null ||
+      !fileSize
     ) {
       // You can show an error message here.
       console.error('New document form failed to submit');
@@ -100,22 +113,25 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     }
     // upload audio
 
-    const audioUploadResponse = await uploadAudioFile({
+    await uploadAudioFile({
       variables: {
         fileInput: {
           docType: 'esf',
-          file: fileUrl,
+          file: file,
         },
         projectId: defaultProjectId,
         documentId: documentId,
         contentLength: fileSize,
       },
-    });
-    console.log(audioUploadResponse.data);
-    console.log(audioUploadResponse.errors);
-    if (audioUploadResponse.errors) {
-      console.error(audioUploadResponse.errors);
-    }
+    })
+      .then((res) => {
+        console.log(res.data);
+        console.log(res.errors);
+        onClose();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     onClose();
   };
@@ -145,7 +161,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
                   onClick={() => handleFileChange(null)}
                   className="bg-gray-900 hover:bg-gray-500 group !duration-[1000ms] transition-all font-medium text-white py-2 px-2 rounded-md"
                 >
-                  <AiOutlineClose size={20} />
+                  <AiOutlineClose size={18} />
                 </button>
               </div>
             </div>
@@ -153,13 +169,13 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         )}
         {!fileUrl && (
           <div
-            className="justify-center grid grid-cols-1 hover:bg-gray-50 border-dashed border-4 border-gray-300 p-4 mb-4 cursor-pointer"
+            className="justify-center grid grid-cols-1 hover:bg-gray-50 border-dashed border-4 border-gray-300 rounded-lg p-4 mb-4 cursor-pointer"
             onDragOver={(e) => e.preventDefault()}
             onDrop={handleFileDrop}
           >
             <p className="text-center mb-3 flex flex-col text-gray-900 font-semibold text-md">
               Drag and drop an audio file{' '}
-              <span className="w-full font-bold text-xs py-4">-- or --</span>
+              <span className="w-full font-bold text-md py-4">or</span>
             </p>
             <input
               type="file"
@@ -197,14 +213,25 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           <p className="text-gray-400 pb-2">
             Choose the target audio transcription language.
           </p>
-          <input
-            placeholder="Language in audio"
-            type="text"
-            id="language"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="w-full mt-2 px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
-          />
+          <select
+            defaultValue="none"
+            onChange={(e) => setLanguage(e.currentTarget.value)}
+            className="h-10 mt-2 mb-1 w-full rounded border-r-8 border-transparent font-normal px-1 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
+          >
+            {data?.supportedLanguages?.map((language) => {
+              if (language?.languageName) {
+                return (
+                  <option
+                    key={language?.languageName}
+                    value={language?.languageName}
+                  >
+                    {language?.languageName.charAt(0).toUpperCase() +
+                      language?.languageName.slice(1)}
+                  </option>
+                );
+              }
+            })}
+          </select>
         </div>
         <div className="mt-4">
           <label htmlFor="speakerCount" className="block font-semibold">
@@ -251,13 +278,21 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           onClick={onClose}
           className="mt-6 bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded"
         >
-          Close
+          {loading || audioLoading ? 'Cancel' : 'Close'}
         </button>
         <button
           onClick={handleSubmit}
-          className="mt-6 bg-gray-900 text-white py-2 px-4 rounded"
+          disabled={
+            loading ||
+            audioLoading ||
+            !fileUrl ||
+            !language ||
+            !documentName ||
+            !speakerCount
+          }
+          className="mt-6 disabled:animate-pulse bg-gray-900 disabled:bg-gray-400 text-white py-2 px-4 rounded"
         >
-          Submit
+          {loading || audioLoading ? 'Loading...' : 'Submit'}
         </button>
       </div>
     </div>

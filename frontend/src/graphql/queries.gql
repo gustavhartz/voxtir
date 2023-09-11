@@ -39,3 +39,9 @@ query mePinnedProjects{
     }
   }
 }
+
+query SupportedLanguages {
+  supportedLanguages {
+    languageName
+  }
+}

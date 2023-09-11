@@ -19,6 +19,49 @@ import { MutationResolvers } from '../generated/graphql';
 // Use the generated `MutationResolvers` type
 // to type check our mutations!
 const mutations: MutationResolvers = {
+  updateDocument: async (_, args, context) => {
+    const { documentId, title } = args;
+    const userId = context.userId;
+    const doc = await prisma.document.findFirst({
+      where: {
+        id: documentId,
+      },
+      include: {
+        project: {
+          include: {
+            UsersOnProjects: true,
+          },
+        },
+      },
+    });
+
+    if (!doc?.project.UsersOnProjects.some((user) => user.userId === userId)) {
+      return {
+        success: false,
+        message: 'User not allowed to perform action',
+      };
+    }
+
+    if (!doc) {
+      return {
+        success: false,
+        message: 'Document not found',
+      };
+    }
+
+    if (doc) {
+      await prisma.document.update({
+        where: {
+          id: documentId,
+        },
+        data: {
+          title: title,
+        },
+      });
+    }
+
+    return { success: true };
+  },
   createDocument: async (_, args, context) => {
     const {
       projectId,

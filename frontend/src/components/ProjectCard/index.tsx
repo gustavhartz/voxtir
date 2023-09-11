@@ -389,6 +389,30 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
       )}
       <Link to={`/project/${project.id}`}>
+        {checkDelete && (
+          <div className="flex relative z-[9999] flex-col justify-center items-center h-36 -mb-36 bg-opacity-90 rounded-md bg-gray-900 w-inherit">
+            <span className="text-ellipsis overflow-hidden whitespace-nowrap text-white font-semibold text-md">
+              Are you sure you want to delete
+            </span>
+            <span className="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-200 -mt-1 mb-2 font-semibold text-md">
+              {project.name}?
+            </span>
+            <div className="flex flex-row justify-center items-center space-x-4">
+              <button
+                onClick={handleDeleteProject}
+                className="bg-red-500 transiiton-colors hover:bg-red-600 px-4 py-1 font-medium text-white rounded-lg"
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleToggleDelete}
+                className="bg-white hover:bg-neutral-200 px-4 py-1 font-medium text-gray-900 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
         <div
           className={` ${loading && 'animate-pulse'}
               border-gray-200 border-[1px] 
@@ -439,15 +463,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                       className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
                     >
                       <AiOutlineDelete size={20} />
-                    </div>
-                  )}
-                  {checkDelete && (
-                    <div
-                      onClick={handleDeleteProject}
-                      className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 bg-red-600 text-white transition-all cursor-pointer"
-                    >
-                      <AiOutlineDelete size={20} className="mr-2" />
-                      <span>Delete Project</span>
                     </div>
                   )}
                 </div>
