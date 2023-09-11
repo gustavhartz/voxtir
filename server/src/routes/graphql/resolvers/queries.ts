@@ -200,7 +200,7 @@ const queries: QueryResolvers = {
 
     return {
       url: presignedUrl,
-      expiresAt: Math.floor(expiration.getTime() / 1000),
+      expiresAtUnixSeconds: Math.floor(expiration.getTime() / 1000),
     };
   },
 

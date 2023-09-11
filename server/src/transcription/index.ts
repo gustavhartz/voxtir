@@ -64,5 +64,5 @@ export const getPresignedUrlForDocumentAudioFile = async (
   expiration.setTime(
     expiration.getTime() + AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION * 1000
   );
-  return { url, expiresAtUnixSeconds: expiration.getTime() };
+  return { url, expiresAtUnixSeconds: Math.floor(expiration.getTime() / 1000) };
 };

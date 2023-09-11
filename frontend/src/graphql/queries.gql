@@ -22,7 +22,7 @@ query Projects {
 
 query GenerateWordFileFromHTML($html: String!) {
   generateWordFileFromHTML(html: $html) {
-    expiresAt
+    expiresAtUnixSeconds
     url
   }
 }

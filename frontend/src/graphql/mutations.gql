@@ -82,7 +82,7 @@ query pinnedProjects {
 
 mutation GeneratePresignedUrlForAudio($documentId: ID!) {
   getPresignedUrlForAudioFile(documentId: $documentId) {
-    expiresAt
+    expiresAtUnixSeconds
     url
   }
 }

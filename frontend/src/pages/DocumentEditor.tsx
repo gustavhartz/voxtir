@@ -52,7 +52,7 @@ function DocumentEditor({ token }: { token: string }): JSX.Element {
         if (res.data?.getPresignedUrlForAudioFile) {
           const expirationTime = new Date(
             // Convert from seconds to milliseconds
-            res.data?.getPresignedUrlForAudioFile?.expiresAt * 1000
+            res.data?.getPresignedUrlForAudioFile?.expiresAtUnixSeconds * 1000
           );
           dispatch(
             setTrack({
