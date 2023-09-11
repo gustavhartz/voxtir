@@ -44,6 +44,7 @@ const Projects = ({ token }: { token: string }) => {
 
   React.useEffect(() => {
     refetch();
+    document.title = 'Voxtir - Projects';
   });
 
   if (loading) {

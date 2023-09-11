@@ -59,7 +59,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const dispatch = useAppDispatch();
   const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => {
-    console.log(pinnedProject, project);
     return pinnedProject?.id === project.id;
   });
 
@@ -218,8 +217,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const handlePinProject = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
-    console.log(isPinned, isPinned !== undefined);
     pinProject({
       variables: {
         projectId: project.id,

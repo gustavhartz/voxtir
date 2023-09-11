@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
+import { BsFillFileEarmarkMusicFill } from 'react-icons/bs';
 
 import {
   useCreateDocumentMutation,
   useUploadAudioFileMutation,
 } from '../../graphql/generated/graphql';
+import useFileUpload from '../../hook/useFileUpload';
+
 interface DocumentCreationModalProps {
   token: string;
   defaultProjectId: string;
@@ -15,7 +19,17 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   defaultProjectId,
   onClose,
 }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const supportedAudioFileTypes = [
+    'audio/mpeg', // MP3 audio
+    'audio/ogg', // Ogg Vorbis audio
+    'audio/wav', // Waveform Audio File Format
+    'audio/aac', // Advanced Audio Coding
+    'audio/webm', // WebM audio
+    'audio/x-m4a', // Apple audio
+  ];
+  const maxSizeInMB = 100; // Specify the max size in MB here
+  const { error, fileUrl, fileName, fileSize, fileType, handleFileChange } =
+    useFileUpload(supportedAudioFileTypes, maxSizeInMB);
   const [language, setLanguage] = useState<string>('');
   const [documentName, setDocumentName] = useState<string>('');
   const [speakerCount, setSpeakerCount] = useState<number | ''>('');
@@ -41,7 +55,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      handleFileChange(file);
     }
   };
 
@@ -49,16 +63,17 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      handleFileChange(file);
     }
   };
 
   const handleSubmit = async () => {
     if (
-      selectedFile === null ||
+      fileUrl === null ||
       !language ||
       !documentName ||
-      speakerCount === ''
+      speakerCount === '' ||
+      fileSize === null
     ) {
       // You can show an error message here.
       console.error('New document form failed to submit');
@@ -89,11 +104,11 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
       variables: {
         fileInput: {
           docType: 'esf',
-          file: selectedFile,
+          file: fileUrl,
         },
         projectId: defaultProjectId,
         documentId: documentId,
-        contentLength: selectedFile.size,
+        contentLength: fileSize,
       },
     });
     console.log(audioUploadResponse.data);
@@ -115,36 +130,52 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         className="cursor-default bg-white p-6 sm:rounded-lg shadow-lg w-full h-full sm:w-2/3 md:w-3/5 sm:h-fit relative z-60"
       >
         <h2 className="text-3xl font-bold mb-4">Create a new document</h2>
-        <div
-          className="flex flex-col justify-center items-center border-dashed border-2 border-gray-300 p-4 mb-4 cursor-pointer"
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleFileDrop}
-        >
-          {selectedFile ? (
-            <div>
-              <p>Selected File: {selectedFile.name}</p>
-              <button onClick={() => setSelectedFile(null)}>Remove</button>
+        <label className="block font-semibold">Selected File</label>
+        <p className="text-gray-400 pb-4">The name of the document.</p>
+        {fileUrl && (
+          <div className="bg-gray-100 rounded-md">
+            <div className="py-4 flex flex-row items-center px-4">
+              <BsFillFileEarmarkMusicFill size={40} />
+              <div className="flex flex-row ml-4 justify-between w-full items-center">
+                <div className="flex flex-col">
+                  <span className="text-xl font-medium">{fileName}</span>
+                  {fileSize && <span>{Math.floor(fileSize)}MB</span>}
+                </div>
+                <button
+                  onClick={() => handleFileChange(null)}
+                  className="bg-gray-900 hover:bg-gray-500 group !duration-[1000ms] transition-all font-medium text-white py-2 px-2 rounded-md"
+                >
+                  <AiOutlineClose size={20} />
+                </button>
+              </div>
             </div>
-          ) : (
-            <p className="text-center mb-3 text-gray-500 text-sm flex flex-col">
-              Drag and drop an audio file{' '}
-              <span className="w-full font-bold text-sm">-- or --</span>
-            </p>
-          )}
-          <input
-            type="file"
-            accept="audio/*"
-            onChange={handleFileInputChange}
-            className="hidden"
-            id="fileInput"
-          />
-          <label
-            htmlFor="fileInput"
-            className="bg-gray-100 hover:bg-gray-200 transition-colors text-center text-gray-900 font-semibold py-1 px-4 rounded cursor-pointer"
+          </div>
+        )}
+        {!fileUrl && (
+          <div
+            className="justify-center grid grid-cols-1 hover:bg-gray-50 border-dashed border-4 border-gray-300 p-4 mb-4 cursor-pointer"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleFileDrop}
           >
-            Browse
-          </label>
-        </div>
+            <p className="text-center mb-3 flex flex-col text-gray-900 font-semibold text-md">
+              Drag and drop an audio file{' '}
+              <span className="w-full font-bold text-xs py-4">-- or --</span>
+            </p>
+            <input
+              type="file"
+              accept="audio/*"
+              onChange={handleFileInputChange}
+              className="hidden"
+              id="fileInput"
+            />
+            <label
+              htmlFor="fileInput"
+              className="bg-gray-100 mx-28 hover:bg-gray-200 transition-colors text-center text-gray-900 font-semibold py-1 px-4 rounded cursor-pointer"
+            >
+              Browse
+            </label>
+          </div>
+        )}
         <div className="mt-8">
           <label htmlFor="documentName" className="block font-semibold">
             Document Name
@@ -193,7 +224,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         </div>
         <div className="mt-4">
           <label htmlFor="transcriptionType" className="block font-semibold">
-            Transcription Type:
+            Transcription Type
           </label>
           <p className="text-gray-400 pb-2">
             Choose whether you want to automatically make the transcription or

@@ -72,3 +72,10 @@ mutation pinProject($projectId: ID!, $pin: Boolean!) {
     success
   }
 }
+
+mutation trashDocument($documentId: ID!, $projectId: ID!) {
+  trashDocument(documentId: $documentId, projectId: $projectId) {
+    message
+    success
+  }
+}

@@ -159,7 +159,7 @@ const Nav = ({ token }: { token: string }) => {
 
   if (isOpen) {
     return (
-      <div className="w-80 flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
+      <div className="max-w-[260px] w-full flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
         <div className="p-6 mb-2 flex items-center justify-between bg-gray-900 text-white">
           <div className="flex flex-row items-center ">
             <FaRegFileAudio className="text-4xl mr-1 0" />

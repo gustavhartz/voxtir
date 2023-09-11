@@ -48,6 +48,9 @@ const CreateProject = ({ token }: { token: string }) => {
     }
   }, [data, loading, navigate]);
 
+  React.useEffect(() => {
+    document.title = 'Voxtir - New Project';
+  });
   if (loading) {
     return <PageLoader />;
   }

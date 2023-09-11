@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { BsChevronLeft } from 'react-icons/bs';
 import { CgFileDocument } from 'react-icons/cg';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token';
+import Document from '../components/Document';
 import DocumentCreationModal from '../components/Document/NewDocumentModal';
-import TranscriptionStatus from '../components/TranscriptionStatus';
-import { Document, useProjectsQuery } from '../graphql/generated/graphql';
+import {
+  useProjectsQuery,
+  useTrashDocumentMutation,
+} from '../graphql/generated/graphql';
 import { useAppDispatch } from '../hooks';
 import { setLatestProject } from '../state/client';
 
@@ -24,21 +26,29 @@ const Documents = ({ token }: { token: string }) => {
   const [selectedFilter, setSelectedFilter] =
     useState<TranscriptionStatusFilter>('ALL');
 
-  const { data, loading, error } = useProjectsQuery({
+  const { data, loading, error, refetch } = useProjectsQuery({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
       },
     },
   });
+
+  const [trashDocument] = useTrashDocumentMutation({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const location = useLocation();
   const projectID = useParams().projectID;
   const project = data?.projects?.find((project) => project?.id === projectID);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const allDocumentStatus = project?.documents?.map(
-    (document) => document?.transcriptionStatus
-  );
+  const allDocumentStatus = project?.documents
+    ?.filter((document) => !document?.isTrashed)
+    .map((document) => document?.transcriptionStatus);
   const completedStatus = allDocumentStatus?.filter(
     (status) => status === 'DONE'
   );
@@ -67,6 +77,7 @@ const Documents = ({ token }: { token: string }) => {
         return document?.transcriptionStatus === selectedFilter;
       }
     })
+    .filter((document) => !document?.isTrashed)
     .sort((a, b) => {
       if (a?.lastModified && b?.lastModified) {
         const dateA = new Date(a.lastModified);
@@ -79,6 +90,10 @@ const Documents = ({ token }: { token: string }) => {
       }
     });
 
+  const handleGoPrev = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     if (project && projectID) {
       dispatch(setLatestProject(projectID));
@@ -89,6 +104,12 @@ const Documents = ({ token }: { token: string }) => {
       console.log(error);
     }
   });
+
+  useEffect(() => {
+    if (project) {
+      document.title = `Voxtir - ${project.name}`;
+    }
+  }, [project]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -123,11 +144,23 @@ const Documents = ({ token }: { token: string }) => {
   }
 
   return (
-    <div className="p-6 w-full flex flex-col space-y-12">
-      <div className="text-gray-900 bg-gray-100 p-5 mt-4 rounded-md flex flex-col space-y-4">
-        <h1 className="text-3xl text-gray-900 font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
-          {project?.name}
-        </h1>
+    <div className="p-6 w-full flex flex-col space-y-8">
+      <div className="text-gray-900 bg-gray-100 p-5 rounded-md flex flex-col space-y-4">
+        <div className="flex flex-row items-center w-full justify-between pr-5">
+          <h1 className="text-3xl text-gray-900 font-semibold text-ellipsis overflow-hidden whitespace-nowrap">
+            {project?.name}
+          </h1>
+          <span
+            onClick={() => handleGoPrev()}
+            className="group flex flex-row items-center text-md font-medium cursor-pointer"
+          >
+            <BsChevronLeft
+              size={20}
+              className="mr-1 group-hover:-translate-x-1 transition-all duration-500"
+            />{' '}
+            Go back
+          </span>
+        </div>
         <p className="text-lg text-gray-500">{project?.description}</p>
       </div>
       <div>
@@ -194,51 +227,14 @@ const Documents = ({ token }: { token: string }) => {
         </div>
         <div className="grid grid-cols-1 gap-4 w-full pb-12">
           {filteredDocuments?.map((document) => {
-            const isNotDoneAutomatic =
-              document?.transcriptionType === 'AUTOMATIC' &&
-              document?.transcriptionStatus !== 'DONE';
-
             return (
-              <Link
-                to={
-                  isNotDoneAutomatic
-                    ? location.pathname
-                    : `/document/${document?.id}`
-                }
+              <Document
                 key={document?.id}
-                className={`${isNotDoneAutomatic && 'pointer-events-none'}`}
-              >
-                <div
-                  className={`border-2 
-                  ${
-                    isNotDoneAutomatic
-                      ? 'bg-slate-50 !text-gray-600 cursor-not-allowed'
-                      : 'hover:scale-[1.01] hover:shadow-md cursor-pointer'
-                  }  border-slate-100
-                      shadow-sm text-gray-900 duration-500 transition-all w-full rounded-md flex flex-row justify-between items-center px-4 py-4 font-semibold`}
-                >
-                  <div className="flex flex-row items-center w-full">
-                    <TranscriptionStatus
-                      status={document?.transcriptionStatus}
-                      type={document?.transcriptionType}
-                    />
-                    <span className="flex flex-col justify-startw-full text-start text-lg font-medium text-ellipsis overflow-hidden whitespace-nowrap">
-                      {document?.title}
-                      {document?.description}
-                      <span className="text-xs text-gray-400 ml-0.2">
-                        {document?.transcriptionStatus === 'DONE'
-                          ? 'COMPLETED'
-                          : document?.transcriptionStatus}
-                      </span>
-                    </span>
-                  </div>
-                  {document?.lastModified && (
-                    <div className="text-end text-md w-full">
-                      {new Date(document?.lastModified).toDateString()}
-                    </div>
-                  )}
-                </div>
-              </Link>
+                document={document}
+                handleRefetch={refetch}
+                projectId={project?.id}
+                token={token}
+              />
             );
           })}
         </div>
