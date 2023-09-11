@@ -218,6 +218,9 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             onChange={(e) => setLanguage(e.currentTarget.value)}
             className="h-10 mt-2 mb-1 w-full rounded border-r-8 border-transparent font-normal px-1 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
           >
+            <option key="none" value="none" disabled>
+              Select a language
+            </option>
             {data?.supportedLanguages?.map((language) => {
               if (language?.languageName) {
                 return (
@@ -268,7 +271,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
                 setTranscriptionType(e.currentTarget.value);
               }
             }}
-            className="h-10 mt-2 w-full rounded border-r-8 border-transparent font-normal px-4 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
+            className="h-10 mt-2 w-full rounded border-r-8 border-transparent font-normal px-1 text-md outline outline-gray-300 focus:outline-gray-400 focus:outline-2"
           >
             <option value="AUTOMATIC">Automatic</option>
             <option value="MANUAL">Manual</option>
