@@ -121,7 +121,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         },
         projectId: defaultProjectId,
         documentId: documentId,
-        contentLength: fileSize,
+        contentLength: file.size,
       },
     })
       .then((res) => {
