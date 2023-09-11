@@ -9,26 +9,23 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
-import { Editor as ttEditor, EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import React, { useState } from 'react';
 
 import Drawer from '../Drawer';
 import suggestion from '../Extensions/Custom/Speakers/Suggestion';
 import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
+import Track from '../Track';
 
-let editorInstance: ttEditor | null = null;
 const DOMAIN = import.meta.env.VITE_BACKEND_WS_URL_BASE;
 
-export const setEditorInstance = (editor: ttEditor | null) => {
-  editorInstance = editor;
-};
+interface EditorProps {
+  documentID: string;
+  token: string;
+}
 
-export const getEditorInstance = (): ttEditor | null => {
-  return editorInstance;
-};
-
-function Editor({ documentID, token }: { documentID: string; token: string }) {
-  // is synced and is authenticated
+function Editor(props: EditorProps): JSX.Element {
+  const { documentID, token } = props;
   const [editorSyncState, setEditorSyncState] = useState({
     isAuthenticated: false,
     isAuthenticatedComplete: false,
@@ -39,7 +36,7 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
     url: `${DOMAIN}/document/${documentID}`,
     name: `${documentID}`,
     token: `${token}`,
-    onAuthenticated() {
+    onAuthenticated(): void {
       if (!editorSyncState.isAuthenticatedComplete) {
         setEditorSyncState({
           ...editorSyncState,
@@ -48,7 +45,7 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
         });
       }
     },
-    onAuthenticationFailed(d) {
+    onAuthenticationFailed(d): void {
       if (!editorSyncState.isAuthenticatedComplete) {
         setEditorSyncState({
           ...editorSyncState,
@@ -95,23 +92,27 @@ function Editor({ documentID, token }: { documentID: string; token: string }) {
     },
     autofocus: true,
   });
-  setEditorInstance(editor);
   return (
-    <div className="w-full h-full flex flex-row items-center">
-      <div className="w-full h-full">
+    <div className="w-full h-full flex flex-row">
+      <div className="w-full flex flex-col">
         {editorSyncState.isAuthenticated && (
-          <EditorContent
-            className="w-full h-full p-8 overflow-y-scroll"
-            editor={editor}
-          />
+          <>
+            <div className="flex-grow">
+              <EditorContent
+                className="w-full h-full p-8 overflow-y-scroll"
+                editor={editor}
+              />
+            </div>
+            <Track />
+          </>
         )}
         {!editorSyncState.isAuthenticated &&
           editorSyncState.isAuthenticatedComplete && (
             <p>{editorSyncState.isAuthenticatedErrorMessage}</p>
           )}
         {!editorSyncState.isAuthenticatedComplete && <p>Loading</p>}
+        <Drawer editor={editor} />
       </div>
-      <Drawer />
     </div>
   );
 }
