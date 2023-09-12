@@ -90,6 +90,7 @@ export class SagemakerBatchTransformTranscription {
       await createBatchTransformJob(payload);
     } catch (e) {
       this.logger.error(`Error creating transcription job: ${e}`);
+      throw e;
     }
   };
 
