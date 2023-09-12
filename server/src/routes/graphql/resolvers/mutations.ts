@@ -8,7 +8,7 @@ import {
 } from '../../../common/jwt.js';
 import prisma from '../../../prisma/index.js';
 import { logger } from '../../../services/logger.js';
-import { sendProjectShareEmail } from '../../../services/resend.js';
+import { Auth0User, sendProjectShareEmail } from '../../../services/resend.js';
 import {
   getPresignedUrlForDocumentAudioFile,
   uploadAudioFile,
@@ -236,7 +236,20 @@ const mutations: MutationResolvers = {
         userId: userId,
       },
     });
-    if (!userRelation) {
+
+    const project = await prisma.project.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!userRelation || !project || !user) {
       return {
         success: false,
         message: 'Projectid not found or related to user',
@@ -261,7 +274,12 @@ const mutations: MutationResolvers = {
       },
     });
 
-    const response = await sendProjectShareEmail(userEmail, token, id);
+    const response = await sendProjectShareEmail(
+      userEmail,
+      user.auth0ManagementApiUserDetails as unknown as Auth0User,
+      token,
+      project.name,
+    );
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },
       'Sent project share email'
