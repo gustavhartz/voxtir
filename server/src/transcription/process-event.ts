@@ -2,6 +2,7 @@
 import { ReceiveMessageCommandOutput } from '@aws-sdk/client-sqs';
 import { Document } from '@prisma/client';
 import { S3Event, S3EventRecord } from 'aws-lambda';
+import * as Y from 'yjs';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
@@ -10,16 +11,17 @@ import {
   S3StorageHandler,
   StorageHandler,
 } from '../services/storageHandler.js';
+import { TipTapJSONToYDoc } from '../tiptap-editor/index.js';
 import {
   audioFilePrefix,
   generatedTranscriptionFilePrefix,
+  LanguageCodePairs,
   speakerDiarizationFilePrefix,
   speechToTextFilePrefix,
   splitAudioTranscriptionBucketKey,
 } from './common.js';
-import { LanguageCodePairs } from './common.js';
 import { SagemakerBatchTransformTranscription } from './sagemaker-transcription.js';
-import { WhisperPyannoteMerger } from './whisper-pyannote-merger.js';
+import { WhisperPyannoteMerger } from './whisper-pyannote-merge-into-tiptap.js';
 
 export class SQSTranscriptionMessageHandler {
   private logger: Logger;
@@ -155,7 +157,7 @@ export class S3AudioTranscriptionEventHandler {
     if (!this.readyForSpeakerChangeTranscription()) {
       return;
     }
-    await this.#createAndPutSpeakerChangeHTMLDocument();
+    await this.#createAndPutSpeakerChangeTipTapDocument();
   }
 
   readyForSpeakerChangeTranscription(): boolean {
@@ -173,8 +175,8 @@ export class S3AudioTranscriptionEventHandler {
     return true;
   }
 
-  async #createAndPutSpeakerChangeHTMLDocument(): Promise<void> {
-    const document = this.#document as any as Document;
+  async #createAndPutSpeakerChangeTipTapDocument(): Promise<void> {
+    const document = this.#document as Document;
     const whisperTranscriptObject = await this.storageHandler.getObject(
       //@ts-ignore
       document.speechToTextFileURL
@@ -206,17 +208,22 @@ export class S3AudioTranscriptionEventHandler {
       whisperTranscript,
       25,
       15,
+      document.title,
       this.logger
-    ).createSpeakerChangeTranscriptionHTML();
-    const mergedTranscriptKey = `${generatedTranscriptionFilePrefix}/${document.id}.html`;
+    ).createSpeakerChangeTranscriptionTipTapJSON();
+    const mergedTranscriptKey = `${generatedTranscriptionFilePrefix}/${document.id}.json`;
 
     await this.storageHandler.putObject(
       mergedTranscriptKey,
-      Buffer.from(mergedTranscript),
-      'text/html',
+      Buffer.from(JSON.stringify(mergedTranscript)),
+      'application/json',
       undefined,
       true
     );
+
+    // Convert to TipTapTransformerDocument
+    const yDoc = TipTapJSONToYDoc(mergedTranscript.default);
+    const yDocArray = Y.encodeStateAsUpdate(yDoc);
 
     await prisma.document.update({
       where: {
@@ -225,6 +232,7 @@ export class S3AudioTranscriptionEventHandler {
       data: {
         mergedTranscriptionFileURL: mergedTranscriptKey,
         transcriptionStatus: 'DONE',
+        data: Buffer.from(yDocArray),
       },
     });
   }
