@@ -13,12 +13,14 @@ interface DocumentCreationModalProps {
   token: string;
   defaultProjectId: string;
   onClose: () => void;
+  refetchDocuments: () => void;
 }
 
 const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   token,
   defaultProjectId,
   onClose,
+  refetchDocuments
 }) => {
   const supportedAudioFileTypes = [
     'audio/mpeg', // MP3 audio
@@ -127,6 +129,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
       .then((res) => {
         console.log(res.data);
         console.log(res.errors);
+        refetchDocuments();
         onClose();
       })
       .catch((err) => {
