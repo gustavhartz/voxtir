@@ -73,6 +73,12 @@ mutation pinProject($projectId: ID!, $pin: Boolean!) {
   }
 }
 
+mutation GeneratePresignedUrlForAudio($documentId: ID!) {
+  getPresignedUrlForAudioFile(documentId: $documentId) {
+    expiresAtUnixSeconds
+    url
+  }
+}
 mutation trashDocument($documentId: ID!, $projectId: ID!) {
   trashDocument(documentId: $documentId, projectId: $projectId) {
     message
@@ -86,4 +92,3 @@ mutation UpdateDocument($documentId: ID!, $title: String!) {
     success
   }
 }
-

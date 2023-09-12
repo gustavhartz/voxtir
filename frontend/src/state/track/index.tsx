@@ -2,7 +2,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface TrackState {
-  isModalOpen: boolean;
   skipToPosition: string;
   hasSkipped: boolean;
   isPlaying: boolean;
@@ -14,22 +13,13 @@ interface TrackState {
     goBackTime: number;
     goForwardTime: number;
   };
-  fileUrl: string;
-  fileName: string;
-  fileSize: number;
-  fileType: string;
   currentPosition: string;
-}
-
-interface SetTrackPayload {
-  src: string;
-  fileName: string;
-  fileSize: number;
-  fileType: string;
+  presignedFileURL: string;
+  presignedFileURLExpiresAtUnixMS: number;
+  documentId: string;
 }
 
 const initialState: TrackState = {
-  isModalOpen: false,
   skipToPosition: '00:00:00',
   hasSkipped: true,
   isPlaying: false,
@@ -41,22 +31,27 @@ const initialState: TrackState = {
     goForwardTime: 30,
     pauseOnSkip: false,
   },
-  fileUrl: '',
-  fileName: '',
-  fileSize: 0,
-  fileType: '',
   currentPosition: '00:00:00',
+  presignedFileURL: '',
+  presignedFileURLExpiresAtUnixMS: new Date().getTime(),
+  documentId: '',
 };
+
+interface SetTrackPayload {
+  presignedFileURL: string;
+  presignedFileURLExpiresAtUnixMS: number;
+  documentId: string;
+}
 
 export const track = createSlice({
   name: 'track',
   initialState,
   reducers: {
     setTrack: (state, action: PayloadAction<SetTrackPayload>) => {
-      state.fileUrl = action.payload.src;
-      state.fileName = action.payload.fileName;
-      state.fileSize = action.payload.fileSize;
-      state.fileType = action.payload.fileType;
+      state.presignedFileURL = action.payload.presignedFileURL;
+      state.presignedFileURLExpiresAtUnixMS =
+        action.payload.presignedFileURLExpiresAtUnixMS;
+      state.documentId = action.payload.documentId;
     },
     skipToPosition: (state, action: PayloadAction<string>) => {
       state.hasSkipped = false;
@@ -65,21 +60,13 @@ export const track = createSlice({
     setToSkipped: (state) => {
       state.hasSkipped = true;
     },
-    toggleModal: (state) => {
-      state.isModalOpen = !state.isModalOpen;
-    },
     setCurrentPosition: (state, action: PayloadAction<string>) => {
       state.currentPosition = action.payload;
     },
   },
 });
 
-export const {
-  setTrack,
-  skipToPosition,
-  setToSkipped,
-  toggleModal,
-  setCurrentPosition,
-} = track.actions;
+export const { skipToPosition, setToSkipped, setCurrentPosition, setTrack } =
+  track.actions;
 
 export default track.reducer;

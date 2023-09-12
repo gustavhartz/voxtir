@@ -25,12 +25,12 @@ query Projects {
 
 query GenerateWordFileFromHTML($html: String!) {
   generateWordFileFromHTML(html: $html) {
-    expiresAt
+    expiresAtUnixSeconds
     url
   }
 }
 
-query mePinnedProjects{
+query mePinnedProjects {
   pinnedProjects {
     id
     name

@@ -1,8 +1,8 @@
+import { Editor } from '@tiptap/react';
 import { saveAs } from 'file-saver';
 import React from 'react';
 import {
   TbFileExport,
-  TbFileImport,
   TbInfoCircle,
   TbKeyboard,
   TbTrash,
@@ -17,13 +17,16 @@ import {
 } from '../../graphql/generated/graphql';
 import { useAppDispatch } from '../../hooks';
 import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
-import { toggleModal as ToggleImportModal } from '../../state/track';
-import { getEditorInstance } from '../Editor';
 
-const Drawer = () => {
+interface DrawerProps {
+  editor: Editor | null;
+}
+
+const Drawer = (props: DrawerProps): JSX.Element => {
   // Update this function to export the document as a docx file based on the redux context
-  const onExport = async () => {
-    const editor = getEditorInstance();
+  const editor = props.editor;
+
+  const onExport = async (): Promise<void> => {
     if (!editor) {
       console.error('Editor instance not found');
       return;
@@ -54,17 +57,12 @@ const Drawer = () => {
   };
 
   const dispatch = useAppDispatch();
-  const handleOpenKeyboardModal = () => {
+  const handleOpenKeyboardModal = (): void => {
     dispatch(ToggleKeyboardModal());
   };
 
-  const handleOpenImportModal = () => {
-    dispatch(ToggleImportModal());
-  };
-
   // delete document
-  const onDelete = () => {
-    const editor = getEditorInstance();
+  const onDelete = (): void => {
     editor?.commands.clearContent();
   };
 
@@ -84,7 +82,7 @@ const Drawer = () => {
             <TbKeyboard className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
           </button>
           <button
-            onClick={() => {
+            onClick={(): void => {
               console.log('Clicked on info circle');
             }}
             data-tooltip-id="document-sidebar"
@@ -93,7 +91,7 @@ const Drawer = () => {
             <TbInfoCircle className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
           </button>
           <button
-            onClick={() => {
+            onClick={(): void => {
               onExport();
             }}
             data-tooltip-id="document-sidebar"
@@ -102,14 +100,7 @@ const Drawer = () => {
             <TbFileExport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
           </button>
           <button
-            onClick={handleOpenImportModal}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="File import"
-          >
-            <TbFileImport className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={() => {
+            onClick={(): void => {
               onDelete();
             }}
             data-tooltip-id="document-sidebar"
