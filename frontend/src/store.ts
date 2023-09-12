@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import client from './state/client';
 import keyboard from './state/keyboard';
 import track from './state/track';
+
 export const store = configureStore({
   reducer: {
     track: track,
     keyboard: keyboard,
+    client: client,
   },
 });
 

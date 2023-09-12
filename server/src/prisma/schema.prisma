@@ -17,7 +17,7 @@ model Document {
     title                            String
     createdAt                        DateTime                          @default(now())
     updatedAt                        DateTime                          @updatedAt
-    project                          Project                           @relation(fields: [projectId], references: [id])
+    project                          Project                           @relation(fields: [projectId], references: [id], onDelete: Cascade)
     projectId                        String // relation scalar field (used in the `@relation` attribute above)  
     // TipTap document data
     data                             Bytes?
@@ -115,7 +115,7 @@ model ProjectInvitation {
 
 model PinnedProjects {
     id        String   @id @default(uuid())
-    project   Project  @relation(fields: [projectId], references: [id])
+    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
     projectId String // relation scalar field (used in the `@relation` attribute above)
     user      User     @relation(fields: [userId], references: [id])
     userId    String // relation scalar field (used in the `@relation` attribute above)

@@ -16,18 +16,23 @@ import { Popover } from 'react-tiny-popover';
 import { toast, ToastContainer } from 'react-toastify';
 import * as Yup from 'yup';
 
-import type { Role } from '../../graphql/generated/graphql';
+import type {
+  MePinnedProjectsQuery,
+  Role,
+} from '../../graphql/generated/graphql';
 import {
-  PinnedProjectsQuery,
   useDeleteProjectMutation,
   usePinProjectMutation,
   useShareProjectMutation,
   useUpdateProjectMutation,
 } from '../../graphql/generated/graphql';
+import { useAppDispatch } from '../../hooks';
+import { refetchPinned } from '../../state/client';
 
 interface ProjectCardProps {
+  handleUpdatePinned: () => void;
   handleUpdate: () => void;
-  pinnedProjects: PinnedProjectsQuery | undefined;
+  pinnedProjects: MePinnedProjectsQuery | undefined;
   project: {
     name: string;
     id: string;
@@ -40,7 +45,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  handleUpdate,
+  handleUpdatePinned,
   pinnedProjects,
   project,
   token,
@@ -51,9 +56,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showShare, setShowShare] = React.useState(false);
   const [email, setEmail] = React.useState<string | undefined>('');
   const [role, setRole] = React.useState<Role | undefined>();
-  const isPinned = pinnedProjects?.pinnedProjects?.find(
-    (pinnedProject) => pinnedProject?.id === project.id
-  );
+
+  const dispatch = useAppDispatch();
+  const isPinned = pinnedProjects?.pinnedProjects?.find((pinnedProject) => {
+    return pinnedProject?.id === project.id;
+  });
 
   const [pinProject] = usePinProjectMutation({
     context: {
@@ -62,6 +69,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       },
     },
   });
+
   const [deleteProject, { loading }] = useDeleteProjectMutation({
     context: {
       headers: {
@@ -162,9 +170,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       },
     })
       .then(() => {
+        dispatch(refetchPinned());
         toast(`Deleted project: ${projectToDelete.name}`, {
           type: 'success',
-          toastId: 'deleteProject',
           position: 'bottom-right',
         });
         setCheckDelete(false);
@@ -209,20 +217,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const handlePinProject = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
-    console.log(isPinned, isPinned !== undefined);
     pinProject({
       variables: {
         projectId: project.id,
-        pin: isPinned !== undefined ?? true,
+        pin: isPinned === undefined ? true : false,
       },
     })
       .then(() => {
-        handleUpdate();
+        handleUpdatePinned();
       })
       .catch(() => {
-        handleUpdate();
+        handleUpdatePinned();
       });
+  };
+
+  const handleAutoClose = () => {
+    setIsPopoverOpen(false);
   };
 
   if (isEdit) {
@@ -284,7 +294,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </label>
             </span>
             <textarea
-              className={`px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md w-full focus:outline-gray-400 focus:outline-2
+              className={`px-2 py-2 max-h-[400px] text-gray-900 outline-gray-300 font-normal text-md outline rounded-md w-full focus:outline-gray-400 focus:outline-2
                             ${
                               formik.errors.name && formik.touched.name
                                 ? 'border-red-800'
@@ -379,6 +389,30 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
       )}
       <Link to={`/project/${project.id}`}>
+        {checkDelete && (
+          <div className="flex relative z-[9999] flex-col justify-center items-center h-36 -mb-36 bg-opacity-90 rounded-md bg-gray-900 w-inherit">
+            <span className="text-ellipsis overflow-hidden whitespace-nowrap text-white font-semibold text-md">
+              Are you sure you want to delete
+            </span>
+            <span className="text-ellipsis overflow-hidden whitespace-nowrap text-neutral-200 -mt-1 mb-2 font-semibold text-md">
+              {project.name}?
+            </span>
+            <div className="flex flex-row justify-center items-center space-x-4">
+              <button
+                onClick={handleDeleteProject}
+                className="bg-red-500 transiiton-colors hover:bg-red-600 px-4 py-1 font-medium text-white rounded-lg"
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleToggleDelete}
+                className="bg-white hover:bg-neutral-200 px-4 py-1 font-medium text-gray-900 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
         <div
           className={` ${loading && 'animate-pulse'}
               border-gray-200 border-[1px] 
@@ -389,13 +423,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               drop-shadow-sm rounded-lg`}
         >
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-medium">{project?.name}</span>
+            <span className="text-2xl font-medium text-ellipsis overflow-hidden whitespace-nowrap">
+              {project?.name}
+            </span>
             <Popover
               onClickOutside={() => setIsPopoverOpen(false)}
               isOpen={isPopoverOpen}
               positions={['left']}
               content={
-                <div className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row">
+                <div
+                  onMouseLeave={handleAutoClose}
+                  className="mr-4 bg-white border-2 border-gray-100 rounded-md text-gray-900 flex flex-row"
+                >
                   <div
                     onClick={handlePinProject}
                     className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-gray-100 transition-all cursor-pointer"
@@ -426,15 +465,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                       <AiOutlineDelete size={20} />
                     </div>
                   )}
-                  {checkDelete && (
-                    <div
-                      onClick={handleDeleteProject}
-                      className="flex flex-row items-center p-2 justify-between text-md font-semibold hover:bg-red-700 bg-red-600 text-white transition-all cursor-pointer"
-                    >
-                      <AiOutlineDelete size={20} className="mr-2" />
-                      <span>Delete Project</span>
-                    </div>
-                  )}
                 </div>
               }
             >
@@ -460,7 +490,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </span>
             {project.documentLength > 0 && (
               <span className="text-gray-400 text-sm">
-                {project.documentLength} document{' '}
+                {project.documentLength} document
                 {project.documentLength > 1 && 's'}{' '}
               </span>
             )}
