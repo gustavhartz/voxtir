@@ -62,7 +62,6 @@ export class S3AudioTranscriptionEventHandler {
   #document: Document | null = null;
   storageHandler: StorageHandler;
   event: S3EventRecord;
-  setupComplete = false;
   logger: Logger;
 
   constructor(
@@ -75,17 +74,6 @@ export class S3AudioTranscriptionEventHandler {
     this.logger = logger || CoreLogger;
   }
 
-  async #setup(): Promise<void> {
-    if (this.setupComplete) {
-      return;
-    }
-    const success = await this.#validateAndSetDocument();
-    if (!success || !this.#document) {
-      throw new Error('Could not validate and set document');
-    }
-
-    this.setupComplete = true;
-  }
   shouldProcessDocumet(): boolean {
     if (
       this.#document?.transcriptionStatus === 'DONE' ||
@@ -97,15 +85,16 @@ export class S3AudioTranscriptionEventHandler {
   }
 
   async process(): Promise<void> {
+    await this.#validateAndSetDocument();
+
     if (!this.shouldProcessEvent()) {
       return;
     }
-    await this.#setup();
     // Get rid of ts error
     if (!this.#document) {
-      this.logger.error('this.#document is null');
       return;
     }
+
     if (!this.shouldProcessDocumet()) {
       this.logger.info(
         `Document ${this.#document?.id} should not be processed. Skipping`
@@ -252,7 +241,7 @@ export class S3AudioTranscriptionEventHandler {
     }
     return true;
   }
-  async #validateAndSetDocument(): Promise<boolean> {
+  async #validateAndSetDocument(): Promise<void> {
     const key = this.getKeyFromEvent();
     const { prefix, documentId } = splitAudioTranscriptionBucketKey(key);
 
@@ -271,17 +260,9 @@ export class S3AudioTranscriptionEventHandler {
       this.logger.error(
         `Recieved event for unknown document. Could not find document for audio file ${key}`
       );
-      return false;
-    }
-
-    if (document.transcriptionType === 'MANUAL') {
-      this.logger.info(
-        `Skipping processing of ${key} because transcription type is MANUAL`
-      );
-      return false;
+      throw new Error("Couldn't find document");
     }
     this.#document = document;
-    return true;
   }
 
   getBucketFromEvent(): string {
