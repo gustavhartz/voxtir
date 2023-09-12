@@ -158,3 +158,6 @@ Once you change the schema in the `schema.prisma`, apply the migrations in the *
 If yo want to see the database you can use 
 `npx prisma studio --schema src/prisma/schema.prisma`
 from the server folder
+
+### IDE
+VSCode
