@@ -1,5 +1,4 @@
-import { ProjectRole } from '@prisma/client';
-import { TranscriptionType } from '@prisma/client';
+import { ProjectRole, TranscriptionType } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -399,7 +398,6 @@ const mutations: MutationResolvers = {
     return { success: true };
   },
   uploadAudioFile: async (_, args, context) => {
-    logger.info('Uploading file');
     const { doc, documentId, projectId, contentLength } = args;
     const { createReadStream, filename } = await doc.file;
     // assert user has permission
@@ -436,8 +434,7 @@ const mutations: MutationResolvers = {
       };
     }
 
-    logger.info('Uploading file', doc.docType, filename, documentId);
-    logger.info(doc);
+    logger.info(`Uploading audio file for document ${documentId}`);
     const stream: Buffer = createReadStream();
     try {
       const key = await uploadAudioFile(
@@ -447,8 +444,8 @@ const mutations: MutationResolvers = {
         filename,
         doc.docType
       );
-
-      prisma.document.update({
+      logger.debug(`Uploaded audio file to ${key}`);
+      await prisma.document.update({
         where: {
           id: documentId,
         },
