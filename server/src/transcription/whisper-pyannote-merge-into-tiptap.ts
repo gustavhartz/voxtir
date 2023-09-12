@@ -139,14 +139,14 @@ export class WhisperPyannoteMerger {
    * This function takes a pyannote transcript and a whisper transcript and merges them into a TipTapJSONDoc as used by the tiptap transformer with speaker changes and timestamps
    * it's based upon the https://github.com/fourTheorem/podwhisperer logic, but customized to work with the Pyannote transcript and our own pipeline
    * The core idea is to iterate over the whisper transcript and insert speaker changes and timestamps from the Pyannote transcript and then merge the two
-   * into a single HTML document that can be used in the frontend editor. Thus this function is highly dependent on the HTML structure of the frontend editor
+   * into a single JSON structure that can be used in the frontend editor. The TipTap format. Thus this function is highly dependent on the Schema of the frontend editor
    * @param pyannoteTranscript - The json format ml transcription pipeline for pyannote
    * @param whisperTranscript - The json format of the ml transcription pipeline for whisper
    * @param timestampEveryApproximateSeconds - The approximate number of seconds between timestamps
    * @param minimumTimeBetweenTimestampsSeconds - The minimum number of seconds between timestamps
    * @returns
    */
-  createSpeakerChangeTranscriptionHTML(): TipTapTransformerDocument {
+  createSpeakerChangeTranscriptionTipTapJSON(): TipTapTransformerDocument {
     const pyannoteTranscript = this.pyannoteTranscript;
     const whisperTranscript = this.whisperTranscript;
     const timestampEveryApproximateSeconds =
