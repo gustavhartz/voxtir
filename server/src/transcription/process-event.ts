@@ -223,7 +223,7 @@ export class S3AudioTranscriptionEventHandler {
 
     // Convert to TipTapTransformerDocument
     const yDoc = TipTapJSONToYDoc(mergedTranscript.default);
-    const yDocArray = Y.encodeStateVector(yDoc);
+    const yDocArray = Y.encodeStateAsUpdate(yDoc);
 
     await prisma.document.update({
       where: {
