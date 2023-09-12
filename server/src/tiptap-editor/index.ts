@@ -64,4 +64,8 @@ if (isRunningDirectly) {
   }
   const tipTapDoc = yjsStateToTipTapJSON(doc.data);
   JSON.stringify(tipTapDoc, null, 2);
+  const yDoc = TipTapJSONToYDoc(tipTapDoc.default);
+  const yDocState = Y.encodeStateAsUpdate(yDoc);
+  const tipTapDoc2 = yjsStateToTipTapJSON(yDocState);
+  JSON.stringify(tipTapDoc2, null, 2);
 }

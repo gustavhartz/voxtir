@@ -1,7 +1,7 @@
 ## Tiptap editor
 
 The purpose of this code is two fold
-* Generate the HTML from the database state
+* Generate the HTML from the database state (not implemented)
 * Allow for creation of documents serverside
 
 A little documentation can be found [here](https://tiptap.dev/api/utilities/html/#generate-json-from-html) and [here](https://tiptap.dev/hocuspocus/server/hooks) in the section "Create a Y.js document from JSON/HTML (once)".
