@@ -128,6 +128,7 @@ const Documents = ({ token }: { token: string }) => {
         </div>
         {isModalOpen && project && (
           <DocumentCreationModal
+            refetchDocuments={refetch}
             onClose={() => setIsModalOpen(!isModalOpen)}
             token={token}
             defaultProjectId={project.id}
@@ -234,6 +235,7 @@ const Documents = ({ token }: { token: string }) => {
         </div>
         {isModalOpen && project && (
           <DocumentCreationModal
+          refetchDocuments={refetch}
             onClose={() => setIsModalOpen(!isModalOpen)}
             token={token}
             defaultProjectId={project.id}
