@@ -17,7 +17,9 @@ export const Auth0ProviderWithNavigate = ({
   const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
   const onRedirectCallback = (appState?: AppState) => {
-    navigate(appState?.returnTo || window.location.pathname);
+    console.log('appState', appState);
+    console.log('appState', window.location.pathname);
+    navigate(appState?.returnTo || '/');
   };
 
   if (!(domain && clientId && redirectUri && audience)) {
