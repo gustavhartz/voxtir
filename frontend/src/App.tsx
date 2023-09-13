@@ -18,7 +18,7 @@ function App(): JSX.Element {
         <Route path="/callback" element={<CallbackPage />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Projects />} />
-          <Route path="accept-invitation/:token" element={<AcceptInvitation />} />
+          <Route path="/accept-invitation" element={<AcceptInvitation />} />
           <Route path="document/:documentID" element={<DocumentEditor />} />
           <Route path="project/new" element={<CreateProject />} />
           <Route path="project/:projectID" element={<Documents />} />

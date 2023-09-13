@@ -36,7 +36,7 @@ export const VoxtirInviteProjectEmail = ({
             <Preview>{previewText}</Preview>
             <Tailwind>
                 <Body className="bg-white my-auto mx-auto font-sans">
-                    <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
+                    <Container className="border bg-white border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
                         <Section className="w-full mt-[46px]">
                             <center>
                                 <Img src={'https://i.imgur.com/VP7hPI5.png'} alt="Voxtir" className="w-[50px] h-[50px]" />

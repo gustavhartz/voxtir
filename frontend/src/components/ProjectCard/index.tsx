@@ -387,12 +387,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               >
                 Cancel
               </button>
-              {loading && <button className="bg-gray-600 text-white animate-pulse rounded py-2 px-4">
+              {shareLoading && <button className="bg-gray-600 text-white animate-pulse rounded py-2 px-4">
                 Sending..
                 </button>}
-              {!loading && <button
+              {!shareLoading && <button
                 onClick={handleShare}
-                disabled={!email || !role || email !== data?.me?.email}
+                disabled={!email || !role || email === data?.me?.email}
                 className="disabled:bg-gray-300 bg-gray-900 text-white py-2 px-4 rounded"
               >
                 Send Invite

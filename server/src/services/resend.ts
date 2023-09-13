@@ -46,7 +46,7 @@ export const sendProjectShareEmail = async (
   token: string,
   projectName: string
 ): Promise<CreateEmailResponse> => {
-  const invitationLink = `${FRONTEND_BASE_URL}/accept-invitation/${token}`;
+  const invitationLink = `${FRONTEND_BASE_URL}/accept-invitation?token=${token}`;
 
   return resend.emails.send({
     from: `Voxtir <no-reply@${RESEND_DOMAIN}>`,

@@ -63,8 +63,8 @@ async function main(): Promise<void> {
 
   // Socket related routes
   app.use(wsRoutes);
-  app.use(auth0Middleware);
-  app.use(userInfoSync);
+  //app.use(auth0Middleware);
+  //app.use(userInfoSync);
 
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
