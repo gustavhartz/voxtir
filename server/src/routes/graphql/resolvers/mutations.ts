@@ -8,11 +8,12 @@ import {
 } from '../../../common/jwt.js';
 import prisma from '../../../prisma/index.js';
 import { logger } from '../../../services/logger.js';
-import { Auth0User, sendProjectShareEmail } from '../../../services/resend.js';
+import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
   getPresignedUrlForDocumentAudioFile,
   uploadAudioFile,
 } from '../../../transcription/index.js';
+import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { FileAlreadyExistsError } from '../../../types/customErrors.js';
 import { MutationResolvers } from '../generated/graphql';
 
@@ -276,9 +277,9 @@ const mutations: MutationResolvers = {
 
     const response = await sendProjectShareEmail(
       userEmail,
-      user.auth0ManagementApiUserDetails as unknown as Auth0User,
+      user.auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser,
       token,
-      project.name,
+      project.name
     );
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },

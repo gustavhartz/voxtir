@@ -6,43 +6,14 @@ import {
   RESEND_API_KEY,
   RESEND_DOMAIN,
 } from '../common/env.js';
-import Invitiation from "../email/emails/Invitiation.js";
+import Invitiation from '../email/emails/Invitiation.js';
+import { Auth0ManagementApiUser } from '../types/auth0.js';
 
 const resend = new Resend(RESEND_API_KEY);
 
-/*
-userEmail,
-      user.auth0ManagementApiUserDetails,
-      token,
-      project.name,
-*/
-
-export interface Auth0User {
-  name: string
-  email: string
-  last_ip: string
-  picture: string
-  user_id: string
-  nickname: string
-  created_at: string
-  identities: Identity[]
-  last_login: string
-  updated_at: string
-  logins_count: number
-  email_verified: boolean
-  last_password_reset: string
-}
-
-export interface Identity {
-  user_id: string
-  isSocial: boolean
-  provider: string
-  connection: string
-}
-
 export const sendProjectShareEmail = async (
   emailTo: string,
-  user: Auth0User,
+  user: Auth0ManagementApiUser,
   token: string,
   projectName: string
 ): Promise<CreateEmailResponse> => {
@@ -54,8 +25,8 @@ export const sendProjectShareEmail = async (
     subject: `Invitation to join project: ${projectName}`,
     react: Invitiation({
       projectName: projectName,
-      user: user.name ?? "A user",
+      user: user.name ?? 'A user',
       invitation: invitationLink,
-    })
+    }),
   });
 };
