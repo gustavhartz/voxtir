@@ -63,8 +63,8 @@ async function main(): Promise<void> {
 
   // Socket related routes
   app.use(wsRoutes);
-  //app.use(auth0Middleware);
-  //app.use(userInfoSync);
+  app.use(auth0Middleware);
+  app.use(userInfoSync);
 
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
@@ -82,13 +82,13 @@ async function main(): Promise<void> {
   httpServer.listen({ port: APP_PORT }, () => {
     console.info(`
         Server "${chalk.magentaBright(
-      'APP_NAME'
-    )}" started. Port: ${chalk.blue.bold(
+          'APP_NAME'
+        )}" started. Port: ${chalk.blue.bold(
       APP_PORT
     )} , NODE_ENV: ${chalk.blue.bold(NODE_ENV)}
         Open Project: ${chalk.bold.underline.yellow(
-      `http://localhost:${APP_PORT}`
-    )} (ctrl+click)
+          `http://localhost:${APP_PORT}`
+        )} (ctrl+click)
       `);
     console.timeEnd('startup');
   });
