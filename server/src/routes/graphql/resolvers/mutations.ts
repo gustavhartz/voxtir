@@ -236,21 +236,13 @@ const mutations: MutationResolvers = {
         projectId: id,
         userId: userId,
       },
-    });
-
-    const project = await prisma.project.findFirst({
-      where: {
-        id: id,
+      include: {
+        project: true,
+        user: true,
       },
     });
 
-    const user = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!userRelation || !project || !user) {
+    if (!userRelation || !userRelation.project || !userRelation.user) {
       return {
         success: false,
         message: 'Projectid not found or related to user',
@@ -274,13 +266,13 @@ const mutations: MutationResolvers = {
         projectId: id,
       },
     });
-    const senderAuth0 =
-      user.auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
+    const senderAuth0 = userRelation.user
+      .auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
     const response = await sendProjectShareEmail(
       userEmail,
       senderAuth0.name || 'A user',
       token,
-      project.name
+      userRelation.project.name
     );
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },
