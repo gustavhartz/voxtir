@@ -274,10 +274,11 @@ const mutations: MutationResolvers = {
         projectId: id,
       },
     });
-
+    const senderAuth0 =
+      user.auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
     const response = await sendProjectShareEmail(
       userEmail,
-      user.auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser,
+      senderAuth0.name || 'A user',
       token,
       project.name
     );

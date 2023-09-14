@@ -7,13 +7,12 @@ import {
   RESEND_DOMAIN,
 } from '../common/env.js';
 import Invitiation from '../email/emails/Invitiation.js';
-import { Auth0ManagementApiUser } from '../types/auth0.js';
 
 const resend = new Resend(RESEND_API_KEY);
 
 export const sendProjectShareEmail = async (
   emailTo: string,
-  user: Auth0ManagementApiUser,
+  senderName: string,
   token: string,
   projectName: string
 ): Promise<CreateEmailResponse> => {
@@ -25,7 +24,7 @@ export const sendProjectShareEmail = async (
     subject: `Invitation to join project: ${projectName}`,
     react: Invitiation({
       projectName: projectName,
-      user: user.name ?? 'A user',
+      senderName: senderName,
       invitation: invitationLink,
     }),
   });
