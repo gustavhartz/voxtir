@@ -92,3 +92,10 @@ mutation UpdateDocument($documentId: ID!, $title: String!) {
     success
   }
 }
+
+mutation AcceptProject($token: String!) {
+  acceptProjectInvitation(token: $token) {
+    message
+    success
+  }
+}

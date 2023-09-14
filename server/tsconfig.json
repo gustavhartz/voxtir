@@ -12,20 +12,37 @@
     "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist",
+    "jsx": "react",
     "allowJs": true,
-    "lib": ["esnext", "dom"],
-    "types": ["node", "jest"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
     "skipLibCheck": false,
     "forceConsistentCasingInFileNames": true
   },
   "resolve": {
-    "extensions": [".js", ".ts"]
+    "extensions": [
+      ".js",
+      ".ts",
+      ".tsx",
+    ]
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.tsx",
     "src/routes/graphql/resolvers/index.ts",
     "src/routes/graphql/schema.ts",
     "src/routes/graphql/context.ts"
   ],
-  "exclude": ["**/node_modules", "**/dist", "**/*.local.*", "jest.config.js"]
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/*.local.*",
+    "jest.config.js"
+  ]
 }

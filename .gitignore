@@ -199,4 +199,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+# Ignore react-email generator
+.react-email
+
 server/src/routes/graphql/generated/*

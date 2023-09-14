@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import KeyboardModal from './components/KeyboardModal';
 import KeyboardSettings from './components/KeyboardSettings';
 import Layout from './components/Layout';
+import AcceptInvitation from './pages/AcceptInvitation';
 import { CallbackPage } from './pages/Callback';
 import CreateProject from './pages/CreateProject';
 import DocumentEditor from './pages/DocumentEditor';
@@ -17,6 +18,7 @@ function App(): JSX.Element {
         <Route path="/callback" element={<CallbackPage />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Projects />} />
+          <Route path="/accept-invitation" element={<AcceptInvitation />} />
           <Route path="document/:documentID" element={<DocumentEditor />} />
           <Route path="project/new" element={<CreateProject />} />
           <Route path="project/:projectID" element={<Documents />} />

@@ -20,6 +20,7 @@ import type {
   MePinnedProjectsQuery,
   Role,
 } from '../../graphql/generated/graphql';
+import { useGetMeQuery } from '../../graphql/generated/graphql';
 import {
   useDeleteProjectMutation,
   usePinProjectMutation,
@@ -62,6 +63,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     return pinnedProject?.id === project.id;
   });
 
+  const { data } = useGetMeQuery({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
+
   const [pinProject] = usePinProjectMutation({
     context: {
       headers: {
@@ -86,7 +95,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     },
   });
 
-  const [shareProject] = useShareProjectMutation({
+  const [shareProject, { loading: shareLoading }] = useShareProjectMutation({
     context: {
       headers: {
         authorization: `Bearer ${token}`,
@@ -359,6 +368,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               onChange={(e) => setEmail(e.currentTarget.value)}
               className="mt-6 w-full px-5 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
             />
+            {data?.me?.email === email && <p className="pt-2 text-red-700 font-semibold">You cannot share it with yourself.</p>}
             <select
               defaultValue="none"
               onChange={(e) => setRole(e.currentTarget.value as Role)}
@@ -377,13 +387,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               >
                 Cancel
               </button>
-              <button
+              {shareLoading && <button className="bg-gray-600 text-white animate-pulse rounded py-2 px-4">
+                Sending..
+                </button>}
+              {!shareLoading && <button
                 onClick={handleShare}
-                disabled={!email || !role}
+                disabled={!email || !role || email === data?.me?.email}
                 className="disabled:bg-gray-300 bg-gray-900 text-white py-2 px-4 rounded"
               >
                 Send Invite
-              </button>
+              </button>}
             </div>
           </div>
         </div>

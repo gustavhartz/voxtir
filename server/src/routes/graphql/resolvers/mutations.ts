@@ -13,6 +13,7 @@ import {
   getPresignedUrlForDocumentAudioFile,
   uploadAudioFile,
 } from '../../../transcription/index.js';
+import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { FileAlreadyExistsError } from '../../../types/customErrors.js';
 import { MutationResolvers } from '../generated/graphql';
 
@@ -235,8 +236,13 @@ const mutations: MutationResolvers = {
         projectId: id,
         userId: userId,
       },
+      include: {
+        project: true,
+        user: true,
+      },
     });
-    if (!userRelation) {
+
+    if (!userRelation || !userRelation.project || !userRelation.user) {
       return {
         success: false,
         message: 'Projectid not found or related to user',
@@ -260,8 +266,14 @@ const mutations: MutationResolvers = {
         projectId: id,
       },
     });
-
-    const response = await sendProjectShareEmail(userEmail, token, id);
+    const senderAuth0 = userRelation.user
+      .auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
+    const response = await sendProjectShareEmail(
+      userEmail,
+      senderAuth0.name || 'A user',
+      token,
+      userRelation.project.name
+    );
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },
       'Sent project share email'
