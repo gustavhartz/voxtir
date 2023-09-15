@@ -30,7 +30,6 @@ model Document {
     transcriptionType                TranscriptionType
     // Automatic transcription data
     transcriptionStatus              TranscriptionProcessStatus?
-    doSpeakerDiarization             Boolean?
     mergedTranscriptionFileURL       String?
     speakerDiarizationFileURL        String?
     speechToTextFileURL              String?
