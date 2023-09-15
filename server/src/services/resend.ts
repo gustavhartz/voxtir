@@ -6,7 +6,7 @@ import {
   RESEND_API_KEY,
   RESEND_DOMAIN,
 } from '../common/env.js';
-import Invitiation from '../email/emails/Invitiation.js';
+import Invitiation from '../emails/Invitiation.js';
 
 const resend = new Resend(RESEND_API_KEY);
 
