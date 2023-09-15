@@ -1,4 +1,5 @@
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
+import { mimeTypeToExtension } from '../common/file-formats.js';
 import prisma from '../prisma/index.js';
 import { logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
@@ -15,7 +16,7 @@ const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
  * existing files. And should only really be used for the initial user upload.
  * @param documentId
  * @param body
- * @param fileEnding
+ * @param fileName
  * @param contentType
  * @returns
  */
@@ -23,12 +24,14 @@ export const uploadAudioFile = async (
   documentId: string,
   body: Buffer,
   contentLength: number,
-  fileEnding = '',
+  fileName = '',
   contentType = ''
 ): Promise<string> => {
-  const key = `${audioFilePrefix}/${documentId}.${fileEnding}`;
-  logger.info(`Uploading audio file to ${key}`);
-
+  const fileExtension = mimeTypeToExtension(contentType);
+  const key = `${audioFilePrefix}/${documentId}.${fileExtension}`;
+  logger.info(
+    `Uploading audio file ${fileName} to ${key} with size ${contentLength}`
+  );
   await s3.putObject(key, body, contentType, contentLength, false);
   return key;
 };

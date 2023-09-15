@@ -20,7 +20,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   token,
   defaultProjectId,
   onClose,
-  refetchDocuments
+  refetchDocuments,
 }) => {
   const supportedAudioFileTypes = [
     'audio/mpeg', // MP3 audio
@@ -118,7 +118,6 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     await uploadAudioFile({
       variables: {
         fileInput: {
-          docType: 'esf',
           file: file,
         },
         projectId: defaultProjectId,

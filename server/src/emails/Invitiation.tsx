@@ -20,7 +20,9 @@ interface VercelInviteUserEmailProps {
   invitation: string;
 }
 
-export const VoxtirInviteProjectEmail = (props: VercelInviteUserEmailProps) => {
+export const VoxtirInviteProjectEmail = (
+  props: VercelInviteUserEmailProps
+): React.JSX.Element => {
   const { projectName, senderName, invitation } = props;
   const previewText = `Join ${projectName} on Vercel`;
 

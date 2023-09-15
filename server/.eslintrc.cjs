@@ -6,7 +6,6 @@ module.exports = {
   },
   ignorePatterns: [
     '**/node_modules/*',
-    '**/emails/*',
     '**/dist/*',
     '**/generated/*',
     '**/*.local.*',
