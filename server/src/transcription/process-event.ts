@@ -87,11 +87,7 @@ export class S3AudioTranscriptionEventHandler {
   async process(): Promise<void> {
     await this.#validateAndSetDocument();
 
-    if (!this.shouldProcessEvent()) {
-      return;
-    }
-    // Get rid of ts error
-    if (!this.#document) {
+    if (!this.shouldProcessEvent() || !this.#document) {
       return;
     }
 
@@ -100,6 +96,7 @@ export class S3AudioTranscriptionEventHandler {
         `Document ${this.#document?.id} should not be processed. Skipping`
       );
     }
+
     const { prefix } = splitAudioTranscriptionBucketKey(this.getKeyFromEvent());
     switch (prefix) {
       case audioFilePrefix: {
@@ -114,6 +111,16 @@ export class S3AudioTranscriptionEventHandler {
           this.logger
         );
         await TranscriptionProcessor.triggerBatchTransformJob();
+        this.#document = await prisma.document.update({
+          where: {
+            id: this.#document.id,
+          },
+          data: {
+            transcriptionStatus: 'PROCESSING',
+            transcriptionStartedAt: new Date(),
+            transcriptProcessingLogicVersion: 'V1',
+          },
+        });
         break;
       }
       case speakerDiarizationFilePrefix:
@@ -122,8 +129,8 @@ export class S3AudioTranscriptionEventHandler {
             id: this.#document.id,
           },
           data: {
-            transcriptionStatus: 'PROCESSING',
             speakerDiarizationFileURL: this.getKeyFromEvent(),
+            transcriptionFinishedAt: new Date(), // APPROXIMATELY
           },
         });
         break;
@@ -133,8 +140,8 @@ export class S3AudioTranscriptionEventHandler {
             id: this.#document.id,
           },
           data: {
-            transcriptionStatus: 'PROCESSING',
             speechToTextFileURL: this.getKeyFromEvent(),
+            transcriptionFinishedAt: new Date(), // APPROXIMATELY
           },
         });
         break;
@@ -157,7 +164,7 @@ export class S3AudioTranscriptionEventHandler {
     if (
       !document.speakerDiarizationFileURL ||
       !document.speechToTextFileURL ||
-      !(document.transcriptionStatus === 'PROCESSING')
+      document.transcriptionStatus !== 'PROCESSING'
     ) {
       return false;
     }
@@ -243,10 +250,10 @@ export class S3AudioTranscriptionEventHandler {
   }
   async #validateAndSetDocument(): Promise<void> {
     const key = this.getKeyFromEvent();
-    const { prefix, documentId } = splitAudioTranscriptionBucketKey(key);
+    const { documentId } = splitAudioTranscriptionBucketKey(key);
 
     this.logger.info(
-      `Processing ${this.getEventTypeFromEvent()} event for ${prefix}/${key}`
+      `Processing ${this.getEventTypeFromEvent()} event for ${key}`
     );
 
     const document = await prisma.document.findFirst({
