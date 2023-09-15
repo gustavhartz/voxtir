@@ -66,10 +66,11 @@ async function main(): Promise<void> {
   app.use(auth0Middleware);
   app.use(userInfoSync);
 
+  const fileUploadSizeLimit = 100 * 10 ** 6; // 100MB
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
     '/graphql',
-    graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }),
+    graphqlUploadExpress({ maxFileSize: fileUploadSizeLimit, maxFiles: 1 }), // since it's a stream this is not noticed until s3 upload
     expressMiddleware(gqlServer, {
       context: async ({ req }) => ({
         prisma: prisma,
