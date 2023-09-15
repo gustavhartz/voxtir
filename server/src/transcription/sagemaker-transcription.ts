@@ -88,6 +88,9 @@ export class SagemakerBatchTransformTranscription {
     const payload = await this.prepareBatchTransformJobPayload();
     try {
       await createBatchTransformJob(payload);
+      this.logger.debug(
+        `Created transcription job ${payload.TransformJobName} for ${this.documentId}`
+      );
     } catch (e) {
       this.logger.error(`Error creating transcription job: ${e}`);
       throw e;
