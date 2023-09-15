@@ -8,7 +8,6 @@ export const typeDefs = gql`
   }
 
   input DocumentUploadInput {
-    docType: String!
     file: Upload!
   }
 

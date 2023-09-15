@@ -411,7 +411,7 @@ const mutations: MutationResolvers = {
   },
   uploadAudioFile: async (_, args, context) => {
     const { doc, documentId, projectId, contentLength } = args;
-    const { createReadStream, filename } = await doc.file;
+    const { createReadStream, filename, mimetype } = await doc.file;
     // assert user has permission
     const userRelation = await prisma.userOnProject.findFirst({
       where: {
@@ -454,7 +454,7 @@ const mutations: MutationResolvers = {
         stream,
         contentLength,
         filename,
-        doc.docType
+        mimetype
       );
       logger.debug(`Uploaded audio file to ${key}`);
       await prisma.document.update({
