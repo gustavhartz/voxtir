@@ -14,7 +14,7 @@ import {
   QueryResolvers,
   TranscriptionStatus,
   UserSharing,
-} from '../generated/graphql';
+} from '../generated/graphql.js';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!

@@ -2,7 +2,7 @@ import { taskType } from '@prisma/client';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
-import { Logger, logger } from '../services/logger.js';
+import { Logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import { TranscriptionJobHandler } from '../transcription/transcription-job-handler.js';
 import { acquireTaskLock } from './common.js';
@@ -45,7 +45,7 @@ const transcriptionJobTask: HandlerFunction = async (
 
   await prisma.task.update({
     where: { type: taskType.TRANSCRIPTION_JOB_STARTER },
-    data: { lastSuccessAt: jobStarTime },
+    data: { lastSuccessAt: jobStarTime, isLocked: false },
   });
 };
 
@@ -54,8 +54,3 @@ export const transcriptionJob = new ScheduledAsyncTask(
   transcriptionJobTask,
   POLL_INTERVAL_MS
 );
-
-const isRunningLocally = true;
-if (isRunningLocally) {
-  await transcriptionJobTask('', logger);
-}
