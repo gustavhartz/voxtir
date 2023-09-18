@@ -115,7 +115,7 @@ function Editor(props: EditorProps): JSX.Element {
         {!editorSyncState.isAuthenticatedComplete && (
           <p className="w-full">Loading</p>
         )}
-        <Drawer editor={editor} />
+        <Drawer editor={editor} token={token} />
       </div>
     </div>
   );

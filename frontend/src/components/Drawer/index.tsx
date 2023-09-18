@@ -20,6 +20,7 @@ import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
 
 interface DrawerProps {
   editor: Editor | null;
+  token: string;
 }
 
 const Drawer = (props: DrawerProps): JSX.Element => {
@@ -31,7 +32,7 @@ const Drawer = (props: DrawerProps): JSX.Element => {
       console.error('Editor instance not found');
       return;
     }
-    const data = await editor.getHTML();
+    const data = editor.getHTML();
 
     const variables: GenerateWordFileFromHtmlQueryVariables = {
       html: data,
@@ -40,18 +41,22 @@ const Drawer = (props: DrawerProps): JSX.Element => {
     const response = (await client.query({
       query: GenerateWordFileFromHtmlDocument,
       variables: variables,
+      context: {
+        headers: {
+          Authorization: `Bearer ${props.token}`,
+        },
+      },
     })) as GenerateWordFileFromHtmlQueryResult;
-    console.log(response);
     if (response.error) {
       console.error(response.error);
       return;
     }
-    if (!response.data?.generateWordFileFromHTML) {
+    const s3Url = response.data?.generateWordFileFromHTML?.url;
+    if (!s3Url) {
       console.error('No data returned');
       return;
     }
-    console.log(response.data?.generateWordFileFromHTML?.url);
-    const s3Reponse = await fetch(response.data?.generateWordFileFromHTML?.url);
+    const s3Reponse = await fetch(s3Url);
     const wordBlob = await s3Reponse.blob();
     saveAs(wordBlob, 'VoxtirDocument.docx');
   };
