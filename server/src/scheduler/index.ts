@@ -19,7 +19,9 @@ const transcriptionJobTask: HandlerFunction = async (
     taskType.TRANSCRIPTION_JOB_STARTER
   );
   if (!obtainedLock) {
-    executionLogger.info(`Could not obtain lock for transcription job starter`);
+    executionLogger.info(
+      `Did not obtain lock for transcription job task. Exiting`
+    );
     return;
   }
   const jobStarTime = new Date();

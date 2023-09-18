@@ -27,6 +27,7 @@ export const listBatchTransformJobs = async (
   const command = new ListTransformJobsCommand(params);
   let response = await client.send(command);
   while (response.NextToken) {
+    logger.debug(`Fetching next page of sagemaker jobs`);
     const nextCommand = new ListTransformJobsCommand({
       ...params,
       NextToken: response.NextToken,

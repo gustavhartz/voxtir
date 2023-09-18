@@ -15,6 +15,7 @@ export const acquireTaskLock = async (task: taskType): Promise<boolean> => {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2025') {
         logger.debug(`Task ${task} is already locked by another process`);
+        return false;
       }
     }
     logger.error(
