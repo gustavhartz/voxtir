@@ -1,4 +1,4 @@
-import { taskType } from '@prisma/client';
+import { taskType, TranscriptionProcessStatus } from '@prisma/client';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
@@ -24,28 +24,29 @@ const transcriptionJobTask: HandlerFunction = async (
     );
     return;
   }
-  const jobStarTime = new Date();
-  const task = await prisma.task.findFirst({
-    where: { type: taskType.TRANSCRIPTION_JOB_STARTER },
+
+  const runningJobs = await prisma.transcriptionJob.findMany({
+    where: {
+      status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
+    },
   });
-  let lastSuccessAt = task?.lastSuccessAt;
-  if (!lastSuccessAt) {
-    executionLogger.warn(
-      `No last success time found for transcription job starter. Running from current time -1 day`
-    );
-    //Now minus 1 day
-    lastSuccessAt = new Date(Date.now() - 86400000);
-  }
+  // get the earliest start time of the running jobs
+  const earliestStartTime = runningJobs.reduce((earliestTime, job) => {
+    if (!job.jobStartedAt) {
+      return earliestTime;
+    }
+    return earliestTime < job.jobStartedAt! ? earliestTime : job.jobStartedAt;
+  }, new Date());
 
   await new TranscriptionJobHandler(
     executionLogger,
     new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
-    { CreationTimeAfter: lastSuccessAt }
+    { CreationTimeAfter: earliestStartTime }
   ).run();
 
   await prisma.task.update({
     where: { type: taskType.TRANSCRIPTION_JOB_STARTER },
-    data: { lastSuccessAt: jobStarTime, isLocked: false },
+    data: { lastSuccessAt: new Date(), isLocked: false },
   });
 };
 
