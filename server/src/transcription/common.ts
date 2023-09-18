@@ -146,3 +146,15 @@ export const LanguageCodePairs = {
   javanese: 'jw',
   sundanese: 'su',
 };
+
+export function getSpeakerDiarizationOutputKey(documentId: string): string {
+  return `${speakerDiarizationFilePrefix}/${documentId}.json`;
+}
+
+export function getSpeechToTextOutputKey(documentId: string): string {
+  return `${speechToTextFilePrefix}/${documentId}.json`;
+}
+
+export function getGeneratedTranscriptionFileKey(documentId: string): string {
+  return `${generatedTranscriptionFilePrefix}/${documentId}.json`;
+}

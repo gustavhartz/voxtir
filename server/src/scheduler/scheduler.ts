@@ -2,11 +2,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Logger, schedulerLogger } from '../services/logger.js';
 
+export interface HandlerFunction {
+  (executionId: string, executionLogger: Logger): Promise<void>;
+}
 export class ScheduledAsyncTask {
-  private handler: (
-    executionId: string,
-    executionLogger: Logger
-  ) => Promise<void>;
+  private handler: HandlerFunction;
   private intervalTime: number;
   private isRunning = false;
   private runningUUID: string | null = null;
