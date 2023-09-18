@@ -9,7 +9,12 @@ import { S3StorageHandler } from '../../../services/storageHandler.js';
 import { LanguageCodePairs } from '../../../transcription/common.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { generateWordFileFromHTML } from '../../../utilities/tiptap-word-exporter.js';
-import { Project, QueryResolvers, UserSharing } from '../generated/graphql';
+import {
+  Project,
+  QueryResolvers,
+  TranscriptionStatus,
+  UserSharing,
+} from '../generated/graphql';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!
@@ -46,7 +51,11 @@ const queries: QueryResolvers = {
         },
       },
       include: {
-        Documents: {},
+        Documents: {
+          include: {
+            transcription: true,
+          },
+        },
       },
     });
     const projectResponse: Project[] = [];
@@ -56,23 +65,27 @@ const queries: QueryResolvers = {
         id: projectEle.id,
         name: projectEle.name,
         description: projectEle.description,
-        documents: projectEle.Documents.map((doc) => {
-          return {
-            id: doc.id,
-            title: doc.title,
-            projectId: doc.projectId,
-            isTrashed: doc.isTrashed,
-            lastModified: doc.updatedAt.toISOString(),
-            transcriptionMetadata: {
-              language: doc.language,
-              speakersCount: doc.speakerCount,
-              dialects: [doc.dialect],
-            },
-            transcriptionStatus:
-              doc.transcriptionStatus as TranscriptionProcessStatus,
-            transcriptionType: doc.transcriptionType,
-          };
-        }),
+        documents: projectEle.Documents.filter((doc) => doc.transcription).map(
+          (doc) => {
+            return {
+              id: doc.id,
+              title: doc.title,
+              projectId: doc.projectId,
+              isTrashed: doc.isTrashed,
+              lastModified: doc.updatedAt.toISOString(),
+              transcriptionMetadata: {
+                language: doc.language,
+                speakersCount: doc.speakerCount,
+                dialects: [doc.dialect],
+              },
+              transcriptionStatus:
+                convertTranscriptionStatusToTranscriptionProcessStatus(
+                  doc.transcription!.status
+                ),
+              transcriptionType: doc.transcription!.type,
+            };
+          }
+        ),
       };
       projectResponse.push(projectResponseObj);
     }
@@ -90,7 +103,11 @@ const queries: QueryResolvers = {
         id: args.id,
       },
       include: {
-        Documents: {},
+        Documents: {
+          include: {
+            transcription: true,
+          },
+        },
       },
     });
     if (!project) {
@@ -100,23 +117,27 @@ const queries: QueryResolvers = {
       id: project.id,
       name: project.name,
       description: project.description,
-      documents: project.Documents.map((doc) => {
-        return {
-          id: doc.id,
-          title: doc.title,
-          projectId: doc.projectId,
-          isTrashed: doc.isTrashed,
-          lastModified: doc.updatedAt.toISOString(),
-          transcriptionMetadata: {
-            language: doc.language,
-            speakersCount: doc.speakerCount,
-            dialects: [doc.dialect],
-          },
-          transcriptionStatus:
-            doc.transcriptionStatus as TranscriptionProcessStatus,
-          transcriptionType: doc.transcriptionType,
-        };
-      }),
+      documents: project.Documents.filter((doc) => doc.transcription).map(
+        (doc) => {
+          return {
+            id: doc.id,
+            title: doc.title,
+            projectId: doc.projectId,
+            isTrashed: doc.isTrashed,
+            lastModified: doc.updatedAt.toISOString(),
+            transcriptionMetadata: {
+              language: doc.language,
+              speakersCount: doc.speakerCount,
+              dialects: [doc.dialect],
+            },
+            transcriptionStatus:
+              convertTranscriptionStatusToTranscriptionProcessStatus(
+                doc.transcription!.status
+              ),
+            transcriptionType: doc.transcription!.type,
+          };
+        }
+      ),
     };
   },
   supportedLanguages: () => {
@@ -137,10 +158,15 @@ const queries: QueryResolvers = {
             UsersOnProjects: true,
           },
         },
+        transcription: true,
       },
     });
     if (!document) {
       throw new GraphQLError('Document not found');
+    }
+    if (!document.transcription) {
+      logger.error(`Document ${documentId} has no transcription`);
+      throw new GraphQLError('Document has error in transcription');
     }
     if (
       document.project.UsersOnProjects.some(
@@ -161,8 +187,10 @@ const queries: QueryResolvers = {
         dialects: [document.dialect],
       },
       transcriptionStatus:
-        document.transcriptionStatus as TranscriptionProcessStatus,
-      transcriptionType: document.transcriptionType,
+        convertTranscriptionStatusToTranscriptionProcessStatus(
+          document.transcription?.status
+        ),
+      transcriptionType: document.transcription?.type,
     };
   },
   /**
@@ -214,7 +242,11 @@ const queries: QueryResolvers = {
       include: {
         project: {
           include: {
-            Documents: true,
+            Documents: {
+              include: {
+                transcription: true,
+              },
+            },
           },
         },
       },
@@ -230,23 +262,27 @@ const queries: QueryResolvers = {
         id: projectEle.id,
         name: projectEle.name,
         description: projectEle.description,
-        documents: projectEle.Documents.map((doc) => {
-          return {
-            id: doc.id,
-            title: doc.title,
-            projectId: doc.projectId,
-            isTrashed: doc.isTrashed,
-            lastModified: doc.updatedAt.toISOString(),
-            transcriptionMetadata: {
-              language: doc.language,
-              speakersCount: doc.speakerCount,
-              dialects: [doc.dialect],
-            },
-            transcriptionStatus:
-              doc.transcriptionStatus as TranscriptionProcessStatus,
-            transcriptionType: doc.transcriptionType,
-          };
-        }),
+        documents: projectEle.Documents.filter((doc) => doc.transcription).map(
+          (doc) => {
+            return {
+              id: doc.id,
+              title: doc.title,
+              projectId: doc.projectId,
+              isTrashed: doc.isTrashed,
+              lastModified: doc.updatedAt.toISOString(),
+              transcriptionMetadata: {
+                language: doc.language,
+                speakersCount: doc.speakerCount,
+                dialects: [doc.dialect],
+              },
+              transcriptionStatus:
+                convertTranscriptionStatusToTranscriptionProcessStatus(
+                  doc.transcription?.status
+                ),
+              transcriptionType: doc.transcription!.type,
+            };
+          }
+        ),
       };
       projectResponse.push(projectResponseObj);
     }
@@ -290,3 +326,23 @@ const queries: QueryResolvers = {
 };
 
 export default queries;
+
+// TranscriptionProcessStatus to TranscriptionStatus
+const convertTranscriptionStatusToTranscriptionProcessStatus = (
+  status: TranscriptionProcessStatus | null | undefined
+): TranscriptionStatus => {
+  switch (status) {
+    case TranscriptionProcessStatus.DONE:
+      return TranscriptionStatus.Done;
+    case TranscriptionProcessStatus.FAILED:
+      return TranscriptionStatus.Failed;
+    case TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING:
+      return TranscriptionStatus.Processing;
+    case TranscriptionProcessStatus.TRANSCRIPTION_JOB_COMPLETED:
+      return TranscriptionStatus.Processing;
+    case TranscriptionProcessStatus.QUEUED:
+      return TranscriptionStatus.Queued;
+    default:
+      return TranscriptionStatus.Created;
+  }
+};

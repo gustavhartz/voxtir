@@ -65,14 +65,15 @@ export default (): Partial<Configuration> => {
               UsersOnProjects: {},
             },
           },
+          transcription: true,
         },
       });
       if (!doc) {
         throw new HocuspocusError('Document not found');
       }
       if (
-        doc.transcriptionType === TranscriptionType.AUTOMATIC &&
-        doc.transcriptionStatus !== TranscriptionProcessStatus.DONE
+        doc?.transcription?.type === TranscriptionType.AUTOMATIC &&
+        doc?.transcription?.status !== TranscriptionProcessStatus.DONE
       ) {
         logger.debug(
           `Attempting to access to transcription that is not done for document ${documentId}`
