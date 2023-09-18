@@ -29,7 +29,7 @@ export class TranscriptionJobHandler {
   runFilter: ListTransformJobsCommandInput;
 
   runningJobs = 0;
-  static MAX_CONCURRENT_TRANSCRIPTION_JOBS = 10;
+  static MAX_CONCURRENT_TRANSCRIPTION_JOBS = 4;
 
   constructor(
     logger: Logger,
@@ -42,7 +42,7 @@ export class TranscriptionJobHandler {
   }
 
   protected async processStartedJobs(): Promise<void> {
-    this.logger.info(`Preparing transcription job`);
+    this.logger.info(`Proccesing Existing Sagemaker jobs`);
     const activeJobs = await listBatchTransformJobs(this.runFilter);
     this.runningJobs = 0;
     for (const job of activeJobs.TransformJobSummaries ?? []) {
