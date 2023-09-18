@@ -62,7 +62,6 @@ export class TranscriptionJobHandler {
           break;
 
         case TransformJobStatus.COMPLETED:
-          job.TransformEndTime;
           await prisma.transcriptionJob.update({
             where: { jobName: job.TransformJobName },
             data: {
@@ -188,7 +187,9 @@ export class TranscriptionJobHandler {
     });
     this.logger.info(`Starting ${queuedDocuments.length} transcription jobs`);
 
-    // For each document ordered by creation time, start a transcription job until the limit is reached
+    // Ensure that the timestamp is before the job start time, but after the last job run start time
+    const jobStartTime = new Date();
+
     for (const document of queuedDocuments) {
       const TranscriptionProcessor = new SagemakerBatchTransformTranscription(
         new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
@@ -207,7 +208,7 @@ export class TranscriptionJobHandler {
           data: {
             jobName: jobName,
             status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
-            jobStartedAt: new Date(),
+            jobStartedAt: jobStartTime,
           },
         });
         this.logger.info(
