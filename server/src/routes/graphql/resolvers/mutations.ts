@@ -1,4 +1,8 @@
-import { ProjectRole, TranscriptionType } from '@prisma/client';
+import {
+  ProjectRole,
+  TranscriptionProcessStatus,
+  TranscriptionType,
+} from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -79,9 +83,15 @@ const mutations: MutationResolvers = {
         language: language,
         dialect: dialect,
         speakerCount: speakerCount,
-        transcriptionType: transcriptionType,
-        transcriptionStatus:
-          transcriptionType === TranscriptionType.MANUAL ? 'DONE' : 'CREATED',
+        transcription: {
+          create: {
+            type: transcriptionType,
+            status:
+              transcriptionType === TranscriptionType.MANUAL
+                ? TranscriptionProcessStatus.DONE
+                : TranscriptionProcessStatus.QUEUED,
+          },
+        },
       },
     });
     logger.debug(

@@ -44,7 +44,6 @@ export class S3StorageHandler extends StorageHandler {
     this.s3 = new S3Client({
       apiVersion: '2006-03-01',
       region: AWS_REGION,
-      logger: logger,
     });
     this.bucket = bucket;
   }

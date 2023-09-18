@@ -13,46 +13,48 @@ enum TranscriptionType {
 }
 
 model Document {
-    id                               String                            @id @default(uuid())
-    title                            String
-    createdAt                        DateTime                          @default(now())
-    updatedAt                        DateTime                          @updatedAt
-    project                          Project                           @relation(fields: [projectId], references: [id], onDelete: Cascade)
-    projectId                        String // relation scalar field (used in the `@relation` attribute above)  
+    id           String   @id @default(uuid())
+    title        String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    projectId    String // relation scalar field (used in the `@relation` attribute above)  
     // TipTap document data
-    data                             Bytes?
+    data         Bytes?
     // Audio file
-    audioFileURL                     String?
+    audioFileURL String?
     // Transcription data
-    language                         String?
-    speakerCount                     Int?
-    dialect                          String?
-    transcriptionType                TranscriptionType
-    // Automatic transcription data
-    transcriptionStatus              TranscriptionProcessStatus?
-    mergedTranscriptionFileURL       String?
-    speakerDiarizationFileURL        String?
-    speechToTextFileURL              String?
-    transcriptionStartedAt           DateTime?
-    transcriptionFinishedAt          DateTime?
-    // Since TipTap/Prosemirror enforces a very strict schema, we need to store which version of the transcript processing logic 
-    // was used to generate the transcript to be able to determine how to parse it when loading it into the editor in the frontend
-    transcriptProcessingLogicVersion TranscriptProcessingLogicVersion?
+    language     String?
+    speakerCount Int?
+    dialect      String?
 
     // Other
-    isTrashed Boolean @default(false)
+    isTrashed     Boolean           @default(false)
+    transcription TranscriptionJob?
 
     @@index([projectId])
 }
 
-enum TranscriptProcessingLogicVersion {
-    V1
+model TranscriptionJob {
+    id         String   @id @default(uuid())
+    document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+    documentId String   @unique // relation scalar field (used in the `@relation` attribute above)
+
+    jobName       String?                    @unique
+    jobStartedAt  DateTime?
+    jobFinishedAt DateTime?
+    type          TranscriptionType
+    status        TranscriptionProcessStatus
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 enum TranscriptionProcessStatus {
-    CREATED
     QUEUED
-    PROCESSING
+    TRANSCRIPTION_JOB_RUNNING
+    TRANSCRIPTION_JOB_COMPLETED
+    MERGE_TRANSCRIPTION_DATA_STARTED
     FAILED
     DONE
 }
@@ -124,4 +126,20 @@ model PinnedProjects {
 
     @@unique([projectId, userId])
     @@index([projectId, userId])
+}
+
+model Task {
+    id            Int       @id @default(autoincrement())
+    type          taskType
+    details       String
+    isLocked      Boolean
+    lastSuccessAt DateTime?
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    @@unique([type])
+}
+
+enum taskType {
+    TRANSCRIPTION_JOB_STARTER
 }

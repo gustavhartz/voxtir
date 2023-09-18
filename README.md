@@ -66,7 +66,6 @@ Technologies
 * Typescript
 * AWS S3
 * AWS Sagemaker
-* AWS SQS
 * AWS Amplify
 * AWS Fargate (ECS)
 * Resend

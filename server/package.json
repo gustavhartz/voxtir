@@ -9,7 +9,7 @@
     "codegen-generate": "graphql-codegen --config codegen.yml",
     "generate": "npm run prisma-generate && npm run codegen-generate",
     "prisma-generate": "npx prisma generate --schema src/prisma/schema.prisma",
-    "prisma-delete-seed": "npx prisma migrate reset --schema src/prisma/schema.prisma -f",
+    "prisma-delete": "npx prisma migrate reset --schema src/prisma/schema.prisma -f",
     "prisma-push": "npx prisma db push --schema src/prisma/schema.prisma",
     "actenv": "export $(grep -v '^#' .env | xargs)",
     "prepare": "cd .. && husky install server/.husky",
@@ -17,16 +17,12 @@
     "test": "jest",
     "dev-email": "email dev --dir src/emails"
   },
-  "prisma": {
-    "seed": "ts-node --esm --transpile-only src/prisma/seed.ts"
-  },
   "author": "Gustav Hartz",
   "license": "None",
   "dependencies": {
     "@apollo/server": "^4.7.1",
     "@aws-sdk/client-s3": "^3.388.0",
     "@aws-sdk/client-sagemaker": "^3.385.0",
-    "@aws-sdk/client-sqs": "^3.388.0",
     "@aws-sdk/s3-request-presigner": "^3.388.0",
     "@graphql-tools/schema": "^10.0.0",
     "@hocuspocus/extension-database": "^2.0.6",
