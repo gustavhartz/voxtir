@@ -50,7 +50,7 @@ const transcriptionJobTask: HandlerFunction = async (
 };
 
 export const transcriptionJob = new ScheduledAsyncTask(
-  'audio_bucket_sqs_poll_process',
+  'sagemaker_transcription_job',
   transcriptionJobTask,
   POLL_INTERVAL_MS
 );
