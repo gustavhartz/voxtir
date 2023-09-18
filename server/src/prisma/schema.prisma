@@ -40,8 +40,8 @@ model TranscriptionJob {
     document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
     documentId String   @unique // relation scalar field (used in the `@relation` attribute above)
 
-    jobName       String                     @unique
-    jobStartedAt  DateTime
+    jobName       String?                    @unique
+    jobStartedAt  DateTime?
     jobFinishedAt DateTime?
     type          TranscriptionType
     status        TranscriptionProcessStatus
