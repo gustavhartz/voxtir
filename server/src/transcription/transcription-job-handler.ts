@@ -196,7 +196,7 @@ export class TranscriptionJobHandler {
         document.id,
         document.audioFileURL!,
         {
-          model: 'medium',
+          model: 'large',
           language: document.language as keyof typeof LanguageCodePairs,
         },
         this.logger
