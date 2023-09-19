@@ -19,6 +19,14 @@ interface WhisperSegment {
   avg_logprob: number;
   compression_ratio: number;
   no_speech_prob: number;
+  words: WhisperWordTimestamp[];
+}
+
+interface WhisperWordTimestamp {
+  word: string;
+  start: number;
+  end: number;
+  probability: number;
 }
 
 interface WhisperTranscript {
@@ -53,6 +61,7 @@ export class WhisperPyannoteMerger {
   minimumTimeBetweenTimestampsSeconds: number;
   documentTitle: string;
   logger: Logger;
+  MINIMUM_SEGMENT_LENGTH_SECONDS = 0.5;
   constructor(
     pyannoteTranscript: PyannoteTranscript,
     whisperTranscript: WhisperTranscript,
@@ -68,6 +77,9 @@ export class WhisperPyannoteMerger {
       minimumTimeBetweenTimestampsSeconds;
     this.logger = logger || coreLogger;
     this.documentTitle = documentTitle;
+    this.enforcePyannoteSpeakerSegmentMinimumLength(
+      this.MINIMUM_SEGMENT_LENGTH_SECONDS
+    );
   }
   /**
    * This function generates the TipTapJsonDoc template for a timestamp button used in the frontend editor
@@ -134,6 +146,31 @@ export class WhisperPyannoteMerger {
       content: [],
     };
   }
+  /**
+   * A Function to clean up the pyannote transcript by removing segments that are too short
+   *
+   * @memberof WhisperPyannoteMerger
+   */
+  enforcePyannoteSpeakerSegmentMinimumLength(seconds: number): void {
+    this.pyannoteTranscript.segments = this.pyannoteTranscript.segments.filter(
+      (segment) => {
+        return segment.end - segment.start > seconds;
+      }
+    );
+    // Now there can be segments of the same speaker that are directly after each other, so we need to merge them
+    // This is done by iterating over the segments and merging them if they have the same speaker
+    let idx = 0;
+    while (idx < this.pyannoteTranscript.segments.length - 1) {
+      const currentSegment = this.pyannoteTranscript.segments[idx];
+      const nextSegment = this.pyannoteTranscript.segments[idx + 1];
+      if (currentSegment.speaker === nextSegment.speaker) {
+        currentSegment.end = nextSegment.end;
+        this.pyannoteTranscript.segments.splice(idx + 1, 1);
+      } else {
+        idx++;
+      }
+    }
+  }
 
   /**
    * This function takes a pyannote transcript and a whisper transcript and merges them into a TipTapJSONDoc as used by the tiptap transformer with speaker changes and timestamps
@@ -147,6 +184,20 @@ export class WhisperPyannoteMerger {
    * @returns
    */
   createSpeakerChangeTranscriptionTipTapJSON(): TipTapTransformerDocument {
+    // Setup the document
+    const TipTapJSONDoc: TipTapTransformerDocument = {
+      default: {
+        type: 'doc',
+        content: [],
+      },
+    };
+    const heading = WhisperPyannoteMerger.getHeadingTemplate(2);
+    heading.content?.push(
+      WhisperPyannoteMerger.getTextTemplate(this.documentTitle)
+    );
+    TipTapJSONDoc.default.content.push(heading);
+
+    // Setup the data to add
     const pyannoteTranscript = this.pyannoteTranscript;
     const whisperTranscript = this.whisperTranscript;
     const timestampEveryApproximateSeconds =
@@ -157,6 +208,16 @@ export class WhisperPyannoteMerger {
     this.logger.info(
       `Creating speaker change transcription document based on ${pyannoteTranscript.segments.length} pyannote segments and ${whisperTranscript.segments.length} whisper segments`
     );
+    if (
+      pyannoteTranscript.segments.length === 0 ||
+      whisperTranscript.segments.length <= 1
+    ) {
+      this.logger.warn(
+        'ML Pipeline data is not sufficient to create a transcription. Probably an error'
+      );
+      return TipTapJSONDoc;
+    }
+    // Merging logic
     let pyannoteIdx = 0;
     let pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
     let whisperIdx = 0;
@@ -165,19 +226,6 @@ export class WhisperPyannoteMerger {
     let prevSpeaker = '';
     let setTimestamp = false;
     let lastTimestampAt = 0;
-
-    const TipTapJSONDoc: TipTapTransformerDocument = {
-      default: {
-        type: 'doc',
-        content: [],
-      },
-    };
-
-    const heading = WhisperPyannoteMerger.getHeadingTemplate(2);
-    heading.content?.push(
-      WhisperPyannoteMerger.getTextTemplate(this.documentTitle)
-    );
-    TipTapJSONDoc.default.content.push(heading);
 
     let currentParagraph: Paragraph = {
       type: 'paragraph',
