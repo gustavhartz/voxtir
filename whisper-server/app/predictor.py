@@ -132,7 +132,7 @@ def transformation() -> flask.Response:
         # The root is relative to the current working directory in docker
         model = whisper.load_model(model, download_root="../whisper_image")
         logger.info(f"Transcribing {filename}")
-        result = model.transcribe(filename, language=language)
+        result = model.transcribe(filename, language=language, word_timestamps=True)
         logger.info(f"Transcription of {filename} complete")
         # Dump the result to a file
         WHISPER_FILE_NAME = "whisper.json"

@@ -1,3 +1,5 @@
+import { Interval, IntervalTree } from 'node-interval-tree';
+
 import { Logger, logger as coreLogger } from '../services/logger.js';
 import {
   Heading,
@@ -19,6 +21,14 @@ interface WhisperSegment {
   avg_logprob: number;
   compression_ratio: number;
   no_speech_prob: number;
+  words: WhisperWordTimestamp[];
+}
+
+interface WhisperWordTimestamp {
+  word: string;
+  start: number;
+  end: number;
+  probability: number;
 }
 
 interface WhisperTranscript {
@@ -53,6 +63,8 @@ export class WhisperPyannoteMerger {
   minimumTimeBetweenTimestampsSeconds: number;
   documentTitle: string;
   logger: Logger;
+  MINIMUM_SEGMENT_LENGTH_SECONDS = 0.3;
+  MINIMUM_SPEAKER_SEGMENT_OVERLAP_PERCENTAGE = 0.3;
   constructor(
     pyannoteTranscript: PyannoteTranscript,
     whisperTranscript: WhisperTranscript,
@@ -68,6 +80,9 @@ export class WhisperPyannoteMerger {
       minimumTimeBetweenTimestampsSeconds;
     this.logger = logger || coreLogger;
     this.documentTitle = documentTitle;
+    this.enforcePyannoteSpeakerSegmentMinimumLength(
+      this.MINIMUM_SEGMENT_LENGTH_SECONDS
+    );
   }
   /**
    * This function generates the TipTapJsonDoc template for a timestamp button used in the frontend editor
@@ -134,6 +149,31 @@ export class WhisperPyannoteMerger {
       content: [],
     };
   }
+  /**
+   * A Function to clean up the pyannote transcript by removing segments that are too short
+   *
+   * @memberof WhisperPyannoteMerger
+   */
+  enforcePyannoteSpeakerSegmentMinimumLength(seconds: number): void {
+    this.pyannoteTranscript.segments = this.pyannoteTranscript.segments.filter(
+      (segment) => {
+        return segment.end - segment.start > seconds;
+      }
+    );
+    // Now there can be segments of the same speaker that are directly after each other, so we need to merge them
+    // This is done by iterating over the segments and merging them if they have the same speaker
+    let idx = 0;
+    while (idx < this.pyannoteTranscript.segments.length - 1) {
+      const currentSegment = this.pyannoteTranscript.segments[idx];
+      const nextSegment = this.pyannoteTranscript.segments[idx + 1];
+      if (currentSegment.speaker === nextSegment.speaker) {
+        currentSegment.end = nextSegment.end;
+        this.pyannoteTranscript.segments.splice(idx + 1, 1);
+      } else {
+        idx++;
+      }
+    }
+  }
 
   /**
    * This function takes a pyannote transcript and a whisper transcript and merges them into a TipTapJSONDoc as used by the tiptap transformer with speaker changes and timestamps
@@ -147,6 +187,20 @@ export class WhisperPyannoteMerger {
    * @returns
    */
   createSpeakerChangeTranscriptionTipTapJSON(): TipTapTransformerDocument {
+    // Setup the document
+    const TipTapJSONDoc: TipTapTransformerDocument = {
+      default: {
+        type: 'doc',
+        content: [],
+      },
+    };
+    const heading = WhisperPyannoteMerger.getHeadingTemplate(2);
+    heading.content?.push(
+      WhisperPyannoteMerger.getTextTemplate(this.documentTitle)
+    );
+    TipTapJSONDoc.default.content.push(heading);
+
+    // Setup the data to add
     const pyannoteTranscript = this.pyannoteTranscript;
     const whisperTranscript = this.whisperTranscript;
     const timestampEveryApproximateSeconds =
@@ -157,67 +211,64 @@ export class WhisperPyannoteMerger {
     this.logger.info(
       `Creating speaker change transcription document based on ${pyannoteTranscript.segments.length} pyannote segments and ${whisperTranscript.segments.length} whisper segments`
     );
-    let pyannoteIdx = 0;
-    let pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
+    if (
+      pyannoteTranscript.segments.length === 0 ||
+      whisperTranscript.segments.length <= 1
+    ) {
+      this.logger.warn(
+        'ML Pipeline data is not sufficient to create a transcription. Probably an error'
+      );
+      return TipTapJSONDoc;
+    }
+    // Merging logic
     let whisperIdx = 0;
-    let whisperSegment = whisperTranscript.segments[whisperIdx];
-    let speaker = pyannoteSegment.speaker;
-    let prevSpeaker = '';
     let setTimestamp = false;
     let lastTimestampAt = 0;
-
-    const TipTapJSONDoc: TipTapTransformerDocument = {
-      default: {
-        type: 'doc',
-        content: [],
-      },
-    };
-
-    const heading = WhisperPyannoteMerger.getHeadingTemplate(2);
-    heading.content?.push(
-      WhisperPyannoteMerger.getTextTemplate(this.documentTitle)
-    );
-    TipTapJSONDoc.default.content.push(heading);
+    let prevSpeaker = '';
+    interface PyannoteIntervalTree extends Interval {
+      data: PyannoteSegment;
+    }
+    // Use interval tree for finding the pyannote segment for a given whisper segment
+    const intervalTree = new IntervalTree<PyannoteIntervalTree>();
+    for (const pyannoteSegment of pyannoteTranscript.segments) {
+      intervalTree.insert({
+        low: pyannoteSegment.start,
+        high: pyannoteSegment.end,
+        data: pyannoteSegment,
+      });
+    }
 
     let currentParagraph: Paragraph = {
       type: 'paragraph',
       content: [],
     };
-    // Initialize by adding the first speaker and timestamp
-    currentParagraph.content?.push(
-      WhisperPyannoteMerger.getTimeStampTemplate('00:00:00')
-    );
-    currentParagraph.content?.push(
-      WhisperPyannoteMerger.getSpeakerTemplate(speaker)
-    );
 
+    // Text is the primary focus of the whisper transcript, so we iterate over the whisper transcript
+    // and add the pyannote speaker changes and timestamps to improve the whisper transcript
     while (whisperIdx < whisperTranscript.segments.length) {
-      whisperSegment = whisperTranscript.segments[whisperIdx];
-      pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
-      // move whisper segment forward
-      if (
-        whisperSegment.end < pyannoteSegment.start ||
-        pyannoteIdx === pyannoteTranscript.segments.length - 1
-      ) {
-        currentParagraph.content?.push(
-          WhisperPyannoteMerger.getTextTemplate(whisperSegment.text)
-        );
-        whisperIdx++;
-        continue;
-      } else {
-        pyannoteIdx++;
-        pyannoteSegment = pyannoteTranscript.segments[pyannoteIdx];
-        speaker = pyannoteSegment.speaker;
-      }
+      const whisperSegment = whisperTranscript.segments[whisperIdx];
 
-      if (speaker !== prevSpeaker) {
-        TipTapJSONDoc.default.content.push(currentParagraph);
-        currentParagraph = WhisperPyannoteMerger.getParagraphTemplate();
+      // Identify potential speakers
+      const potentialSpeakers = intervalTree
+        .search(whisperSegment.start, whisperSegment.end)
+        .map((interval) => interval.data);
+
+      const bestSpeaker = this.getBestSpeakerMatch(
+        potentialSpeakers,
+        whisperSegment
+      );
+
+      if (bestSpeaker && bestSpeaker !== prevSpeaker) {
+        // If this is not the first speaker without any text before it, we start a new paragraph
+        if (whisperIdx !== 0) {
+          TipTapJSONDoc.default.content.push(currentParagraph);
+          currentParagraph = WhisperPyannoteMerger.getParagraphTemplate();
+        }
         currentParagraph.content?.push(
-          WhisperPyannoteMerger.getSpeakerTemplate(speaker)
+          WhisperPyannoteMerger.getSpeakerTemplate(bestSpeaker)
         );
-        prevSpeaker = speaker;
         setTimestamp = true;
+        prevSpeaker = bestSpeaker;
       }
 
       if (
@@ -229,13 +280,60 @@ export class WhisperPyannoteMerger {
       ) {
         currentParagraph.content?.push(
           WhisperPyannoteMerger.getTimeStampTemplate(
-            convertSecondsToTimestamp(whisperSegment.end)
+            convertSecondsToTimestamp(whisperSegment.start)
           )
         );
         setTimestamp = false;
-        lastTimestampAt = whisperSegment.end;
+        lastTimestampAt = whisperSegment.start;
       }
+
+      currentParagraph.content?.push(
+        WhisperPyannoteMerger.getTextTemplate(whisperSegment.text)
+      );
+      whisperIdx++;
     }
     return TipTapJSONDoc;
+  }
+
+  /**
+   * Determine best match by taking the one with the highest overlap and breaking ties by taking the longest
+   *
+   * @param {PyannoteSegment[]} potentialSpeakers
+   * @param {WhisperSegment} whisperSegment
+   * @return {*}  {string} - The best speaker match or null if no match
+   * @memberof WhisperPyannoteMerger
+   */
+  getBestSpeakerMatch(
+    potentialSpeakers: PyannoteSegment[],
+    whisperSegment: WhisperSegment
+  ): string | null {
+    let maxOverlap = 0;
+    let bestSpeaker = null;
+    let bestSpeakerLength = 0;
+    for (const potentialSpeaker of potentialSpeakers) {
+      const overlapLength =
+        Math.min(potentialSpeaker.end, whisperSegment.end) -
+        Math.max(potentialSpeaker.start, whisperSegment.start);
+      const overlapPercentage = Math.min(
+        1e-3 + overlapLength / (whisperSegment.end - whisperSegment.start),
+        1
+      );
+
+      if (
+        overlapPercentage >= maxOverlap &&
+        overlapPercentage > this.MINIMUM_SPEAKER_SEGMENT_OVERLAP_PERCENTAGE
+      ) {
+        if (
+          !bestSpeaker || // If no best speaker yet
+          overlapPercentage > maxOverlap || // If better overlap
+          potentialSpeaker.end - potentialSpeaker.start > bestSpeakerLength // If same overlap, but longer segment. We prefer fewer speaker changes
+        ) {
+          bestSpeaker = potentialSpeaker.speaker;
+          maxOverlap = overlapPercentage;
+          bestSpeakerLength = potentialSpeaker.end - potentialSpeaker.start;
+        }
+      }
+    }
+    return bestSpeaker;
   }
 }
