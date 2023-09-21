@@ -36,6 +36,7 @@ const queries: QueryResolvers = {
       user?.auth0ManagementApiUserDetails as any as Auth0ManagementApiUser;
     return {
       id: context.userId,
+      credits: user.credits,
       name: aut0Details.name,
       email: aut0Details.email,
     };
