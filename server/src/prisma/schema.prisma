@@ -23,8 +23,8 @@ model Document {
     data                            Bytes?
     // Audio file
     audioFileURL                    String?
-    rawAudioFileLengthSeconds       Int?
-    processedAudioFileLengthSeconds Int?
+    rawAudioFileLengthSeconds       Float?
+    processedAudioFileLengthSeconds Float?
     // Transcription data
     language                        String?
     speakerCount                    Int?
