@@ -12,7 +12,7 @@ const client = new LambdaClient({
 });
 const asciiDecoder = new TextDecoder('ascii');
 
-interface AudioProcessorResponse {
+export interface AudioProcessorResponse {
   statusCode: number;
   body: {
     original_file_length: number;

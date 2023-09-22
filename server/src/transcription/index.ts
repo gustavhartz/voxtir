@@ -1,14 +1,24 @@
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import { mimeTypeToExtension } from '../common/file-formats.js';
 import prisma from '../prisma/index.js';
+import {
+  AudioProcessorResponse,
+  invokeAudioProcessor,
+} from '../services/aws-lambda.js';
 import { logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import {
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
+  getProcessedAudioFileKey,
   getRawAudioFileKey,
 } from './common.js';
 
 const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
+
+export interface uploadProcessAudioFile extends AudioProcessorResponse {
+  rawAudioKey: string;
+  processedAudioKey: string;
+}
 
 /**
  * Basic function for uploading an audio file to S3 from user. Intended to be used for raw audio files
@@ -20,20 +30,34 @@ const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
  * @param contentType
  * @returns
  */
-export const uploadAudioFile = async (
+export const uploadProcessAudioFile = async (
   documentId: string,
   body: Buffer,
   contentLength: number,
   fileName = '',
   contentType = ''
-): Promise<string> => {
+): Promise<uploadProcessAudioFile> => {
   const fileExtension = mimeTypeToExtension(contentType);
-  const key = getRawAudioFileKey(documentId, fileExtension);
+  const rawAudioKey = getRawAudioFileKey(documentId, fileExtension);
+  const processedAudioKey = getProcessedAudioFileKey(documentId, fileExtension);
   logger.info(
-    `Uploading audio file ${fileName} to ${key} with size ${contentLength}`
+    `Uploading audio file ${fileName} to ${rawAudioKey} with size ${contentLength}`
   );
-  await s3.putObject(key, body, contentType, contentLength, false);
-  return key;
+  await s3.putObject(rawAudioKey, body, contentType, contentLength, false);
+  logger.info(`Running ffmpeg lambda on audiofile`);
+  const processingResult = await invokeAudioProcessor({
+    input_file_bucket: AWS_AUDIO_BUCKET_NAME,
+    input_file_key: rawAudioKey,
+    input_file_format: fileExtension,
+    output_file_bucket: AWS_AUDIO_BUCKET_NAME,
+    output_file_key: processedAudioKey,
+    output_file_format: 'mp3',
+  });
+  return {
+    ...processingResult,
+    rawAudioKey: rawAudioKey,
+    processedAudioKey: processedAudioKey,
+  };
 };
 
 /**
