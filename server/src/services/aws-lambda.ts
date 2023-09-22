@@ -4,7 +4,7 @@ import {
   LambdaClient,
 } from '@aws-sdk/client-lambda'; // ES Modules import
 
-import { AWS_REGION } from '../common/env.js';
+import { AUDIO_PROCESSOR_LAMBDA_NAME, AWS_REGION } from '../common/env.js';
 import { logger } from './logger.js';
 
 const client = new LambdaClient({
@@ -34,7 +34,7 @@ export const invokeAudioProcessor = async (
 ): Promise<AudioProcessorResponse> => {
   logger.debug('invokeAudioProcessor', processingConfig);
   const input: InvokeCommandInput = {
-    FunctionName: 'audio-processor-staging',
+    FunctionName: AUDIO_PROCESSOR_LAMBDA_NAME,
     InvocationType: 'RequestResponse',
     Payload: JSON.stringify(processingConfig),
   };
