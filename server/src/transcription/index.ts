@@ -15,7 +15,7 @@ import {
 
 const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 
-export interface uploadProcessAudioFile extends AudioProcessorResponse {
+export interface uploadProcessAudioFileResult extends AudioProcessorResponse {
   rawAudioKey: string;
   processedAudioKey: string;
 }
@@ -36,7 +36,7 @@ export const uploadProcessAudioFile = async (
   contentLength: number,
   fileName = '',
   contentType = ''
-): Promise<uploadProcessAudioFile> => {
+): Promise<uploadProcessAudioFileResult> => {
   const fileExtension = mimeTypeToExtension(contentType);
   const rawAudioKey = getRawAudioFileKey(documentId, fileExtension);
   const processedAudioKey = getProcessedAudioFileKey(documentId, fileExtension);
@@ -53,6 +53,7 @@ export const uploadProcessAudioFile = async (
     output_file_key: processedAudioKey,
     output_file_format: 'mp3',
   });
+  logger.debug('Audio processing result', processingResult);
   return {
     ...processingResult,
     rawAudioKey: rawAudioKey,
@@ -76,7 +77,7 @@ export const getPresignedUrlForDocumentAudioFile = async (
       id: documentId,
     },
   });
-  if (!doc || !doc.audioFileURL) {
+  if (!doc?.audioFileURL) {
     throw new Error(
       `Document with id ${documentId} not found with audio file key`
     );
