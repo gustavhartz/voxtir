@@ -12,12 +12,19 @@ const client = new LambdaClient({
 });
 const asciiDecoder = new TextDecoder('ascii');
 
+interface AudioProcessorResponseRaw {
+  statusCode: number;
+  body: string;
+}
+
+type LambdaFunctionResult = {
+  original_file_length: number;
+  processed_file_length: number;
+};
+
 export interface AudioProcessorResponse {
   statusCode: number;
-  body: {
-    original_file_length: number;
-    processed_file_length: number;
-  };
+  body: LambdaFunctionResult;
 }
 
 interface AudioProcessorInput {
@@ -40,10 +47,15 @@ export const invokeAudioProcessor = async (
   };
   const command = new InvokeCommand(input);
   const res = await client.send(command);
-  logger.debug('invokeAudioProcessor response', res.$metadata);
-  const data = asciiDecoder.decode(res.Payload);
-  const audioProcessorResponse = JSON.parse(data) as AudioProcessorResponse;
-  return audioProcessorResponse;
+  logger.debug('invokeAudioProcessor response', res);
+  const responseRaw = JSON.parse(
+    asciiDecoder.decode(res.Payload)
+  ) as AudioProcessorResponseRaw;
+  const lambdaFunctionResult: LambdaFunctionResult = JSON.parse(
+    responseRaw.body
+  );
+
+  return { statusCode: responseRaw.statusCode, body: lambdaFunctionResult };
 };
 
 const isRunningDirectly = false;
