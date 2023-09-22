@@ -1,7 +1,7 @@
 clean: 
 	rm -rf build
 
-build-ffmpeg:
+build:
 	mkdir -p build
 	# Get resources
 	wget -P build https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
