@@ -5,14 +5,18 @@ import {
 } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
+import { AWS_AUDIO_BUCKET_NAME } from '../../../common/env.js';
+import { mimeTypeToExtension } from '../../../common/file-formats.js';
 import {
   generateProjectSharingToken,
   projectSharingJWTRes,
   verifyProjectSharingToken,
 } from '../../../common/jwt.js';
 import prisma from '../../../prisma/index.js';
+import { invokeAudioProcessor } from '../../../services/aws-lambda.js';
 import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
+import { getProcessedAudioFileKey } from '../../../transcription/common.js';
 import {
   getPresignedUrlForDocumentAudioFile,
   uploadAudioFile,
@@ -459,20 +463,37 @@ const mutations: MutationResolvers = {
     logger.info(`Uploading audio file for document ${documentId}`);
     const stream: Buffer = createReadStream();
     try {
-      const key = await uploadAudioFile(
+      const fileType = mimeTypeToExtension(mimetype);
+      const keyRawAudio = await uploadAudioFile(
         documentId,
         stream,
         contentLength,
         filename,
         mimetype
       );
-      logger.debug(`Uploaded audio file to ${key}`);
+      const fileTypeTarget = 'mp3';
+      const keyProcessedAudio = getProcessedAudioFileKey(
+        documentId,
+        fileTypeTarget
+      );
+      logger.debug(`Uploaded audio file to ${keyRawAudio}`);
+      logger.info(`Running ffmpeg lambda on audiofile`);
+      const processingResult = await invokeAudioProcessor({
+        input_file_bucket: AWS_AUDIO_BUCKET_NAME,
+        input_file_key: keyRawAudio,
+        input_file_format: fileType,
+        output_file_bucket: AWS_AUDIO_BUCKET_NAME,
+        output_file_key: keyProcessedAudio,
+        output_file_format: 'mp3',
+      });
       await prisma.document.update({
         where: {
           id: documentId,
         },
         data: {
-          audioFileURL: key,
+          audioFileURL: keyProcessedAudio,
+          rawAudioFileLength: processingResult.body.original_file_length,
+          processedAudioFileLength: processingResult.body.processed_file_length,
         },
       });
     } catch (error) {
@@ -488,6 +509,9 @@ const mutations: MutationResolvers = {
         message: 'Error uploading file',
       };
     }
+    logger.info(
+      `Finished uploading and processing audio file for document ${documentId}`
+    );
     return { success: true };
   },
   getPresignedUrlForAudioFile: async (_, args, context) => {

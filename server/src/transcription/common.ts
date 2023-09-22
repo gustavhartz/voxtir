@@ -4,7 +4,8 @@ import { logger } from '../services/logger.js';
 export const AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION = 60 * 60 * 2; // 2 Hours in milliseconds
 
 // TRANSCRIPTION BUCKET SETUP
-export const audioFilePrefix = 'raw-audio';
+export const rawAudioFilePrefix = 'raw-audio';
+export const processedAudioFilePrefix = 'processed-audio';
 export const speechToTextFilePrefix = 'speech-to-text';
 export const speakerDiarizationFilePrefix = 'speaker-diarization';
 export const generatedTranscriptionFilePrefix = 'generated-transcription';
@@ -157,4 +158,18 @@ export function getSpeechToTextOutputKey(documentId: string): string {
 
 export function getGeneratedTranscriptionFileKey(documentId: string): string {
   return `${generatedTranscriptionFilePrefix}/${documentId}.json`;
+}
+
+export function getRawAudioFileKey(
+  documentId: string,
+  fileExtension: string
+): string {
+  return `${rawAudioFilePrefix}/${documentId}.${fileExtension}`;
+}
+
+export function getProcessedAudioFileKey(
+  documentId: string,
+  fileExtension: string
+): string {
+  return `${processedAudioFilePrefix}/${documentId}.${fileExtension}`;
 }

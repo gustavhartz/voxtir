@@ -4,8 +4,8 @@ import prisma from '../prisma/index.js';
 import { logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import {
-  audioFilePrefix,
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
+  getRawAudioFileKey,
 } from './common.js';
 
 const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
@@ -28,7 +28,7 @@ export const uploadAudioFile = async (
   contentType = ''
 ): Promise<string> => {
   const fileExtension = mimeTypeToExtension(contentType);
-  const key = `${audioFilePrefix}/${documentId}.${fileExtension}`;
+  const key = getRawAudioFileKey(documentId, fileExtension);
   logger.info(
     `Uploading audio file ${fileName} to ${key} with size ${contentLength}`
   );
