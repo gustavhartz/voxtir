@@ -21,6 +21,7 @@
   "license": "None",
   "dependencies": {
     "@apollo/server": "^4.7.1",
+    "@aws-sdk/client-lambda": "^3.414.0",
     "@aws-sdk/client-s3": "^3.388.0",
     "@aws-sdk/client-sagemaker": "^3.385.0",
     "@aws-sdk/s3-request-presigner": "^3.388.0",
