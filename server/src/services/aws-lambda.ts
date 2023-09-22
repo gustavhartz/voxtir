@@ -47,7 +47,7 @@ export const invokeAudioProcessor = async (
   };
   const command = new InvokeCommand(input);
   const res = await client.send(command);
-  logger.debug('invokeAudioProcessor response', res);
+  logger.debug('invokeAudioProcessor response metadata', res.$metadata);
   const responseRaw = JSON.parse(
     asciiDecoder.decode(res.Payload)
   ) as AudioProcessorResponseRaw;
