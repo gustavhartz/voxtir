@@ -13,22 +13,22 @@ enum TranscriptionType {
 }
 
 model Document {
-    id                       String   @id @default(uuid())
-    title                    String
-    createdAt                DateTime @default(now())
-    updatedAt                DateTime @updatedAt
-    project                  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-    projectId                String // relation scalar field (used in the `@relation` attribute above)  
+    id                              String   @id @default(uuid())
+    title                           String
+    createdAt                       DateTime @default(now())
+    updatedAt                       DateTime @updatedAt
+    project                         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    projectId                       String // relation scalar field (used in the `@relation` attribute above)  
     // TipTap document data
-    data                     Bytes?
+    data                            Bytes?
     // Audio file
-    audioFileURL             String?
-    rawAudioFileLength       Int?
-    processedAudioFileLength Int?
+    audioFileURL                    String?
+    rawAudioFileLengthSeconds       Int?
+    processedAudioFileLengthSeconds Int?
     // Transcription data
-    language                 String?
-    speakerCount             Int?
-    dialect                  String?
+    language                        String?
+    speakerCount                    Int?
+    dialect                         String?
 
     // Other
     isTrashed     Boolean           @default(false)

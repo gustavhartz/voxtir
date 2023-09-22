@@ -472,8 +472,8 @@ const mutations: MutationResolvers = {
         },
         data: {
           audioFileURL: response.processedAudioKey,
-          rawAudioFileLength: response.body.original_file_length,
-          processedAudioFileLength: response.body.processed_file_length,
+          rawAudioFileLengthSeconds: response.body.original_file_length,
+          processedAudioFileLengthSeconds: response.body.processed_file_length,
         },
       });
     } catch (error) {
