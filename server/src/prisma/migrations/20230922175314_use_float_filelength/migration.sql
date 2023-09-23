@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Document" ALTER COLUMN "processedAudioFileLengthSeconds" SET DATA TYPE DOUBLE PRECISION,
+ALTER COLUMN "rawAudioFileLengthSeconds" SET DATA TYPE DOUBLE PRECISION;

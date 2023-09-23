@@ -15,7 +15,7 @@ import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
   getPresignedUrlForDocumentAudioFile,
-  uploadAudioFile,
+  uploadProcessAudioFile,
 } from '../../../transcription/index.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { FileAlreadyExistsError } from '../../../types/customErrors.js';
@@ -422,6 +422,7 @@ const mutations: MutationResolvers = {
   uploadAudioFile: async (_, args, context) => {
     const { doc, documentId, projectId, contentLength } = args;
     const { createReadStream, filename, mimetype } = await doc.file;
+    logger.debug(`Attempting upload of audio file for  ${documentId}`);
     // assert user has permission
     const userRelation = await prisma.userOnProject.findFirst({
       where: {
@@ -456,23 +457,23 @@ const mutations: MutationResolvers = {
       };
     }
 
-    logger.info(`Uploading audio file for document ${documentId}`);
     const stream: Buffer = createReadStream();
     try {
-      const key = await uploadAudioFile(
+      const response = await uploadProcessAudioFile(
         documentId,
         stream,
         contentLength,
         filename,
         mimetype
       );
-      logger.debug(`Uploaded audio file to ${key}`);
       await prisma.document.update({
         where: {
           id: documentId,
         },
         data: {
-          audioFileURL: key,
+          audioFileURL: response.processedAudioKey,
+          rawAudioFileLengthSeconds: response.body.original_file_length,
+          processedAudioFileLengthSeconds: response.body.processed_file_length,
         },
       });
     } catch (error) {
@@ -488,6 +489,9 @@ const mutations: MutationResolvers = {
         message: 'Error uploading file',
       };
     }
+    logger.info(
+      `Finished uploading and processing audio file for document ${documentId}`
+    );
     return { success: true };
   },
   getPresignedUrlForAudioFile: async (_, args, context) => {

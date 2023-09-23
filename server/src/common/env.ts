@@ -21,6 +21,7 @@ export const {
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME,
   ENABLE_SCHEDULER_JOBS,
   AUTH0_DOMAIN,
+  AUDIO_PROCESSOR_LAMBDA_NAME,
 } = process.env as {
   AUTH0_CLIENT_ID: string;
   AUTH0_CLIENT_SECRET: string;
@@ -38,6 +39,7 @@ export const {
   SAGEMAKER_TRANSCRIPTION_MODEL_NAME: string;
   ENABLE_SCHEDULER_JOBS: string;
   AUTH0_DOMAIN: string;
+  AUDIO_PROCESSOR_LAMBDA_NAME: string;
 };
 // Assert defined
 if (
@@ -55,7 +57,8 @@ if (
   !NODE_ENV ||
   !DATABASE_URL ||
   !SAGEMAKER_TRANSCRIPTION_MODEL_NAME ||
-  !AUTH0_DOMAIN
+  !AUTH0_DOMAIN ||
+  !AUDIO_PROCESSOR_LAMBDA_NAME
 ) {
   throw new Error('Missing env');
 }
