@@ -25,6 +25,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    credits: Int!
   }
   type UserSharing {
     email: String!
