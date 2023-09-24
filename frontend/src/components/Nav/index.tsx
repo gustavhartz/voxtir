@@ -4,16 +4,16 @@ import {
   AiFillFolderOpen,
   AiFillInfoCircle,
   AiFillPushpin,
-  AiOutlineBug,
   AiOutlineFolder,
   AiOutlineInfoCircle,
   AiOutlineMenuFold,
-  AiOutlineMenuUnfold} from 'react-icons/ai';
-import { BiCoin } from "react-icons/bi";
+  AiOutlineMenuUnfold,
+} from 'react-icons/ai';
+import { BiCoin } from 'react-icons/bi';
 import { FaRegFileAudio } from 'react-icons/fa';
 import { IoMdLogOut } from 'react-icons/io';
 import { IconType } from 'react-icons/lib';
-import { MdOutlineQuestionAnswer } from "react-icons/md";
+import { MdOutlineQuestionAnswer } from 'react-icons/md';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
@@ -24,8 +24,7 @@ import { useAppSelector } from '../../hooks';
 import { useAppDispatch } from '../../hooks';
 import { refetchPinnedComplete } from '../../state/client';
 import withAccessToken from '../Auth/with-access-token';
-import BugModal from '../BugModal';
-import FeatureModal from '../FeatureModal';
+import FeatureModal from '../TermsConditionsModal';
 
 interface Route {
   name: string;
@@ -129,8 +128,7 @@ const PinnedRoutes = ({
 };
 
 const Nav = ({ token }: { token: string }) => {
-  const [isBugOpen, setBugOpen] = React.useState(false);
-  const [isFeatureOpen, setFeatureOpen] = React.useState(false);
+  const [isTermsConditionsOpen, setTermsConditionsOpen] = React.useState(true);
   const [isOpen, setOpen] = React.useState(
     localStorage.getItem('sidebar') === 'true' ? true : false
   );
@@ -174,8 +172,10 @@ const Nav = ({ token }: { token: string }) => {
   if (isOpen) {
     return (
       <>
-        <BugModal isOpen={isBugOpen} toggleOpen={() => setBugOpen(!isBugOpen)} />
-        <FeatureModal isOpen={isFeatureOpen} toggleOpen={() => setFeatureOpen(!isFeatureOpen)} />
+        <FeatureModal
+          isOpen={isTermsConditionsOpen}
+          toggleOpen={() => setTermsConditionsOpen(!isTermsConditionsOpen)}
+        />
         <div className="max-w-[270px] w-full flex flex-col min-h-full h-full bg-white border-r-2 border-gray-100">
           <div className="p-6 flex items-center justify-between bg-gray-900 text-white">
             <div className="flex flex-row items-center ">
@@ -188,50 +188,45 @@ const Nav = ({ token }: { token: string }) => {
             />
           </div>
           <div className="rounded-sm px-4 flex bg-gray-100 flex-col justify-center items-center py-4 mb-4 border-t-2 border-b-2 text-gray-900 font-bold">
-                  <div className="flex flex-row items-center">
-                    <BiCoin size={45} className="text-slate-900" />
-                  </div>
-                  <span className="text-lg font-medium flex flex-row items-center">
-                    <span className="font-extrabold text-xl pr-1">3</span> 
-                    Total credits remaining
-                  </span>
-                </div>
+            <div className="flex flex-row items-center">
+              <BiCoin size={45} className="text-slate-900" />
+            </div>
+            <span className="text-lg font-medium flex flex-row items-center">
+              <span className="font-extrabold text-xl pr-1">3</span>
+              Total credits remaining
+            </span>
+          </div>
           <div className="flex-grow flex flex-col h-full justify-between">
-              <div>
-                <PinnedRoutes pinnedProp={data} latestProject={latestProject} />
-                <SidebarRoutes />
-              </div>
-              <div className="text-gray-900 py-10">
-                <button
-                    onClick={() => setFeatureOpen(!isFeatureOpen)}
-                    className={`hover:bg-gray-200 py-4 flex items-center font-medium px-8 mb-2 w-full transition-all`}>
-                    <MdOutlineQuestionAnswer size={25} />
-                    <span className="px-4 text-lg font-inherit bg-inherit overflow-hidden whitespace-pre text-ellipsis">
-                      Request a feature
-                    </span>
-                </button>
-                <button
-                    onClick={() => setBugOpen(!isBugOpen)}
-                    className={`hover:bg-gray-200 py-4 flex items-center font-semibold px-8 mb-2 w-full transition-all`}>
-                    <AiOutlineBug size={25} />
-                    <span className="px-4 text-lg font-medium font-inherit bg-inherit overflow-hidden whitespace-nowrap text-ellipsis">
-                      Report a bug
-                    </span>
-                </button>
-                <button
-                    onClick={() =>
-                      logout({
-                        logoutParams: {
-                          returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI,
-                        },
-                      })}
-                    className={`hover:bg-gray-200 py-4 flex items-center font-semibold px-8 w-full transition-all`}>
-                    <IoMdLogOut size={25} />
-                    <span className="px-4 text-lg font-medium font-inherit bg-inherit overflow-hidden whitespace-nowrap text-ellipsis">
-                      Signout
-                    </span>
-                </button>
-              </div>  
+            <div>
+              <PinnedRoutes pinnedProp={data} latestProject={latestProject} />
+              <SidebarRoutes />
+            </div>
+            <div className="text-gray-900 py-10">
+              <button
+                onClick={() => setTermsConditionsOpen(!isTermsConditionsOpen)}
+                className={`hover:bg-gray-200 py-4 flex items-center font-medium px-8 mb-2 w-full transition-all`}
+              >
+                <MdOutlineQuestionAnswer size={25} />
+                <span className="px-4 text-lg font-inherit bg-inherit overflow-hidden whitespace-pre text-ellipsis">
+                  Info & Contact
+                </span>
+              </button>
+              <button
+                onClick={() =>
+                  logout({
+                    logoutParams: {
+                      returnTo: import.meta.env.VITE_AUTH0_LOGOUT_URI,
+                    },
+                  })
+                }
+                className={`hover:bg-gray-200 py-4 flex items-center font-semibold px-8 w-full transition-all`}
+              >
+                <IoMdLogOut size={25} />
+                <span className="px-4 text-lg font-medium font-inherit bg-inherit overflow-hidden whitespace-nowrap text-ellipsis">
+                  Signout
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </>

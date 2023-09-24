@@ -30,7 +30,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     'audio/webm', // WebM audio
     'audio/x-m4a', // Apple audio
   ];
-  const maxSizeInMB = 100; // Specify the max size in MB here
+  const maxSizeInMB = 200; // Specify the max size in MB here
   const { fileUrl, file, fileName, fileSize, handleFileChange } = useFileUpload(
     supportedAudioFileTypes,
     maxSizeInMB

@@ -65,7 +65,6 @@ model User {
     UsersOnProjects               UserOnProject[]
     PinnedProjects                PinnedProjects[]
     ProjectInvitation             ProjectInvitation[]
-    Bug                           Bug[]
 }
 
 model Project {
@@ -143,12 +142,4 @@ model Task {
 
 enum taskType {
     TRANSCRIPTION_JOB_STARTER
-}
-
-model Bug {
-    id          Int    @id @default(autoincrement())
-    problem     String
-    description String
-    user        User   @relation(fields: [userId], references: [id])
-    userId      String // relation scalar field (used in the `@relation` attribute above)
 }
