@@ -66,6 +66,7 @@ const queries: QueryResolvers = {
         id: projectEle.id,
         name: projectEle.name,
         description: projectEle.description,
+        updatedAt: projectEle.updatedAt.toISOString(),
         documents: projectEle.Documents.filter((doc) => doc.transcription).map(
           (doc) => {
             return {
@@ -118,6 +119,7 @@ const queries: QueryResolvers = {
       id: project.id,
       name: project.name,
       description: project.description,
+      updatedAt: project.updatedAt.toISOString(),
       documents: project.Documents.filter((doc) => doc.transcription).map(
         (doc) => {
           return {
@@ -263,6 +265,7 @@ const queries: QueryResolvers = {
         id: projectEle.id,
         name: projectEle.name,
         description: projectEle.description,
+        updatedAt: projectEle.updatedAt.toISOString(),
         documents: projectEle.Documents.filter((doc) => doc.transcription).map(
           (doc) => {
             return {

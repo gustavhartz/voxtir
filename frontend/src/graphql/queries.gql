@@ -12,6 +12,7 @@ query Projects {
     name
     id
     description
+    updatedAt
     documents {
       description
       id

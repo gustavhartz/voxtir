@@ -18,9 +18,9 @@ const TermsConditionsModal: React.FC<BaseModalProps> = ({
         ref={modalRef}
         className="bg-white rounded-lg w-full m-4 mx-24 px-4 py-4"
       >
-        <div>
-          <div>
-            <label className="text-2xl font-semibold text-black">
+        <div className="p-8">
+          <div className="space-y-6 text-xl">
+            <label className="text-4xl font-semibold text-black">
               Voxtir Beta Transcription application
             </label>
             <p>
@@ -86,7 +86,7 @@ const TermsConditionsModal: React.FC<BaseModalProps> = ({
             </p>
           </div>
           <button
-            className="bg-gray-200 hover:bg-gray-300 transition-colors text-gray-800 font-bold py-2 px-4 mt-4 rounded"
+            className="text-xl bg-gray-200 hover:bg-gray-300 transition-colors text-gray-800 font-semibold py-3 px-6 mt-4 rounded"
             onClick={toggleOpen}
           >
             Accept
