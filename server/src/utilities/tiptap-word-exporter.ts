@@ -1,5 +1,7 @@
 import HTMLtoDOCX from 'html-to-docx';
 
+import { logger } from '../services/logger';
+
 const htmlPreprocessing = (htmlString: string): string => {
   htmlString = convertTimestampsToSpans(htmlString);
   htmlString = styleMentionSpans(htmlString);
@@ -35,7 +37,8 @@ function convertTimestampsToSpans(htmlString: string): string {
       const timestampMatch = match.match(timestampRegex)?.[1];
       // Create the new span element wrapped in a p tag
       if (timestampMatch) {
-        return `<p><span style="color: green;">${timestampMatch}</span></p>`;
+        console.log(timestampMatch);
+        return `<span style="font-weight: bold;"> Time: ${timestampMatch}.</span>`;
       }
       return '';
     }
