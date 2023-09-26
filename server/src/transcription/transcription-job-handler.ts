@@ -9,11 +9,13 @@ import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
 import { listBatchTransformJobs } from '../services/aws-sagemaker.js';
 import { Logger } from '../services/logger.js';
+import { sendTranscriptionStatusEmail } from '../services/resend.js';
 import {
   S3StorageHandler,
   StorageHandler,
 } from '../services/storageHandler.js';
 import { TipTapJSONToYDoc } from '../tiptap-editor/index.js';
+import { Auth0ManagementApiUser } from '../types/auth0.js';
 import {
   getGeneratedTranscriptionFileKey,
   getSpeakerDiarizationOutputKey,
@@ -168,6 +170,28 @@ export class TranscriptionJobHandler {
           },
         },
       });
+      const projectUsers = await prisma.userOnProject.findMany({
+        where: {
+          projectId: document.projectId,
+        },
+        include: {
+          user: true,
+        },
+      });
+      // Send email to all project users
+      this.logger.info(
+        `Sending emails to ${projectUsers.length} users about ${document.id}`
+      );
+      for (const userOnProject of projectUsers) {
+        const recipientAuth0Details = userOnProject.user
+          .auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
+        await sendTranscriptionStatusEmail(
+          recipientAuth0Details.email,
+          document.title,
+          'DONE',
+          `${process.env.FRONTEND_BASE_URL}/document/${document.id}`
+        );
+      }
     }
   }
   protected async processQueuedJobs(): Promise<void> {
