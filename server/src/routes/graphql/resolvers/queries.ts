@@ -6,6 +6,10 @@ import { AWS_AUDIO_BUCKET_NAME } from '../../../common/env.js';
 import prisma from '../../../prisma/index.js';
 import { logger } from '../../../services/logger.js';
 import { S3StorageHandler } from '../../../services/storageHandler.js';
+import {
+  TipTapJSONToHTML,
+  yjsStateToTipTapJSON,
+} from '../../../tiptap-editor/index.js';
 import { LanguageCodePairs } from '../../../transcription/common.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { generateWordFileFromHTML } from '../../../utilities/tiptap-word-exporter.js';
@@ -205,17 +209,36 @@ const queries: QueryResolvers = {
    * @param context
    * @returns
    */
-  generateWordFileFromHTML: async (_, args, context) => {
-    const htmlString = args.html;
+  generateWordExport: async (_, args, context) => {
+    const documentId = args.documentId;
     logger.info(`Generating word file from HTML for user ${context.userId}`);
-    const doc = await generateWordFileFromHTML(htmlString);
+    const document = await prisma.document.findFirst({
+      where: {
+        id: documentId,
+        project: {
+          UsersOnProjects: {
+            some: {
+              userId: context.userId,
+            },
+          },
+        },
+      },
+    });
+
+    if (!document?.data) {
+      throw new GraphQLError('Document not found');
+    }
+    const htmlString = TipTapJSONToHTML(
+      yjsStateToTipTapJSON(document.data).default
+    );
+    const wordDoc = await generateWordFileFromHTML(htmlString);
     // Should be a separate bucket
     const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
 
     const key = `wordexport/${uuidv4() + '-' + context.userId}.docx`;
     await s3.putObject(
       key,
-      doc,
+      wordDoc,
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     );
 
