@@ -37,9 +37,9 @@ export const sendTranscriptionStatusEmail = async (
   transcriptionStatus: 'DONE' | 'FAILED',
   documentLink: string
 ): Promise<CreateEmailResponse> => {
-  const subject = `Your transcription ${documentName} - ${
-    transcriptionStatus === 'DONE' ? 'Is ready' : 'failed'
-  }`;
+  const subject = `Your transcription "${documentName}" - has ${
+    transcriptionStatus === 'DONE' ? 'completed' : 'failed'
+  } its transcription`;
   return resend.emails.send({
     from: `Voxtir <no-reply@${RESEND_DOMAIN}>`,
     to: emailTo,

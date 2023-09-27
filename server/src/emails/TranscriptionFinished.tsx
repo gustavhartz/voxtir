@@ -7,6 +7,7 @@ import {
   Html,
   Img,
   Link,
+  Preview,
   Section,
   Tailwind,
   Text,
@@ -32,6 +33,7 @@ export const TranscriptionStatusEmail = (
   return (
     <Html>
       <Head />
+      <Preview>We hope you find it useful</Preview>
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border bg-white border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
