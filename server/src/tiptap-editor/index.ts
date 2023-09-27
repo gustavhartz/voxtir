@@ -8,37 +8,40 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
+import { generateHTML } from '@tiptap/html';
 import * as Y from 'yjs';
 
 import prisma from '../prisma/index.js';
 import { Doc, TipTapTransformerDocument } from '../types/tiptap-editor.js';
 import TrackTimeStamp from './timestamp.js';
 
+const extensions = [
+  Document,
+  Paragraph,
+  Text,
+  HorizontalRule,
+  Heading,
+  Color,
+  TextStyle,
+  Placeholder.configure({
+    placeholder: 'Start typing here...',
+    emptyNodeClass:
+      'first:before:h-0 first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
+  }),
+  Mention.configure({
+    HTMLAttributes: {
+      class:
+        'border-black rounded-md break-clone py-0.5 px-1.5 p-1 bg-blue-500 text-white',
+    },
+  }),
+  TrackTimeStamp.configure({
+    timestamp: '00:00:00',
+    show: false,
+  }),
+];
+
 export const TipTapJSONToYDoc = (json: Doc): Y.Doc => {
-  return TiptapTransformer.toYdoc(json, 'default', [
-    Document,
-    Paragraph,
-    Text,
-    HorizontalRule,
-    Heading,
-    Color,
-    TextStyle,
-    Placeholder.configure({
-      placeholder: 'Start typing here...',
-      emptyNodeClass:
-        'first:before:h-0 first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
-    }),
-    Mention.configure({
-      HTMLAttributes: {
-        class:
-          'border-black rounded-md break-clone py-0.5 px-1.5 p-1 bg-blue-500 text-white',
-      },
-    }),
-    TrackTimeStamp.configure({
-      timestamp: '00:00:00',
-      show: false,
-    }),
-  ]);
+  return TiptapTransformer.toYdoc(json, 'default', extensions);
 };
 
 export const yjsStateToTipTapJSON = (
@@ -47,6 +50,10 @@ export const yjsStateToTipTapJSON = (
   const ydoc = new Y.Doc();
   Y.applyUpdate(ydoc, yjsState);
   return TiptapTransformer.fromYdoc(ydoc);
+};
+
+export const TipTapJSONToHTML = (json: Doc): string => {
+  return generateHTML(json, extensions);
 };
 
 const isRunningDirectly = false;
@@ -64,6 +71,8 @@ if (isRunningDirectly) {
   }
   const tipTapDoc = yjsStateToTipTapJSON(doc.data);
   JSON.stringify(tipTapDoc, null, 2);
+  const html = TipTapJSONToHTML(tipTapDoc.default);
+  console.log(html);
   const yDoc = TipTapJSONToYDoc(tipTapDoc.default);
   const yDocState = Y.encodeStateAsUpdate(yDoc);
   const tipTapDoc2 = yjsStateToTipTapJSON(yDocState);

@@ -25,8 +25,8 @@ query Projects {
   }
 }
 
-query GenerateWordFileFromHTML($html: String!) {
-  generateWordFileFromHTML(html: $html) {
+query generateWordExport($documentId: ID!) {
+  generateWordExport(documentId: $documentId) {
     expiresAtUnixSeconds
     url
   }
