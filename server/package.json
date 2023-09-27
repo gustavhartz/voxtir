@@ -43,6 +43,7 @@
     "@tiptap/extension-placeholder": "^2.1.8",
     "@tiptap/extension-text": "^2.1.8",
     "@tiptap/extension-text-style": "^2.1.8",
+    "@tiptap/html": "^2.1.11",
     "access-token-jwt": "^0.0.0",
     "aws-sdk": "^2.1428.0",
     "axios": "^1.4.0",
