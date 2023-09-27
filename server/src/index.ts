@@ -4,11 +4,12 @@ import { expressMiddleware } from '@apollo/server/express4';
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import expressWebsockets from 'express-ws';
 import { graphqlUploadExpress } from 'graphql-upload-minimal';
 import http from 'http';
 import morgan from 'morgan';
+import { serializeError } from 'serialize-error';
 
 import {
   APP_NAME,
@@ -29,6 +30,20 @@ console.timeEnd('deps');
 
 console.time('startup');
 
+// Worst case capture
+process.on('unhandledRejection', (reason, promise) => {
+  logger.fatal('unhandledRejection', {
+    promise: serializeError(promise),
+    reason: serializeError(reason),
+  });
+});
+process.on('uncaughtExceptionMonitor', (err, origin) => {
+  logger.fatal('uncaughtExceptionMonitor', {
+    err: serializeError(err),
+    origin: serializeError(origin),
+  });
+});
+
 async function main(): Promise<void> {
   if (ENABLE_SCHEDULER_JOBS === 'true') {
     logger.info('Scheduler jobs enabled');
@@ -39,7 +54,7 @@ async function main(): Promise<void> {
   const httpServer = http.createServer(expressApp);
   const app = expressWebsockets(expressApp, httpServer).app;
 
-  // Common Middelware
+  // Common Middleware
   app.use(
     morgan(`${chalk.green(APP_NAME)} :method :url :status - :response-time ms`)
   );
@@ -65,6 +80,18 @@ async function main(): Promise<void> {
   app.use(wsRoutes);
   app.use(auth0Middleware);
   app.use(userInfoSync);
+
+  // Error capture
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.name === 'UnauthorizedError') {
+      // Set an appropriate status code and send the error as JSON
+      res.status(401).json({
+        reason: err.message,
+        message: 'No valid Auth0 token provided in header',
+        // Include any additional properties you want to expose
+      });
+    }
+  });
 
   const fileUploadSizeLimit = 200 * 10 ** 6; // 200MB
   const gqlServer = await getGqlServer(httpServer);
