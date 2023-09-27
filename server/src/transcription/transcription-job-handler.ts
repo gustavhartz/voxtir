@@ -65,7 +65,10 @@ export class TranscriptionJobHandler {
 
         case TransformJobStatus.COMPLETED:
           await prisma.transcriptionJob.update({
-            where: { jobName: job.TransformJobName },
+            where: {
+              jobName: job.TransformJobName,
+              status: { not: TranscriptionProcessStatus.DONE },
+            },
             data: {
               status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_COMPLETED,
               jobFinishedAt: job.TransformEndTime || new Date(),
