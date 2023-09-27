@@ -18,10 +18,10 @@ import { Link, useLocation } from 'react-router-dom';
 
 import {
   MePinnedProjectsQuery,
+  useGetMeQuery,
   useMePinnedProjectsQuery,
 } from '../../graphql/generated/graphql';
-import { useAppSelector } from '../../hooks';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { refetchPinnedComplete } from '../../state/client';
 import withAccessToken from '../Auth/with-access-token';
 import FeatureModal from '../TermsConditionsModal';
@@ -151,6 +151,14 @@ const Nav = ({ token }: { token: string }) => {
     },
   });
 
+  const { data: meData } = useGetMeQuery({
+    context: {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    },
+  });
+
   React.useEffect(() => {
     if (refetchPinned) {
       refetch();
@@ -192,8 +200,10 @@ const Nav = ({ token }: { token: string }) => {
               <BiCoin size={45} className="text-slate-900" />
             </div>
             <span className="text-lg font-medium flex flex-row items-center">
-              <span className="font-extrabold text-xl pr-1">3</span>
-              Total credits remaining
+              <span className="font-extrabold text-xl pr-1">
+                {meData?.me?.credits}
+              </span>
+              credits remaining
             </span>
           </div>
           <div className="flex-grow flex flex-col h-full justify-between">
