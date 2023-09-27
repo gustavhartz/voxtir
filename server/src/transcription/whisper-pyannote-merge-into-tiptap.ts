@@ -287,9 +287,12 @@ export class WhisperPyannoteMerger {
         lastTimestampAt = whisperSegment.start;
       }
 
-      currentParagraph.content?.push(
-        WhisperPyannoteMerger.getTextTemplate(whisperSegment.text)
-      );
+      // Empty text nodes are not allowed in the TipTapJSONDoc
+      if (whisperSegment.text !== '') {
+        currentParagraph.content?.push(
+          WhisperPyannoteMerger.getTextTemplate(whisperSegment.text)
+        );
+      }
       whisperIdx++;
     }
     return TipTapJSONDoc;
