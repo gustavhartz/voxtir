@@ -11,9 +11,9 @@ import { Tooltip } from 'react-tooltip';
 
 import { client } from '../../graphql/client';
 import {
-  GenerateWordFileFromHtmlDocument,
-  GenerateWordFileFromHtmlQueryResult,
-  GenerateWordFileFromHtmlQueryVariables,
+  GenerateWordExportDocument,
+  GenerateWordExportQueryResult,
+  GenerateWordExportQueryVariables,
 } from '../../graphql/generated/graphql';
 import { useAppDispatch } from '../../hooks';
 import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
@@ -21,6 +21,7 @@ import { toggleModal as ToggleKeyboardModal } from '../../state/keyboard';
 interface DrawerProps {
   editor: Editor | null;
   token: string;
+  documentId: string;
 }
 
 const Drawer = (props: DrawerProps): JSX.Element => {
@@ -32,26 +33,25 @@ const Drawer = (props: DrawerProps): JSX.Element => {
       console.error('Editor instance not found');
       return;
     }
-    const data = editor.getHTML();
 
-    const variables: GenerateWordFileFromHtmlQueryVariables = {
-      html: data,
+    const variables: GenerateWordExportQueryVariables = {
+      documentId: props.documentId,
     };
 
     const response = (await client.query({
-      query: GenerateWordFileFromHtmlDocument,
+      query: GenerateWordExportDocument,
       variables: variables,
       context: {
         headers: {
           Authorization: `Bearer ${props.token}`,
         },
       },
-    })) as GenerateWordFileFromHtmlQueryResult;
+    })) as GenerateWordExportQueryResult;
     if (response.error) {
       console.error(response.error);
       return;
     }
-    const s3Url = response.data?.generateWordFileFromHTML?.url;
+    const s3Url = response.data?.generateWordExport?.url;
     if (!s3Url) {
       console.error('No data returned');
       return;
