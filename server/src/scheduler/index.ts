@@ -2,7 +2,7 @@ import { taskType, TranscriptionProcessStatus } from '@prisma/client';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
-import { Logger } from '../services/logger.js';
+import { Logger, logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import { TranscriptionJobHandler } from '../transcription/transcription-job-handler.js';
 import { acquireTaskLock } from './common.js';
@@ -55,3 +55,24 @@ export const transcriptionJob = new ScheduledAsyncTask(
   transcriptionJobTask,
   POLL_INTERVAL_MS
 );
+
+const isRunningDirectly = false;
+if (isRunningDirectly) {
+  const runningJobs = await prisma.transcriptionJob.findMany({
+    where: {
+      status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
+    },
+  });
+  // get the earliest start time of the running jobs
+  const earliestStartTime = runningJobs.reduce((earliestTime, job) => {
+    if (!job.jobStartedAt) {
+      return earliestTime;
+    }
+    return earliestTime < job.jobStartedAt! ? earliestTime : job.jobStartedAt;
+  }, new Date());
+  await new TranscriptionJobHandler(
+    logger,
+    new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
+    { CreationTimeAfter: earliestStartTime }
+  ).run();
+}
