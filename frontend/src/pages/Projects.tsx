@@ -117,7 +117,7 @@ const Projects = ({ token }: { token: string }) => {
                     project.documents?.filter(
                       (document) => !document?.isTrashed
                     ).length || 0,
-                  createdAt: new Date(),
+                  createdAt: new Date(project.updatedAt),
                   description: project.description || '',
                 }}
               />

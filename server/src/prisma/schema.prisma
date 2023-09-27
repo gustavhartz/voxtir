@@ -63,6 +63,7 @@ enum TranscriptionProcessStatus {
 model User {
     id                            String              @id
     auth0ManagementApiUserDetails Json?
+    credits                       Int                 @default(3)
     UsersOnProjects               UserOnProject[]
     PinnedProjects                PinnedProjects[]
     ProjectInvitation             ProjectInvitation[]

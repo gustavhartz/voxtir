@@ -15,7 +15,7 @@
     "prepare": "cd .. && husky install server/.husky",
     "lint-server": "lint-staged",
     "test": "jest",
-    "dev-email": "email dev --dir src/emails"
+    "dev-email": "email dev --dir src/emails -p 3001"
   },
   "author": "Gustav Hartz",
   "license": "None",

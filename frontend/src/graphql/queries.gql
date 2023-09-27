@@ -1,6 +1,7 @@
 query GetMe {
   me {
     email
+    credits
     id
     name
   }
@@ -11,6 +12,7 @@ query Projects {
     name
     id
     description
+    updatedAt
     documents {
       description
       id

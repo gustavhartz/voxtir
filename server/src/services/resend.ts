@@ -7,6 +7,7 @@ import {
   RESEND_DOMAIN,
 } from '../common/env.js';
 import Invitiation from '../emails/Invitiation.js';
+import TranscriptionStatusEmail from '../emails/TranscriptionFinished.js';
 
 const resend = new Resend(RESEND_API_KEY);
 
@@ -26,6 +27,27 @@ export const sendProjectShareEmail = async (
       projectName: projectName,
       senderName: senderName,
       invitation: invitationLink,
+    }),
+  });
+};
+
+export const sendTranscriptionStatusEmail = async (
+  emailTo: string,
+  documentName: string,
+  transcriptionStatus: 'DONE' | 'FAILED',
+  documentLink: string
+): Promise<CreateEmailResponse> => {
+  const subject = `Your transcription "${documentName}" - has ${
+    transcriptionStatus === 'DONE' ? 'completed' : 'failed'
+  } its transcription`;
+  return resend.emails.send({
+    from: `Voxtir <no-reply@${RESEND_DOMAIN}>`,
+    to: emailTo,
+    subject: subject,
+    react: TranscriptionStatusEmail({
+      documentName: documentName,
+      documentLink: documentLink,
+      transcriptionStatus: transcriptionStatus,
     }),
   });
 };

@@ -6,5 +6,6 @@ export const typeDefs = gql`
     name: String!
     description: String
     documents: [Document]
+    updatedAt: String!
   }
 `;

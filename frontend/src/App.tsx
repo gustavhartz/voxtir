@@ -22,6 +22,7 @@ function App(): JSX.Element {
           <Route path="document/:documentID" element={<DocumentEditor />} />
           <Route path="project/new" element={<CreateProject />} />
           <Route path="project/:projectID" element={<Documents />} />
+          <Route path="about" element={<div>About</div>} />
           <Route path="me" element={<Me />} />
         </Route>
       </Routes>

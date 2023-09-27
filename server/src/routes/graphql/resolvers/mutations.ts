@@ -76,6 +76,18 @@ const mutations: MutationResolvers = {
     if (!userRights) {
       throw new GraphQLError('Projectid not found or related to user');
     }
+
+    if (transcriptionType === TranscriptionType.AUTOMATIC) {
+      const userDBObject = await prisma.user.findFirst({
+        where: {
+          id: context.userId,
+        },
+      });
+      if (!userDBObject || userDBObject?.credits < 1) {
+        throw new GraphQLError('User has no credits');
+      }
+    }
+
     const doc = await prisma.document.create({
       data: {
         title: title,
@@ -94,6 +106,18 @@ const mutations: MutationResolvers = {
         },
       },
     });
+    if (transcriptionType === TranscriptionType.AUTOMATIC) {
+      await prisma.user.update({
+        where: {
+          id: context.userId,
+        },
+        data: {
+          credits: {
+            decrement: 1,
+          },
+        },
+      });
+    }
     logger.debug(
       `Created document: ${doc.id} for project: ${projectId}. User by ${context.userId}`
     );
