@@ -148,10 +148,12 @@ const queries: QueryResolvers = {
     };
   },
   supportedLanguages: () => {
-    return Object.keys(LanguageCodePairs).map((key) => ({
+    const languagePairs = Object.keys(LanguageCodePairs).map((key) => ({
       languageCode: LanguageCodePairs[key as keyof typeof LanguageCodePairs],
       languageName: key,
     }));
+    languagePairs.sort((a, b) => a.languageName.localeCompare(b.languageName));
+    return languagePairs;
   },
   document: async (_, args, context) => {
     const documentId = args.id;
