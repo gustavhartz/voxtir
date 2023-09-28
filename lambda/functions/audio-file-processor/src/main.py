@@ -4,7 +4,10 @@ import os
 import subprocess
 import string
 import random
-from logger import logger
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
