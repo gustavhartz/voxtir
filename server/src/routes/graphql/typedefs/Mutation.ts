@@ -23,8 +23,7 @@ export const typeDefs = gql`
       dialect: String
       speakerCount: Int
       transcriptionType: TranscriptionType!
-      file: Upload!
-      fileContentLength: Int!
+      fileInput: FileUploadInput!
     ): ID!
     updateDocument(documentId: ID!, title: String!): ActionResult!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!

@@ -69,10 +69,11 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
-      file,
-      fileContentLength,
+      fileInput: { file: file, fileContentLength },
     } = args;
-
+    logger.info(
+      `Creating document for project: ${projectId} of type ${transcriptionType}`
+    );
     // assert user has permission
     checkUserRightsOnProject(projectId, context.userId);
     if (transcriptionType === TranscriptionType.AUTOMATIC) {
@@ -133,7 +134,7 @@ const mutations: MutationResolvers = {
       );
     } catch (error) {
       logger.error('error in raw fileupload to S3', error);
-      throw new GraphQLError('Error uploading file');
+      throw new GraphQLError('Error in document creation');
     }
 
     if (transcriptionType === TranscriptionType.AUTOMATIC) {

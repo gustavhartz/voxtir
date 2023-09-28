@@ -95,10 +95,12 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           projectId: defaultProjectId,
           title: documentName,
           transcriptionType: transcriptionType,
-          file: file,
-          fileContentLength: fileSize,
           language: language,
           speakerCount: speakerCount,
+          fileInput: {
+            file: file,
+            fileContentLength: fileSize,
+          },
         },
       });
       const documentId = documentResponse.data?.createDocument;

@@ -23,8 +23,7 @@ mutation CreateDocument(
   $projectId: ID!
   $title: String!
   $transcriptionType: TranscriptionType!
-  $file: Upload!
-  $fileContentLength: Int!
+  $fileInput: FileUploadInput!
   $language: String
   $speakerCount: Int
 ) {
@@ -34,8 +33,7 @@ mutation CreateDocument(
     transcriptionType: $transcriptionType
     language: $language
     speakerCount: $speakerCount
-    file: $file
-    fileContentLength: $fileContentLength
+    fileInput: $fileInput
   )
 }
 
