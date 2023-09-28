@@ -335,18 +335,7 @@ const mutations: MutationResolvers = {
     const { id, userEmail } = args;
     const userId = context.userId;
 
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: id,
-        userId: userId,
-      },
-    });
-    if (!userRelation || userRelation.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
+    checkUserRightsOnProject(id, userId, ProjectRole.ADMIN);
     // If not accepted, delete invitation
     const invitation = await prisma.projectInvitation.findFirst({
       where: {
@@ -462,31 +451,17 @@ const mutations: MutationResolvers = {
   },
   getPresignedUrlForAudioFile: async (_, args, context) => {
     const { documentId } = args;
-    // assert user has permission
-    // Document is on project
+
     const document = await prisma.document.findFirst({
       where: {
         id: documentId,
       },
-      include: {
-        project: {
-          include: {
-            UsersOnProjects: true,
-          },
-        },
-      },
     });
 
     if (!document) {
-      throw new GraphQLError('Document project combination not found');
+      throw new GraphQLError('Document not found');
     }
-    if (
-      !document.project.UsersOnProjects.some(
-        (userOnProject) => userOnProject.userId == context.userId
-      )
-    ) {
-      throw new GraphQLError('Projectid not found or related to user');
-    }
+    checkUserRightsOnProject(document.projectId, context.userId);
     const signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
       `${documentId}`
     );
@@ -495,18 +470,7 @@ const mutations: MutationResolvers = {
   pinnedProject: async (_, args, context) => {
     const { projectId, pin } = args;
     const userId = context.userId;
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: projectId,
-        userId: userId,
-      },
-    });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
+    checkUserRightsOnProject(projectId, userId);
     await prisma.pinnedProjects.upsert({
       where: {
         projectId_userId: {
