@@ -18,8 +18,12 @@ import {
   uploadProcessAudioFile,
 } from '../../../transcription/index.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
-import { FileAlreadyExistsError } from '../../../types/customErrors.js';
 import { MutationResolvers } from '../generated/graphql';
+import {
+  assertUserCreditsGreaterThan,
+  checkUserRightsOnProject,
+  subtractCreditsFromUser,
+} from './database-helpers.js';
 
 // Use the generated `MutationResolvers` type
 // to type check our mutations!
@@ -65,63 +69,80 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
+      file,
+      fileContentLength,
     } = args;
-    const userRights = await prisma.userOnProject.findFirst({
-      where: {
-        userId: context.userId,
-        projectId: projectId,
-      },
-    });
 
-    if (!userRights) {
-      throw new GraphQLError('Projectid not found or related to user');
+    // assert user has permission
+    checkUserRightsOnProject(projectId, context.userId);
+    if (transcriptionType === TranscriptionType.AUTOMATIC) {
+      assertUserCreditsGreaterThan(context.userId, 0);
+    }
+
+    const { createReadStream, filename, mimetype } = await file;
+    const stream: Buffer = createReadStream();
+
+    // We use a transaction to ensure that the document is only created
+    // if the audio file is successfully uploaded
+    let documentId = '';
+    try {
+      await prisma.$transaction(
+        async (tx) => {
+          const doc = await tx.document.create({
+            data: {
+              title: title,
+              projectId: projectId,
+              language: language,
+              dialect: dialect,
+              speakerCount: speakerCount,
+              transcription: {
+                create: {
+                  type: transcriptionType,
+                  status:
+                    transcriptionType === TranscriptionType.MANUAL
+                      ? TranscriptionProcessStatus.DONE
+                      : TranscriptionProcessStatus.QUEUED,
+                },
+              },
+            },
+          });
+          documentId = doc.id;
+          const response = await uploadProcessAudioFile(
+            doc.id,
+            stream,
+            fileContentLength,
+            filename,
+            mimetype
+          );
+          await tx.document.update({
+            where: {
+              id: doc.id,
+            },
+            data: {
+              audioFileURL: response.processedAudioKey,
+              rawAudioFileLengthSeconds: response.body.original_file_length,
+              processedAudioFileLengthSeconds:
+                response.body.processed_file_length,
+            },
+          });
+        },
+        {
+          maxWait: 15000, // default: 2000
+          timeout: 20000, // default: 5000
+        }
+      );
+    } catch (error) {
+      logger.error('error in raw fileupload to S3', error);
+      throw new GraphQLError('Error uploading file');
     }
 
     if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      const userDBObject = await prisma.user.findFirst({
-        where: {
-          id: context.userId,
-        },
-      });
-      if (!userDBObject || userDBObject?.credits < 1) {
-        throw new GraphQLError('User has no credits');
-      }
-    }
-
-    const doc = await prisma.document.create({
-      data: {
-        title: title,
-        projectId: projectId,
-        language: language,
-        dialect: dialect,
-        speakerCount: speakerCount,
-        transcription: {
-          create: {
-            type: transcriptionType,
-            status:
-              transcriptionType === TranscriptionType.MANUAL
-                ? TranscriptionProcessStatus.DONE
-                : TranscriptionProcessStatus.QUEUED,
-          },
-        },
-      },
-    });
-    if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      await prisma.user.update({
-        where: {
-          id: context.userId,
-        },
-        data: {
-          credits: {
-            decrement: 1,
-          },
-        },
-      });
+      subtractCreditsFromUser(context.userId, 1);
     }
     logger.debug(
-      `Created document: ${doc.id} for project: ${projectId}. User by ${context.userId}`
+      `Created document: ${documentId} for project: ${projectId}. User by ${context.userId}`
     );
-    return doc.id;
+    return documentId;
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;
@@ -441,81 +462,6 @@ const mutations: MutationResolvers = {
         usedById: userId,
       },
     });
-    return { success: true };
-  },
-  uploadAudioFile: async (_, args, context) => {
-    const { doc, documentId, projectId, contentLength } = args;
-    const { createReadStream, filename, mimetype } = await doc.file;
-    logger.debug(`Attempting upload of audio file for  ${documentId}`);
-    // assert user has permission
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: projectId,
-        userId: context.userId,
-      },
-    });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    // Document is on project
-    const docRelation = await prisma.document.findFirst({
-      where: {
-        projectId: projectId,
-        id: documentId,
-      },
-    });
-
-    if (!docRelation) {
-      return {
-        success: false,
-        message: 'Document project combination not found',
-      };
-    }
-    if (docRelation.audioFileURL) {
-      return {
-        success: false,
-        message: 'Audio file already uploaded',
-      };
-    }
-
-    const stream: Buffer = createReadStream();
-    try {
-      const response = await uploadProcessAudioFile(
-        documentId,
-        stream,
-        contentLength,
-        filename,
-        mimetype
-      );
-      await prisma.document.update({
-        where: {
-          id: documentId,
-        },
-        data: {
-          audioFileURL: response.processedAudioKey,
-          rawAudioFileLengthSeconds: response.body.original_file_length,
-          processedAudioFileLengthSeconds: response.body.processed_file_length,
-        },
-      });
-    } catch (error) {
-      if (error instanceof FileAlreadyExistsError) {
-        return {
-          success: false,
-          message: 'File already exists',
-        };
-      }
-      logger.error('error in raw fileupload to S3', error);
-      return {
-        success: false,
-        message: 'Error uploading file',
-      };
-    }
-    logger.info(
-      `Finished uploading and processing audio file for document ${documentId}`
-    );
     return { success: true };
   },
   getPresignedUrlForAudioFile: async (_, args, context) => {

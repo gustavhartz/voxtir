@@ -2,12 +2,6 @@ import gql from 'graphql-tag';
 
 export const typeDefs = gql`
   type Mutation {
-    uploadAudioFile(
-      doc: DocumentUploadInput!
-      documentId: ID!
-      projectId: ID!
-      contentLength: Int!
-    ): ActionResult
     getPresignedUrlForAudioFile(documentId: ID!): PresignedUrlResponse
     """
     Projects
@@ -29,6 +23,8 @@ export const typeDefs = gql`
       dialect: String
       speakerCount: Int
       transcriptionType: TranscriptionType!
+      file: Upload!
+      fileContentLength: Int!
     ): ID!
     updateDocument(documentId: ID!, title: String!): ActionResult!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!
