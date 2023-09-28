@@ -19,27 +19,12 @@ mutation UpdateProject($id: ID!, $name: String, $description: String) {
   }
 }
 
-mutation UploadAudioFile(
-  $fileInput: DocumentUploadInput!
-  $documentId: ID!
-  $projectId: ID!
-  $contentLength: Int!
-) {
-  uploadAudioFile(
-    doc: $fileInput
-    documentId: $documentId
-    projectId: $projectId
-    contentLength: $contentLength
-  ) {
-    message
-    success
-  }
-}
-
 mutation CreateDocument(
   $projectId: ID!
   $title: String!
   $transcriptionType: TranscriptionType!
+  $file: Upload!
+  $fileContentLength: Int!
   $language: String
   $speakerCount: Int
 ) {
@@ -49,6 +34,8 @@ mutation CreateDocument(
     transcriptionType: $transcriptionType
     language: $language
     speakerCount: $speakerCount
+    file: $file
+    fileContentLength: $fileContentLength
   )
 }
 
