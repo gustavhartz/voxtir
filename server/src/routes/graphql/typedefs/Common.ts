@@ -13,7 +13,7 @@ export const typeDefs = gql`
   }
   input FileUploadInput {
     file: Upload!
-    fileContentSizeMB: Float!
+    fileContentLength: Int!
   }
 
   type PresignedUrlResponse {

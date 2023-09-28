@@ -25,6 +25,7 @@ import {
   checkUserRightsOnProject,
   subtractCreditsFromUser,
 } from './database-helpers.js';
+import { dumpReadStream } from './helpers.js';
 
 // Use the generated `MutationResolvers` type
 // to type check our mutations!
@@ -70,24 +71,25 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
-      fileInput: { file: file, fileContentSizeMB },
+      fileInput: { file: file, fileContentLength },
     } = args;
     logger.info(
       `Creating document for project: ${projectId} of type ${transcriptionType}`
     );
-    // assert user has permission
-    checkUserRightsOnProject(projectId, context.userId);
-    if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      assertUserCreditsGreaterThan(context.userId, 0);
-    }
 
     const { createReadStream, filename, mimetype } = await file;
     const stream: ReadStream = createReadStream();
-
-    // We use a transaction to ensure that the document is only created
-    // if the audio file is successfully uploaded
     let documentId = '';
+
+    // This is to ensure the stream is dumped in case of failure because gql upload sucks
     try {
+      // assert user has permission
+      checkUserRightsOnProject(projectId, context.userId);
+      if (transcriptionType === TranscriptionType.AUTOMATIC) {
+        assertUserCreditsGreaterThan(context.userId, 0);
+      }
+      // We use a transaction to ensure that the document is only created
+      // if the audio file is successfully uploaded
       await prisma.$transaction(
         async (tx) => {
           const doc = await tx.document.create({
@@ -112,10 +114,11 @@ const mutations: MutationResolvers = {
           const response = await uploadProcessAudioFile(
             doc.id,
             stream,
-            fileContentSizeMB,
+            fileContentLength,
             filename,
             mimetype
           );
+
           await tx.document.update({
             where: {
               id: doc.id,
@@ -133,17 +136,19 @@ const mutations: MutationResolvers = {
           timeout: 20000, // default: 5000
         }
       );
-    } catch (error) {
-      logger.error('error in raw fileupload to S3', error);
+
+      if (transcriptionType === TranscriptionType.AUTOMATIC) {
+        subtractCreditsFromUser(context.userId, 1);
+      }
+      logger.debug(
+        `Created document: ${documentId} for project: ${projectId}. User by ${context.userId}`
+      );
+    } catch (err) {
+      logger.error(`Error in document creation`, err);
+      // Ensure multipart can terminate
+      dumpReadStream(stream);
       throw new GraphQLError('Error in document creation');
     }
-
-    if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      subtractCreditsFromUser(context.userId, 1);
-    }
-    logger.debug(
-      `Created document: ${documentId} for project: ${projectId}. User by ${context.userId}`
-    );
     return documentId;
   },
   trashDocument: async (_, args, context) => {
