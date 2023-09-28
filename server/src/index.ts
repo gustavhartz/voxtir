@@ -22,7 +22,7 @@ import { requestId, userInfoSync } from './middleware.js';
 import prisma from './prisma/index.js';
 import { getGqlServer } from './routes/graphql/index.js';
 import wsRoutes from './routes/websocket/index.js';
-import { transcriptionJob } from './scheduler/index.js';
+import { audioPreProcessingJob, transcriptionJob } from './scheduler/index.js';
 import { auth0Middleware } from './services/auth0.js';
 import { logger } from './services/logger.js';
 
@@ -48,6 +48,7 @@ async function main(): Promise<void> {
   if (ENABLE_SCHEDULER_JOBS === 'true') {
     logger.info('Scheduler jobs enabled');
     transcriptionJob.start();
+    audioPreProcessingJob.start();
   }
 
   const expressApp = express();
