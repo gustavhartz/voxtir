@@ -79,7 +79,7 @@ const mutations: MutationResolvers = {
 
     const { createReadStream, filename, mimetype } = await file;
     const stream: ReadStream = createReadStream();
-    const documentId = '';
+    let documentId = '';
 
     // This is to ensure the stream is dumped in case of failure because gql upload sucks
     try {
@@ -121,19 +121,18 @@ const mutations: MutationResolvers = {
           rawAudioFileExtension: result.fileExtension,
         },
       });
+      documentId = doc.id;
 
       if (transcriptionType === TranscriptionType.AUTOMATIC) {
         subtractCreditsFromUser(context.userId, 1);
       }
-      logger.debug(
-        `Created document: ${documentId} for project: ${projectId}. User by ${context.userId}`
-      );
     } catch (err) {
       logger.error(`Error in document creation`, err);
       // Ensure multipart can terminate
       dumpReadStream(stream);
       throw new GraphQLError('Error in document creation');
     }
+    logger.info(`Created document: ${documentId} for project: ${projectId}`);
     return documentId;
   },
   trashDocument: async (_, args, context) => {
