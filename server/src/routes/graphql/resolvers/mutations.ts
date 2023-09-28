@@ -16,7 +16,7 @@ import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
   getPresignedUrlForDocumentAudioFile,
-  uploadProcessAudioFile,
+  uploadRawAudioFile,
 } from '../../../transcription/index.js';
 import { Auth0ManagementApiUser } from '../../../types/auth0.js';
 import { MutationResolvers } from '../generated/graphql';
@@ -86,7 +86,7 @@ const mutations: MutationResolvers = {
       // assert user has permission
       checkUserRightsOnProject(projectId, context.userId);
       if (transcriptionType === TranscriptionType.AUTOMATIC) {
-        assertUserCreditsGreaterThan(context.userId, 5);
+        assertUserCreditsGreaterThan(context.userId, 0);
       }
       logger.debug(`User ${context.userId} has permission to create document`);
       const doc = await prisma.document.create({
@@ -99,15 +99,12 @@ const mutations: MutationResolvers = {
           transcription: {
             create: {
               type: transcriptionType,
-              status:
-                transcriptionType === TranscriptionType.MANUAL
-                  ? TranscriptionProcessStatus.DONE
-                  : TranscriptionProcessStatus.QUEUED,
+              status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
             },
           },
         },
       });
-      const response = await uploadProcessAudioFile(
+      const result = await uploadRawAudioFile(
         doc.id,
         stream,
         fileContentLength,
@@ -120,9 +117,8 @@ const mutations: MutationResolvers = {
           id: doc.id,
         },
         data: {
-          audioFileURL: response.processedAudioKey,
-          rawAudioFileLengthSeconds: response.body.original_file_length,
-          processedAudioFileLengthSeconds: response.body.processed_file_length,
+          audioFileURL: result.rawAudioKey,
+          rawAudioFileExtension: result.fileExtension,
         },
       });
 
