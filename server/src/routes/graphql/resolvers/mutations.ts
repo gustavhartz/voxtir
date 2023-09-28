@@ -3,6 +3,7 @@ import {
   TranscriptionProcessStatus,
   TranscriptionType,
 } from '@prisma/client';
+import { ReadStream } from 'fs';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -69,7 +70,7 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
-      fileInput: { file: file, fileContentLength },
+      fileInput: { file: file, fileContentSizeMB },
     } = args;
     logger.info(
       `Creating document for project: ${projectId} of type ${transcriptionType}`
@@ -81,7 +82,7 @@ const mutations: MutationResolvers = {
     }
 
     const { createReadStream, filename, mimetype } = await file;
-    const stream: Buffer = createReadStream();
+    const stream: ReadStream = createReadStream();
 
     // We use a transaction to ensure that the document is only created
     // if the audio file is successfully uploaded
@@ -111,7 +112,7 @@ const mutations: MutationResolvers = {
           const response = await uploadProcessAudioFile(
             doc.id,
             stream,
-            fileContentLength,
+            fileContentSizeMB,
             filename,
             mimetype
           );

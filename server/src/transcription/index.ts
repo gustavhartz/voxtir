@@ -1,3 +1,5 @@
+import { ReadStream } from 'fs';
+
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import { mimeTypeToExtension } from '../common/file-formats.js';
 import prisma from '../prisma/index.js';
@@ -32,7 +34,7 @@ export interface uploadProcessAudioFileResult extends AudioProcessorResponse {
  */
 export const uploadProcessAudioFile = async (
   documentId: string,
-  body: Buffer,
+  body: ReadStream | Buffer,
   contentLength: number,
   fileName = '',
   contentType = ''

@@ -99,7 +99,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           speakerCount: speakerCount,
           fileInput: {
             file: file,
-            fileContentLength: fileSize,
+            fileContentSizeMB: fileSize,
           },
         },
       });
