@@ -25,6 +25,7 @@ model Document {
     audioFileURL                    String?
     rawAudioFileLengthSeconds       Float?
     processedAudioFileLengthSeconds Float?
+    rawAudioFileExtension           String?
     // Transcription data
     language                        String?
     speakerCount                    Int?
@@ -53,6 +54,7 @@ model TranscriptionJob {
 }
 
 enum TranscriptionProcessStatus {
+    AUDIO_PREPROCESSOR_JOB_PENDING
     QUEUED
     TRANSCRIPTION_JOB_RUNNING
     TRANSCRIPTION_JOB_COMPLETED
@@ -144,4 +146,5 @@ model Task {
 
 enum taskType {
     TRANSCRIPTION_JOB_STARTER
+    AUDIO_PREPROCESSOR_JOB_STARTER
 }
