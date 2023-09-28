@@ -79,63 +79,52 @@ const mutations: MutationResolvers = {
 
     const { createReadStream, filename, mimetype } = await file;
     const stream: ReadStream = createReadStream();
-    let documentId = '';
+    const documentId = '';
 
     // This is to ensure the stream is dumped in case of failure because gql upload sucks
     try {
       // assert user has permission
       checkUserRightsOnProject(projectId, context.userId);
       if (transcriptionType === TranscriptionType.AUTOMATIC) {
-        assertUserCreditsGreaterThan(context.userId, 0);
+        assertUserCreditsGreaterThan(context.userId, 5);
       }
-      // We use a transaction to ensure that the document is only created
-      // if the audio file is successfully uploaded
-      await prisma.$transaction(
-        async (tx) => {
-          const doc = await tx.document.create({
-            data: {
-              title: title,
-              projectId: projectId,
-              language: language,
-              dialect: dialect,
-              speakerCount: speakerCount,
-              transcription: {
-                create: {
-                  type: transcriptionType,
-                  status:
-                    transcriptionType === TranscriptionType.MANUAL
-                      ? TranscriptionProcessStatus.DONE
-                      : TranscriptionProcessStatus.QUEUED,
-                },
-              },
+      logger.debug(`User ${context.userId} has permission to create document`);
+      const doc = await prisma.document.create({
+        data: {
+          title: title,
+          projectId: projectId,
+          language: language,
+          dialect: dialect,
+          speakerCount: speakerCount,
+          transcription: {
+            create: {
+              type: transcriptionType,
+              status:
+                transcriptionType === TranscriptionType.MANUAL
+                  ? TranscriptionProcessStatus.DONE
+                  : TranscriptionProcessStatus.QUEUED,
             },
-          });
-          documentId = doc.id;
-          const response = await uploadProcessAudioFile(
-            doc.id,
-            stream,
-            fileContentLength,
-            filename,
-            mimetype
-          );
-
-          await tx.document.update({
-            where: {
-              id: doc.id,
-            },
-            data: {
-              audioFileURL: response.processedAudioKey,
-              rawAudioFileLengthSeconds: response.body.original_file_length,
-              processedAudioFileLengthSeconds:
-                response.body.processed_file_length,
-            },
-          });
+          },
         },
-        {
-          maxWait: 15000, // default: 2000
-          timeout: 20000, // default: 5000
-        }
+      });
+      const response = await uploadProcessAudioFile(
+        doc.id,
+        stream,
+        fileContentLength,
+        filename,
+        mimetype
       );
+
+      await prisma.document.update({
+        where: {
+          id: doc.id,
+        },
+        data: {
+          audioFileURL: response.processedAudioKey,
+          rawAudioFileLengthSeconds: response.body.original_file_length,
+          processedAudioFileLengthSeconds: response.body.processed_file_length,
+        },
+      });
 
       if (transcriptionType === TranscriptionType.AUTOMATIC) {
         subtractCreditsFromUser(context.userId, 1);
