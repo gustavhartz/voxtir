@@ -5,6 +5,7 @@ import prisma from '../prisma/index.js';
 import { Logger, logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import { TranscriptionJobHandler } from '../transcription/transcription-job-handler.js';
+import { processAudioFile } from './audioPreProcessing.js';
 import { acquireTaskLock } from './common.js';
 import { HandlerFunction, ScheduledAsyncTask } from './scheduler.js';
 
@@ -49,6 +50,61 @@ const transcriptionJobTask: HandlerFunction = async (
     data: { lastSuccessAt: new Date(), isLocked: false },
   });
 };
+
+const audioPreProcessingJobTask: HandlerFunction = async (
+  _: string,
+  executionLogger: Logger
+): Promise<void> => {
+  executionLogger.info(`Starting transcription job`);
+  const obtainedLock = await acquireTaskLock(
+    taskType.AUDIO_PREPROCESSOR_JOB_STARTER
+  );
+  if (!obtainedLock) {
+    executionLogger.info(
+      `Did not obtain lock for transcription job task. Exiting`
+    );
+    return;
+  }
+  executionLogger.info(`Starting audio pre-processing job`);
+  const pendingJobs = await prisma.transcriptionJob.findMany({
+    where: {
+      status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
+    },
+    include: {
+      document: true,
+    },
+  });
+  // Start the audio pre-processing job for each pending job
+  const jobList = pendingJobs.map((job) => {
+    if (!job.document.audioFileURL || !job.document.rawAudioFileExtension) {
+      executionLogger.error(
+        `Document ${job.document.id} does not have an audio file URL`
+      );
+      return Promise.resolve(); // or return Promise.reject("REJECTED"); if you want to handle rejection separately
+    }
+    const { id: documentId, rawAudioFileExtension } = job.document;
+    const transcriptionJobId = job.id;
+    return processAudioFile(
+      documentId,
+      rawAudioFileExtension,
+      transcriptionJobId
+    );
+  });
+
+  const result = await Promise.all(jobList);
+
+  // Log the number of jobs that failed
+  const failedJobs = result.filter((job) => !job);
+  executionLogger.info(
+    `Audio pre-processing job completed. ${failedJobs.length} jobs failed of ${result.length} total jobs`
+  );
+};
+
+export const audioPreProcessingJob = new ScheduledAsyncTask(
+  'audio_preprocessing_job',
+  audioPreProcessingJobTask,
+  POLL_INTERVAL_MS
+);
 
 export const transcriptionJob = new ScheduledAsyncTask(
   'sagemaker_transcription_job',
