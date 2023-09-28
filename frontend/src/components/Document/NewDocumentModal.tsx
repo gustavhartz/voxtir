@@ -6,7 +6,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import {
   useCreateDocumentMutation,
   useSupportedLanguagesQuery,
-  useUploadAudioFileMutation,
 } from '../../graphql/generated/graphql';
 import useFileUpload from '../../hook/useFileUpload';
 
@@ -58,14 +57,6 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
       },
     },
   });
-  const [uploadAudioFile, { loading: audioLoading }] =
-    useUploadAudioFileMutation({
-      context: {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      },
-    });
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -104,6 +95,8 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           projectId: defaultProjectId,
           title: documentName,
           transcriptionType: transcriptionType,
+          file: file,
+          fileContentLength: fileSize,
           language: language,
           speakerCount: speakerCount,
         },
@@ -111,37 +104,20 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
       const documentId = documentResponse.data?.createDocument;
 
       if (!documentId || documentResponse.errors) {
-        console.error('Did not work');
+        toast(`${documentResponse.errors}`, {
+          type: 'error',
+          toastId: 'createDocumentFailure',
+          position: 'bottom-right',
+        });
         return;
       }
-      // upload audio
-
-      await uploadAudioFile({
-        variables: {
-          fileInput: {
-            file: file,
-          },
-          projectId: defaultProjectId,
-          documentId: documentId,
-          contentLength: file.size,
-        },
-      })
-        .then((res) => {
-          console.log(res.data);
-          console.log(res.errors);
-          refetchDocuments();
-          onClose();
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-
+      refetchDocuments();
       onClose();
     } catch (err) {
       console.error(err);
       toast(`${err}`, {
         type: 'error',
-        toastId: 'createDocumentSuccess',
+        toastId: 'createDocumentFailure',
         position: 'bottom-right',
       });
       throw err;
@@ -295,21 +271,16 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             onClick={onClose}
             className="mt-6 bg-gray-200 text-gray-900 mr-2 py-2 px-4 rounded"
           >
-            {loading || audioLoading ? 'Cancel' : 'Close'}
+            {loading ? 'Cancel' : 'Close'}
           </button>
           <button
             onClick={handleSubmit}
             disabled={
-              loading ||
-              audioLoading ||
-              !fileUrl ||
-              !language ||
-              !documentName ||
-              !speakerCount
+              loading || !fileUrl || !language || !documentName || !speakerCount
             }
             className="mt-6 disabled:animate-pulse bg-gray-900 disabled:bg-gray-400 text-white py-2 px-4 rounded"
           >
-            {loading || audioLoading ? 'Loading...' : 'Submit'}
+            {loading ? 'Loading...' : 'Submit'}
           </button>
         </div>
       </div>
