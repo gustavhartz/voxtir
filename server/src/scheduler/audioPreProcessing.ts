@@ -1,4 +1,4 @@
-import { TranscriptionProcessStatus } from '@prisma/client';
+import { TranscriptionProcessStatus, TranscriptionType } from '@prisma/client';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
@@ -8,18 +8,19 @@ import {
   getProcessedAudioFileKey,
   getRawAudioFileKey,
 } from '../transcription/common.js';
-const POSTPROCESSED_FILE_FORMAT = 'mp3';
+const TARGET_FILE_FORMAT = 'mp3';
 
 export const processAudioFile = async (
   documentId: string,
   rawAudioFileExtension: string,
-  transcriptionJobId: string
+  transcriptionJobId: string,
+  transcriptionType: TranscriptionType
 ): Promise<boolean> => {
   try {
     const rawAudioKey = getRawAudioFileKey(documentId, rawAudioFileExtension);
     const processedAudioKey = getProcessedAudioFileKey(
       documentId,
-      POSTPROCESSED_FILE_FORMAT
+      TARGET_FILE_FORMAT
     );
     logger.info(`Running ffmpeg lambda on audiofile ${rawAudioKey}`);
     const processingResult = await invokeAudioProcessor({
@@ -28,14 +29,17 @@ export const processAudioFile = async (
       input_file_format: rawAudioFileExtension,
       output_file_bucket: AWS_AUDIO_BUCKET_NAME,
       output_file_key: processedAudioKey,
-      output_file_format: POSTPROCESSED_FILE_FORMAT,
+      output_file_format: TARGET_FILE_FORMAT,
     });
     await prisma.transcriptionJob.update({
       where: {
         id: transcriptionJobId,
       },
       data: {
-        status: TranscriptionProcessStatus.QUEUED,
+        status:
+          transcriptionType === TranscriptionType.AUTOMATIC
+            ? TranscriptionProcessStatus.QUEUED
+            : TranscriptionProcessStatus.DONE,
         document: {
           update: {
             audioFileURL: processedAudioKey,

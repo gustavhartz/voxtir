@@ -87,7 +87,8 @@ const audioPreProcessingJobTask: HandlerFunction = async (
     return processAudioFile(
       documentId,
       rawAudioFileExtension,
-      transcriptionJobId
+      transcriptionJobId,
+      job.type
     );
   });
 
@@ -98,6 +99,10 @@ const audioPreProcessingJobTask: HandlerFunction = async (
   executionLogger.info(
     `Audio pre-processing job completed. ${failedJobs.length} jobs failed of ${result.length} total jobs`
   );
+  await prisma.task.update({
+    where: { type: taskType.AUDIO_PREPROCESSOR_JOB_STARTER },
+    data: { lastSuccessAt: new Date(), isLocked: false },
+  });
 };
 
 export const audioPreProcessingJob = new ScheduledAsyncTask(
@@ -112,23 +117,24 @@ export const transcriptionJob = new ScheduledAsyncTask(
   POLL_INTERVAL_MS
 );
 
-const isRunningDirectly = false;
+const isRunningDirectly = true;
 if (isRunningDirectly) {
-  const runningJobs = await prisma.transcriptionJob.findMany({
-    where: {
-      status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
-    },
-  });
-  // get the earliest start time of the running jobs
-  const earliestStartTime = runningJobs.reduce((earliestTime, job) => {
-    if (!job.jobStartedAt) {
-      return earliestTime;
-    }
-    return earliestTime < job.jobStartedAt! ? earliestTime : job.jobStartedAt;
-  }, new Date());
-  await new TranscriptionJobHandler(
-    logger,
-    new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
-    { CreationTimeAfter: earliestStartTime }
-  ).run();
+  // const runningJobs = await prisma.transcriptionJob.findMany({
+  //   where: {
+  //     status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
+  //   },
+  // });
+  // // get the earliest start time of the running jobs
+  // const earliestStartTime = runningJobs.reduce((earliestTime, job) => {
+  //   if (!job.jobStartedAt) {
+  //     return earliestTime;
+  //   }
+  //   return earliestTime < job.jobStartedAt! ? earliestTime : job.jobStartedAt;
+  // }, new Date());
+  // await new TranscriptionJobHandler(
+  //   logger,
+  //   new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
+  //   { CreationTimeAfter: earliestStartTime }
+  // ).run();
+  await audioPreProcessingJobTask('', logger);
 }
