@@ -4,3 +4,4 @@ build:
 	cd src/package && zip -r ../build.zip .
 	mv src/build.zip build.zip
 	rm -rf src/package
+	rm -rf build
