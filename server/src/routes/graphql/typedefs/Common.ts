@@ -7,13 +7,13 @@ export const typeDefs = gql`
     message: String!
   }
 
-  input DocumentUploadInput {
-    file: Upload!
-  }
-
   type ActionResult {
     success: Boolean!
     message: String
+  }
+  input FileUploadInput {
+    file: Upload!
+    fileContentLength: Int!
   }
 
   type PresignedUrlResponse {

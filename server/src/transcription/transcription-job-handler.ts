@@ -216,6 +216,9 @@ export class TranscriptionJobHandler {
 
     // Ensure that the timestamp is before the job start time, but after the last job run start time
     const jobStartTime = new Date();
+    // Remove milliseconds and subtract 1 second as sagemaker api uses strictly greater than ignoring small units
+    jobStartTime.setMilliseconds(0);
+    jobStartTime.setSeconds(jobStartTime.getSeconds() - 1);
 
     for (const document of queuedDocuments) {
       const TranscriptionProcessor = new SagemakerBatchTransformTranscription(

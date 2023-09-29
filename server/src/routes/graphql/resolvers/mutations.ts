@@ -3,6 +3,7 @@ import {
   TranscriptionProcessStatus,
   TranscriptionType,
 } from '@prisma/client';
+import { ReadStream } from 'fs';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -11,18 +12,21 @@ import {
   verifyProjectSharingToken,
 } from '../../../common/jwt.js';
 import prisma from '../../../prisma/index.js';
+import { Auth0Client } from '../../../services/auth0.js';
 import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
   getPresignedUrlForDocumentAudioFile,
-  uploadProcessAudioFile,
+  uploadRawAudioFile,
 } from '../../../transcription/index.js';
-import { Auth0ManagementApiUser } from '../../../types/auth0.js';
-import { FileAlreadyExistsError } from '../../../types/customErrors.js';
 import { MutationResolvers } from '../generated/graphql';
+import {
+  assertUserCreditsGreaterThan,
+  checkUserRightsOnProject,
+  subtractCreditsFromUser,
+} from './database-helpers.js';
+import { dumpReadStream } from './helpers.js';
 
-// Use the generated `MutationResolvers` type
-// to type check our mutations!
 const mutations: MutationResolvers = {
   updateDocument: async (_, args, context) => {
     const { documentId, title } = args;
@@ -31,20 +35,13 @@ const mutations: MutationResolvers = {
       where: {
         id: documentId,
       },
-      include: {
-        project: {
-          include: {
-            UsersOnProjects: true,
-          },
-        },
-      },
     });
 
-    if (!doc?.project.UsersOnProjects.some((user) => user.userId === userId)) {
-      return {
-        success: false,
-      };
+    if (!doc) {
+      throw new GraphQLError('Document not found');
     }
+
+    checkUserRightsOnProject(doc.projectId, userId);
 
     await prisma.document.update({
       where: {
@@ -65,84 +62,82 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
+      fileInput: { file: file, fileContentLength },
     } = args;
-    const userRights = await prisma.userOnProject.findFirst({
-      where: {
-        userId: context.userId,
-        projectId: projectId,
-      },
-    });
+    logger.info(
+      `Creating document for project: ${projectId} of type ${transcriptionType}`
+    );
 
-    if (!userRights) {
-      throw new GraphQLError('Projectid not found or related to user');
-    }
+    const { createReadStream, filename, mimetype } = await file;
+    const stream: ReadStream = createReadStream();
+    let documentId = '';
 
-    if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      const userDBObject = await prisma.user.findFirst({
-        where: {
-          id: context.userId,
-        },
-      });
-      if (!userDBObject || userDBObject?.credits < 1) {
-        throw new GraphQLError('User has no credits');
+    // This is to ensure the stream is dumped in case of failure because gql upload sucks
+    try {
+      // assert user has permission
+      await checkUserRightsOnProject(projectId, context.userId);
+
+      if (transcriptionType === TranscriptionType.AUTOMATIC) {
+        await assertUserCreditsGreaterThan(context.userId, 0);
       }
-    }
 
-    const doc = await prisma.document.create({
-      data: {
-        title: title,
-        projectId: projectId,
-        language: language,
-        dialect: dialect,
-        speakerCount: speakerCount,
-        transcription: {
-          create: {
-            type: transcriptionType,
-            status:
-              transcriptionType === TranscriptionType.MANUAL
-                ? TranscriptionProcessStatus.DONE
-                : TranscriptionProcessStatus.QUEUED,
+      logger.debug(`User ${context.userId} has permission to create document`);
+
+      const doc = await prisma.document.create({
+        data: {
+          title: title,
+          projectId: projectId,
+          language: language,
+          dialect: dialect,
+          speakerCount: speakerCount,
+          transcription: {
+            create: {
+              type: transcriptionType,
+              status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
+            },
           },
         },
-      },
-    });
-    if (transcriptionType === TranscriptionType.AUTOMATIC) {
-      await prisma.user.update({
+      });
+      const result = await uploadRawAudioFile(
+        doc.id,
+        stream,
+        fileContentLength,
+        filename,
+        mimetype
+      );
+
+      await prisma.document.update({
         where: {
-          id: context.userId,
+          id: doc.id,
         },
         data: {
-          credits: {
-            decrement: 1,
-          },
+          audioFileURL: result.rawAudioKey,
+          rawAudioFileExtension: result.fileExtension,
         },
       });
+      documentId = doc.id;
+
+      if (transcriptionType === TranscriptionType.AUTOMATIC) {
+        await subtractCreditsFromUser(context.userId, 1);
+      }
+    } catch (err) {
+      logger.error(`Error in document creation`, err);
+      // Ensure multipart can terminate
+      await dumpReadStream(stream);
+      throw new GraphQLError('Error in document creation');
     }
-    logger.debug(
-      `Created document: ${doc.id} for project: ${projectId}. User by ${context.userId}`
-    );
-    return doc.id;
+    logger.info(`Created document: ${documentId} for project: ${projectId}`);
+    return documentId;
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;
-    const userRights = await prisma.userOnProject.findFirst({
-      where: {
-        userId: context.userId,
-        projectId: projectId,
-      },
-    });
-    if (!userRights) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    if (userRights.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'User not allowed to perform action',
-      };
-    }
+
+    await checkUserRightsOnProject(
+      projectId,
+      context.userId,
+      ProjectRole.ADMIN
+    );
+
     const doc = await prisma.document.update({
       where: {
         projectId: projectId,
@@ -164,24 +159,9 @@ const mutations: MutationResolvers = {
   updateProject: async (_, args, context) => {
     const { id, name, description } = args;
     const userId = context.userId;
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: id,
-        userId: userId,
-      },
-    });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    if (userRelation.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'User not allowed to perform action',
-      };
-    }
+
+    await checkUserRightsOnProject(id, userId, ProjectRole.ADMIN);
+
     if (name !== null) {
       await prisma.project.update({
         where: {
@@ -227,67 +207,35 @@ const mutations: MutationResolvers = {
     */
     const userId = context.userId;
     const projectId = args.id;
-    const userRelation = await prisma.userOnProject.findFirst({
+
+    await checkUserRightsOnProject(projectId, userId, ProjectRole.ADMIN);
+
+    logger.info(`Deleting project: ${projectId}`);
+    await prisma.document.deleteMany({
       where: {
         projectId: projectId,
-        userId: userId,
       },
     });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    if (userRelation.role != ProjectRole.ADMIN) {
-      await prisma.userOnProject.deleteMany({
-        where: {
-          projectId: projectId,
-          userId: userId,
-        },
-      });
-    } else {
-      logger.info(`Deleting project: ${projectId}`);
-      await prisma.document.deleteMany({
-        where: {
-          projectId: projectId,
-        },
-      });
-      await prisma.project.delete({
-        where: {
-          id: projectId,
-        },
-      });
-    }
+    await prisma.project.delete({
+      where: {
+        id: projectId,
+      },
+    });
+
     return { success: true };
   },
   shareProject: async (_, args, context) => {
     const { id, userEmail, role } = args;
     const userId = context.userId;
-    // Assert user has permission
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: id,
-        userId: userId,
-      },
-      include: {
-        project: true,
-        user: true,
-      },
-    });
 
-    if (!userRelation || !userRelation.project || !userRelation.user) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    if (userRelation.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'User not allowed to perform action',
-      };
-    }
+    const project = await checkUserRightsOnProject(
+      id,
+      userId,
+      ProjectRole.ADMIN
+    );
+
+    const senderDetails = await Auth0Client.getUserById(userId);
+
     const token = generateProjectSharingToken(id);
 
     await prisma.projectInvitation.create({
@@ -300,13 +248,12 @@ const mutations: MutationResolvers = {
         projectId: id,
       },
     });
-    const senderAuth0 = userRelation.user
-      .auth0ManagementApiUserDetails as unknown as Auth0ManagementApiUser;
+
     const response = await sendProjectShareEmail(
       userEmail,
-      senderAuth0.name || 'A user',
+      senderDetails.name || 'A user',
       token,
-      userRelation.project.name
+      project.name
     );
     logger.info(
       { messageId: response.id, email: userEmail, projectId: id },
@@ -318,18 +265,8 @@ const mutations: MutationResolvers = {
     const { id, userEmail } = args;
     const userId = context.userId;
 
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: id,
-        userId: userId,
-      },
-    });
-    if (!userRelation || userRelation.role != ProjectRole.ADMIN) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
+    await checkUserRightsOnProject(id, userId, ProjectRole.ADMIN);
+
     // If not accepted, delete invitation
     const invitation = await prisma.projectInvitation.findFirst({
       where: {
@@ -443,108 +380,21 @@ const mutations: MutationResolvers = {
     });
     return { success: true };
   },
-  uploadAudioFile: async (_, args, context) => {
-    const { doc, documentId, projectId, contentLength } = args;
-    const { createReadStream, filename, mimetype } = await doc.file;
-    logger.debug(`Attempting upload of audio file for  ${documentId}`);
-    // assert user has permission
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: projectId,
-        userId: context.userId,
-      },
-    });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
-    // Document is on project
-    const docRelation = await prisma.document.findFirst({
-      where: {
-        projectId: projectId,
-        id: documentId,
-      },
-    });
-
-    if (!docRelation) {
-      return {
-        success: false,
-        message: 'Document project combination not found',
-      };
-    }
-    if (docRelation.audioFileURL) {
-      return {
-        success: false,
-        message: 'Audio file already uploaded',
-      };
-    }
-
-    const stream: Buffer = createReadStream();
-    try {
-      const response = await uploadProcessAudioFile(
-        documentId,
-        stream,
-        contentLength,
-        filename,
-        mimetype
-      );
-      await prisma.document.update({
-        where: {
-          id: documentId,
-        },
-        data: {
-          audioFileURL: response.processedAudioKey,
-          rawAudioFileLengthSeconds: response.body.original_file_length,
-          processedAudioFileLengthSeconds: response.body.processed_file_length,
-        },
-      });
-    } catch (error) {
-      if (error instanceof FileAlreadyExistsError) {
-        return {
-          success: false,
-          message: 'File already exists',
-        };
-      }
-      logger.error('error in raw fileupload to S3', error);
-      return {
-        success: false,
-        message: 'Error uploading file',
-      };
-    }
-    logger.info(
-      `Finished uploading and processing audio file for document ${documentId}`
-    );
-    return { success: true };
-  },
   getPresignedUrlForAudioFile: async (_, args, context) => {
     const { documentId } = args;
-    // assert user has permission
-    // Document is on project
+
     const document = await prisma.document.findFirst({
       where: {
         id: documentId,
       },
-      include: {
-        project: {
-          include: {
-            UsersOnProjects: true,
-          },
-        },
-      },
     });
 
     if (!document) {
-      throw new GraphQLError('Document project combination not found');
+      throw new GraphQLError('Document not found');
     }
-    if (
-      !document.project.UsersOnProjects.some(
-        (userOnProject) => userOnProject.userId == context.userId
-      )
-    ) {
-      throw new GraphQLError('Projectid not found or related to user');
-    }
+
+    checkUserRightsOnProject(document.projectId, context.userId);
+
     const signedUrlResponse = await getPresignedUrlForDocumentAudioFile(
       `${documentId}`
     );
@@ -553,18 +403,9 @@ const mutations: MutationResolvers = {
   pinnedProject: async (_, args, context) => {
     const { projectId, pin } = args;
     const userId = context.userId;
-    const userRelation = await prisma.userOnProject.findFirst({
-      where: {
-        projectId: projectId,
-        userId: userId,
-      },
-    });
-    if (!userRelation) {
-      return {
-        success: false,
-        message: 'Projectid not found or related to user',
-      };
-    }
+
+    await checkUserRightsOnProject(projectId, userId);
+
     await prisma.pinnedProjects.upsert({
       where: {
         projectId_userId: {
