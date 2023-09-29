@@ -31,7 +31,7 @@ Remember that on m1 ypu need dockerx to target the platform like
 
 **Other**
 build
-`docker buildx build --platform linux/amd64 -t whisperserver .`
+`docker buildx build --platform linux/amd64 -t voxtir-whisper .`
 
 Run the model locally:
 `docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm <IMAGE_ID> serve`

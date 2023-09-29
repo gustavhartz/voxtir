@@ -145,16 +145,18 @@ def transformation() -> flask.Response:
         s3_client.upload_file(WHISPER_FILE_NAME, bucket_name, speech_to_text_output_key)
 
         # Cleanup of resources
+        logger.info(f"Cleaning up resources")
         del model
         del result
         torch.cuda.empty_cache()
         gc.collect()
         torch.cuda.empty_cache()
-
+        logger.info(f"Resources cleaned up. Loading speaker diarization model")
         # Run speaker diarization
         pipeline = Pipeline.from_pretrained(
             "pyannote/speaker-diarization", use_auth_token=HF_AUTH_TOKEN
         )
+        logger.info(f"Speaker diarization model loaded. Setting device")
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         pipeline = pipeline.to(device)
         logger.info(f"Running speaker diarization on {filename}")
