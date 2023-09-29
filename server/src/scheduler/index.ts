@@ -11,6 +11,15 @@ import { HandlerFunction, ScheduledAsyncTask } from './scheduler.js';
 
 export const POLL_INTERVAL_MS = 15000;
 
+/**
+ * This job will start the transcription job for all pending jobs. This manages all the states of the transcription jobs
+ * it will start the sage maker job, and update the database with the job id and status
+ * it will also update the database with the transcription job results
+ * it will also merge the transcription job results into the document
+ * @param {string} _
+ * @param {Logger} executionLogger
+ * @return {*}  {Promise<void>}
+ */
 const transcriptionJobTask: HandlerFunction = async (
   _: string,
   executionLogger: Logger
@@ -51,6 +60,14 @@ const transcriptionJobTask: HandlerFunction = async (
   });
 };
 
+/**
+ * This job will start the audio pre-processing job for all pending jobs
+ * This will execute the lambda function running ffmpeg and convert the audio file to the correct format
+ * Additionally it will get the audio length and store it in the database, and clip size to 3 hours
+ * @param {string} _
+ * @param {Logger} executionLogger
+ * @return {*}  {Promise<void>}
+ */
 const audioPreProcessingJobTask: HandlerFunction = async (
   _: string,
   executionLogger: Logger
