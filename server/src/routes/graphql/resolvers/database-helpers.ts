@@ -1,4 +1,4 @@
-import { ProjectRole } from '@prisma/client';
+import { Project, ProjectRole } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
 import prisma from '../../../prisma/index.js';
@@ -7,11 +7,14 @@ export const checkUserRightsOnProject = async (
   projectId: string,
   userId: string,
   requireRole?: ProjectRole
-): Promise<void> => {
+): Promise<Project> => {
   const relation = await prisma.userOnProject.findFirst({
     where: {
       userId: userId,
       projectId: projectId,
+    },
+    include: {
+      project: true,
     },
   });
   if (!relation) {
@@ -22,6 +25,7 @@ export const checkUserRightsOnProject = async (
       `User does not have the required ${requireRole} role on project`
     );
   }
+  return relation.project;
 };
 
 export const assertUserCreditsGreaterThan = async (
