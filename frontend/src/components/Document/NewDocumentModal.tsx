@@ -23,12 +23,15 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
   refetchDocuments,
 }) => {
   const supportedAudioFileTypes = [
-    'audio/mpeg', // MP3 audio
-    'audio/ogg', // Ogg Vorbis audio
-    'audio/wav', // Waveform Audio File Format
-    'audio/aac', // Advanced Audio Coding
-    'audio/webm', // WebM audio
-    'audio/x-m4a', // Apple audio
+    'audio/aac',
+    'audio/mpeg',
+    'audio/wav',
+    'audio/aiff',
+    'audio/flac',
+    'audio/alac',
+    'audio/mp4',
+    'audio/x-caf',
+    'audio/ac3',
   ];
   const maxSizeInMB = 200; // Specify the max size in MB here
   const { fileUrl, file, fileName, fileSize, handleFileChange } = useFileUpload(
