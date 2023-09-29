@@ -134,24 +134,8 @@ export const transcriptionJob = new ScheduledAsyncTask(
   POLL_INTERVAL_MS
 );
 
-const isRunningDirectly = true;
+const isRunningDirectly = false;
 if (isRunningDirectly) {
-  // const runningJobs = await prisma.transcriptionJob.findMany({
-  //   where: {
-  //     status: TranscriptionProcessStatus.TRANSCRIPTION_JOB_RUNNING,
-  //   },
-  // });
-  // // get the earliest start time of the running jobs
-  // const earliestStartTime = runningJobs.reduce((earliestTime, job) => {
-  //   if (!job.jobStartedAt) {
-  //     return earliestTime;
-  //   }
-  //   return earliestTime < job.jobStartedAt! ? earliestTime : job.jobStartedAt;
-  // }, new Date());
-  // await new TranscriptionJobHandler(
-  //   logger,
-  //   new S3StorageHandler(AWS_AUDIO_BUCKET_NAME),
-  //   { CreationTimeAfter: earliestStartTime }
-  // ).run();
+  await transcriptionJobTask('', logger);
   await audioPreProcessingJobTask('', logger);
 }
