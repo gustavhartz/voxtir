@@ -147,7 +147,9 @@ def transformation() -> flask.Response:
         # Cleanup of resources
         del model
         del result
+        torch.cuda.empty_cache()
         gc.collect()
+        torch.cuda.empty_cache()
 
         # Run speaker diarization
         pipeline = Pipeline.from_pretrained(
