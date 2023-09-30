@@ -29,8 +29,6 @@ def lambda_handler(event, context):
     Returns:
         _type_: _description_
     """
-    SAMPLE_RATE = 16000
-    BIT_RATE = "32k"
     MAX_LENGTH_SECONDS = 60 * 60 * 3  # 3 hours
     N = 5
     random_string = "".join(random.choices(string.ascii_letters, k=N))
@@ -92,10 +90,6 @@ def lambda_handler(event, context):
             "-y",
             "-i",
             download_path,
-            "-ar",
-            f"{SAMPLE_RATE}",
-            "-ab",
-            f"{BIT_RATE}",
             "-ss",
             "0",
             "-t",

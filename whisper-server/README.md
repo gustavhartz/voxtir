@@ -31,13 +31,13 @@ Remember that on m1 ypu need dockerx to target the platform like
 
 **Other**
 build
-`docker buildx build --platform linux/amd64 -t whisperserver .`
+`docker buildx build --platform linux/amd64 -t voxtir-whisper .`
 
 Run the model locally:
 `docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm <IMAGE_ID> serve`
 
 For local development
-`docker run -v $(pwd)/app:/app -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --env-file .env --rm whisperserver serve`
+`docker run -v $(pwd)/app:/app -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --env-file .env --rm voxtir-whisper serve`
 
 Get the remote image
 `aws ecr get-login-password --region <AWS_REGION> | docker login --username AWS --password-stdin <AWS_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com`

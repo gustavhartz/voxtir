@@ -116,6 +116,10 @@ export class SagemakerBatchTransformTranscription {
         CompressionType: 'None',
         SplitType: 'None',
       },
+      ModelClientConfig: {
+        InvocationsMaxRetries: 0, // No retries
+        InvocationsTimeoutInSeconds: 3600, // 1 hour
+      },
       TransformOutput: {
         // TransformOutput
         S3OutputPath: `s3://${AWS_AUDIO_BUCKET_NAME}/${sagemakerOutputFilePrefix}/${this.documentId}`, // required

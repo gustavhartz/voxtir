@@ -13,6 +13,7 @@ import torch
 from collections import defaultdict
 import sys
 from json_logger import logger
+import torchaudio
 
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
@@ -145,18 +146,27 @@ def transformation() -> flask.Response:
         s3_client.upload_file(WHISPER_FILE_NAME, bucket_name, speech_to_text_output_key)
 
         # Cleanup of resources
+        logger.info(f"Cleaning up resources")
         del model
         del result
+        torch.cuda.empty_cache()
         gc.collect()
-
+        torch.cuda.empty_cache()
+        logger.info(f"Resources cleaned up. Loading speaker diarization model")
         # Run speaker diarization
         pipeline = Pipeline.from_pretrained(
-            "pyannote/speaker-diarization", use_auth_token=HF_AUTH_TOKEN
+            "pyannote/speaker-diarization-3.0", use_auth_token=HF_AUTH_TOKEN
         )
+        logger.info(f"Speaker diarization model loaded. Setting device")
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         pipeline = pipeline.to(device)
+        logger.info("Preloading audio")
+        waveform, sample_rate = torchaudio.load(filename)
         logger.info(f"Running speaker diarization on {filename}")
-        diarization = pipeline(filename, num_speakers=speaker_count)
+        diarization = pipeline(
+            {"waveform": waveform, "sample_rate": sample_rate},
+            num_speakers=speaker_count,
+        )
         logger.info(f"Speaker diarization of {filename} complete")
 
         # Create the result
