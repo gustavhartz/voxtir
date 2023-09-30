@@ -50,7 +50,9 @@ interface PyannoteTranscript {
 function convertSecondsToTimestamp(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds - hours * 3600) / 60);
-  const secondsRemainder = seconds - hours * 3600 - minutes * 60;
+  // Better timestamp is a little before the actual time, so that the user can click on the timestamp
+  // and not miss the start of the sentence
+  const secondsRemainder = Math.floor(seconds - hours * 3600 - minutes * 60);
   return `${hours.toString().padStart(2, '0')}:${minutes
     .toString()
     .padStart(2, '0')}:${secondsRemainder.toString().padStart(2, '0')}`;
