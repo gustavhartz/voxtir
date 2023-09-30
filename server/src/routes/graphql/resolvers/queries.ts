@@ -19,10 +19,20 @@ import {
   TranscriptionStatus,
   UserSharing,
 } from '../generated/graphql.js';
+import { checkUserAccessToDocument } from './database-helpers.js';
 
 // Use the generated `QueryResolvers`
 // type to type check our queries!
 const queries: QueryResolvers = {
+  documentJSON: async (_, args, context) => {
+    const documentId = args.documentId;
+    const userId = context.userId;
+    const document = await checkUserAccessToDocument(documentId, userId);
+    if (!document?.data) {
+      throw new GraphQLError('Document empty');
+    }
+    return JSON.stringify(yjsStateToTipTapJSON(document.data));
+  },
   status: async () => {
     return { success: true, message: 'ok' };
   },
@@ -214,22 +224,15 @@ const queries: QueryResolvers = {
   generateWordExport: async (_, args, context) => {
     const documentId = args.documentId;
     logger.info(`Generating word file from HTML for user ${context.userId}`);
-    const document = await prisma.document.findFirst({
-      where: {
-        id: documentId,
-        project: {
-          UsersOnProjects: {
-            some: {
-              userId: context.userId,
-            },
-          },
-        },
-      },
-    });
+    const document = await checkUserAccessToDocument(
+      documentId,
+      context.userId
+    );
 
     if (!document?.data) {
-      throw new GraphQLError('Document not found');
+      throw new GraphQLError('Document empty');
     }
+
     const htmlString = TipTapJSONToHTML(
       yjsStateToTipTapJSON(document.data).default
     );
