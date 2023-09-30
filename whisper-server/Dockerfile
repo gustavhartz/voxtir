@@ -30,13 +30,12 @@ WORKDIR /app
 RUN pip3 install --upgrade pip
 RUN pip install git+https://github.com/openai/whisper.git
 # Pyannote
-RUN pip install -qq https://github.com/pyannote/pyannote-audio/archive/refs/heads/develop.zip
+RUN pip install pyannote.audio
 #TODO: Download pyannote model save time
 COPY requirements.txt /app
 RUN pip3 install -r requirements.txt
 COPY app /app
 
 # Add Whipser image and set env to determine which model is available
-RUN mkdir /whisper_image
-RUN wget -P /whisper_image https://openaipublic.azureedge.net/main/whisper/models/81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524/large-v2.pt
-ENV AVAILABLE_WHISPER_MODELS='["large"]'
+
+ENV AVAILABLE_WHISPER_MODELS='["large", "medium", "small"]'
