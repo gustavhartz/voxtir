@@ -1,4 +1,4 @@
-import { Project, ProjectRole } from '@prisma/client';
+import { Document, Project, ProjectRole } from '@prisma/client';
 import { GraphQLError } from 'graphql';
 
 import prisma from '../../../prisma/index.js';
@@ -26,6 +26,24 @@ export const checkUserRightsOnProject = async (
     );
   }
   return relation.project;
+};
+
+export const checkUserAccessToDocument = async (
+  documentId: string,
+  userId: string
+): Promise<Document> => {
+  return await prisma.document.findFirstOrThrow({
+    where: {
+      id: documentId,
+      project: {
+        UsersOnProjects: {
+          some: {
+            userId: userId,
+          },
+        },
+      },
+    },
+  });
 };
 
 export const assertUserCreditsGreaterThan = async (
