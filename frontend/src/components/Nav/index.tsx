@@ -2,10 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import {
   AiFillFolderOpen,
-  AiFillInfoCircle,
   AiFillPushpin,
   AiOutlineFolder,
-  AiOutlineInfoCircle,
   AiOutlineMenuFold,
   AiOutlineMenuUnfold,
 } from 'react-icons/ai';
@@ -39,12 +37,6 @@ const routes: Route[] = [
     path: '/',
     icon: AiOutlineFolder,
     activeIcon: AiFillFolderOpen,
-  },
-  {
-    name: 'About Us',
-    path: '/about',
-    icon: AiOutlineInfoCircle,
-    activeIcon: AiFillInfoCircle,
   },
 ];
 

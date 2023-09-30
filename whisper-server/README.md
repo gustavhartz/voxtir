@@ -9,9 +9,16 @@ Compared to the typical approach in both of those links, our case does not use S
 
 Base image originates from [Podwhisperer](https://github.com/fourTheorem/podwhisperer)
 
-The docker container also performs speaker dizartation with [Pyannote](https://huggingface.co/pyannote/speaker-diarization). Currently it takes around 2.5 seconds pr. minute to perform it on a t4.
+The docker container also performs speaker dizartation with [Pyannote](https://huggingface.co/pyannote/speaker-diarization). Currently it takes around 2.5 seconds pr. minute to perform it on a t4 for the inference part, but on 1 hour long mp3 file this were the total processing results running on t4 in colab.
 
-Remember that the Server backend uses the output from this code so altering the format of the output data requires changes to the backend
+| model | Model load time | Inference time - preloaded audio | inferencetime - normal |
+|-------|-----------------|----------------------------------|------------------------|
+| V2.1  | 2.09            | 200.84                           | 753.95                 |
+| V3    | 2.49            | 176.64                           | 498.71                 |
+| Base  | 1.29            | 205.28                           | 813.25                 |
+
+## ATTENTION
+The Server backend uses the output from this code so altering the format of the output data requires changes to the backend
 
 ## Development
 

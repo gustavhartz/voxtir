@@ -1,12 +1,7 @@
 import { Editor } from '@tiptap/react';
 import { saveAs } from 'file-saver';
 import React from 'react';
-import {
-  TbFileExport,
-  TbInfoCircle,
-  TbKeyboard,
-  TbTrash,
-} from 'react-icons/tb';
+import { TbFileExport, TbKeyboard, TbTrash } from 'react-icons/tb';
 import { Tooltip } from 'react-tooltip';
 
 import { client } from '../../graphql/client';
@@ -85,15 +80,6 @@ const Drawer = (props: DrawerProps): JSX.Element => {
             data-tooltip-content="Keyboard shortcuts"
           >
             <TbKeyboard className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
-          </button>
-          <button
-            onClick={(): void => {
-              console.log('Clicked on info circle');
-            }}
-            data-tooltip-id="document-sidebar"
-            data-tooltip-content="Info"
-          >
-            <TbInfoCircle className="text-4xl text-gray-600 hover:text-gray-800 cursor-pointer" />
           </button>
           <button
             onClick={(): void => {

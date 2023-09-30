@@ -1,40 +1,43 @@
 # Voxtir 🎤
 
-This project is the source code for the **Voxtir app** (expected launch ultimo september 2023). The voxtir app is a solution built for AWS that 
-that can be self-hosted as a cheaper alternative to public solutions for larger scale operations, but primarly  to ensure
+This project is the source code for the **Voxtir app**. The voxtir app is a transcription service solution built for AWS that can be self-hosted as a cheaper alternative to public solutions for larger scale operations, but primarly  to ensure
 that there is full transparancy in how the data is stored.
 
-The solution is built upon the OpenAI Whisper model and a Speaker Dizaritation model. The Pyannote model used in this
-source code only comes with a non-commercial license. Please act accordingly.
+The solution is built upon the OpenAI Whisper model and a Pyannote for Speaker Dizaritation model.
 
 The transcripts are HTML documents conforming to quite strict TipTap/Prosemirror schemas. This makes backwardscompatible changes
 a bit difficult, but has the great benefit of allowing quite easy processing of the documents into a format that can
 be used to train/fine-tune your own transcription models.
 
-You can host this solution your self, but commercialization of the code in any way of form of this code base in parts or it's entirety is not allowed without prior approval. We can help hosting it for you, so that it's easier to get new updates etc. More information [here](voxtir.com) or send us an email at gsh (AT) voxtir.com.
+You can host this solution your self or let us help you by reaching out at gsh (AT) voxtir.com.
 
-**WIP:** A goal of this software is also to increase the amount of high-quality public data available transcription data. Thus 
-this software also provides the framework for sharing the transcriptions.This is of course opt-in and a manual process to ensure everything is going according to plan. If you have generated data yourself in the specified
-format and want to publice it in our bucket. Then react out :) When you use our service and agree to share your data
-then you also get it a lot cheaper.
+**WIP:** A goal of this software is also to improve performance of publicly available models. Thus we will offer free services to any entity willing to share the transcribed data.
 
 ## The app
+This is how (at the time of writing 🙏 ) the app looks.
 
-Screenshots will be added here
+**Document**
+![Document page](./assets/Document.png)
 
+**Document overview panel**
+![Document page](./assets/DocumentOverview.png)
+
+The app allows for sharing between users and collaborative editing of documents.
 ## The costs
 
 **Self-hosted**
-The smallest setup in AWS we have created costs around 130\$ a month in fixed costs and around 0.25\$ pr. transcribed hour. This should
-be able to handle up to at least 50 concurrent workers writing the editor. There is no limit on the number of transcriptions
-that can be run at once.
+The smallest setup in AWS we have created costs around 130\$ a month in fixed costs and around 0.25\$ pr. transcribed hour using the medium model. This should
+be able to handle up to at least 50 concurrent workers writing the editor. There is no limit on the number of transcriptions that can be run at once. This is determined by AWS Quotas.
 
 **Voxtir**
-We charge 0.25\$ pr. transcribed where the transcript is shared and 0.5\$ pr. transcribed hour if kept private. We can also host a completely private instance for you.
+We currently only offer a free beta version, but plan to charge 0\$ pr. transcribed hour where the transcript is corrected and shared with other users and 0.5\$ pr. transcribed hour if kept private using the large models. We can also host a completely private instance for you incorporating IP-restrictions.
 
 ## The infrastructure
-The code consists of three different "services". There is the React Typescript Vite frontend. The Express Typescript 
-Nodejs backend. The whisper-server which is a python app intended to run on AWS Batch Transform as a Flask API.
+The code consists of four different "services". There is:
+* React Typescript Vite frontend
+* Express Typescript Nodejs backend
+* whisper-server which is a python app intended to run on AWS Batch Transform as a Flask API.
+* AWS lambda running ffmpeg
 
 **High-level diagram**
 ![Draw.io file in assets](./assets/VoxtirHighlevel.svg)
@@ -131,6 +134,7 @@ Run the commands in the package.json folder
 4. `npm run dev # other terminal`
 
 
+**Docker**
 The server runs of a docker container in production. Try it locally using
 
 ```
