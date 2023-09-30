@@ -59,3 +59,6 @@ chmod +x predict.sh
 * Don't push an image built with ARM (M1 mac) target to the container registry as it will not run
 * Don't push stuff built on windows either due to the difference in data formats or edit it. [Reason](https://askubuntu.com/questions/896860/usr-bin-env-python3-r-no-such-file-or-directory)
 
+
+## TODO:
+- [ ] Add whisper and pyannote to requirements.txt to get lock on versions
