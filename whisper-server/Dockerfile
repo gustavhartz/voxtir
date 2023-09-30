@@ -30,7 +30,7 @@ WORKDIR /app
 RUN pip3 install --upgrade pip
 RUN pip install git+https://github.com/openai/whisper.git
 # Pyannote
-RUN pip install -qq https://github.com/pyannote/pyannote-audio/archive/refs/heads/develop.zip
+RUN pip install pyannote.audio
 #TODO: Download pyannote model save time
 COPY requirements.txt /app
 RUN pip3 install -r requirements.txt
