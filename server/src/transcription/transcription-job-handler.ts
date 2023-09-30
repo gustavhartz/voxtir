@@ -226,7 +226,10 @@ export class TranscriptionJobHandler {
         document.id,
         document.audioFileURL!,
         {
-          model: 'large',
+          model:
+            document.language === 'english' || document.language === 'en'
+              ? 'medium'
+              : 'large',
           language: document.language as keyof typeof LanguageCodePairs,
         },
         this.logger
