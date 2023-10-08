@@ -90,12 +90,7 @@ const mutations: MutationResolvers = {
           language: language,
           dialect: dialect,
           speakerCount: speakerCount,
-          transcription: {
-            create: {
-              type: transcriptionType,
-              status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
-            },
-          },
+          createdByUserId: context.userId,
         },
       });
       const result = await uploadRawAudioFile(
@@ -113,6 +108,12 @@ const mutations: MutationResolvers = {
         data: {
           audioFileURL: result.rawAudioKey,
           rawAudioFileExtension: result.fileExtension,
+          transcription: {
+            create: {
+              type: transcriptionType,
+              status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
+            },
+          },
         },
       });
       documentId = doc.id;
