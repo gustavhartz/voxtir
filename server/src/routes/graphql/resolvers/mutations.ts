@@ -90,6 +90,7 @@ const mutations: MutationResolvers = {
           language: language,
           dialect: dialect,
           speakerCount: speakerCount,
+          createdByUserId: context.userId,
         },
       });
       const result = await uploadRawAudioFile(
