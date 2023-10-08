@@ -15,7 +15,11 @@ ALTER TABLE "Task" ADD COLUMN     "errorMessages" TEXT;
 
 -- AlterTable
 ALTER TABLE "User" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL;
+
+-- Set a default and remove it again to resolve issues
+ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE "User" ALTER COLUMN "updatedAt" DROP DEFAULT;
 
 -- AddForeignKey
 ALTER TABLE "Document" ADD CONSTRAINT "Document_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
