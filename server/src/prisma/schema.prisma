@@ -35,6 +35,10 @@ model Document {
     isTrashed     Boolean           @default(false)
     transcription TranscriptionJob?
 
+    // Relations
+    createdByUser   User   @relation(fields: [createdByUserId], references: [id])
+    createdByUserId String // relation scalar field (used in the `@relation` attribute above)
+
     @@index([projectId])
 }
 
@@ -69,6 +73,9 @@ model User {
     UsersOnProjects               UserOnProject[]
     PinnedProjects                PinnedProjects[]
     ProjectInvitation             ProjectInvitation[]
+    Document                      Document[]
+    createdAt                     DateTime            @default(now())
+    updatedAt                     DateTime            @updatedAt
 }
 
 model Project {
@@ -138,6 +145,7 @@ model Task {
     details       String
     isLocked      Boolean
     lastSuccessAt DateTime?
+    errorMessages String?
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
 
