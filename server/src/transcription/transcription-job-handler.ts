@@ -46,8 +46,18 @@ export class TranscriptionJobHandler {
   protected async processStartedJobs(): Promise<void> {
     this.logger.info(`Proccesing Existing Sagemaker jobs`);
     const activeJobs = await listBatchTransformJobs(this.runFilter);
+
+    if (!activeJobs.TransformJobSummaries) {
+      this.logger.info(`No active jobs found`);
+      return;
+    }
+
     this.runningJobs = 0;
     for (const job of activeJobs.TransformJobSummaries ?? []) {
+      if (!job?.TransformJobName) {
+        this.logger.info(`Skipping unknown job ${job.TransformJobName}`, job);
+        continue;
+      }
       switch (job.TransformJobStatus) {
         case TransformJobStatus.FAILED:
           await prisma.transcriptionJob.update({
@@ -64,7 +74,7 @@ export class TranscriptionJobHandler {
           break;
 
         case TransformJobStatus.COMPLETED:
-          await prisma.transcriptionJob.update({
+          await prisma.transcriptionJob.updateMany({
             where: {
               jobName: job.TransformJobName,
               status: { not: TranscriptionProcessStatus.DONE },
