@@ -35,9 +35,9 @@ model Document {
     isTrashed     Boolean           @default(false)
     transcription TranscriptionJob?
 
-    // Relations
-    createdByUser   User   @relation(fields: [createdByUserId], references: [id])
-    createdByUserId String // relation scalar field (used in the `@relation` attribute above)
+    // Creator
+    createdByUser   User?   @relation(fields: [createdByUserId], references: [id])
+    createdByUserId String? // relation scalar field (used in the `@relation` attribute above)
 
     @@index([projectId])
 }
@@ -120,7 +120,7 @@ model ProjectInvitation {
     usedById  String? // relation scalar field (used in the `@relation` attribute above)
     expiresAt DateTime
     createdAt DateTime    @default(now())
-    updatedAt DateTime    @updatedAt
+    updatedAt DateTime    @default(now()) @updatedAt
 
     @@index([projectId, email, token])
 }
