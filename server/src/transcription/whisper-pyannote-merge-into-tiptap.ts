@@ -44,6 +44,7 @@ interface PyannoteSegment {
 }
 
 interface PyannoteTranscript {
+  //Can actually be null
   segments: PyannoteSegment[];
 }
 
@@ -77,6 +78,11 @@ export class WhisperPyannoteMerger {
   ) {
     this.whisperTranscript = whisperTranscript;
     this.pyannoteTranscript = pyannoteTranscript;
+    // If there are no segments, we create an empty array
+    if (!this.pyannoteTranscript.segments) {
+      this.pyannoteTranscript.segments = [];
+    }
+
     this.timestampEveryApproximateSeconds = timestampEveryApproximateSeconds;
     this.minimumTimeBetweenTimestampsSeconds =
       minimumTimeBetweenTimestampsSeconds;
