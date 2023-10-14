@@ -46,8 +46,8 @@ const MenuBar = ({ editor }: MenuBarProps) => {
   ];
 
   return (
-    <div className="menu-bar fixed bottom-20 left-70 bg-gray-100 rounded-md shadow-md">
-      {items.map((item, index) => (
+    <div className="">
+      {items.map((item, _) => (
         <button
           key={item.title}
           onClick={() => item.action()}
