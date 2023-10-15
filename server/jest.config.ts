@@ -17,6 +17,7 @@ const jestConfig: JestConfigWithTsJest = {
     ],
   },
   modulePathIgnorePatterns: ['node_modules', 'dist'],
+  setupFiles: ['./jest.setup.ts'],
 };
 
 export default jestConfig;
