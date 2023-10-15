@@ -15,7 +15,7 @@ interface WhisperChunk {
   text: string;
 }
 
-interface WhisperTranscript {
+export interface WhisperTranscript {
   chunks?: WhisperChunk[];
   text: string;
 }
@@ -292,6 +292,7 @@ export class WhisperPyannoteMerger {
       }
       whisperIdx++;
     }
+    TipTapJSONDoc.default.content.push(currentParagraph);
     return TipTapJSONDoc;
   }
 
