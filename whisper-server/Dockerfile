@@ -28,10 +28,6 @@ ENV PATH="/app:${PATH}"
 RUN mkdir /app
 WORKDIR /app
 RUN pip3 install --upgrade pip
-RUN pip install git+https://github.com/openai/whisper.git
-# Pyannote
-RUN pip install pyannote.audio
-#TODO: Download pyannote model save time
 COPY requirements.txt /app
 RUN pip3 install -r requirements.txt
 COPY app /app

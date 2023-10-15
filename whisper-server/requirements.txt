@@ -2,3 +2,5 @@ boto3==1.24.96
 flask
 gunicorn
 python-json-logger==2.0.7
+transformers==4.18.0
+pyannote.audio==3.0.1
