@@ -5,8 +5,8 @@ import json
 import tempfile
 import flask
 import boto3
-import whisper
-from whisper.tokenizer import TO_LANGUAGE_CODE, LANGUAGES
+from helper import TO_LANGUAGE_CODE, LANGUAGES
+from transformers import pipeline
 import gc
 from pyannote.audio import Pipeline
 import torch
@@ -103,7 +103,8 @@ def transformation() -> flask.Response:
     speaker_count = model_options.get("speakerCount", None)
 
     language = TO_LANGUAGE_CODE.get(language, language)
-    if language and (language not in TO_LANGUAGE_CODE) and (language not in LANGUAGES):
+
+    if language and (language not in LANGUAGES.keys()):
         logger.error(
             f"Language {language} not supported. Supported languages: {TO_LANGUAGE_CODE}"
         )
@@ -130,12 +131,22 @@ def transformation() -> flask.Response:
         s3_client.download_file(bucket_name, audio_input_key, filename)
         logger.info(f"Loading model {model}")
 
-        # The root is relative to the current working directory in docker
+        # Whisper model
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"Loding model {model}")
-        model = whisper.load_model(model)
+        pipe = pipeline(
+            "automatic-speech-recognition",
+            model=model,
+            chunk_length_s=30,
+            device=device,
+        )
         logger.info(f"Model {model} loaded")
         logger.info(f"Transcribing {filename}")
-        result = model.transcribe(filename, language=language, word_timestamps=True)
+        result = pipe(
+            filename,
+            generate_kwargs={"language": f"<|{language}|>", "task": "transcribe"},
+            return_timestamps=True,
+        )
         logger.info(f"Transcription of {filename} complete")
         # Dump the result to a file
         WHISPER_FILE_NAME = "whisper.json"
