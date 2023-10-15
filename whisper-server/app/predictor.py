@@ -5,7 +5,7 @@ import json
 import tempfile
 import flask
 import boto3
-from helper import TO_LANGUAGE_CODE, LANGUAGES
+from helper import TO_LANGUAGE_CODE, LANGUAGES, AVAILABLE_WHISPER_MODELS
 from transformers import pipeline
 import gc
 from pyannote.audio import Pipeline
@@ -20,7 +20,6 @@ TEXT_TYPE = "text/plain"
 try:
     ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
     HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
-    AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS"))
 except KeyError as e:
     logger.error(f"Missing environment variable {e}")
     raise e

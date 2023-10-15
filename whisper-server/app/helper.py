@@ -115,3 +115,10 @@ TO_LANGUAGE_CODE = {
     "sinhalese": "si",
     "castilian": "es",
 }
+
+AVAILABLE_WHISPER_MODELS = [
+    "openai/whisper-large-v2",
+    "openai/whisper-medium",
+    "openai/whisper-small",
+    "openai/whisper-tiny",
+]
