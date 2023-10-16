@@ -1,0 +1,64 @@
+name: Deploy to ECR
+
+on:
+  #test
+  push:
+  #test
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: 'false'
+
+      - name: Set BUILD_TAG
+        id: set-build-tag
+        run: |
+          if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/main' ]]; then
+            echo "BUILD_TAG=build-master" >> "$GITHUB_OUTPUT"
+          else
+            echo "BUILD_TAG=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build Whisper Server
+        env:
+          BUILD_MASTER_TAG: build-master
+        run: |
+          docker build --cache-from ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_MASTER_TAG -t whisper-server ./whisper-server
+
+      - name: push whisper server to ECR
+        env:
+          BUILD_TAG: ${{steps.set-build-tag.outputs.BUILD_TAG}}
+        run: |
+          docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
+          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
+
+      - name: Build Server and push to Amazon ECR
+        env:
+          BUILD_MASTER_TAG: build-master
+        run: |
+          docker build --cache-from ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_MASTER_TAG -t server ./server
+
+      - name: push server to ECR
+        env:
+          BUILD_TAG: ${{steps.set-build-tag.outputs.BUILD_TAG}}
+        run: |
+          docker tag server ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
+          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
