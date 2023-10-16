@@ -1,4 +1,4 @@
-name: Deploy to ECR
+name: Build docker images
 
 on:
   #test
@@ -43,12 +43,12 @@ jobs:
         run: |
           docker build --cache-from ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_MASTER_TAG -t whisper-server ./whisper-server
 
-      - name: push whisper server to ECR
+      - name: Push Whisper Server to ECR
         env:
           BUILD_TAG: ${{steps.set-build-tag.outputs.BUILD_TAG}}
         run: |
           docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
-          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
+          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
 
       - name: Build Server and push to Amazon ECR
         env:
