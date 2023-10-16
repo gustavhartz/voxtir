@@ -1,9 +1,6 @@
 name: Build docker images
 
 on:
-  #test
-  push:
-  #test
   pull_request:
     branches:
       - main
