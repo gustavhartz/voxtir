@@ -33,7 +33,7 @@ jobs:
           if [[ ${{ github.event_name }} == 'push' && ${{ github.ref }} == 'refs/heads/main' ]]; then
             echo "BUILD_TAG=build-master" >> "$GITHUB_OUTPUT"
           else
-            echo "BUILD_TAG=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+            echo "BUILD_TAG=dev" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build Whisper Server
@@ -47,7 +47,8 @@ jobs:
           BUILD_TAG: ${{steps.set-build-tag.outputs.BUILD_TAG}}
         run: |
           docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
-          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
+          docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$GITHUB_SHA
+          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}
 
       - name: Build Server and push to Amazon ECR
         env:
@@ -60,4 +61,5 @@ jobs:
           BUILD_TAG: ${{steps.set-build-tag.outputs.BUILD_TAG}}
         run: |
           docker tag server ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
-          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
+          docker tag server ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$GITHUB_SHA
+          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}
