@@ -48,8 +48,7 @@ jobs:
         run: |
           docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
           docker tag whisper-server ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$GITHUB_SHA
-          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$BUILD_TAG
-          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}:$GITHUB_SHA
+          docker push ${{ secrets.ECR_REPOSITORY_URI_WHISPER_SERVER }}
 
       - name: Build Server and push to Amazon ECR
         env:
@@ -63,5 +62,4 @@ jobs:
         run: |
           docker tag server ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
           docker tag server ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$GITHUB_SHA
-          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$GITHUB_SHA
-          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}:$BUILD_TAG
+          docker push ${{ secrets.ECR_REPOSITORY_URI_SERVER }}
