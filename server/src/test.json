@@ -1,0 +1,6234 @@
+{
+  "text": " Hvad laver du i din fritid? S\u00e5 lidt som muligt, jeg har sagt. Jeg arbejder lidt meget. Jeg k\u00f8rer crossfit. Og indtil for nylig spillede jeg ogs\u00e5 fodbold. S\u00e5 synes min akil-tind, den skulle blive l\u00e6ngere, end i forbindelse med badminton. Det kan jeg ikke anbefale mig nogen gang mere. Og s\u00e5 er jeg ikke godt i at v\u00e6re biffen. Det er en af mine. Der slapper jeg hver dag. Og ellers, ja. Bare v\u00e6re aktiv. Er der nogen, der har sagt, at der er nogle emner, der s\u00e6rligt optager dig, n\u00e5r du fx g\u00e5r i biffen, eller hvis du skal l\u00e6se b\u00f8ger? Jeg kan godt lide b\u00f8ger, eller film, der har noget med virkeligheden. Jeg m\u00e5 indr\u00e6tse Fable Mans i g\u00e5r. Det synes jeg er meget fedt. Ofte kan jeg l\u00e6gge lidt mere, end hvad det fik tilbage. Det er ogs\u00e5 nogle af de bedste filmer, jeg har set, har et eller andet virkelig over sig. Ja. Fx hvis nu er jeg n\u00e6rmere, s\u00e5 er det en film, der hedder Rush. Om Nicolai og James Horns kamp, og om de er vandt, hvis det er for en vild. Hvis ikke I har set den, s\u00e5 er det en sindssyg film. Det er meget, man vil g\u00f8re for at vinde. Ja. Den er ret fed. Den er ret vild. S\u00e5 er det jo. Det var lidt om dig. Hvad med dig, Natia? Jeg er 24, og jeg er l\u00e6st til socialvurgere. Og s\u00e5 arbejder jeg i internetforum. Og p\u00e5 Heisvigvar. Ja, s\u00e5 er det s\u00e5dan lidt blandet. S\u00e5 ja, b\u00e5de studie og arbejde tager ikke s\u00e5 meget tid. Ellers meget socialt. Pr\u00f8ve at lave noget derude. Jeg elsker ogs\u00e5 at g\u00e5 i biografen. Det er lidt helt store. Men ja, det er det, jeg f\u00e5r tid til at g\u00e5 med. Er der nogen emner, som du er s\u00e6rlig optaget af? Jeg er optaget af helt alene kriminalforsvaret. Jeg kan meget f\u00e6rge min podcast omkring kriminalitet. Jeg synes, det er vildt sp\u00e6ndende. B\u00e5de Bandeland og jeg er ogs\u00e5 s\u00e5dan en podcast. S\u00e5 det er det, jeg optager meget. Vi er optager ogs\u00e5 generelt ogs\u00e5 i kring vores socialforgivere. Alts\u00e5 de umyndige og s\u00e5dan noget. Det kan vi godt lide at se. Sp\u00e6ndende. S\u00e5 er du den sidste, Karl. Ja, jeg er 23. Og jeg har helst fanget en fagopgave nu til at studere biologi senere. S\u00e5 jeg har faktisk ikke s\u00e5 meget fritid. Jeg er sammen med mine venner. Min umy arbejder. Vi har ikke g\u00e5et p\u00e5 h\u00f8jsko sammen. Det er jo ikke sporten. Det kan jo lide at fiske. Det g\u00f8r jeg ogs\u00e5 ret meget. Tusind tak. Det var godt med lidt baggrundsinformation. Nu kunne vi godt t\u00e6nke os at tale lidt mere om hvad I opdager dig som en god taler. Og det er jo et meget bredt sp\u00f8rgsm\u00e5l. Men lad os starte der og s\u00e5 pr\u00f8ver vi at komme lidt mere ned i det. Det kan jo v\u00e6re, du vil starte. Uhaller. En god taler. Ja. For mig tror jeg, at en, der er en, hvor man ogs\u00e5 kan lidt mere virkelighedsn\u00e6rmest m\u00e6rkes, at man er mere menneskelig, s\u00e5 man m\u00e5ske generaliterer lidt bedre. Det ogs\u00e5 g\u00f8r, at man bliver mere stor p\u00e5, hvad der bliver sagt. Det tror jeg, at det er for mig. Er det en god vinder, der g\u00f8r, at du ikke er adslutter? Ja, det er jeg ogs\u00e5. Meget p\u00e5s\u00e5ndet. Der er flere ting for mig, men hvis man kan h\u00f8re, at det ikke bliver vist op, eller s\u00e5dan lidt. En god taler, for mig er tit s\u00e5dan noget, som virker egentlig flydende. Der er simpelthen monolog. Jeg er ikke mere s\u00e5dan noget, der bliver vist op, men s\u00e5dan noget, der kommer her af vejen. I hvilken m\u00e5de. Har du et eksempel p\u00e5 en, det kunne v\u00e6re en offentlig person, eller en, du kender, som du synes er god til at formidle sine budskaber? Det kunne det v\u00e6re vores folkeskoleforstander. De var gode til det. Hvor er du g\u00e5et i folkeh\u00f8jde? K. Han hedder Rasmus Meyer. Han var selvf\u00f8lgelig god til at... Man kunne godt m\u00e6rke, at han havde en fagsogn, men det kom ligesom af... Det virkede som om, at det han sagde, ikke m\u00e5ske improviserede s\u00e5 intuitivt. Han var omgang med nogle pauser, og s\u00e5dan noget.",
+  "segments": [
+    {
+      "id": 0,
+      "seek": 0,
+      "start": 2.7800000000000002,
+      "end": 4.08,
+      "text": " Hvad laver du i din fritid?",
+      "tokens": [
+        50364, 389, 29886, 635, 331, 1581, 741, 3791, 431, 270, 327, 30, 50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Hvad",
+          "start": 2.7800000000000002,
+          "end": 3.12,
+          "probability": 0.6174700111150742
+        },
+        {
+          "word": " laver",
+          "start": 3.12,
+          "end": 3.46,
+          "probability": 0.8326202034950256
+        },
+        {
+          "word": " du",
+          "start": 3.46,
+          "end": 3.56,
+          "probability": 0.8244758248329163
+        },
+        {
+          "word": " i",
+          "start": 3.56,
+          "end": 3.68,
+          "probability": 0.9546499252319336
+        },
+        {
+          "word": " din",
+          "start": 3.68,
+          "end": 3.76,
+          "probability": 0.861850917339325
+        },
+        {
+          "word": " fritid?",
+          "start": 3.76,
+          "end": 4.08,
+          "probability": 0.9429827133814493
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "seek": 0,
+      "start": 6.32,
+      "end": 7.7,
+      "text": " S\u00e5 lidt som muligt, jeg har sagt.",
+      "tokens": [
+        50464, 12728, 40574, 3307, 14077, 5828, 11, 10610, 2233, 15764, 13,
+        50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 6.32,
+          "end": 6.66,
+          "probability": 0.37780553102493286
+        },
+        {
+          "word": " lidt",
+          "start": 6.66,
+          "end": 6.86,
+          "probability": 0.8434122800827026
+        },
+        {
+          "word": " som",
+          "start": 6.86,
+          "end": 7.02,
+          "probability": 0.8297167420387268
+        },
+        {
+          "word": " muligt,",
+          "start": 7.02,
+          "end": 7.26,
+          "probability": 0.8784922361373901
+        },
+        {
+          "word": " jeg",
+          "start": 7.38,
+          "end": 7.44,
+          "probability": 0.3071596324443817
+        },
+        {
+          "word": " har",
+          "start": 7.44,
+          "end": 7.62,
+          "probability": 0.36903026700019836
+        },
+        {
+          "word": " sagt.",
+          "start": 7.62,
+          "end": 7.7,
+          "probability": 0.25870850682258606
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "seek": 0,
+      "start": 8.24,
+      "end": 9.1,
+      "text": " Jeg arbejder lidt meget.",
+      "tokens": [50564, 17119, 40476, 73, 1068, 40574, 36411, 13, 50664],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 8.24,
+          "end": 8.58,
+          "probability": 0.6651223301887512
+        },
+        {
+          "word": " arbejder",
+          "start": 8.58,
+          "end": 8.58,
+          "probability": 0.7679018874963125
+        },
+        {
+          "word": " lidt",
+          "start": 8.58,
+          "end": 8.82,
+          "probability": 0.17791108787059784
+        },
+        {
+          "word": " meget.",
+          "start": 8.82,
+          "end": 9.1,
+          "probability": 0.7662729024887085
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "seek": 0,
+      "start": 9.5,
+      "end": 11.1,
+      "text": " Jeg k\u00f8rer crossfit.",
+      "tokens": [50664, 17119, 350, 6715, 9797, 3278, 6845, 13, 50764],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 9.5,
+          "end": 9.68,
+          "probability": 0.8835659623146057
+        },
+        {
+          "word": " k\u00f8rer",
+          "start": 9.68,
+          "end": 10.36,
+          "probability": 0.516689399878184
+        },
+        {
+          "word": " crossfit.",
+          "start": 10.36,
+          "end": 11.1,
+          "probability": 0.5748520791530609
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "seek": 0,
+      "start": 11.66,
+      "end": 13.92,
+      "text": " Og indtil for nylig spillede jeg ogs\u00e5 fodbold.",
+      "tokens": [
+        50764, 14883, 1016, 20007, 337, 18052, 5073, 22044, 4858, 10610, 23864,
+        47698, 42515, 13, 50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Og",
+          "start": 11.66,
+          "end": 11.66,
+          "probability": 0.2710874080657959
+        },
+        {
+          "word": " indtil",
+          "start": 11.66,
+          "end": 12.76,
+          "probability": 0.8918997943401337
+        },
+        {
+          "word": " for",
+          "start": 12.76,
+          "end": 12.92,
+          "probability": 0.630267322063446
+        },
+        {
+          "word": " nylig",
+          "start": 12.92,
+          "end": 13.14,
+          "probability": 0.7479127645492554
+        },
+        {
+          "word": " spillede",
+          "start": 13.14,
+          "end": 13.34,
+          "probability": 0.7932572066783905
+        },
+        {
+          "word": " jeg",
+          "start": 13.34,
+          "end": 13.44,
+          "probability": 0.8840877413749695
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 13.44,
+          "end": 13.58,
+          "probability": 0.856221616268158
+        },
+        {
+          "word": " fodbold.",
+          "start": 13.58,
+          "end": 13.92,
+          "probability": 0.9460872411727905
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "seek": 0,
+      "start": 14.08,
+      "end": 16.54,
+      "text": " S\u00e5 synes min akil-tind, den skulle blive l\u00e6ngere,",
+      "tokens": [
+        50864, 12728, 943, 4081, 923, 9308, 388, 12, 7317, 273, 11, 1441, 20750,
+        888, 488, 44584, 872, 323, 11, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 14.08,
+          "end": 14.22,
+          "probability": 0.7460985779762268
+        },
+        {
+          "word": " synes",
+          "start": 14.22,
+          "end": 14.52,
+          "probability": 0.6689353138208389
+        },
+        {
+          "word": " min",
+          "start": 14.52,
+          "end": 14.8,
+          "probability": 0.3813810646533966
+        },
+        {
+          "word": " akil",
+          "start": 14.8,
+          "end": 15.22,
+          "probability": 0.2830568850040436
+        },
+        {
+          "word": "-tind,",
+          "start": 15.22,
+          "end": 15.46,
+          "probability": 0.19204616298278174
+        },
+        {
+          "word": " den",
+          "start": 15.54,
+          "end": 15.66,
+          "probability": 0.452177494764328
+        },
+        {
+          "word": " skulle",
+          "start": 15.66,
+          "end": 15.82,
+          "probability": 0.585314154624939
+        },
+        {
+          "word": " blive",
+          "start": 15.82,
+          "end": 16.08,
+          "probability": 0.883236825466156
+        },
+        {
+          "word": " l\u00e6ngere,",
+          "start": 16.08,
+          "end": 16.54,
+          "probability": 0.9519952138264974
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "seek": 0,
+      "start": 16.64,
+      "end": 17.52,
+      "text": " end i forbindelse med badminton.",
+      "tokens": [
+        50964, 917, 741, 16603, 471, 44408, 1205, 1578, 76, 12442, 13, 51064
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " end",
+          "start": 16.64,
+          "end": 16.66,
+          "probability": 0.30285879969596863
+        },
+        {
+          "word": " i",
+          "start": 16.66,
+          "end": 16.76,
+          "probability": 0.3819217383861542
+        },
+        {
+          "word": " forbindelse",
+          "start": 16.76,
+          "end": 17.04,
+          "probability": 0.8381262421607971
+        },
+        {
+          "word": " med",
+          "start": 17.04,
+          "end": 17.12,
+          "probability": 0.9260704517364502
+        },
+        {
+          "word": " badminton.",
+          "start": 17.12,
+          "end": 17.52,
+          "probability": 0.7898410260677338
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "seek": 0,
+      "start": 17.94,
+      "end": 19.38,
+      "text": " Det kan jeg ikke anbefale mig nogen gang mere.",
+      "tokens": [
+        51064, 4237, 4608, 10610, 13076, 364, 650, 69, 1220, 6186, 572, 1766,
+        10145, 8401, 13, 51164
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Det",
+          "start": 17.94,
+          "end": 18.06,
+          "probability": 0.866594672203064
+        },
+        {
+          "word": " kan",
+          "start": 18.06,
+          "end": 18.22,
+          "probability": 0.8684345483779907
+        },
+        {
+          "word": " jeg",
+          "start": 18.22,
+          "end": 18.32,
+          "probability": 0.8724818825721741
+        },
+        {
+          "word": " ikke",
+          "start": 18.32,
+          "end": 18.44,
+          "probability": 0.7858533263206482
+        },
+        {
+          "word": " anbefale",
+          "start": 18.44,
+          "end": 18.8,
+          "probability": 0.8942650854587555
+        },
+        {
+          "word": " mig",
+          "start": 18.8,
+          "end": 18.96,
+          "probability": 0.4998645484447479
+        },
+        {
+          "word": " nogen",
+          "start": 18.96,
+          "end": 19.12,
+          "probability": 0.5741749331355095
+        },
+        {
+          "word": " gang",
+          "start": 19.12,
+          "end": 19.22,
+          "probability": 0.21988098323345184
+        },
+        {
+          "word": " mere.",
+          "start": 19.22,
+          "end": 19.38,
+          "probability": 0.8255135416984558
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "seek": 0,
+      "start": 21.02,
+      "end": 22.62,
+      "text": " Og s\u00e5 er jeg ikke godt i at v\u00e6re biffen.",
+      "tokens": [
+        51164, 14883, 4719, 1189, 10610, 13076, 35427, 741, 412, 27458, 272,
+        3661, 268, 13, 51264
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Og",
+          "start": 21.02,
+          "end": 21.36,
+          "probability": 0.7436493039131165
+        },
+        {
+          "word": " s\u00e5",
+          "start": 21.36,
+          "end": 21.52,
+          "probability": 0.759985089302063
+        },
+        {
+          "word": " er",
+          "start": 21.52,
+          "end": 21.72,
+          "probability": 0.4488565921783447
+        },
+        {
+          "word": " jeg",
+          "start": 21.72,
+          "end": 21.74,
+          "probability": 0.6890988349914551
+        },
+        {
+          "word": " ikke",
+          "start": 21.74,
+          "end": 21.84,
+          "probability": 0.1430179476737976
+        },
+        {
+          "word": " godt",
+          "start": 21.84,
+          "end": 21.94,
+          "probability": 0.21549902856349945
+        },
+        {
+          "word": " i",
+          "start": 21.94,
+          "end": 22.04,
+          "probability": 0.8865141272544861
+        },
+        {
+          "word": " at",
+          "start": 22.04,
+          "end": 22.12,
+          "probability": 0.892246425151825
+        },
+        {
+          "word": " v\u00e6re",
+          "start": 22.12,
+          "end": 22.2,
+          "probability": 0.26618707180023193
+        },
+        {
+          "word": " biffen.",
+          "start": 22.2,
+          "end": 22.62,
+          "probability": 0.501772090792656
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "seek": 0,
+      "start": 23.68,
+      "end": 24.48,
+      "text": " Det er en af mine.",
+      "tokens": [51264, 4237, 1189, 465, 3238, 3892, 13, 51364],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Det",
+          "start": 23.68,
+          "end": 24.02,
+          "probability": 0.6848224997520447
+        },
+        {
+          "word": " er",
+          "start": 24.02,
+          "end": 24.08,
+          "probability": 0.9131483435630798
+        },
+        {
+          "word": " en",
+          "start": 24.08,
+          "end": 24.18,
+          "probability": 0.857756495475769
+        },
+        {
+          "word": " af",
+          "start": 24.18,
+          "end": 24.26,
+          "probability": 0.935570240020752
+        },
+        {
+          "word": " mine.",
+          "start": 24.26,
+          "end": 24.48,
+          "probability": 0.8171302080154419
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "seek": 0,
+      "start": 24.64,
+      "end": 25.52,
+      "text": " Der slapper jeg hver dag.",
+      "tokens": [51364, 5618, 8039, 3717, 10610, 276, 331, 15460, 13, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Der",
+          "start": 24.64,
+          "end": 24.8,
+          "probability": 0.888170599937439
+        },
+        {
+          "word": " slapper",
+          "start": 24.8,
+          "end": 25.1,
+          "probability": 0.8277533054351807
+        },
+        {
+          "word": " jeg",
+          "start": 25.1,
+          "end": 25.24,
+          "probability": 0.8974342942237854
+        },
+        {
+          "word": " hver",
+          "start": 25.24,
+          "end": 25.4,
+          "probability": 0.588662400841713
+        },
+        {
+          "word": " dag.",
+          "start": 25.4,
+          "end": 25.52,
+          "probability": 0.8966109752655029
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "seek": 0,
+      "start": 26.3,
+      "end": 26.84,
+      "text": " Og ellers, ja.",
+      "tokens": [51464, 14883, 8284, 433, 11, 2784, 13, 51564],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Og",
+          "start": 26.3,
+          "end": 26.38,
+          "probability": 0.8246228694915771
+        },
+        {
+          "word": " ellers,",
+          "start": 26.38,
+          "end": 26.62,
+          "probability": 0.7523051500320435
+        },
+        {
+          "word": " ja.",
+          "start": 26.7,
+          "end": 26.84,
+          "probability": 0.8292357921600342
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "seek": 0,
+      "start": 27.72,
+      "end": 28.38,
+      "text": " Bare v\u00e6re aktiv.",
+      "tokens": [51564, 43957, 27458, 31658, 13, 51664],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Bare",
+          "start": 27.72,
+          "end": 27.86,
+          "probability": 0.7584115862846375
+        },
+        {
+          "word": " v\u00e6re",
+          "start": 27.86,
+          "end": 28.04,
+          "probability": 0.3814559578895569
+        },
+        {
+          "word": " aktiv.",
+          "start": 28.04,
+          "end": 28.38,
+          "probability": 0.35339757800102234
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "seek": 0,
+      "start": 29.28,
+      "end": 29.98,
+      "text": " Er der nogen, der har sagt,",
+      "tokens": [
+        51664, 3300, 1163, 572, 1766, 11, 1163, 2233, 15764, 11, 51764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.49039275387683545,
+      "compression_ratio": 1.5719424460431655,
+      "no_speech_prob": 0.3344970941543579,
+      "words": [
+        {
+          "word": " Er",
+          "start": 29.28,
+          "end": 29.62,
+          "probability": 0.663638174533844
+        },
+        {
+          "word": " der",
+          "start": 29.62,
+          "end": 29.72,
+          "probability": 0.8975459337234497
+        },
+        {
+          "word": " nogen,",
+          "start": 29.72,
+          "end": 29.98,
+          "probability": 0.6350326836109161
+        },
+        {
+          "word": " der",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.5266929864883423
+        },
+        {
+          "word": " har",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.1191590279340744
+        },
+        {
+          "word": " sagt,",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.10502193868160248
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "seek": 2998,
+      "start": 29.98,
+      "end": 31.92,
+      "text": " at der er nogle emner, der s\u00e6rligt optager dig,",
+      "tokens": [
+        50364, 412, 1163, 1189, 48713, 846, 1193, 11, 1163, 262, 32011, 16770,
+        2427, 3557, 2528, 11, 50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " at",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.0013658571988344193
+        },
+        {
+          "word": " der",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.07942860573530197
+        },
+        {
+          "word": " er",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.8068544864654541
+        },
+        {
+          "word": " nogle",
+          "start": 29.98,
+          "end": 29.98,
+          "probability": 0.8863233923912048
+        },
+        {
+          "word": " emner,",
+          "start": 29.98,
+          "end": 30.34,
+          "probability": 0.9130785465240479
+        },
+        {
+          "word": " der",
+          "start": 30.48,
+          "end": 30.48,
+          "probability": 0.8151845932006836
+        },
+        {
+          "word": " s\u00e6rligt",
+          "start": 30.48,
+          "end": 31.2,
+          "probability": 0.6733038624127706
+        },
+        {
+          "word": " optager",
+          "start": 31.2,
+          "end": 31.74,
+          "probability": 0.808081328868866
+        },
+        {
+          "word": " dig,",
+          "start": 31.74,
+          "end": 31.92,
+          "probability": 0.9349416494369507
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "seek": 2998,
+      "start": 31.96,
+      "end": 32.94,
+      "text": " n\u00e5r du fx g\u00e5r i biffen,",
+      "tokens": [
+        50464, 36522, 1581, 283, 87, 19831, 741, 272, 3661, 268, 11, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " n\u00e5r",
+          "start": 31.96,
+          "end": 32.04,
+          "probability": 0.7780744433403015
+        },
+        {
+          "word": " du",
+          "start": 32.04,
+          "end": 32.14,
+          "probability": 0.9049510955810547
+        },
+        {
+          "word": " fx",
+          "start": 32.14,
+          "end": 32.3,
+          "probability": 0.4616803675889969
+        },
+        {
+          "word": " g\u00e5r",
+          "start": 32.3,
+          "end": 32.54,
+          "probability": 0.7744708061218262
+        },
+        {
+          "word": " i",
+          "start": 32.54,
+          "end": 32.62,
+          "probability": 0.9329822063446045
+        },
+        {
+          "word": " biffen,",
+          "start": 32.62,
+          "end": 32.94,
+          "probability": 0.19141512115796408
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "seek": 2998,
+      "start": 33.06,
+      "end": 34.7,
+      "text": " eller hvis du skal l\u00e6se b\u00f8ger?",
+      "tokens": [
+        50564, 12519, 45427, 1581, 16890, 44584, 405, 272, 6715, 1321, 30, 50664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " eller",
+          "start": 33.06,
+          "end": 33.16,
+          "probability": 0.7703329920768738
+        },
+        {
+          "word": " hvis",
+          "start": 33.16,
+          "end": 33.4,
+          "probability": 0.9231722950935364
+        },
+        {
+          "word": " du",
+          "start": 33.4,
+          "end": 33.48,
+          "probability": 0.903641402721405
+        },
+        {
+          "word": " skal",
+          "start": 33.48,
+          "end": 33.66,
+          "probability": 0.9160884022712708
+        },
+        {
+          "word": " l\u00e6se",
+          "start": 33.66,
+          "end": 34.0,
+          "probability": 0.9415600001811981
+        },
+        {
+          "word": " b\u00f8ger?",
+          "start": 34.0,
+          "end": 34.7,
+          "probability": 0.9609737197558085
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "seek": 2998,
+      "start": 34.76,
+      "end": 35.56,
+      "text": " Jeg kan godt lide b\u00f8ger,",
+      "tokens": [
+        50664, 17119, 4608, 35427, 287, 482, 272, 6715, 1321, 11, 50764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 34.76,
+          "end": 34.86,
+          "probability": 0.6321214437484741
+        },
+        {
+          "word": " kan",
+          "start": 34.86,
+          "end": 34.98,
+          "probability": 0.8586681485176086
+        },
+        {
+          "word": " godt",
+          "start": 34.98,
+          "end": 35.16,
+          "probability": 0.7625607848167419
+        },
+        {
+          "word": " lide",
+          "start": 35.16,
+          "end": 35.24,
+          "probability": 0.9224144816398621
+        },
+        {
+          "word": " b\u00f8ger,",
+          "start": 35.24,
+          "end": 35.56,
+          "probability": 0.8305578629175822
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "seek": 2998,
+      "start": 36.08,
+      "end": 38.18,
+      "text": " eller film, der har noget med virkeligheden.",
+      "tokens": [
+        50764, 12519, 2007, 11, 1163, 2233, 34574, 1205, 4107, 7124, 910, 6876,
+        13, 50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " eller",
+          "start": 36.08,
+          "end": 36.38,
+          "probability": 0.5454756021499634
+        },
+        {
+          "word": " film,",
+          "start": 36.38,
+          "end": 37.04,
+          "probability": 0.7596002817153931
+        },
+        {
+          "word": " der",
+          "start": 37.14,
+          "end": 37.24,
+          "probability": 0.8855847716331482
+        },
+        {
+          "word": " har",
+          "start": 37.24,
+          "end": 37.44,
+          "probability": 0.9076226353645325
+        },
+        {
+          "word": " noget",
+          "start": 37.44,
+          "end": 37.68,
+          "probability": 0.8526147603988647
+        },
+        {
+          "word": " med",
+          "start": 37.68,
+          "end": 37.82,
+          "probability": 0.9109336733818054
+        },
+        {
+          "word": " virkeligheden.",
+          "start": 37.82,
+          "end": 38.18,
+          "probability": 0.836228758096695
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "seek": 2998,
+      "start": 38.58,
+      "end": 40.26,
+      "text": " Jeg m\u00e5 indr\u00e6tse Fable Mans i g\u00e5r.",
+      "tokens": [
+        50864, 17119, 10254, 1016, 81, 7303, 83, 405, 479, 712, 2458, 82, 741,
+        19831, 13, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 38.58,
+          "end": 39.02,
+          "probability": 0.8642269968986511
+        },
+        {
+          "word": " m\u00e5",
+          "start": 39.02,
+          "end": 39.1,
+          "probability": 0.5015748143196106
+        },
+        {
+          "word": " indr\u00e6tse",
+          "start": 39.1,
+          "end": 39.28,
+          "probability": 0.35209575295448303
+        },
+        {
+          "word": " Fable",
+          "start": 39.28,
+          "end": 39.66,
+          "probability": 0.5279233157634735
+        },
+        {
+          "word": " Mans",
+          "start": 39.66,
+          "end": 40.0,
+          "probability": 0.24163302034139633
+        },
+        {
+          "word": " i",
+          "start": 40.0,
+          "end": 40.06,
+          "probability": 0.8210600018501282
+        },
+        {
+          "word": " g\u00e5r.",
+          "start": 40.06,
+          "end": 40.26,
+          "probability": 0.8762457370758057
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "seek": 2998,
+      "start": 40.5,
+      "end": 42.62,
+      "text": " Det synes jeg er meget fedt.",
+      "tokens": [
+        50964, 4237, 943, 4081, 10610, 1189, 36411, 4636, 83, 13, 51064
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Det",
+          "start": 40.5,
+          "end": 40.76,
+          "probability": 0.3116498291492462
+        },
+        {
+          "word": " synes",
+          "start": 40.76,
+          "end": 41.92,
+          "probability": 0.5773594081401825
+        },
+        {
+          "word": " jeg",
+          "start": 41.92,
+          "end": 42.04,
+          "probability": 0.8894138336181641
+        },
+        {
+          "word": " er",
+          "start": 42.04,
+          "end": 42.14,
+          "probability": 0.578464686870575
+        },
+        {
+          "word": " meget",
+          "start": 42.14,
+          "end": 42.28,
+          "probability": 0.738568902015686
+        },
+        {
+          "word": " fedt.",
+          "start": 42.28,
+          "end": 42.62,
+          "probability": 0.8563518524169922
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "seek": 2998,
+      "start": 43.32,
+      "end": 44.72,
+      "text": " Ofte kan jeg l\u00e6gge lidt mere,",
+      "tokens": [
+        51064, 2720, 975, 4608, 10610, 44584, 70, 432, 40574, 8401, 11, 51164
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Ofte",
+          "start": 43.32,
+          "end": 43.76,
+          "probability": 0.7196596264839172
+        },
+        {
+          "word": " kan",
+          "start": 43.76,
+          "end": 43.92,
+          "probability": 0.8118861317634583
+        },
+        {
+          "word": " jeg",
+          "start": 43.92,
+          "end": 44.02,
+          "probability": 0.4112221598625183
+        },
+        {
+          "word": " l\u00e6gge",
+          "start": 44.02,
+          "end": 44.16,
+          "probability": 0.817841092745463
+        },
+        {
+          "word": " lidt",
+          "start": 44.16,
+          "end": 44.32,
+          "probability": 0.8261106610298157
+        },
+        {
+          "word": " mere,",
+          "start": 44.32,
+          "end": 44.72,
+          "probability": 0.837081253528595
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "seek": 2998,
+      "start": 46.760000000000005,
+      "end": 48.88,
+      "text": " end hvad det fik tilbage.",
+      "tokens": [51164, 917, 48160, 1141, 35562, 8440, 9742, 13, 51264],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " end",
+          "start": 46.760000000000005,
+          "end": 47.2,
+          "probability": 0.7853313684463501
+        },
+        {
+          "word": " hvad",
+          "start": 47.2,
+          "end": 47.4,
+          "probability": 0.516589879989624
+        },
+        {
+          "word": " det",
+          "start": 47.4,
+          "end": 47.58,
+          "probability": 0.7792870402336121
+        },
+        {
+          "word": " fik",
+          "start": 47.58,
+          "end": 48.48,
+          "probability": 0.8422812819480896
+        },
+        {
+          "word": " tilbage.",
+          "start": 48.48,
+          "end": 48.88,
+          "probability": 0.6454693526029587
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "seek": 2998,
+      "start": 49.54,
+      "end": 51.0,
+      "text": " Det er ogs\u00e5 nogle af de bedste filmer,",
+      "tokens": [
+        51264, 4237, 1189, 23864, 48713, 3238, 368, 2901, 2941, 1387, 936, 11,
+        51364
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Det",
+          "start": 49.54,
+          "end": 49.98,
+          "probability": 0.5684129595756531
+        },
+        {
+          "word": " er",
+          "start": 49.98,
+          "end": 50.06,
+          "probability": 0.6819207072257996
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 50.06,
+          "end": 50.2,
+          "probability": 0.677121639251709
+        },
+        {
+          "word": " nogle",
+          "start": 50.2,
+          "end": 50.34,
+          "probability": 0.2214963287115097
+        },
+        {
+          "word": " af",
+          "start": 50.34,
+          "end": 50.4,
+          "probability": 0.9138888716697693
+        },
+        {
+          "word": " de",
+          "start": 50.4,
+          "end": 50.46,
+          "probability": 0.9070255756378174
+        },
+        {
+          "word": " bedste",
+          "start": 50.46,
+          "end": 50.72,
+          "probability": 0.9118402898311615
+        },
+        {
+          "word": " filmer,",
+          "start": 50.72,
+          "end": 51.0,
+          "probability": 0.6828082948923111
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "seek": 2998,
+      "start": 51.1,
+      "end": 51.38,
+      "text": " jeg har set,",
+      "tokens": [51364, 10610, 2233, 992, 11, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " jeg",
+          "start": 51.1,
+          "end": 51.1,
+          "probability": 0.841063380241394
+        },
+        {
+          "word": " har",
+          "start": 51.1,
+          "end": 51.16,
+          "probability": 0.8622741103172302
+        },
+        {
+          "word": " set,",
+          "start": 51.16,
+          "end": 51.38,
+          "probability": 0.942712128162384
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "seek": 2998,
+      "start": 52.160000000000004,
+      "end": 54.32,
+      "text": " har et eller andet virkelig over sig.",
+      "tokens": [
+        51464, 2233, 1030, 12519, 293, 302, 4107, 330, 5073, 670, 4556, 13,
+        51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " har",
+          "start": 52.160000000000004,
+          "end": 52.6,
+          "probability": 0.2870507836341858
+        },
+        {
+          "word": " et",
+          "start": 52.6,
+          "end": 52.8,
+          "probability": 0.5942882299423218
+        },
+        {
+          "word": " eller",
+          "start": 52.8,
+          "end": 52.92,
+          "probability": 0.7512389421463013
+        },
+        {
+          "word": " andet",
+          "start": 52.92,
+          "end": 53.46,
+          "probability": 0.9249851703643799
+        },
+        {
+          "word": " virkelig",
+          "start": 53.46,
+          "end": 53.88,
+          "probability": 0.5202982525030772
+        },
+        {
+          "word": " over",
+          "start": 53.88,
+          "end": 54.14,
+          "probability": 0.8227964639663696
+        },
+        {
+          "word": " sig.",
+          "start": 54.14,
+          "end": 54.32,
+          "probability": 0.8180190920829773
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "seek": 2998,
+      "start": 54.92,
+      "end": 54.98,
+      "text": " Ja.",
+      "tokens": [51564, 3530, 13, 51664],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Ja.",
+          "start": 54.92,
+          "end": 54.98,
+          "probability": 0.08902715146541595
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "seek": 2998,
+      "start": 55.26,
+      "end": 57.14,
+      "text": " Fx hvis nu er jeg n\u00e6rmere,",
+      "tokens": [
+        51664, 479, 87, 45427, 3822, 1189, 10610, 297, 32011, 76, 323, 11, 51764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3691230311538234,
+      "compression_ratio": 1.606060606060606,
+      "no_speech_prob": 0.5597211718559265,
+      "words": [
+        {
+          "word": " Fx",
+          "start": 55.26,
+          "end": 55.66,
+          "probability": 0.637008935213089
+        },
+        {
+          "word": " hvis",
+          "start": 55.66,
+          "end": 56.02,
+          "probability": 0.6969819664955139
+        },
+        {
+          "word": " nu",
+          "start": 56.02,
+          "end": 56.24,
+          "probability": 0.28234216570854187
+        },
+        {
+          "word": " er",
+          "start": 56.24,
+          "end": 56.46,
+          "probability": 0.3949122428894043
+        },
+        {
+          "word": " jeg",
+          "start": 56.46,
+          "end": 56.56,
+          "probability": 0.3566833436489105
+        },
+        {
+          "word": " n\u00e6rmere,",
+          "start": 56.56,
+          "end": 57.14,
+          "probability": 0.4372881334275007
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "seek": 5714,
+      "start": 57.14,
+      "end": 59.52,
+      "text": " s\u00e5 er det en film, der hedder Rush.",
+      "tokens": [
+        50364, 4719, 1189, 1141, 465, 2007, 11, 1163, 33653, 1068, 28389, 13,
+        50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " s\u00e5",
+          "start": 57.14,
+          "end": 57.14,
+          "probability": 0.007944460026919842
+        },
+        {
+          "word": " er",
+          "start": 57.14,
+          "end": 57.14,
+          "probability": 0.11428232491016388
+        },
+        {
+          "word": " det",
+          "start": 57.14,
+          "end": 57.24,
+          "probability": 0.3838694393634796
+        },
+        {
+          "word": " en",
+          "start": 57.24,
+          "end": 57.26,
+          "probability": 0.04610632732510567
+        },
+        {
+          "word": " film,",
+          "start": 57.26,
+          "end": 57.5,
+          "probability": 0.038251347839832306
+        },
+        {
+          "word": " der",
+          "start": 57.94,
+          "end": 58.42,
+          "probability": 0.6669480800628662
+        },
+        {
+          "word": " hedder",
+          "start": 58.42,
+          "end": 59.1,
+          "probability": 0.9360943138599396
+        },
+        {
+          "word": " Rush.",
+          "start": 59.1,
+          "end": 59.52,
+          "probability": 0.3947947025299072
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "seek": 5714,
+      "start": 59.76,
+      "end": 62.02,
+      "text": " Om Nicolai og James Horns kamp,",
+      "tokens": [
+        50464, 9757, 14776, 401, 1301, 5360, 5678, 389, 27128, 45369, 11, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Om",
+          "start": 59.76,
+          "end": 59.84,
+          "probability": 0.2921725809574127
+        },
+        {
+          "word": " Nicolai",
+          "start": 59.84,
+          "end": 60.28,
+          "probability": 0.3232150574525197
+        },
+        {
+          "word": " og",
+          "start": 60.28,
+          "end": 60.78,
+          "probability": 0.6208488345146179
+        },
+        {
+          "word": " James",
+          "start": 60.78,
+          "end": 61.3,
+          "probability": 0.6999742388725281
+        },
+        {
+          "word": " Horns",
+          "start": 61.3,
+          "end": 61.58,
+          "probability": 0.4562445133924484
+        },
+        {
+          "word": " kamp,",
+          "start": 61.58,
+          "end": 62.02,
+          "probability": 0.831992506980896
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "seek": 5714,
+      "start": 62.1,
+      "end": 63.54,
+      "text": " og om de er vandt, hvis det er for en vild.",
+      "tokens": [
+        50564, 5360, 3406, 368, 1189, 371, 474, 83, 11, 45427, 1141, 1189, 337,
+        465, 371, 793, 13, 50664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " og",
+          "start": 62.1,
+          "end": 62.14,
+          "probability": 0.508012592792511
+        },
+        {
+          "word": " om",
+          "start": 62.14,
+          "end": 62.26,
+          "probability": 0.36242595314979553
+        },
+        {
+          "word": " de",
+          "start": 62.26,
+          "end": 62.46,
+          "probability": 0.18805192410945892
+        },
+        {
+          "word": " er",
+          "start": 62.46,
+          "end": 62.56,
+          "probability": 0.4547501504421234
+        },
+        {
+          "word": " vandt,",
+          "start": 62.56,
+          "end": 62.8,
+          "probability": 0.5709190567334493
+        },
+        {
+          "word": " hvis",
+          "start": 62.84,
+          "end": 62.96,
+          "probability": 0.9080193638801575
+        },
+        {
+          "word": " det",
+          "start": 62.96,
+          "end": 63.08,
+          "probability": 0.5560455322265625
+        },
+        {
+          "word": " er",
+          "start": 63.08,
+          "end": 63.1,
+          "probability": 0.30511823296546936
+        },
+        {
+          "word": " for",
+          "start": 63.1,
+          "end": 63.24,
+          "probability": 0.13075494766235352
+        },
+        {
+          "word": " en",
+          "start": 63.24,
+          "end": 63.36,
+          "probability": 0.11082976311445236
+        },
+        {
+          "word": " vild.",
+          "start": 63.36,
+          "end": 63.54,
+          "probability": 0.5081166625022888
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "seek": 5714,
+      "start": 63.66,
+      "end": 64.76,
+      "text": " Hvis ikke I har set den,",
+      "tokens": [50664, 389, 4938, 13076, 286, 2233, 992, 1441, 11, 50764],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Hvis",
+          "start": 63.66,
+          "end": 63.84,
+          "probability": 0.8972794413566589
+        },
+        {
+          "word": " ikke",
+          "start": 63.84,
+          "end": 63.96,
+          "probability": 0.36865362524986267
+        },
+        {
+          "word": " I",
+          "start": 63.96,
+          "end": 64.06,
+          "probability": 0.8719017505645752
+        },
+        {
+          "word": " har",
+          "start": 64.06,
+          "end": 64.18,
+          "probability": 0.8777505159378052
+        },
+        {
+          "word": " set",
+          "start": 64.18,
+          "end": 64.48,
+          "probability": 0.933433473110199
+        },
+        {
+          "word": " den,",
+          "start": 64.48,
+          "end": 64.76,
+          "probability": 0.8743361830711365
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "seek": 5714,
+      "start": 64.84,
+      "end": 67.7,
+      "text": " s\u00e5 er det en sindssyg film.",
+      "tokens": [
+        50764, 4719, 1189, 1141, 465, 3290, 82, 3187, 70, 2007, 13, 50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " s\u00e5",
+          "start": 64.84,
+          "end": 65.0,
+          "probability": 0.8474503755569458
+        },
+        {
+          "word": " er",
+          "start": 65.0,
+          "end": 65.0,
+          "probability": 0.5702778697013855
+        },
+        {
+          "word": " det",
+          "start": 65.0,
+          "end": 65.14,
+          "probability": 0.485571950674057
+        },
+        {
+          "word": " en",
+          "start": 65.14,
+          "end": 65.36,
+          "probability": 0.46027013659477234
+        },
+        {
+          "word": " sindssyg",
+          "start": 65.36,
+          "end": 67.4,
+          "probability": 0.6890922337770462
+        },
+        {
+          "word": " film.",
+          "start": 67.4,
+          "end": 67.7,
+          "probability": 0.18146111071109772
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "seek": 5714,
+      "start": 68.06,
+      "end": 69.88,
+      "text": " Det er meget, man vil g\u00f8re for at vinde.",
+      "tokens": [
+        50864, 4237, 1189, 36411, 11, 587, 15349, 290, 35435, 337, 412, 371,
+        8274, 13, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Det",
+          "start": 68.06,
+          "end": 68.18,
+          "probability": 0.34975990653038025
+        },
+        {
+          "word": " er",
+          "start": 68.18,
+          "end": 68.18,
+          "probability": 0.8155442476272583
+        },
+        {
+          "word": " meget,",
+          "start": 68.18,
+          "end": 68.44,
+          "probability": 0.6591017842292786
+        },
+        {
+          "word": " man",
+          "start": 68.54,
+          "end": 68.68,
+          "probability": 0.8016801476478577
+        },
+        {
+          "word": " vil",
+          "start": 68.68,
+          "end": 68.88,
+          "probability": 0.4824846386909485
+        },
+        {
+          "word": " g\u00f8re",
+          "start": 68.88,
+          "end": 69.2,
+          "probability": 0.8800909221172333
+        },
+        {
+          "word": " for",
+          "start": 69.2,
+          "end": 69.52,
+          "probability": 0.8336290121078491
+        },
+        {
+          "word": " at",
+          "start": 69.52,
+          "end": 69.66,
+          "probability": 0.7609798312187195
+        },
+        {
+          "word": " vinde.",
+          "start": 69.66,
+          "end": 69.88,
+          "probability": 0.6898525655269623
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "seek": 5714,
+      "start": 71.12,
+      "end": 71.46,
+      "text": " Ja.",
+      "tokens": [50964, 3530, 13, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Ja.",
+          "start": 71.12,
+          "end": 71.46,
+          "probability": 0.15176942944526672
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "seek": 5714,
+      "start": 71.74,
+      "end": 72.54,
+      "text": " Den er ret fed.",
+      "tokens": [51064, 6458, 1189, 1533, 4636, 13, 51164],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Den",
+          "start": 71.74,
+          "end": 71.92,
+          "probability": 0.7500932812690735
+        },
+        {
+          "word": " er",
+          "start": 71.92,
+          "end": 72.02,
+          "probability": 0.8927329778671265
+        },
+        {
+          "word": " ret",
+          "start": 72.02,
+          "end": 72.26,
+          "probability": 0.6896738409996033
+        },
+        {
+          "word": " fed.",
+          "start": 72.26,
+          "end": 72.54,
+          "probability": 0.8017394542694092
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "seek": 5714,
+      "start": 73.22,
+      "end": 73.84,
+      "text": " Den er ret vild.",
+      "tokens": [51164, 6458, 1189, 1533, 371, 793, 13, 51264],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Den",
+          "start": 73.22,
+          "end": 73.4,
+          "probability": 0.7145171165466309
+        },
+        {
+          "word": " er",
+          "start": 73.4,
+          "end": 73.5,
+          "probability": 0.9063498973846436
+        },
+        {
+          "word": " ret",
+          "start": 73.5,
+          "end": 73.66,
+          "probability": 0.7732468843460083
+        },
+        {
+          "word": " vild.",
+          "start": 73.66,
+          "end": 73.84,
+          "probability": 0.926287442445755
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "seek": 5714,
+      "start": 75.26,
+      "end": 75.96,
+      "text": " S\u00e5 er det jo.",
+      "tokens": [51264, 12728, 1189, 1141, 1488, 13, 51364],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 75.26,
+          "end": 75.7,
+          "probability": 0.19033445417881012
+        },
+        {
+          "word": " er",
+          "start": 75.7,
+          "end": 75.8,
+          "probability": 0.5339264273643494
+        },
+        {
+          "word": " det",
+          "start": 75.8,
+          "end": 75.8,
+          "probability": 0.9059414863586426
+        },
+        {
+          "word": " jo.",
+          "start": 75.8,
+          "end": 75.96,
+          "probability": 0.8935978412628174
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "seek": 5714,
+      "start": 76.5,
+      "end": 77.56,
+      "text": " Det var lidt om dig.",
+      "tokens": [51364, 4237, 1374, 40574, 3406, 2528, 13, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Det",
+          "start": 76.5,
+          "end": 76.84,
+          "probability": 0.8168601989746094
+        },
+        {
+          "word": " var",
+          "start": 76.84,
+          "end": 77.02,
+          "probability": 0.8762484788894653
+        },
+        {
+          "word": " lidt",
+          "start": 77.02,
+          "end": 77.16,
+          "probability": 0.7930560111999512
+        },
+        {
+          "word": " om",
+          "start": 77.16,
+          "end": 77.34,
+          "probability": 0.9367132186889648
+        },
+        {
+          "word": " dig.",
+          "start": 77.34,
+          "end": 77.56,
+          "probability": 0.8437139391899109
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "seek": 5714,
+      "start": 78.22,
+      "end": 79.4,
+      "text": " Hvad med dig, Natia?",
+      "tokens": [51464, 389, 29886, 1205, 2528, 11, 6821, 654, 30, 51564],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Hvad",
+          "start": 78.22,
+          "end": 78.66,
+          "probability": 0.516534760594368
+        },
+        {
+          "word": " med",
+          "start": 78.66,
+          "end": 78.82,
+          "probability": 0.8791628479957581
+        },
+        {
+          "word": " dig,",
+          "start": 78.82,
+          "end": 79.04,
+          "probability": 0.8509054780006409
+        },
+        {
+          "word": " Natia?",
+          "start": 79.1,
+          "end": 79.4,
+          "probability": 0.3611239641904831
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "seek": 5714,
+      "start": 80.04,
+      "end": 83.52,
+      "text": " Jeg er 24, og jeg er l\u00e6st til socialvurgere.",
+      "tokens": [
+        51564, 17119, 1189, 4022, 11, 5360, 10610, 1189, 44584, 372, 8440, 2093,
+        85, 5476, 323, 13, 51664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 80.04,
+          "end": 80.48,
+          "probability": 0.8201161623001099
+        },
+        {
+          "word": " er",
+          "start": 80.48,
+          "end": 80.52,
+          "probability": 0.906826913356781
+        },
+        {
+          "word": " 24,",
+          "start": 80.52,
+          "end": 81.0,
+          "probability": 0.8273627161979675
+        },
+        {
+          "word": " og",
+          "start": 81.48,
+          "end": 81.76,
+          "probability": 0.8659857511520386
+        },
+        {
+          "word": " jeg",
+          "start": 81.76,
+          "end": 82.28,
+          "probability": 0.7572928071022034
+        },
+        {
+          "word": " er",
+          "start": 82.28,
+          "end": 82.4,
+          "probability": 0.5325173139572144
+        },
+        {
+          "word": " l\u00e6st",
+          "start": 82.4,
+          "end": 82.66,
+          "probability": 0.08689926192164421
+        },
+        {
+          "word": " til",
+          "start": 82.66,
+          "end": 82.76,
+          "probability": 0.19942808151245117
+        },
+        {
+          "word": " socialvurgere.",
+          "start": 82.76,
+          "end": 83.52,
+          "probability": 0.1516002370044589
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "seek": 5714,
+      "start": 84.12,
+      "end": 86.34,
+      "text": " Og s\u00e5 arbejder jeg i internetforum.",
+      "tokens": [
+        51664, 14883, 4719, 40476, 73, 1068, 10610, 741, 4705, 2994, 449, 13,
+        51764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5138136056753305,
+      "compression_ratio": 1.5778688524590163,
+      "no_speech_prob": 0.2828686535358429,
+      "words": [
+        {
+          "word": " Og",
+          "start": 84.12,
+          "end": 84.56,
+          "probability": 0.7292296886444092
+        },
+        {
+          "word": " s\u00e5",
+          "start": 84.56,
+          "end": 84.76,
+          "probability": 0.9019578695297241
+        },
+        {
+          "word": " arbejder",
+          "start": 84.76,
+          "end": 85.16,
+          "probability": 0.9611077109972636
+        },
+        {
+          "word": " jeg",
+          "start": 85.16,
+          "end": 85.36,
+          "probability": 0.8682762384414673
+        },
+        {
+          "word": " i",
+          "start": 85.36,
+          "end": 85.52,
+          "probability": 0.24674269556999207
+        },
+        {
+          "word": " internetforum.",
+          "start": 85.52,
+          "end": 86.34,
+          "probability": 0.21745572487513223
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "seek": 8634,
+      "start": 86.34,
+      "end": 87.92,
+      "text": " Og p\u00e5 Heisvigvar.",
+      "tokens": [50364, 14883, 4170, 634, 271, 85, 328, 8517, 13, 50464],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Og",
+          "start": 86.34,
+          "end": 86.96,
+          "probability": 0.10602469742298126
+        },
+        {
+          "word": " p\u00e5",
+          "start": 86.96,
+          "end": 87.22,
+          "probability": 0.8670393228530884
+        },
+        {
+          "word": " Heisvigvar.",
+          "start": 87.22,
+          "end": 87.92,
+          "probability": 0.2747223645448685
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "seek": 8634,
+      "start": 88.74,
+      "end": 91.26,
+      "text": " Ja, s\u00e5 er det s\u00e5dan lidt blandet.",
+      "tokens": [
+        50464, 3530, 11, 4719, 1189, 1141, 40989, 40574, 29849, 302, 13, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Ja,",
+          "start": 88.74,
+          "end": 89.04,
+          "probability": 0.16331294178962708
+        },
+        {
+          "word": " s\u00e5",
+          "start": 89.16,
+          "end": 89.22,
+          "probability": 0.3577871024608612
+        },
+        {
+          "word": " er",
+          "start": 89.22,
+          "end": 89.36,
+          "probability": 0.85160893201828
+        },
+        {
+          "word": " det",
+          "start": 89.36,
+          "end": 89.36,
+          "probability": 0.7898792624473572
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 89.36,
+          "end": 89.62,
+          "probability": 0.43012264370918274
+        },
+        {
+          "word": " lidt",
+          "start": 89.62,
+          "end": 90.36,
+          "probability": 0.3099352717399597
+        },
+        {
+          "word": " blandet.",
+          "start": 90.36,
+          "end": 91.26,
+          "probability": 0.3006701096892357
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "seek": 8634,
+      "start": 92.46,
+      "end": 94.58,
+      "text": " S\u00e5 ja, b\u00e5de studie og arbejde",
+      "tokens": [
+        50664, 12728, 2784, 11, 39845, 972, 414, 5360, 40476, 73, 1479, 50764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 92.46,
+          "end": 92.78,
+          "probability": 0.493728905916214
+        },
+        {
+          "word": " ja,",
+          "start": 92.78,
+          "end": 93.18,
+          "probability": 0.6101200580596924
+        },
+        {
+          "word": " b\u00e5de",
+          "start": 93.58,
+          "end": 93.76,
+          "probability": 0.8934822082519531
+        },
+        {
+          "word": " studie",
+          "start": 93.76,
+          "end": 94.14,
+          "probability": 0.8379081785678864
+        },
+        {
+          "word": " og",
+          "start": 94.14,
+          "end": 94.22,
+          "probability": 0.8727887868881226
+        },
+        {
+          "word": " arbejde",
+          "start": 94.22,
+          "end": 94.58,
+          "probability": 0.9125438531239828
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "seek": 8634,
+      "start": 94.58,
+      "end": 96.74,
+      "text": " tager ikke s\u00e5 meget tid.",
+      "tokens": [50764, 256, 3557, 13076, 4719, 36411, 9422, 13, 50864],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " tager",
+          "start": 94.58,
+          "end": 94.92,
+          "probability": 0.8184218406677246
+        },
+        {
+          "word": " ikke",
+          "start": 94.92,
+          "end": 95.7,
+          "probability": 0.5968301892280579
+        },
+        {
+          "word": " s\u00e5",
+          "start": 95.7,
+          "end": 96.02,
+          "probability": 0.3765661418437958
+        },
+        {
+          "word": " meget",
+          "start": 96.02,
+          "end": 96.22,
+          "probability": 0.8106058239936829
+        },
+        {
+          "word": " tid.",
+          "start": 96.22,
+          "end": 96.74,
+          "probability": 0.40774214267730713
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "seek": 8634,
+      "start": 97.96000000000001,
+      "end": 99.82,
+      "text": " Ellers meget socialt.",
+      "tokens": [50964, 8353, 433, 36411, 2093, 83, 13, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Ellers",
+          "start": 97.96000000000001,
+          "end": 98.44,
+          "probability": 0.8256033658981323
+        },
+        {
+          "word": " meget",
+          "start": 98.44,
+          "end": 98.68,
+          "probability": 0.8345153331756592
+        },
+        {
+          "word": " socialt.",
+          "start": 98.68,
+          "end": 99.82,
+          "probability": 0.8071474730968475
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "seek": 8634,
+      "start": 99.94,
+      "end": 101.72,
+      "text": " Pr\u00f8ve at lave noget derude.",
+      "tokens": [
+        51064, 2114, 6715, 303, 412, 635, 303, 34574, 1163, 2303, 13, 51164
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Pr\u00f8ve",
+          "start": 99.94,
+          "end": 100.12,
+          "probability": 0.8301383256912231
+        },
+        {
+          "word": " at",
+          "start": 100.12,
+          "end": 100.3,
+          "probability": 0.17917610704898834
+        },
+        {
+          "word": " lave",
+          "start": 100.3,
+          "end": 100.74,
+          "probability": 0.6316931545734406
+        },
+        {
+          "word": " noget",
+          "start": 100.74,
+          "end": 101.12,
+          "probability": 0.8024716973304749
+        },
+        {
+          "word": " derude.",
+          "start": 101.12,
+          "end": 101.72,
+          "probability": 0.5944215506315231
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "seek": 8634,
+      "start": 102.18,
+      "end": 103.54,
+      "text": " Jeg elsker ogs\u00e5 at g\u00e5 i biografen.",
+      "tokens": [
+        51164, 17119, 806, 5161, 260, 23864, 412, 22098, 741, 3228, 664, 424,
+        6570, 13, 51264
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 102.18,
+          "end": 102.3,
+          "probability": 0.8554545640945435
+        },
+        {
+          "word": " elsker",
+          "start": 102.3,
+          "end": 102.5,
+          "probability": 0.9441535870234171
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 102.5,
+          "end": 102.66,
+          "probability": 0.827171802520752
+        },
+        {
+          "word": " at",
+          "start": 102.66,
+          "end": 102.86,
+          "probability": 0.8490674495697021
+        },
+        {
+          "word": " g\u00e5",
+          "start": 102.86,
+          "end": 102.86,
+          "probability": 0.8175238370895386
+        },
+        {
+          "word": " i",
+          "start": 102.86,
+          "end": 103.0,
+          "probability": 0.6865278482437134
+        },
+        {
+          "word": " biografen.",
+          "start": 103.0,
+          "end": 103.54,
+          "probability": 0.9075900912284851
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "seek": 8634,
+      "start": 104.98,
+      "end": 106.06,
+      "text": " Det er lidt helt store.",
+      "tokens": [51264, 4237, 1189, 40574, 24821, 3531, 13, 51364],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Det",
+          "start": 104.98,
+          "end": 105.46,
+          "probability": 0.7088693380355835
+        },
+        {
+          "word": " er",
+          "start": 105.46,
+          "end": 105.5,
+          "probability": 0.8731322884559631
+        },
+        {
+          "word": " lidt",
+          "start": 105.5,
+          "end": 105.6,
+          "probability": 0.2645229995250702
+        },
+        {
+          "word": " helt",
+          "start": 105.6,
+          "end": 105.82,
+          "probability": 0.4424648880958557
+        },
+        {
+          "word": " store.",
+          "start": 105.82,
+          "end": 106.06,
+          "probability": 0.3346231281757355
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "seek": 8634,
+      "start": 107.16,
+      "end": 107.6,
+      "text": " Men ja,",
+      "tokens": [51364, 6685, 2784, 11, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Men",
+          "start": 107.16,
+          "end": 107.38,
+          "probability": 0.7056164741516113
+        },
+        {
+          "word": " ja,",
+          "start": 107.38,
+          "end": 107.6,
+          "probability": 0.847531795501709
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "seek": 8634,
+      "start": 108.38,
+      "end": 109.88,
+      "text": " det er det, jeg f\u00e5r tid til at g\u00e5 med.",
+      "tokens": [
+        51464, 1141, 1189, 1141, 11, 10610, 283, 127, 98, 81, 9422, 8440, 412,
+        22098, 1205, 13, 51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " det",
+          "start": 108.38,
+          "end": 108.7,
+          "probability": 0.8583035469055176
+        },
+        {
+          "word": " er",
+          "start": 108.7,
+          "end": 108.74,
+          "probability": 0.8597941398620605
+        },
+        {
+          "word": " det,",
+          "start": 108.74,
+          "end": 108.86,
+          "probability": 0.3088831901550293
+        },
+        {
+          "word": " jeg",
+          "start": 108.98,
+          "end": 109.0,
+          "probability": 0.8825908899307251
+        },
+        {
+          "word": " f\u00e5r",
+          "start": 109.0,
+          "end": 109.14,
+          "probability": 0.7253509201109409
+        },
+        {
+          "word": " tid",
+          "start": 109.14,
+          "end": 109.38,
+          "probability": 0.3548939824104309
+        },
+        {
+          "word": " til",
+          "start": 109.38,
+          "end": 109.5,
+          "probability": 0.7897654175758362
+        },
+        {
+          "word": " at",
+          "start": 109.5,
+          "end": 109.56,
+          "probability": 0.8864086270332336
+        },
+        {
+          "word": " g\u00e5",
+          "start": 109.56,
+          "end": 109.7,
+          "probability": 0.8493605852127075
+        },
+        {
+          "word": " med.",
+          "start": 109.7,
+          "end": 109.88,
+          "probability": 0.9181326627731323
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "seek": 8634,
+      "start": 110.22,
+      "end": 112.54,
+      "text": " Er der nogen emner, som du er s\u00e6rlig optaget af?",
+      "tokens": [
+        51564, 3300, 1163, 572, 1766, 846, 1193, 11, 3307, 1581, 1189, 262,
+        32011, 5073, 999, 83, 559, 302, 3238, 30, 51664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.38800622488706166,
+      "compression_ratio": 1.4748858447488584,
+      "no_speech_prob": 0.17717276513576508,
+      "words": [
+        {
+          "word": " Er",
+          "start": 110.22,
+          "end": 110.38,
+          "probability": 0.7905217409133911
+        },
+        {
+          "word": " der",
+          "start": 110.38,
+          "end": 110.48,
+          "probability": 0.889155924320221
+        },
+        {
+          "word": " nogen",
+          "start": 110.48,
+          "end": 110.76,
+          "probability": 0.594175711274147
+        },
+        {
+          "word": " emner,",
+          "start": 110.76,
+          "end": 111.2,
+          "probability": 0.7588880956172943
+        },
+        {
+          "word": " som",
+          "start": 111.28,
+          "end": 111.44,
+          "probability": 0.5941762924194336
+        },
+        {
+          "word": " du",
+          "start": 111.44,
+          "end": 111.56,
+          "probability": 0.924802303314209
+        },
+        {
+          "word": " er",
+          "start": 111.56,
+          "end": 111.7,
+          "probability": 0.4784957766532898
+        },
+        {
+          "word": " s\u00e6rlig",
+          "start": 111.7,
+          "end": 111.92,
+          "probability": 0.8780208826065063
+        },
+        {
+          "word": " optaget",
+          "start": 111.92,
+          "end": 112.34,
+          "probability": 0.582761206664145
+        },
+        {
+          "word": " af?",
+          "start": 112.34,
+          "end": 112.54,
+          "probability": 0.9149447679519653
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "seek": 11254,
+      "start": 114.12,
+      "end": 114.68,
+      "text": " Jeg er optaget af",
+      "tokens": [50364, 17119, 1189, 999, 83, 559, 302, 3238, 50464],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 114.12,
+          "end": 114.68,
+          "probability": 0.05696533992886543
+        },
+        {
+          "word": " er",
+          "start": 114.68,
+          "end": 114.68,
+          "probability": 0.1596834361553192
+        },
+        {
+          "word": " optaget",
+          "start": 114.68,
+          "end": 114.68,
+          "probability": 0.2276948093349347
+        },
+        {
+          "word": " af",
+          "start": 114.68,
+          "end": 114.68,
+          "probability": 0.49116817116737366
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "seek": 11254,
+      "start": 114.68,
+      "end": 115.86,
+      "text": " helt alene kriminalforsvaret.",
+      "tokens": [
+        50464, 24821, 419, 1450, 350, 46885, 2994, 82, 85, 11298, 13, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " helt",
+          "start": 114.68,
+          "end": 114.8,
+          "probability": 0.05105264484882355
+        },
+        {
+          "word": " alene",
+          "start": 114.8,
+          "end": 115.08,
+          "probability": 0.15356282889842987
+        },
+        {
+          "word": " kriminalforsvaret.",
+          "start": 115.08,
+          "end": 115.86,
+          "probability": 0.45769768953323364
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "seek": 11254,
+      "start": 115.98,
+      "end": 118.44,
+      "text": " Jeg kan meget f\u00e6rge",
+      "tokens": [50564, 17119, 4608, 36411, 283, 32011, 432, 50664],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 115.98,
+          "end": 116.14,
+          "probability": 0.3365504741668701
+        },
+        {
+          "word": " kan",
+          "start": 116.14,
+          "end": 116.18,
+          "probability": 0.08033837378025055
+        },
+        {
+          "word": " meget",
+          "start": 116.18,
+          "end": 116.56,
+          "probability": 0.1948932707309723
+        },
+        {
+          "word": " f\u00e6rge",
+          "start": 116.56,
+          "end": 118.44,
+          "probability": 0.23289180298646292
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "seek": 11254,
+      "start": 118.44,
+      "end": 120.42,
+      "text": " min podcast omkring kriminalitet.",
+      "tokens": [
+        50664, 923, 7367, 3406, 74, 2937, 350, 46885, 16341, 13, 50764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " min",
+          "start": 118.44,
+          "end": 118.7,
+          "probability": 0.03966963291168213
+        },
+        {
+          "word": " podcast",
+          "start": 118.7,
+          "end": 119.14,
+          "probability": 0.4979330897331238
+        },
+        {
+          "word": " omkring",
+          "start": 119.14,
+          "end": 119.76,
+          "probability": 0.741914431254069
+        },
+        {
+          "word": " kriminalitet.",
+          "start": 119.76,
+          "end": 120.42,
+          "probability": 0.8100575009981791
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "seek": 11254,
+      "start": 121.24,
+      "end": 122.4,
+      "text": " Jeg synes, det er vildt sp\u00e6ndende.",
+      "tokens": [
+        50764, 17119, 943, 4081, 11, 1141, 1189, 371, 793, 83, 637, 7303, 273,
+        5445, 13, 50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 121.24,
+          "end": 121.54,
+          "probability": 0.577548086643219
+        },
+        {
+          "word": " synes,",
+          "start": 121.54,
+          "end": 121.62,
+          "probability": 0.8933846950531006
+        },
+        {
+          "word": " det",
+          "start": 121.72,
+          "end": 121.72,
+          "probability": 0.7245731949806213
+        },
+        {
+          "word": " er",
+          "start": 121.72,
+          "end": 121.72,
+          "probability": 0.9069880247116089
+        },
+        {
+          "word": " vildt",
+          "start": 121.72,
+          "end": 121.98,
+          "probability": 0.8208392163117727
+        },
+        {
+          "word": " sp\u00e6ndende.",
+          "start": 121.98,
+          "end": 122.4,
+          "probability": 0.9564469456672668
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "seek": 11254,
+      "start": 123.1,
+      "end": 124.66,
+      "text": " B\u00e5de Bandeland og",
+      "tokens": [50864, 363, 1330, 1479, 363, 474, 15280, 5360, 50964],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " B\u00e5de",
+          "start": 123.1,
+          "end": 123.48,
+          "probability": 0.9434575239817301
+        },
+        {
+          "word": " Bandeland",
+          "start": 123.48,
+          "end": 124.12,
+          "probability": 0.5182304282983144
+        },
+        {
+          "word": " og",
+          "start": 124.12,
+          "end": 124.66,
+          "probability": 0.7921136021614075
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "seek": 11254,
+      "start": 124.66,
+      "end": 126.36,
+      "text": " jeg er ogs\u00e5 s\u00e5dan en podcast.",
+      "tokens": [50964, 10610, 1189, 23864, 40989, 465, 7367, 13, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " jeg",
+          "start": 124.66,
+          "end": 125.38,
+          "probability": 0.4317217469215393
+        },
+        {
+          "word": " er",
+          "start": 125.38,
+          "end": 125.5,
+          "probability": 0.43819642066955566
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 125.5,
+          "end": 125.58,
+          "probability": 0.4562200903892517
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 125.58,
+          "end": 125.7,
+          "probability": 0.25533825159072876
+        },
+        {
+          "word": " en",
+          "start": 125.7,
+          "end": 126.04,
+          "probability": 0.648518979549408
+        },
+        {
+          "word": " podcast.",
+          "start": 126.04,
+          "end": 126.36,
+          "probability": 0.7775686979293823
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "seek": 11254,
+      "start": 128.58,
+      "end": 130.64,
+      "text": " S\u00e5 det er det, jeg optager meget.",
+      "tokens": [
+        51164, 12728, 1141, 1189, 1141, 11, 10610, 999, 83, 3557, 36411, 13,
+        51264
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 128.58,
+          "end": 128.92,
+          "probability": 0.5234193801879883
+        },
+        {
+          "word": " det",
+          "start": 128.92,
+          "end": 129.54,
+          "probability": 0.7795336842536926
+        },
+        {
+          "word": " er",
+          "start": 129.54,
+          "end": 129.58,
+          "probability": 0.6977458596229553
+        },
+        {
+          "word": " det,",
+          "start": 129.58,
+          "end": 129.76,
+          "probability": 0.11259938031435013
+        },
+        {
+          "word": " jeg",
+          "start": 129.96,
+          "end": 130.04,
+          "probability": 0.4603962302207947
+        },
+        {
+          "word": " optager",
+          "start": 130.04,
+          "end": 130.34,
+          "probability": 0.4134476954738299
+        },
+        {
+          "word": " meget.",
+          "start": 130.34,
+          "end": 130.64,
+          "probability": 0.23887744545936584
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "seek": 11254,
+      "start": 131.1,
+      "end": 131.24,
+      "text": " Vi er",
+      "tokens": [51264, 6626, 1189, 51364],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Vi",
+          "start": 131.1,
+          "end": 131.18,
+          "probability": 0.358493834733963
+        },
+        {
+          "word": " er",
+          "start": 131.18,
+          "end": 131.24,
+          "probability": 0.11301044374704361
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "seek": 11254,
+      "start": 132.79999999999998,
+      "end": 134.56,
+      "text": " optager ogs\u00e5 generelt",
+      "tokens": [51364, 999, 83, 3557, 23864, 41553, 2282, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " optager",
+          "start": 132.79999999999998,
+          "end": 133.35999999999999,
+          "probability": 0.40510046606262523
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 133.35999999999999,
+          "end": 133.92,
+          "probability": 0.30576661229133606
+        },
+        {
+          "word": " generelt",
+          "start": 133.92,
+          "end": 134.56,
+          "probability": 0.8116049468517303
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "seek": 11254,
+      "start": 134.56,
+      "end": 137.02,
+      "text": " ogs\u00e5 i kring vores socialforgivere.",
+      "tokens": [
+        51464, 23864, 741, 350, 2937, 371, 2706, 2093, 2994, 25850, 265, 13,
+        51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " ogs\u00e5",
+          "start": 134.56,
+          "end": 135.48,
+          "probability": 0.2945549190044403
+        },
+        {
+          "word": " i",
+          "start": 135.48,
+          "end": 135.68,
+          "probability": 0.3933148682117462
+        },
+        {
+          "word": " kring",
+          "start": 135.68,
+          "end": 135.88,
+          "probability": 0.6149026304483414
+        },
+        {
+          "word": " vores",
+          "start": 135.88,
+          "end": 136.24,
+          "probability": 0.5225082561373711
+        },
+        {
+          "word": " socialforgivere.",
+          "start": 136.24,
+          "end": 137.02,
+          "probability": 0.3046788314823061
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "seek": 11254,
+      "start": 137.18,
+      "end": 138.84,
+      "text": " Alts\u00e5 de umyndige og s\u00e5dan noget.",
+      "tokens": [
+        51564, 967, 25441, 368, 1105, 88, 273, 3969, 5360, 40989, 34574, 13,
+        51664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Alts\u00e5",
+          "start": 137.18,
+          "end": 137.34,
+          "probability": 0.7548555731773376
+        },
+        {
+          "word": " de",
+          "start": 137.34,
+          "end": 137.76,
+          "probability": 0.7161089777946472
+        },
+        {
+          "word": " umyndige",
+          "start": 137.76,
+          "end": 138.3,
+          "probability": 0.7288979962468147
+        },
+        {
+          "word": " og",
+          "start": 138.3,
+          "end": 138.52,
+          "probability": 0.664406418800354
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 138.52,
+          "end": 138.64,
+          "probability": 0.8943617343902588
+        },
+        {
+          "word": " noget.",
+          "start": 138.64,
+          "end": 138.84,
+          "probability": 0.7383962869644165
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "seek": 11254,
+      "start": 138.9,
+      "end": 140.46,
+      "text": " Det kan vi godt lide at se.",
+      "tokens": [51664, 4237, 4608, 1932, 35427, 287, 482, 412, 369, 13, 51764],
+      "temperature": 0.0,
+      "avg_logprob": -0.5167774808579597,
+      "compression_ratio": 1.631336405529954,
+      "no_speech_prob": 0.3548101484775543,
+      "words": [
+        {
+          "word": " Det",
+          "start": 138.9,
+          "end": 139.14,
+          "probability": 0.8714399933815002
+        },
+        {
+          "word": " kan",
+          "start": 139.14,
+          "end": 139.78,
+          "probability": 0.777510941028595
+        },
+        {
+          "word": " vi",
+          "start": 139.78,
+          "end": 139.92,
+          "probability": 0.8695987462997437
+        },
+        {
+          "word": " godt",
+          "start": 139.92,
+          "end": 140.08,
+          "probability": 0.726951003074646
+        },
+        {
+          "word": " lide",
+          "start": 140.08,
+          "end": 140.2,
+          "probability": 0.8167532086372375
+        },
+        {
+          "word": " at",
+          "start": 140.2,
+          "end": 140.28,
+          "probability": 0.8919299244880676
+        },
+        {
+          "word": " se.",
+          "start": 140.28,
+          "end": 140.46,
+          "probability": 0.924909770488739
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "seek": 14046,
+      "start": 142.44,
+      "end": 142.46,
+      "text": " Sp\u00e6ndende.",
+      "tokens": [50364, 1738, 7303, 273, 5445, 13, 50464],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Sp\u00e6ndende.",
+          "start": 142.44,
+          "end": 142.72,
+          "probability": 0.7448072358965874
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "seek": 14046,
+      "start": 143.22,
+      "end": 144.56,
+      "text": " S\u00e5 er du den sidste, Karl.",
+      "tokens": [
+        50464, 12728, 1189, 1581, 1441, 20822, 2941, 11, 8009, 75, 13, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 143.22,
+          "end": 143.72,
+          "probability": 0.5428023338317871
+        },
+        {
+          "word": " er",
+          "start": 143.72,
+          "end": 143.8,
+          "probability": 0.50395667552948
+        },
+        {
+          "word": " du",
+          "start": 143.8,
+          "end": 143.88,
+          "probability": 0.820617139339447
+        },
+        {
+          "word": " den",
+          "start": 143.88,
+          "end": 144.02,
+          "probability": 0.42609429359436035
+        },
+        {
+          "word": " sidste,",
+          "start": 144.02,
+          "end": 144.18,
+          "probability": 0.8583764433860779
+        },
+        {
+          "word": " Karl.",
+          "start": 144.34,
+          "end": 144.56,
+          "probability": 0.47285641729831696
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "seek": 14046,
+      "start": 145.02,
+      "end": 146.48,
+      "text": " Ja, jeg er 23.",
+      "tokens": [50564, 3530, 11, 10610, 1189, 6673, 13, 50664],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Ja,",
+          "start": 145.02,
+          "end": 145.22,
+          "probability": 0.6804360747337341
+        },
+        {
+          "word": " jeg",
+          "start": 145.66,
+          "end": 145.88,
+          "probability": 0.8279128074645996
+        },
+        {
+          "word": " er",
+          "start": 145.88,
+          "end": 146.04,
+          "probability": 0.941087543964386
+        },
+        {
+          "word": " 23.",
+          "start": 146.04,
+          "end": 146.48,
+          "probability": 0.8675497770309448
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "seek": 14046,
+      "start": 147.28,
+      "end": 148.28,
+      "text": " Og jeg har",
+      "tokens": [50664, 14883, 10610, 2233, 50764],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Og",
+          "start": 147.28,
+          "end": 147.84,
+          "probability": 0.4213864803314209
+        },
+        {
+          "word": " jeg",
+          "start": 147.84,
+          "end": 148.1,
+          "probability": 0.7916811108589172
+        },
+        {
+          "word": " har",
+          "start": 148.1,
+          "end": 148.28,
+          "probability": 0.37472018599510193
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "seek": 14046,
+      "start": 148.9,
+      "end": 150.5,
+      "text": " helst fanget en fagopgave nu",
+      "tokens": [
+        50764, 801, 372, 283, 656, 302, 465, 283, 559, 404, 70, 946, 3822, 50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " helst",
+          "start": 148.9,
+          "end": 149.46,
+          "probability": 0.2347594052553177
+        },
+        {
+          "word": " fanget",
+          "start": 149.46,
+          "end": 149.74,
+          "probability": 0.8325445254643759
+        },
+        {
+          "word": " en",
+          "start": 149.74,
+          "end": 149.86,
+          "probability": 0.8091961741447449
+        },
+        {
+          "word": " fagopgave",
+          "start": 149.86,
+          "end": 150.24,
+          "probability": 0.6197021901607513
+        },
+        {
+          "word": " nu",
+          "start": 150.24,
+          "end": 150.5,
+          "probability": 0.5689799785614014
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "seek": 14046,
+      "start": 150.5,
+      "end": 152.5,
+      "text": " til at studere biologi senere.",
+      "tokens": [
+        50864, 8440, 412, 972, 323, 3228, 1132, 72, 3151, 323, 13, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " til",
+          "start": 150.5,
+          "end": 151.14,
+          "probability": 0.5013570189476013
+        },
+        {
+          "word": " at",
+          "start": 151.14,
+          "end": 151.28,
+          "probability": 0.9200464487075806
+        },
+        {
+          "word": " studere",
+          "start": 151.28,
+          "end": 151.52,
+          "probability": 0.8984157145023346
+        },
+        {
+          "word": " biologi",
+          "start": 151.52,
+          "end": 152.12,
+          "probability": 0.8137776156266531
+        },
+        {
+          "word": " senere.",
+          "start": 152.12,
+          "end": 152.5,
+          "probability": 0.7693715393543243
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "seek": 14046,
+      "start": 153.24,
+      "end": 154.72,
+      "text": " S\u00e5 jeg har faktisk ikke s\u00e5 meget",
+      "tokens": [
+        50964, 12728, 10610, 2233, 21310, 7797, 13076, 4719, 36411, 51064
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " S\u00e5",
+          "start": 153.24,
+          "end": 153.8,
+          "probability": 0.7069504261016846
+        },
+        {
+          "word": " jeg",
+          "start": 153.8,
+          "end": 153.88,
+          "probability": 0.662597119808197
+        },
+        {
+          "word": " har",
+          "start": 153.88,
+          "end": 153.92,
+          "probability": 0.6333176493644714
+        },
+        {
+          "word": " faktisk",
+          "start": 153.92,
+          "end": 154.24,
+          "probability": 0.6955353170633316
+        },
+        {
+          "word": " ikke",
+          "start": 154.24,
+          "end": 154.38,
+          "probability": 0.8185437321662903
+        },
+        {
+          "word": " s\u00e5",
+          "start": 154.38,
+          "end": 154.52,
+          "probability": 0.9034006595611572
+        },
+        {
+          "word": " meget",
+          "start": 154.52,
+          "end": 154.72,
+          "probability": 0.8265167474746704
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "seek": 14046,
+      "start": 154.72,
+      "end": 155.76,
+      "text": " fritid.",
+      "tokens": [51064, 431, 270, 327, 13, 51164],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " fritid.",
+          "start": 154.72,
+          "end": 155.76,
+          "probability": 0.7405312061309814
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "seek": 14046,
+      "start": 156.26,
+      "end": 160.08,
+      "text": " Jeg er sammen med mine venner.",
+      "tokens": [
+        51164, 17119, 1189, 3247, 2558, 1205, 3892, 6138, 1193, 13, 51264
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 156.26,
+          "end": 156.58,
+          "probability": 0.24931396543979645
+        },
+        {
+          "word": " er",
+          "start": 156.58,
+          "end": 159.26,
+          "probability": 0.45619580149650574
+        },
+        {
+          "word": " sammen",
+          "start": 159.26,
+          "end": 159.58,
+          "probability": 0.6961765438318253
+        },
+        {
+          "word": " med",
+          "start": 159.58,
+          "end": 159.66,
+          "probability": 0.9290342330932617
+        },
+        {
+          "word": " mine",
+          "start": 159.66,
+          "end": 159.8,
+          "probability": 0.5871080756187439
+        },
+        {
+          "word": " venner.",
+          "start": 159.8,
+          "end": 160.08,
+          "probability": 0.9183121919631958
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "seek": 14046,
+      "start": 161.12,
+      "end": 162.28,
+      "text": " Min umy arbejder.",
+      "tokens": [51364, 2829, 1105, 88, 40476, 73, 1068, 13, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Min",
+          "start": 161.12,
+          "end": 161.56,
+          "probability": 0.288908451795578
+        },
+        {
+          "word": " umy",
+          "start": 161.56,
+          "end": 161.88,
+          "probability": 0.0009099025919567794
+        },
+        {
+          "word": " arbejder.",
+          "start": 161.88,
+          "end": 162.28,
+          "probability": 0.9436712066332499
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "seek": 14046,
+      "start": 163.44,
+      "end": 164.64,
+      "text": " Vi har ikke g\u00e5et p\u00e5 h\u00f8jsko sammen.",
+      "tokens": [
+        51464, 6626, 2233, 13076, 22098, 302, 4170, 276, 6715, 25530, 4093,
+        3247, 2558, 13, 51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Vi",
+          "start": 163.44,
+          "end": 163.54,
+          "probability": 0.39243951439857483
+        },
+        {
+          "word": " har",
+          "start": 163.54,
+          "end": 163.7,
+          "probability": 0.4331994652748108
+        },
+        {
+          "word": " ikke",
+          "start": 163.7,
+          "end": 163.82,
+          "probability": 0.6130475401878357
+        },
+        {
+          "word": " g\u00e5et",
+          "start": 163.82,
+          "end": 163.9,
+          "probability": 0.918533593416214
+        },
+        {
+          "word": " p\u00e5",
+          "start": 163.9,
+          "end": 164.02,
+          "probability": 0.9426811933517456
+        },
+        {
+          "word": " h\u00f8jsko",
+          "start": 164.02,
+          "end": 164.32,
+          "probability": 0.8515200912952423
+        },
+        {
+          "word": " sammen.",
+          "start": 164.32,
+          "end": 164.64,
+          "probability": 0.9098981320858002
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "seek": 14046,
+      "start": 166.66,
+      "end": 167.88,
+      "text": " Det er jo ikke sporten.",
+      "tokens": [51664, 4237, 1189, 1488, 13076, 7282, 268, 13, 51764],
+      "temperature": 0.0,
+      "avg_logprob": -0.3881306012471517,
+      "compression_ratio": 1.4090909090909092,
+      "no_speech_prob": 0.1891414374113083,
+      "words": [
+        {
+          "word": " Det",
+          "start": 166.66,
+          "end": 167.22,
+          "probability": 0.4877544045448303
+        },
+        {
+          "word": " er",
+          "start": 167.22,
+          "end": 167.28,
+          "probability": 0.7419595718383789
+        },
+        {
+          "word": " jo",
+          "start": 167.28,
+          "end": 167.28,
+          "probability": 0.19805586338043213
+        },
+        {
+          "word": " ikke",
+          "start": 167.28,
+          "end": 167.42,
+          "probability": 0.393347829580307
+        },
+        {
+          "word": " sporten.",
+          "start": 167.42,
+          "end": 167.88,
+          "probability": 0.4532456248998642
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "seek": 16788,
+      "start": 168.88,
+      "end": 170.0,
+      "text": " Det kan jo lide at fiske.",
+      "tokens": [50364, 4237, 4608, 1488, 287, 482, 412, 36609, 330, 13, 50464],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Det",
+          "start": 168.88,
+          "end": 169.28,
+          "probability": 0.26691728830337524
+        },
+        {
+          "word": " kan",
+          "start": 169.28,
+          "end": 169.4,
+          "probability": 0.5122389793395996
+        },
+        {
+          "word": " jo",
+          "start": 169.4,
+          "end": 169.46,
+          "probability": 0.12624961137771606
+        },
+        {
+          "word": " lide",
+          "start": 169.46,
+          "end": 169.56,
+          "probability": 0.4731532782316208
+        },
+        {
+          "word": " at",
+          "start": 169.56,
+          "end": 169.64,
+          "probability": 0.7605131268501282
+        },
+        {
+          "word": " fiske.",
+          "start": 169.64,
+          "end": 170.0,
+          "probability": 0.8979597389698029
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "seek": 16788,
+      "start": 170.38,
+      "end": 171.26,
+      "text": " Det g\u00f8r jeg ogs\u00e5 ret meget.",
+      "tokens": [50464, 4237, 290, 15499, 10610, 23864, 1533, 36411, 13, 50564],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Det",
+          "start": 170.38,
+          "end": 170.56,
+          "probability": 0.8984950184822083
+        },
+        {
+          "word": " g\u00f8r",
+          "start": 170.56,
+          "end": 170.7,
+          "probability": 0.9402211010456085
+        },
+        {
+          "word": " jeg",
+          "start": 170.7,
+          "end": 170.78,
+          "probability": 0.8722029328346252
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 170.78,
+          "end": 170.92,
+          "probability": 0.7643216848373413
+        },
+        {
+          "word": " ret",
+          "start": 170.92,
+          "end": 171.06,
+          "probability": 0.4281538724899292
+        },
+        {
+          "word": " meget.",
+          "start": 171.06,
+          "end": 171.26,
+          "probability": 0.8979317545890808
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "seek": 16788,
+      "start": 173.7,
+      "end": 174.4,
+      "text": " Tusind tak.",
+      "tokens": [50664, 42026, 471, 991, 13, 50764],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Tusind",
+          "start": 173.7,
+          "end": 174.1,
+          "probability": 0.7115273177623749
+        },
+        {
+          "word": " tak.",
+          "start": 174.1,
+          "end": 174.4,
+          "probability": 0.9102426767349243
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "seek": 16788,
+      "start": 174.76,
+      "end": 176.98,
+      "text": " Det var godt med lidt baggrundsinformation.",
+      "tokens": [
+        50764, 4237, 1374, 35427, 1205, 40574, 3411, 23701, 19767, 8663, 13,
+        50864
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Det",
+          "start": 174.76,
+          "end": 174.88,
+          "probability": 0.8813857436180115
+        },
+        {
+          "word": " var",
+          "start": 174.88,
+          "end": 175.0,
+          "probability": 0.8768420219421387
+        },
+        {
+          "word": " godt",
+          "start": 175.0,
+          "end": 175.22,
+          "probability": 0.6356067061424255
+        },
+        {
+          "word": " med",
+          "start": 175.22,
+          "end": 175.42,
+          "probability": 0.825628399848938
+        },
+        {
+          "word": " lidt",
+          "start": 175.42,
+          "end": 175.7,
+          "probability": 0.8611573576927185
+        },
+        {
+          "word": " baggrundsinformation.",
+          "start": 175.7,
+          "end": 176.98,
+          "probability": 0.7793017476797104
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "seek": 16788,
+      "start": 177.74,
+      "end": 179.78,
+      "text": " Nu kunne vi godt t\u00e6nke os at tale lidt mere",
+      "tokens": [
+        50864, 13612, 45335, 1932, 35427, 256, 7303, 77, 330, 3003, 412, 17172,
+        40574, 8401, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Nu",
+          "start": 177.74,
+          "end": 177.96,
+          "probability": 0.9347350001335144
+        },
+        {
+          "word": " kunne",
+          "start": 177.96,
+          "end": 178.3,
+          "probability": 0.898793637752533
+        },
+        {
+          "word": " vi",
+          "start": 178.3,
+          "end": 178.42,
+          "probability": 0.9015653729438782
+        },
+        {
+          "word": " godt",
+          "start": 178.42,
+          "end": 178.62,
+          "probability": 0.6907474398612976
+        },
+        {
+          "word": " t\u00e6nke",
+          "start": 178.62,
+          "end": 178.78,
+          "probability": 0.965239629149437
+        },
+        {
+          "word": " os",
+          "start": 178.78,
+          "end": 178.9,
+          "probability": 0.9492301344871521
+        },
+        {
+          "word": " at",
+          "start": 178.9,
+          "end": 179.02,
+          "probability": 0.8958404660224915
+        },
+        {
+          "word": " tale",
+          "start": 179.02,
+          "end": 179.26,
+          "probability": 0.8807625770568848
+        },
+        {
+          "word": " lidt",
+          "start": 179.26,
+          "end": 179.48,
+          "probability": 0.8350111246109009
+        },
+        {
+          "word": " mere",
+          "start": 179.48,
+          "end": 179.78,
+          "probability": 0.7919739484786987
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "seek": 16788,
+      "start": 179.78,
+      "end": 181.8,
+      "text": " om hvad I opdager dig som",
+      "tokens": [50964, 3406, 48160, 286, 999, 67, 3557, 2528, 3307, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " om",
+          "start": 179.78,
+          "end": 180.1,
+          "probability": 0.9069113731384277
+        },
+        {
+          "word": " hvad",
+          "start": 180.1,
+          "end": 180.56,
+          "probability": 0.46524301171302795
+        },
+        {
+          "word": " I",
+          "start": 180.56,
+          "end": 180.86,
+          "probability": 0.866481363773346
+        },
+        {
+          "word": " opdager",
+          "start": 180.86,
+          "end": 181.28,
+          "probability": 0.4558218518892924
+        },
+        {
+          "word": " dig",
+          "start": 181.28,
+          "end": 181.48,
+          "probability": 0.7482641339302063
+        },
+        {
+          "word": " som",
+          "start": 181.48,
+          "end": 181.8,
+          "probability": 0.8960728049278259
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "seek": 16788,
+      "start": 181.8,
+      "end": 183.3,
+      "text": " en god taler.",
+      "tokens": [51064, 465, 3044, 4023, 260, 13, 51164],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " en",
+          "start": 181.8,
+          "end": 182.24,
+          "probability": 0.8237344622612
+        },
+        {
+          "word": " god",
+          "start": 182.24,
+          "end": 182.48,
+          "probability": 0.8495373725891113
+        },
+        {
+          "word": " taler.",
+          "start": 182.48,
+          "end": 183.3,
+          "probability": 0.7499113976955414
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "seek": 16788,
+      "start": 186.06,
+      "end": 187.54,
+      "text": " Og det er jo et meget bredt sp\u00f8rgsm\u00e5l.",
+      "tokens": [
+        51264, 14883, 1141, 1189, 1488, 1030, 36411, 34133, 83, 637, 15499, 70,
+        10817, 1330, 75, 13, 51364
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Og",
+          "start": 186.06,
+          "end": 186.24,
+          "probability": 0.5511404871940613
+        },
+        {
+          "word": " det",
+          "start": 186.24,
+          "end": 186.34,
+          "probability": 0.926631510257721
+        },
+        {
+          "word": " er",
+          "start": 186.34,
+          "end": 186.46,
+          "probability": 0.8617884516716003
+        },
+        {
+          "word": " jo",
+          "start": 186.46,
+          "end": 186.58,
+          "probability": 0.8942527770996094
+        },
+        {
+          "word": " et",
+          "start": 186.58,
+          "end": 186.7,
+          "probability": 0.9043091535568237
+        },
+        {
+          "word": " meget",
+          "start": 186.7,
+          "end": 186.9,
+          "probability": 0.9566583633422852
+        },
+        {
+          "word": " bredt",
+          "start": 186.9,
+          "end": 187.22,
+          "probability": 0.8071734011173248
+        },
+        {
+          "word": " sp\u00f8rgsm\u00e5l.",
+          "start": 187.22,
+          "end": 187.54,
+          "probability": 0.9835494061311086
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "seek": 16788,
+      "start": 187.68,
+      "end": 190.5,
+      "text": " Men lad os starte der og s\u00e5 pr\u00f8ver vi at komme lidt mere ned i det.",
+      "tokens": [
+        51364, 6685, 6632, 3003, 722, 68, 1163, 5360, 4719, 582, 6715, 331,
+        1932, 412, 31194, 40574, 8401, 25614, 741, 1141, 13, 51464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Men",
+          "start": 187.68,
+          "end": 187.76,
+          "probability": 0.5507534742355347
+        },
+        {
+          "word": " lad",
+          "start": 187.76,
+          "end": 187.92,
+          "probability": 0.8890936970710754
+        },
+        {
+          "word": " os",
+          "start": 187.92,
+          "end": 188.0,
+          "probability": 0.9482259750366211
+        },
+        {
+          "word": " starte",
+          "start": 188.0,
+          "end": 188.32,
+          "probability": 0.8794774115085602
+        },
+        {
+          "word": " der",
+          "start": 188.32,
+          "end": 188.48,
+          "probability": 0.8285762071609497
+        },
+        {
+          "word": " og",
+          "start": 188.48,
+          "end": 188.66,
+          "probability": 0.44579237699508667
+        },
+        {
+          "word": " s\u00e5",
+          "start": 188.66,
+          "end": 188.8,
+          "probability": 0.8172317147254944
+        },
+        {
+          "word": " pr\u00f8ver",
+          "start": 188.8,
+          "end": 189.06,
+          "probability": 0.8810445070266724
+        },
+        {
+          "word": " vi",
+          "start": 189.06,
+          "end": 189.42,
+          "probability": 0.34880244731903076
+        },
+        {
+          "word": " at",
+          "start": 189.42,
+          "end": 189.6,
+          "probability": 0.857365608215332
+        },
+        {
+          "word": " komme",
+          "start": 189.6,
+          "end": 189.84,
+          "probability": 0.7616861462593079
+        },
+        {
+          "word": " lidt",
+          "start": 189.84,
+          "end": 190.02,
+          "probability": 0.8882083296775818
+        },
+        {
+          "word": " mere",
+          "start": 190.02,
+          "end": 190.14,
+          "probability": 0.633467972278595
+        },
+        {
+          "word": " ned",
+          "start": 190.14,
+          "end": 190.28,
+          "probability": 0.4890882670879364
+        },
+        {
+          "word": " i",
+          "start": 190.28,
+          "end": 190.4,
+          "probability": 0.8996495008468628
+        },
+        {
+          "word": " det.",
+          "start": 190.4,
+          "end": 190.5,
+          "probability": 0.5164738893508911
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "seek": 16788,
+      "start": 190.62,
+      "end": 191.56,
+      "text": " Det kan jo v\u00e6re, du vil starte.",
+      "tokens": [
+        51464, 4237, 4608, 1488, 27458, 11, 1581, 15349, 722, 68, 13, 51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Det",
+          "start": 190.62,
+          "end": 190.62,
+          "probability": 0.7212113738059998
+        },
+        {
+          "word": " kan",
+          "start": 190.62,
+          "end": 190.62,
+          "probability": 0.7940049767494202
+        },
+        {
+          "word": " jo",
+          "start": 190.62,
+          "end": 190.68,
+          "probability": 0.5465150475502014
+        },
+        {
+          "word": " v\u00e6re,",
+          "start": 190.68,
+          "end": 190.76,
+          "probability": 0.5164204835891724
+        },
+        {
+          "word": " du",
+          "start": 190.84,
+          "end": 190.84,
+          "probability": 0.6750213503837585
+        },
+        {
+          "word": " vil",
+          "start": 190.84,
+          "end": 190.96,
+          "probability": 0.9058288335800171
+        },
+        {
+          "word": " starte.",
+          "start": 190.96,
+          "end": 191.56,
+          "probability": 0.9023571014404297
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "seek": 16788,
+      "start": 192.44,
+      "end": 192.84,
+      "text": " Uhaller.",
+      "tokens": [51564, 4019, 22414, 13, 51664],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " Uhaller.",
+          "start": 192.44,
+          "end": 192.84,
+          "probability": 0.07682130485773087
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "seek": 16788,
+      "start": 194.04,
+      "end": 195.18,
+      "text": " En god taler.",
+      "tokens": [51664, 2193, 3044, 4023, 260, 13, 51764],
+      "temperature": 0.0,
+      "avg_logprob": -0.27290612679940685,
+      "compression_ratio": 1.5714285714285714,
+      "no_speech_prob": 0.0761726126074791,
+      "words": [
+        {
+          "word": " En",
+          "start": 194.04,
+          "end": 194.44,
+          "probability": 0.42071089148521423
+        },
+        {
+          "word": " god",
+          "start": 194.44,
+          "end": 194.66,
+          "probability": 0.8046011328697205
+        },
+        {
+          "word": " taler.",
+          "start": 194.66,
+          "end": 195.18,
+          "probability": 0.8452233374118805
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "seek": 19788,
+      "start": 201.08,
+      "end": 201.52,
+      "text": " Ja.",
+      "tokens": [50364, 220, 19111, 13, 50464],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " Ja.",
+          "start": 201.08,
+          "end": 201.52,
+          "probability": 0.027019632048904896
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "seek": 19788,
+      "start": 201.52,
+      "end": 201.52,
+      "text": "",
+      "tokens": [],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": []
+    },
+    {
+      "id": 92,
+      "seek": 19788,
+      "start": 203.98000000000002,
+      "end": 211.98,
+      "text": " For mig tror jeg, at en, der er en, hvor man ogs\u00e5 kan lidt mere virkelighedsn\u00e6rmest m\u00e6rkes,",
+      "tokens": [
+        50564, 1171, 6186, 22109, 10610, 11, 412, 465, 11, 1163, 1189, 465, 11,
+        31459, 587, 23864, 4608, 40574, 8401, 4107, 7124, 910, 5147, 77, 32011,
+        76, 377, 275, 32011, 330, 82, 11, 51064
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " For",
+          "start": 203.98000000000002,
+          "end": 204.42000000000002,
+          "probability": 0.3371998965740204
+        },
+        {
+          "word": " mig",
+          "start": 204.42000000000002,
+          "end": 204.86,
+          "probability": 0.9019069075584412
+        },
+        {
+          "word": " tror",
+          "start": 204.86,
+          "end": 205.12,
+          "probability": 0.4543251097202301
+        },
+        {
+          "word": " jeg,",
+          "start": 205.12,
+          "end": 205.32,
+          "probability": 0.8994010090827942
+        },
+        {
+          "word": " at",
+          "start": 205.46,
+          "end": 205.46,
+          "probability": 0.7379583120346069
+        },
+        {
+          "word": " en,",
+          "start": 205.46,
+          "end": 205.68,
+          "probability": 0.40544477105140686
+        },
+        {
+          "word": " der",
+          "start": 205.8,
+          "end": 205.9,
+          "probability": 0.15050417184829712
+        },
+        {
+          "word": " er",
+          "start": 205.9,
+          "end": 207.78,
+          "probability": 0.34218519926071167
+        },
+        {
+          "word": " en,",
+          "start": 207.78,
+          "end": 208.12,
+          "probability": 0.2552885115146637
+        },
+        {
+          "word": " hvor",
+          "start": 208.18,
+          "end": 208.26,
+          "probability": 0.8629512786865234
+        },
+        {
+          "word": " man",
+          "start": 208.26,
+          "end": 208.42,
+          "probability": 0.8917842507362366
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 208.42,
+          "end": 208.62,
+          "probability": 0.5950484275817871
+        },
+        {
+          "word": " kan",
+          "start": 208.62,
+          "end": 208.78,
+          "probability": 0.8378774523735046
+        },
+        {
+          "word": " lidt",
+          "start": 208.78,
+          "end": 210.06,
+          "probability": 0.3350338637828827
+        },
+        {
+          "word": " mere",
+          "start": 210.06,
+          "end": 210.26,
+          "probability": 0.8349088430404663
+        },
+        {
+          "word": " virkelighedsn\u00e6rmest",
+          "start": 210.26,
+          "end": 211.68,
+          "probability": 0.6405819728970528
+        },
+        {
+          "word": " m\u00e6rkes,",
+          "start": 211.68,
+          "end": 211.98,
+          "probability": 0.3344456907361746
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "seek": 19788,
+      "start": 212.24,
+      "end": 213.14,
+      "text": " at man er mere menneskelig,",
+      "tokens": [51064, 412, 587, 1189, 8401, 1706, 4081, 330, 5073, 11, 51164],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " at",
+          "start": 212.24,
+          "end": 212.46,
+          "probability": 0.04215673729777336
+        },
+        {
+          "word": " man",
+          "start": 212.46,
+          "end": 212.46,
+          "probability": 0.8538379073143005
+        },
+        {
+          "word": " er",
+          "start": 212.46,
+          "end": 212.46,
+          "probability": 0.8348226547241211
+        },
+        {
+          "word": " mere",
+          "start": 212.46,
+          "end": 212.56,
+          "probability": 0.24874041974544525
+        },
+        {
+          "word": " menneskelig,",
+          "start": 212.56,
+          "end": 213.14,
+          "probability": 0.8135561794042587
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "seek": 19788,
+      "start": 213.68,
+      "end": 216.3,
+      "text": " s\u00e5 man m\u00e5ske generaliterer lidt bedre.",
+      "tokens": [
+        51164, 4719, 587, 10254, 82, 330, 2674, 1681, 260, 40574, 2901, 265, 13,
+        51264
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " s\u00e5",
+          "start": 213.68,
+          "end": 213.82,
+          "probability": 0.422599732875824
+        },
+        {
+          "word": " man",
+          "start": 213.82,
+          "end": 213.98,
+          "probability": 0.753749668598175
+        },
+        {
+          "word": " m\u00e5ske",
+          "start": 213.98,
+          "end": 214.26,
+          "probability": 0.8949257532755533
+        },
+        {
+          "word": " generaliterer",
+          "start": 214.26,
+          "end": 215.12,
+          "probability": 0.6166976764798164
+        },
+        {
+          "word": " lidt",
+          "start": 215.12,
+          "end": 215.9,
+          "probability": 0.843805730342865
+        },
+        {
+          "word": " bedre.",
+          "start": 215.9,
+          "end": 216.3,
+          "probability": 0.9580663740634918
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "seek": 19788,
+      "start": 218.68,
+      "end": 221.9,
+      "text": " Det ogs\u00e5 g\u00f8r, at man bliver mere stor p\u00e5, hvad der bliver sagt.",
+      "tokens": [
+        51364, 4237, 23864, 290, 15499, 11, 412, 587, 45329, 8401, 5967, 4170,
+        11, 48160, 1163, 45329, 15764, 13, 51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " Det",
+          "start": 218.68,
+          "end": 219.12,
+          "probability": 0.8783292174339294
+        },
+        {
+          "word": " ogs\u00e5",
+          "start": 219.12,
+          "end": 219.3,
+          "probability": 0.6184510588645935
+        },
+        {
+          "word": " g\u00f8r,",
+          "start": 219.3,
+          "end": 219.48,
+          "probability": 0.9187942445278168
+        },
+        {
+          "word": " at",
+          "start": 219.7,
+          "end": 219.72,
+          "probability": 0.9116024971008301
+        },
+        {
+          "word": " man",
+          "start": 219.72,
+          "end": 219.94,
+          "probability": 0.9002224802970886
+        },
+        {
+          "word": " bliver",
+          "start": 219.94,
+          "end": 220.2,
+          "probability": 0.44466105103492737
+        },
+        {
+          "word": " mere",
+          "start": 220.2,
+          "end": 220.6,
+          "probability": 0.39536869525909424
+        },
+        {
+          "word": " stor",
+          "start": 220.6,
+          "end": 220.88,
+          "probability": 0.05394842475652695
+        },
+        {
+          "word": " p\u00e5,",
+          "start": 220.88,
+          "end": 221.12,
+          "probability": 0.8466811776161194
+        },
+        {
+          "word": " hvad",
+          "start": 221.22,
+          "end": 221.26,
+          "probability": 0.9125828742980957
+        },
+        {
+          "word": " der",
+          "start": 221.26,
+          "end": 221.36,
+          "probability": 0.832557737827301
+        },
+        {
+          "word": " bliver",
+          "start": 221.36,
+          "end": 221.5,
+          "probability": 0.768343985080719
+        },
+        {
+          "word": " sagt.",
+          "start": 221.5,
+          "end": 221.9,
+          "probability": 0.756575882434845
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "seek": 19788,
+      "start": 224.28,
+      "end": 225.48,
+      "text": " Det tror jeg, at det er for mig.",
+      "tokens": [
+        51664, 4237, 22109, 10610, 11, 412, 1141, 1189, 337, 6186, 13, 51764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.6037644280327691,
+      "compression_ratio": 1.5657142857142856,
+      "no_speech_prob": 0.034345149993896484,
+      "words": [
+        {
+          "word": " Det",
+          "start": 224.28,
+          "end": 224.72,
+          "probability": 0.46625831723213196
+        },
+        {
+          "word": " tror",
+          "start": 224.72,
+          "end": 224.84,
+          "probability": 0.802273690700531
+        },
+        {
+          "word": " jeg,",
+          "start": 224.84,
+          "end": 224.98,
+          "probability": 0.8902401924133301
+        },
+        {
+          "word": " at",
+          "start": 225.02,
+          "end": 225.02,
+          "probability": 0.40601757168769836
+        },
+        {
+          "word": " det",
+          "start": 225.02,
+          "end": 225.12,
+          "probability": 0.8197934031486511
+        },
+        {
+          "word": " er",
+          "start": 225.12,
+          "end": 225.18,
+          "probability": 0.5729289054870605
+        },
+        {
+          "word": " for",
+          "start": 225.18,
+          "end": 225.26,
+          "probability": 0.7573301792144775
+        },
+        {
+          "word": " mig.",
+          "start": 225.26,
+          "end": 225.48,
+          "probability": 0.903574526309967
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "seek": 22788,
+      "start": 227.88,
+      "end": 229.62,
+      "text": " Er det en god vinder, der g\u00f8r, at du ikke er adslutter?",
+      "tokens": [
+        50364, 3300, 1141, 465, 3044, 371, 5669, 11, 1163, 290, 15499, 11, 412,
+        1581, 13076, 1189, 614, 10418, 9947, 30, 50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Er",
+          "start": 227.88,
+          "end": 227.88,
+          "probability": 0.06448882073163986
+        },
+        {
+          "word": " det",
+          "start": 227.88,
+          "end": 227.88,
+          "probability": 0.4593393802642822
+        },
+        {
+          "word": " en",
+          "start": 227.88,
+          "end": 227.96,
+          "probability": 0.26376110315322876
+        },
+        {
+          "word": " god",
+          "start": 227.96,
+          "end": 228.24,
+          "probability": 0.5959634184837341
+        },
+        {
+          "word": " vinder,",
+          "start": 228.24,
+          "end": 228.62,
+          "probability": 0.13590877503156662
+        },
+        {
+          "word": " der",
+          "start": 228.76,
+          "end": 228.88,
+          "probability": 0.049394767731428146
+        },
+        {
+          "word": " g\u00f8r,",
+          "start": 228.88,
+          "end": 228.94,
+          "probability": 0.6279615759849548
+        },
+        {
+          "word": " at",
+          "start": 229.02,
+          "end": 229.02,
+          "probability": 0.6905227899551392
+        },
+        {
+          "word": " du",
+          "start": 229.02,
+          "end": 229.06,
+          "probability": 0.8725699186325073
+        },
+        {
+          "word": " ikke",
+          "start": 229.06,
+          "end": 229.22,
+          "probability": 0.5870875716209412
+        },
+        {
+          "word": " er",
+          "start": 229.22,
+          "end": 229.34,
+          "probability": 0.624879002571106
+        },
+        {
+          "word": " adslutter?",
+          "start": 229.34,
+          "end": 229.62,
+          "probability": 0.174099521090587
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "seek": 22788,
+      "start": 230.38,
+      "end": 231.16,
+      "text": " Ja, det er jeg ogs\u00e5.",
+      "tokens": [50464, 3530, 11, 1141, 1189, 10610, 23864, 13, 50564],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Ja,",
+          "start": 230.38,
+          "end": 230.74,
+          "probability": 0.7111392617225647
+        },
+        {
+          "word": " det",
+          "start": 230.84,
+          "end": 230.98,
+          "probability": 0.4591638147830963
+        },
+        {
+          "word": " er",
+          "start": 230.98,
+          "end": 231.04,
+          "probability": 0.8700552582740784
+        },
+        {
+          "word": " jeg",
+          "start": 231.04,
+          "end": 231.14,
+          "probability": 0.1734425127506256
+        },
+        {
+          "word": " ogs\u00e5.",
+          "start": 231.14,
+          "end": 231.16,
+          "probability": 0.08132521063089371
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "seek": 22788,
+      "start": 232.38,
+      "end": 233.1,
+      "text": " Meget p\u00e5s\u00e5ndet.",
+      "tokens": [50564, 1923, 847, 4170, 82, 1330, 273, 302, 13, 50664],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Meget",
+          "start": 232.38,
+          "end": 232.74,
+          "probability": 0.6285548657178879
+        },
+        {
+          "word": " p\u00e5s\u00e5ndet.",
+          "start": 232.74,
+          "end": 233.1,
+          "probability": 0.3570879489183426
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "seek": 22788,
+      "start": 233.36,
+      "end": 234.54,
+      "text": " Der er flere ting for mig,",
+      "tokens": [50664, 5618, 1189, 932, 323, 17922, 337, 6186, 11, 50764],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Der",
+          "start": 233.36,
+          "end": 233.6,
+          "probability": 0.49017220735549927
+        },
+        {
+          "word": " er",
+          "start": 233.6,
+          "end": 233.68,
+          "probability": 0.8956815004348755
+        },
+        {
+          "word": " flere",
+          "start": 233.68,
+          "end": 233.92,
+          "probability": 0.9207387566566467
+        },
+        {
+          "word": " ting",
+          "start": 233.92,
+          "end": 234.16,
+          "probability": 0.7714798450469971
+        },
+        {
+          "word": " for",
+          "start": 234.16,
+          "end": 234.38,
+          "probability": 0.761013388633728
+        },
+        {
+          "word": " mig,",
+          "start": 234.38,
+          "end": 234.54,
+          "probability": 0.944513201713562
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "seek": 22788,
+      "start": 236.27999999999997,
+      "end": 237.82,
+      "text": " men hvis man kan h\u00f8re,",
+      "tokens": [50764, 1706, 45427, 587, 4608, 276, 35435, 11, 50864],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " men",
+          "start": 236.27999999999997,
+          "end": 236.64,
+          "probability": 0.7570143342018127
+        },
+        {
+          "word": " hvis",
+          "start": 236.64,
+          "end": 237.0,
+          "probability": 0.5547261238098145
+        },
+        {
+          "word": " man",
+          "start": 237.0,
+          "end": 237.44,
+          "probability": 0.8913515210151672
+        },
+        {
+          "word": " kan",
+          "start": 237.44,
+          "end": 237.6,
+          "probability": 0.877410888671875
+        },
+        {
+          "word": " h\u00f8re,",
+          "start": 237.6,
+          "end": 237.82,
+          "probability": 0.9478088617324829
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "seek": 22788,
+      "start": 238.04,
+      "end": 240.82,
+      "text": " at det ikke bliver vist op,",
+      "tokens": [50864, 412, 1141, 13076, 45329, 40247, 999, 11, 50964],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " at",
+          "start": 238.04,
+          "end": 238.06,
+          "probability": 0.8621484041213989
+        },
+        {
+          "word": " det",
+          "start": 238.06,
+          "end": 238.22,
+          "probability": 0.7254911661148071
+        },
+        {
+          "word": " ikke",
+          "start": 238.22,
+          "end": 239.16,
+          "probability": 0.6565536260604858
+        },
+        {
+          "word": " bliver",
+          "start": 239.16,
+          "end": 240.26,
+          "probability": 0.6080538630485535
+        },
+        {
+          "word": " vist",
+          "start": 240.26,
+          "end": 240.5,
+          "probability": 0.357679545879364
+        },
+        {
+          "word": " op,",
+          "start": 240.5,
+          "end": 240.82,
+          "probability": 0.8970952033996582
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "seek": 22788,
+      "start": 241.0,
+      "end": 241.5,
+      "text": " eller s\u00e5dan lidt.",
+      "tokens": [50964, 12519, 40989, 40574, 13, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " eller",
+          "start": 241.0,
+          "end": 241.16,
+          "probability": 0.3314206302165985
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 241.16,
+          "end": 241.34,
+          "probability": 0.29616352915763855
+        },
+        {
+          "word": " lidt.",
+          "start": 241.34,
+          "end": 241.5,
+          "probability": 0.083355613052845
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "seek": 22788,
+      "start": 242.76,
+      "end": 243.74,
+      "text": " En god taler,",
+      "tokens": [51064, 2193, 3044, 4023, 260, 11, 51164],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " En",
+          "start": 242.76,
+          "end": 243.12,
+          "probability": 0.28550827503204346
+        },
+        {
+          "word": " god",
+          "start": 243.12,
+          "end": 243.34,
+          "probability": 0.8189406394958496
+        },
+        {
+          "word": " taler,",
+          "start": 243.34,
+          "end": 243.74,
+          "probability": 0.3022950366139412
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "seek": 22788,
+      "start": 243.84,
+      "end": 244.62,
+      "text": " for mig er tit s\u00e5dan noget,",
+      "tokens": [51164, 337, 6186, 1189, 3459, 40989, 34574, 11, 51264],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " for",
+          "start": 243.84,
+          "end": 243.94,
+          "probability": 0.07554394751787186
+        },
+        {
+          "word": " mig",
+          "start": 243.94,
+          "end": 244.06,
+          "probability": 0.9214809536933899
+        },
+        {
+          "word": " er",
+          "start": 244.06,
+          "end": 244.18,
+          "probability": 0.06710101664066315
+        },
+        {
+          "word": " tit",
+          "start": 244.18,
+          "end": 244.32,
+          "probability": 0.059933025389909744
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 244.32,
+          "end": 244.48,
+          "probability": 0.1815037578344345
+        },
+        {
+          "word": " noget,",
+          "start": 244.48,
+          "end": 244.62,
+          "probability": 0.7495073676109314
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "seek": 22788,
+      "start": 244.64,
+      "end": 247.64,
+      "text": " som virker egentlig flydende.",
+      "tokens": [
+        51264, 3307, 4107, 5767, 41170, 5073, 932, 88, 1479, 16404, 13, 51364
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " som",
+          "start": 244.64,
+          "end": 244.72,
+          "probability": 0.2471923828125
+        },
+        {
+          "word": " virker",
+          "start": 244.72,
+          "end": 244.88,
+          "probability": 0.6385865807533264
+        },
+        {
+          "word": " egentlig",
+          "start": 244.88,
+          "end": 245.72,
+          "probability": 0.45879119262099266
+        },
+        {
+          "word": " flydende.",
+          "start": 245.72,
+          "end": 247.64,
+          "probability": 0.3952177446335554
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "seek": 22788,
+      "start": 248.0,
+      "end": 249.46,
+      "text": " Der er simpelthen monolog.",
+      "tokens": [51364, 5618, 1189, 1034, 20071, 19096, 1108, 1132, 13, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Der",
+          "start": 248.0,
+          "end": 248.36,
+          "probability": 0.10954663157463074
+        },
+        {
+          "word": " er",
+          "start": 248.36,
+          "end": 248.42,
+          "probability": 0.8743718266487122
+        },
+        {
+          "word": " simpelthen",
+          "start": 248.42,
+          "end": 248.66,
+          "probability": 0.7331941823164622
+        },
+        {
+          "word": " monolog.",
+          "start": 248.66,
+          "end": 249.46,
+          "probability": 0.6547494977712631
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "seek": 22788,
+      "start": 250.66000000000003,
+      "end": 252.52,
+      "text": " Jeg er ikke mere s\u00e5dan noget, der bliver vist op,",
+      "tokens": [
+        51464, 17119, 1189, 13076, 8401, 40989, 34574, 11, 1163, 45329, 40247,
+        999, 11, 51564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " Jeg",
+          "start": 250.66000000000003,
+          "end": 251.02,
+          "probability": 0.21247074007987976
+        },
+        {
+          "word": " er",
+          "start": 251.02,
+          "end": 251.04,
+          "probability": 0.8576596975326538
+        },
+        {
+          "word": " ikke",
+          "start": 251.04,
+          "end": 251.16,
+          "probability": 0.6391904950141907
+        },
+        {
+          "word": " mere",
+          "start": 251.16,
+          "end": 251.4,
+          "probability": 0.6781206130981445
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 251.4,
+          "end": 251.62,
+          "probability": 0.7056244015693665
+        },
+        {
+          "word": " noget,",
+          "start": 251.62,
+          "end": 251.82,
+          "probability": 0.7485485076904297
+        },
+        {
+          "word": " der",
+          "start": 251.92,
+          "end": 251.92,
+          "probability": 0.8686105608940125
+        },
+        {
+          "word": " bliver",
+          "start": 251.92,
+          "end": 252.08,
+          "probability": 0.7146985530853271
+        },
+        {
+          "word": " vist",
+          "start": 252.08,
+          "end": 252.26,
+          "probability": 0.840446412563324
+        },
+        {
+          "word": " op,",
+          "start": 252.26,
+          "end": 252.52,
+          "probability": 0.8873174786567688
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "seek": 22788,
+      "start": 252.72,
+      "end": 254.6,
+      "text": " men s\u00e5dan noget, der kommer her af vejen.",
+      "tokens": [
+        51564, 1706, 40989, 34574, 11, 1163, 12589, 720, 3238, 1241, 15378, 13,
+        51664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " men",
+          "start": 252.72,
+          "end": 252.88,
+          "probability": 0.7995434999465942
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 252.88,
+          "end": 253.6,
+          "probability": 0.7630085945129395
+        },
+        {
+          "word": " noget,",
+          "start": 253.6,
+          "end": 253.74,
+          "probability": 0.7452822923660278
+        },
+        {
+          "word": " der",
+          "start": 253.82,
+          "end": 253.86,
+          "probability": 0.8911346793174744
+        },
+        {
+          "word": " kommer",
+          "start": 253.86,
+          "end": 254.1,
+          "probability": 0.7370699644088745
+        },
+        {
+          "word": " her",
+          "start": 254.1,
+          "end": 254.3,
+          "probability": 0.31307151913642883
+        },
+        {
+          "word": " af",
+          "start": 254.3,
+          "end": 254.38,
+          "probability": 0.4101862907409668
+        },
+        {
+          "word": " vejen.",
+          "start": 254.38,
+          "end": 254.6,
+          "probability": 0.8683801591396332
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "seek": 22788,
+      "start": 254.74,
+      "end": 255.08,
+      "text": " I hvilken m\u00e5de.",
+      "tokens": [51664, 286, 276, 20202, 2653, 10254, 1479, 13, 51764],
+      "temperature": 0.0,
+      "avg_logprob": -0.5351033050741926,
+      "compression_ratio": 1.6804979253112033,
+      "no_speech_prob": 0.17807941138744354,
+      "words": [
+        {
+          "word": " I",
+          "start": 254.74,
+          "end": 254.76,
+          "probability": 0.7241130471229553
+        },
+        {
+          "word": " hvilken",
+          "start": 254.76,
+          "end": 254.84,
+          "probability": 0.6958518226941427
+        },
+        {
+          "word": " m\u00e5de.",
+          "start": 254.84,
+          "end": 255.08,
+          "probability": 0.9717751741409302
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "seek": 25788,
+      "start": 257.88,
+      "end": 260.6,
+      "text": " Har du et eksempel p\u00e5 en,",
+      "tokens": [
+        50364, 3653, 1581, 1030, 13359, 405, 2455, 338, 4170, 465, 11, 50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " Har",
+          "start": 257.88,
+          "end": 257.94,
+          "probability": 0.16112549602985382
+        },
+        {
+          "word": " du",
+          "start": 257.94,
+          "end": 258.14,
+          "probability": 0.8767022490501404
+        },
+        {
+          "word": " et",
+          "start": 258.14,
+          "end": 258.66,
+          "probability": 0.9261678457260132
+        },
+        {
+          "word": " eksempel",
+          "start": 258.66,
+          "end": 259.18,
+          "probability": 0.9436737895011902
+        },
+        {
+          "word": " p\u00e5",
+          "start": 259.18,
+          "end": 260.0,
+          "probability": 0.6177496910095215
+        },
+        {
+          "word": " en,",
+          "start": 260.0,
+          "end": 260.6,
+          "probability": 0.7280709743499756
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "seek": 25788,
+      "start": 260.7,
+      "end": 261.94,
+      "text": " det kunne v\u00e6re en offentlig person,",
+      "tokens": [
+        50464, 1141, 45335, 27458, 465, 766, 317, 5073, 954, 11, 50564
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " det",
+          "start": 260.7,
+          "end": 260.94,
+          "probability": 0.8318617939949036
+        },
+        {
+          "word": " kunne",
+          "start": 260.94,
+          "end": 261.02,
+          "probability": 0.7774771451950073
+        },
+        {
+          "word": " v\u00e6re",
+          "start": 261.02,
+          "end": 261.14,
+          "probability": 0.9082788228988647
+        },
+        {
+          "word": " en",
+          "start": 261.14,
+          "end": 261.22,
+          "probability": 0.9105756282806396
+        },
+        {
+          "word": " offentlig",
+          "start": 261.22,
+          "end": 261.54,
+          "probability": 0.8218419353167216
+        },
+        {
+          "word": " person,",
+          "start": 261.54,
+          "end": 261.94,
+          "probability": 0.8469988703727722
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "seek": 25788,
+      "start": 261.98,
+      "end": 265.22,
+      "text": " eller en, du kender, som du synes er god til at formidle sine budskaber?",
+      "tokens": [
+        50564, 12519, 465, 11, 1581, 350, 3216, 11, 3307, 1581, 943, 4081, 1189,
+        3044, 8440, 412, 1254, 327, 306, 18609, 3265, 5161, 23298, 30, 50764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " eller",
+          "start": 261.98,
+          "end": 262.12,
+          "probability": 0.5282922387123108
+        },
+        {
+          "word": " en,",
+          "start": 262.12,
+          "end": 262.2,
+          "probability": 0.8223272562026978
+        },
+        {
+          "word": " du",
+          "start": 262.3,
+          "end": 262.3,
+          "probability": 0.8738131523132324
+        },
+        {
+          "word": " kender,",
+          "start": 262.3,
+          "end": 262.56,
+          "probability": 0.8624670207500458
+        },
+        {
+          "word": " som",
+          "start": 262.68,
+          "end": 262.76,
+          "probability": 0.8524577617645264
+        },
+        {
+          "word": " du",
+          "start": 262.76,
+          "end": 262.88,
+          "probability": 0.8789342045783997
+        },
+        {
+          "word": " synes",
+          "start": 262.88,
+          "end": 263.06,
+          "probability": 0.8266831040382385
+        },
+        {
+          "word": " er",
+          "start": 263.06,
+          "end": 263.2,
+          "probability": 0.8950985670089722
+        },
+        {
+          "word": " god",
+          "start": 263.2,
+          "end": 263.36,
+          "probability": 0.6365350484848022
+        },
+        {
+          "word": " til",
+          "start": 263.36,
+          "end": 263.56,
+          "probability": 0.8907940983772278
+        },
+        {
+          "word": " at",
+          "start": 263.56,
+          "end": 263.82,
+          "probability": 0.9084655046463013
+        },
+        {
+          "word": " formidle",
+          "start": 263.82,
+          "end": 264.28,
+          "probability": 0.854769229888916
+        },
+        {
+          "word": " sine",
+          "start": 264.28,
+          "end": 264.62,
+          "probability": 0.7977136969566345
+        },
+        {
+          "word": " budskaber?",
+          "start": 264.62,
+          "end": 265.22,
+          "probability": 0.8076037367184957
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "seek": 25788,
+      "start": 271.3,
+      "end": 273.88,
+      "text": " Det kunne det v\u00e6re vores folkeskoleforstander.",
+      "tokens": [
+        51064, 4237, 45335, 1141, 27458, 371, 2706, 3339, 5993, 4093, 306, 2994,
+        1115, 260, 13, 51164
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " Det",
+          "start": 271.3,
+          "end": 271.76,
+          "probability": 0.03449885547161102
+        },
+        {
+          "word": " kunne",
+          "start": 271.76,
+          "end": 272.2,
+          "probability": 0.9159337878227234
+        },
+        {
+          "word": " det",
+          "start": 272.2,
+          "end": 272.34,
+          "probability": 0.46802568435668945
+        },
+        {
+          "word": " v\u00e6re",
+          "start": 272.34,
+          "end": 272.5,
+          "probability": 0.7089360952377319
+        },
+        {
+          "word": " vores",
+          "start": 272.5,
+          "end": 273.36,
+          "probability": 0.8161332011222839
+        },
+        {
+          "word": " folkeskoleforstander.",
+          "start": 273.36,
+          "end": 273.88,
+          "probability": 0.7036426663398743
+        }
+      ]
+    },
+    {
+      "id": 115,
+      "seek": 25788,
+      "start": 275.12,
+      "end": 276.32,
+      "text": " De var gode til det.",
+      "tokens": [51164, 1346, 1374, 352, 1479, 8440, 1141, 13, 51264],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " De",
+          "start": 275.12,
+          "end": 275.58,
+          "probability": 0.0888582319021225
+        },
+        {
+          "word": " var",
+          "start": 275.58,
+          "end": 275.58,
+          "probability": 0.8009558320045471
+        },
+        {
+          "word": " gode",
+          "start": 275.58,
+          "end": 275.8,
+          "probability": 0.6695604175329208
+        },
+        {
+          "word": " til",
+          "start": 275.8,
+          "end": 275.96,
+          "probability": 0.875048041343689
+        },
+        {
+          "word": " det.",
+          "start": 275.96,
+          "end": 276.32,
+          "probability": 0.885657787322998
+        }
+      ]
+    },
+    {
+      "id": 116,
+      "seek": 25788,
+      "start": 277.0,
+      "end": 277.9,
+      "text": " Hvor er du g\u00e5et i folkeh\u00f8jde?",
+      "tokens": [
+        51264, 389, 8453, 1189, 1581, 22098, 302, 741, 3339, 330, 71, 6715, 73,
+        1479, 30, 51364
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " Hvor",
+          "start": 277.0,
+          "end": 277.42,
+          "probability": 0.7631210386753082
+        },
+        {
+          "word": " er",
+          "start": 277.42,
+          "end": 277.52,
+          "probability": 0.2863939106464386
+        },
+        {
+          "word": " du",
+          "start": 277.52,
+          "end": 277.56,
+          "probability": 0.803446352481842
+        },
+        {
+          "word": " g\u00e5et",
+          "start": 277.56,
+          "end": 277.66,
+          "probability": 0.6243115663528442
+        },
+        {
+          "word": " i",
+          "start": 277.66,
+          "end": 277.84,
+          "probability": 0.1307591050863266
+        },
+        {
+          "word": " folkeh\u00f8jde?",
+          "start": 277.84,
+          "end": 277.9,
+          "probability": 0.4458055893580119
+        }
+      ]
+    },
+    {
+      "id": 117,
+      "seek": 25788,
+      "start": 278.38,
+      "end": 278.64,
+      "text": " K.",
+      "tokens": [51364, 591, 13, 51464],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " K.",
+          "start": 278.38,
+          "end": 278.64,
+          "probability": 0.2898896634578705
+        }
+      ]
+    },
+    {
+      "id": 118,
+      "seek": 25788,
+      "start": 280.46000000000004,
+      "end": 281.98,
+      "text": " Han hedder Rasmus Meyer.",
+      "tokens": [51464, 7820, 33653, 1068, 497, 14774, 301, 47207, 13, 51564],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " Han",
+          "start": 280.46000000000004,
+          "end": 280.92,
+          "probability": 0.5453534126281738
+        },
+        {
+          "word": " hedder",
+          "start": 280.92,
+          "end": 281.38,
+          "probability": 0.8427818417549133
+        },
+        {
+          "word": " Rasmus",
+          "start": 281.38,
+          "end": 281.72,
+          "probability": 0.9602260986963908
+        },
+        {
+          "word": " Meyer.",
+          "start": 281.72,
+          "end": 281.98,
+          "probability": 0.25357916951179504
+        }
+      ]
+    },
+    {
+      "id": 119,
+      "seek": 25788,
+      "start": 283.58000000000004,
+      "end": 285.86,
+      "text": " Han var selvf\u00f8lgelig god til at...",
+      "tokens": [
+        51564, 7820, 1374, 33277, 69, 6715, 75, 10345, 328, 3044, 8440, 412,
+        485, 51664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.37181197094316243,
+      "compression_ratio": 1.4827586206896552,
+      "no_speech_prob": 0.14045248925685883,
+      "words": [
+        {
+          "word": " Han",
+          "start": 283.58000000000004,
+          "end": 284.04,
+          "probability": 0.9116858839988708
+        },
+        {
+          "word": " var",
+          "start": 284.04,
+          "end": 284.16,
+          "probability": 0.865041196346283
+        },
+        {
+          "word": " selvf\u00f8lgelig",
+          "start": 284.16,
+          "end": 284.4,
+          "probability": 0.7536911641558012
+        },
+        {
+          "word": " god",
+          "start": 284.4,
+          "end": 284.6,
+          "probability": 0.4974783957004547
+        },
+        {
+          "word": " til",
+          "start": 284.6,
+          "end": 284.7,
+          "probability": 0.9081436395645142
+        },
+        {
+          "word": " at...",
+          "start": 284.7,
+          "end": 285.86,
+          "probability": 0.4518357068300247
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "seek": 28586,
+      "start": 286.36,
+      "end": 288.28,
+      "text": " Man kunne godt m\u00e6rke, at han havde en fagsogn,",
+      "tokens": [
+        50364, 2458, 45335, 35427, 275, 32011, 330, 11, 412, 7276, 26139, 1479,
+        465, 283, 559, 539, 4568, 11, 50464
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " Man",
+          "start": 286.36,
+          "end": 286.68,
+          "probability": 0.7147758603096008
+        },
+        {
+          "word": " kunne",
+          "start": 286.68,
+          "end": 286.9,
+          "probability": 0.7149171233177185
+        },
+        {
+          "word": " godt",
+          "start": 286.9,
+          "end": 287.34,
+          "probability": 0.850117027759552
+        },
+        {
+          "word": " m\u00e6rke,",
+          "start": 287.34,
+          "end": 287.56,
+          "probability": 0.9663554032643636
+        },
+        {
+          "word": " at",
+          "start": 287.66,
+          "end": 287.66,
+          "probability": 0.7364587783813477
+        },
+        {
+          "word": " han",
+          "start": 287.66,
+          "end": 287.7,
+          "probability": 0.07791847735643387
+        },
+        {
+          "word": " havde",
+          "start": 287.7,
+          "end": 287.8,
+          "probability": 0.9197851419448853
+        },
+        {
+          "word": " en",
+          "start": 287.8,
+          "end": 287.88,
+          "probability": 0.4620402157306671
+        },
+        {
+          "word": " fagsogn,",
+          "start": 287.88,
+          "end": 288.28,
+          "probability": 0.33907436579465866
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "seek": 28586,
+      "start": 288.38,
+      "end": 289.86,
+      "text": " men det kom ligesom af...",
+      "tokens": [50464, 1706, 1141, 5207, 11742, 279, 298, 3238, 485, 50564],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " men",
+          "start": 288.38,
+          "end": 288.5,
+          "probability": 0.8684718608856201
+        },
+        {
+          "word": " det",
+          "start": 288.5,
+          "end": 288.64,
+          "probability": 0.8444505333900452
+        },
+        {
+          "word": " kom",
+          "start": 288.64,
+          "end": 288.8,
+          "probability": 0.10985752195119858
+        },
+        {
+          "word": " ligesom",
+          "start": 288.8,
+          "end": 289.14,
+          "probability": 0.8257719477017721
+        },
+        {
+          "word": " af...",
+          "start": 289.14,
+          "end": 289.86,
+          "probability": 0.4447617530822754
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "seek": 28586,
+      "start": 290.52,
+      "end": 291.94,
+      "text": " Det virkede som om, at det han sagde,",
+      "tokens": [
+        50564, 4237, 4107, 74, 4858, 3307, 3406, 11, 412, 1141, 7276, 15274,
+        1479, 11, 50664
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " Det",
+          "start": 290.52,
+          "end": 290.84,
+          "probability": 0.743873655796051
+        },
+        {
+          "word": " virkede",
+          "start": 290.84,
+          "end": 291.12,
+          "probability": 0.8799439469973246
+        },
+        {
+          "word": " som",
+          "start": 291.12,
+          "end": 291.24,
+          "probability": 0.7054091095924377
+        },
+        {
+          "word": " om,",
+          "start": 291.24,
+          "end": 291.34,
+          "probability": 0.8430914282798767
+        },
+        {
+          "word": " at",
+          "start": 291.44,
+          "end": 291.46,
+          "probability": 0.6068342924118042
+        },
+        {
+          "word": " det",
+          "start": 291.46,
+          "end": 291.54,
+          "probability": 0.7080668210983276
+        },
+        {
+          "word": " han",
+          "start": 291.54,
+          "end": 291.66,
+          "probability": 0.7568676471710205
+        },
+        {
+          "word": " sagde,",
+          "start": 291.66,
+          "end": 291.94,
+          "probability": 0.9001854360103607
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "seek": 28586,
+      "start": 291.98,
+      "end": 296.3,
+      "text": " ikke m\u00e5ske improviserede s\u00e5 intuitivt.",
+      "tokens": [
+        50664, 13076, 10254, 82, 330, 39784, 4073, 68, 4719, 16224, 592, 83, 13,
+        50764
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " ikke",
+          "start": 291.98,
+          "end": 292.3,
+          "probability": 0.5436849594116211
+        },
+        {
+          "word": " m\u00e5ske",
+          "start": 292.3,
+          "end": 293.32,
+          "probability": 0.8035783569018046
+        },
+        {
+          "word": " improviserede",
+          "start": 293.32,
+          "end": 294.04,
+          "probability": 0.7925167481104533
+        },
+        {
+          "word": " s\u00e5",
+          "start": 294.04,
+          "end": 294.2,
+          "probability": 0.4375426471233368
+        },
+        {
+          "word": " intuitivt.",
+          "start": 294.2,
+          "end": 296.3,
+          "probability": 0.9417060812314352
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "seek": 28586,
+      "start": 297.3,
+      "end": 298.6,
+      "text": " Han var omgang med nogle pauser,",
+      "tokens": [
+        50864, 7820, 1374, 3406, 19619, 1205, 48713, 2502, 18088, 11, 50964
+      ],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " Han",
+          "start": 297.3,
+          "end": 297.62,
+          "probability": 0.2940270006656647
+        },
+        {
+          "word": " var",
+          "start": 297.62,
+          "end": 297.68,
+          "probability": 0.8976621627807617
+        },
+        {
+          "word": " omgang",
+          "start": 297.68,
+          "end": 297.96,
+          "probability": 0.4729381948709488
+        },
+        {
+          "word": " med",
+          "start": 297.96,
+          "end": 298.06,
+          "probability": 0.6531262397766113
+        },
+        {
+          "word": " nogle",
+          "start": 298.06,
+          "end": 298.22,
+          "probability": 0.8193351626396179
+        },
+        {
+          "word": " pauser,",
+          "start": 298.22,
+          "end": 298.6,
+          "probability": 0.8242429494857788
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "seek": 28586,
+      "start": 298.66,
+      "end": 299.04,
+      "text": " og s\u00e5dan noget.",
+      "tokens": [50964, 5360, 40989, 34574, 13, 51064],
+      "temperature": 0.0,
+      "avg_logprob": -0.32748859807064656,
+      "compression_ratio": 1.364864864864865,
+      "no_speech_prob": 0.15877924859523773,
+      "words": [
+        {
+          "word": " og",
+          "start": 298.66,
+          "end": 298.78,
+          "probability": 0.6236064434051514
+        },
+        {
+          "word": " s\u00e5dan",
+          "start": 298.78,
+          "end": 298.84,
+          "probability": 0.8545262217521667
+        },
+        {
+          "word": " noget.",
+          "start": 298.84,
+          "end": 299.04,
+          "probability": 0.5072293281555176
+        }
+      ]
+    }
+  ],
+  "language": "da"
+}

@@ -1,0 +1,201 @@
+{
+  "default": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "heading",
+        "attrs": {
+          "level": 2
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Trump Test - Short audio"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_00"
+            }
+          },
+          {
+            "type": "text",
+            "text": " These are bad, sick people."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_01"
+            }
+          },
+          {
+            "type": "text",
+            "text": " That was your coup, you know, against you."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_00"
+            }
+          },
+          {
+            "type": "text",
+            "text": " Well, it started right at the beginning."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_01"
+            }
+          },
+          {
+            "type": "text",
+            "text": " Like when Milley's talking about, oh, you were going to try to do a coup."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_00"
+            }
+          },
+          {
+            "type": "text",
+            "text": " They were trying to do that before you even were sworn in. That's right. Trying to overthrow your election. Well, with Milley, let me see that. I'll show you an example. He said that I wanted to attack Iran."
+          },
+          {
+            "type": "timeStampButton",
+            "attrs": {
+              "timestamp": "00:00:25.78"
+            }
+          },
+          {
+            "type": "text",
+            "text": " Isn't it amazing? I have a big pile of papers. This thing just came out. Look. This was him. They presented me this. This is off the record, but they presented me this. This was him. This was the Defense Department and him. We looked at some. This was him. This wasn't done by me. This was him. All sorts of stuff. Pages long. Wait a minute."
+          },
+          {
+            "type": "timeStampButton",
+            "attrs": {
+              "timestamp": "00:00:50.72"
+            }
+          },
+          {
+            "type": "text",
+            "text": " Let's see here. Look at this. Yeah. I just found, isn't that amazing? This totally wins my case, you know. Except it is highly confidential. This is secret information. Look at this."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_01"
+            }
+          },
+          {
+            "type": "text",
+            "text": " You attack. Hillary would print that out all the time. Private email."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_00"
+            }
+          },
+          {
+            "type": "timeStampButton",
+            "attrs": {
+              "timestamp": "00:01:13"
+            }
+          },
+          {
+            "type": "text",
+            "text": " She'd send it to Anthony Weiner for pervert. By the way, isn't that incredible? I was just saying, because we were talking about it. And he said, he wanted to attack Iran. And what?"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_01"
+            }
+          },
+          {
+            "type": "text",
+            "text": " He said it first."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_00"
+            }
+          },
+          {
+            "type": "text",
+            "text": " This was done by the military. Given to me. I think we can probably, right?"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "mention",
+            "attrs": {
+              "id": "SPEAKER_01"
+            }
+          },
+          {
+            "type": "timeStampButton",
+            "attrs": {
+              "timestamp": "00:01:36.94"
+            }
+          },
+          {
+            "type": "text",
+            "text": " We'll have to see. Yeah, we'll have to try to figure out."
+          }
+        ]
+      }
+    ]
+  }
+}
