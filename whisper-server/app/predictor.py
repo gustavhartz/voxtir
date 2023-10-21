@@ -8,12 +8,15 @@ import boto3
 from helper import TO_LANGUAGE_CODE, LANGUAGES, AVAILABLE_WHISPER_MODELS
 import transformers
 import gc
-import pyannote.audio as pyannote
 import torch
 from collections import defaultdict
 import sys
 from json_logger import logger
 import torchaudio
+from simple_diarizer.diarizer import Diarizer
+from simple_diarizer.utils import (
+    convert_wavfile,
+)
 
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
@@ -79,7 +82,6 @@ def transformation() -> flask.Response:
 
     logger.info(f"Python version: {sys.version_info}")
     logger.info(f"Transformers version: {transformers.__version__}")
-    logger.info(f"Pyannote version: {pyannote.__version__}")
 
     if flask.request.content_type == JSON_TYPE:
         try:
@@ -167,33 +169,32 @@ def transformation() -> flask.Response:
         torch.cuda.empty_cache()
         gc.collect()
         torch.cuda.empty_cache()
-        logger.info("Resources cleaned up. Loading speaker diarization model")
+        logger.info(
+            "Resources cleaned up. Loading and running speaker diarization model"
+        )
         # Run speaker diarization
-        pipeline = pyannote.Pipeline.from_pretrained(
-            "pyannote/speaker-diarization-3.0", use_auth_token=HF_AUTH_TOKEN
+        logger.info(f"processing {filename} with ffmpeg for speaker diarization")
+        wav_file = convert_wavfile(filename, filename + ".wav")
+        logger.info(f"Speaker diarization of {wav_file} done")
+        diar = Diarizer(
+            embed_model="ecapa",  # supported types: ['xvec', 'ecapa']
+            cluster_method="sc",  # supported types: ['ahc', 'sc']
+            window=5,  # size of window to extract embeddings (in seconds)
+            period=1.5,  # hop of window (in seconds)
         )
-        logger.info("Speaker diarization model loaded. Setting device")
-        pipeline.to(device)
-        logger.info("Preloading audio")
-        waveform, sample_rate = torchaudio.load(filename)
-        logger.info(f"Running speaker diarization on {filename}")
-        diarization = pipeline(
-            {"waveform": waveform, "sample_rate": sample_rate},
-            num_speakers=speaker_count,
-        )
+        logger.info("Loaded speaker diarization model")
+        segments = diar.diarize(wav_file, num_speakers=2)
         logger.info(f"Speaker diarization of {filename} complete")
 
         # Create the result
         result = defaultdict(list)
-        for idx, (turn, _, speaker) in enumerate(
-            diarization.itertracks(yield_label=True)
-        ):
+        for idx, (start, end, label, start_sample, end_sample) in enumerate(segments):
             result["segments"].append(
                 {
-                    "start": turn.start,
-                    "end": turn.end,
+                    "start": start,
+                    "end": end,
                     "idx": idx,
-                    "speaker": speaker,
+                    "speaker": label,
                 }
             )
         # Dump the result to a file
