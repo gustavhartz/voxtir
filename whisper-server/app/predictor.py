@@ -134,6 +134,7 @@ def transformation() -> flask.Response:
         s3_client.download_file(bucket_name, audio_input_key, filename)
         # Whisper model
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Setting device to {device}")
         logger.info(f"Loding HF model {model}")
         pipe = transformers.pipeline(
             "automatic-speech-recognition",
@@ -172,8 +173,7 @@ def transformation() -> flask.Response:
             "pyannote/speaker-diarization-3.0", use_auth_token=HF_AUTH_TOKEN
         )
         logger.info("Speaker diarization model loaded. Setting device")
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        pipeline = pipeline.to(device)
+        pipeline.to(device)
         logger.info("Preloading audio")
         waveform, sample_rate = torchaudio.load(filename)
         logger.info(f"Running speaker diarization on {filename}")
