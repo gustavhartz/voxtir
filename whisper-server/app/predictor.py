@@ -6,9 +6,9 @@ import tempfile
 import flask
 import boto3
 from helper import TO_LANGUAGE_CODE, LANGUAGES, AVAILABLE_WHISPER_MODELS
-from transformers import pipeline as TransformersPipeline
+import transformers
 import gc
-from pyannote.audio import Pipeline as PyannotePipeline
+import pyannote.audio as pyannote
 import torch
 from collections import defaultdict
 import sys
@@ -77,6 +77,10 @@ def transformation() -> flask.Response:
 
     input_dict = None
 
+    logger.info(f"Python version: {sys.version_info}")
+    logger.info(f"Transformers version: {transformers.__version__}")
+    logger.info(f"Pyannote version: {pyannote.__version__}")
+
     if flask.request.content_type == JSON_TYPE:
         try:
             input_dict = json.loads(data)
@@ -128,12 +132,10 @@ def transformation() -> flask.Response:
         os.close(fd)
         logger.info(f"Downloading s3://{bucket_name}/{audio_input_key} to {filename}")
         s3_client.download_file(bucket_name, audio_input_key, filename)
-        logger.info(f"Loading model {model}")
-
         # Whisper model
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        logger.info(f"Loding model {model}")
-        pipe = TransformersPipeline(
+        logger.info(f"Loding HF model {model}")
+        pipe = transformers.pipeline(
             "automatic-speech-recognition",
             model=model,
             chunk_length_s=30,
@@ -166,7 +168,7 @@ def transformation() -> flask.Response:
         torch.cuda.empty_cache()
         logger.info("Resources cleaned up. Loading speaker diarization model")
         # Run speaker diarization
-        pipeline = PyannotePipeline.from_pretrained(
+        pipeline = pyannote.Pipeline.from_pretrained(
             "pyannote/speaker-diarization-3.0", use_auth_token=HF_AUTH_TOKEN
         )
         logger.info("Speaker diarization model loaded. Setting device")
