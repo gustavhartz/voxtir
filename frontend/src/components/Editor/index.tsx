@@ -61,10 +61,10 @@ function Editor(props: EditorProps): JSX.Element {
         {editorSyncState.isAuthenticated && editor !== null && (
           <div className="flex flex-col w-full">
             <EditorContent
-              className="w-full h-full p-8 overflow-y-scroll"
+              className="w-full h-full p-4 overflow-y-scroll"
               editor={editor}
             />
-            <div className="fixed bottom-20 left-70 bg-gray-100 rounded-md shadow-md">
+            <div className="px-4 border-t-1 mb-2 border-gray-100">
               <MenuBar editor={editor} />
             </div>
             <div className="w-full">

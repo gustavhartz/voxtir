@@ -48,30 +48,30 @@ function DocumentEditor({ token }: { token: string }): JSX.Element {
         documentId: documentID,
       },
     })
-      .then((res) => {
-        if (res.data?.getPresignedUrlForAudioFile) {
-          const expirationTime = new Date(
-            // Convert from seconds to milliseconds
-            res.data?.getPresignedUrlForAudioFile?.expiresAtUnixSeconds * 1000
-          );
-          dispatch(
-            setTrack({
-              presignedFileURL: res.data?.getPresignedUrlForAudioFile?.url,
-              presignedFileURLExpiresAtUnixMS: expirationTime.getTime(),
-              documentId: documentID,
-            })
-          );
-        } else {
-          navigate('/');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        navigate('/');
-      });
+      // .then((res) => {
+      //   if (res.data?.getPresignedUrlForAudioFile) {
+      //     const expirationTime = new Date(
+      //       // Convert from seconds to milliseconds
+      //       res.data?.getPresignedUrlForAudioFile?.expiresAtUnixSeconds * 1000
+      //     );
+      //     dispatch(
+      //       setTrack({
+      //         presignedFileURL: res.data?.getPresignedUrlForAudioFile?.url,
+      //         presignedFileURLExpiresAtUnixMS: expirationTime.getTime(),
+      //         documentId: documentID,
+      //       })
+      //     );
+      //   } else {
+      //     navigate('/');
+      //   }
+      // })
+      // .catch((err) => {
+      //   console.error(err);
+      //   navigate('/');
+      // });
   }
 
-  if (loading) return <div>Loading...</div>;
+  if (!loading) return <div>Loading...</div>;
 
   return (
     <div className="w-full h-full">

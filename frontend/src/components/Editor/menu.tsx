@@ -46,16 +46,16 @@ const MenuBar = ({ editor }: MenuBarProps) => {
   ];
 
   return (
-    <div className="">
+    <div className="gap-4 py-2 flex flex-row items-center">
       {items.map((item, _) => (
         <button
           key={item.title}
           onClick={() => item.action()}
-          className={`p-2 mx-1 ${
-            item.isActive() ? 'font-semibold' : 'font-normal'
+          className={`text-3xl hover:opacity-100 transition-opacity ${
+            item.isActive() ? 'opacity-100' : 'opacity-50'
           }`}
         >
-          {item.title}
+          <item.icon />
         </button>
       ))}
     </div>
