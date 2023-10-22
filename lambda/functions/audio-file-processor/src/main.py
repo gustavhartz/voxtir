@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     Returns:
         _type_: _description_
     """
-    MAX_LENGTH_SECONDS = 60 * 60 * 3  # 3 hours
+    MAX_LENGTH_SECONDS = 60 * 60 * 4  # 4 hours
     N = 5
     random_string = "".join(random.choices(string.ascii_letters, k=N))
 
