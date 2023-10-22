@@ -1,6 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token.tsx';
 import Editor from '../components/Editor/index.tsx';
@@ -42,36 +41,36 @@ function DocumentEditor({ token }: { token: string }): JSX.Element {
     trackDocumentId !== documentID ||
     presignedFileURLExpiresAtUnixMS < requiredExpirationTime.getTime()
   ) {
-    console.log('Fetching new presigned URL');
     createProjectMutation({
       variables: {
         documentId: documentID,
       },
     })
-      // .then((res) => {
-      //   if (res.data?.getPresignedUrlForAudioFile) {
-      //     const expirationTime = new Date(
-      //       // Convert from seconds to milliseconds
-      //       res.data?.getPresignedUrlForAudioFile?.expiresAtUnixSeconds * 1000
-      //     );
-      //     dispatch(
-      //       setTrack({
-      //         presignedFileURL: res.data?.getPresignedUrlForAudioFile?.url,
-      //         presignedFileURLExpiresAtUnixMS: expirationTime.getTime(),
-      //         documentId: documentID,
-      //       })
-      //     );
-      //   } else {
-      //     navigate('/');
-      //   }
-      // })
-      // .catch((err) => {
-      //   console.error(err);
-      //   navigate('/');
-      // });
+      .then((res) => {
+        console.log(res);
+        if (res.data?.getPresignedUrlForAudioFile) {
+          const expirationTime = new Date(
+            // Convert from seconds to milliseconds
+            res.data?.getPresignedUrlForAudioFile?.expiresAtUnixSeconds * 1000
+          );
+          dispatch(
+            setTrack({
+              presignedFileURL: res.data?.getPresignedUrlForAudioFile?.url,
+              presignedFileURLExpiresAtUnixMS: expirationTime.getTime(),
+              documentId: documentID,
+            })
+          );
+        } else {
+          navigate('/');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate('/');
+      });
   }
 
-  if (!loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="w-full h-full">
