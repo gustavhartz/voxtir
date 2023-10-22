@@ -236,10 +236,7 @@ export class TranscriptionJobHandler {
         document.id,
         document.audioFileURL!,
         {
-          model:
-            document.language === 'english' || document.language === 'en'
-              ? 'openai/whisper-medium'
-              : 'openai/whisper-large-v2',
+          model: 'openai/whisper-medium',
           language: document.language as keyof typeof LanguageCodePairs,
         },
         this.logger
