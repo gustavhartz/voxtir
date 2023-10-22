@@ -12,7 +12,6 @@ import torch
 from collections import defaultdict
 import sys
 from json_logger import logger
-import torchaudio
 from simple_diarizer.diarizer import Diarizer
 from simple_diarizer.utils import (
     convert_wavfile,
@@ -188,13 +187,13 @@ def transformation() -> flask.Response:
 
         # Create the result
         result = defaultdict(list)
-        for idx, (start, end, label, start_sample, end_sample) in enumerate(segments):
+        for idx, element in enumerate(segments):
             result["segments"].append(
                 {
-                    "start": start,
-                    "end": end,
+                    "start": element["start"],
+                    "end": element["end"],
                     "idx": idx,
-                    "speaker": label,
+                    "speaker": element["label"],
                 }
             )
         # Dump the result to a file
