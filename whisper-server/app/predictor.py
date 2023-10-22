@@ -188,10 +188,10 @@ def transformation() -> flask.Response:
         for idx, element in enumerate(segments):
             result["segments"].append(
                 {
-                    "start": element["start"],
-                    "end": element["end"],
+                    "start": float(element["start"]),
+                    "end": float(element["end"]),
                     "idx": idx,
-                    "speaker": element["label"],
+                    "speaker": f"Speaker{int(element['label'])}",
                 }
             )
         # Dump the result to a file
