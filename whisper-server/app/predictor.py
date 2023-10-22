@@ -104,7 +104,7 @@ def transformation() -> flask.Response:
     model_options = input_dict["modelOptions"]
     model = model_options.get("model")
     language = model_options.get("language", None)
-    speaker_count = model_options.get("speakerCount", None)
+    speaker_count = model_options.get("speakerCount", 2)
 
     language = TO_LANGUAGE_CODE.get(language, language)
 
