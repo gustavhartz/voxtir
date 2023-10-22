@@ -3,4 +3,4 @@ flask
 gunicorn
 python-json-logger==2.0.7
 transformers==4.34.1
-simple-diarizer==0.0.13
+simple-diarizer

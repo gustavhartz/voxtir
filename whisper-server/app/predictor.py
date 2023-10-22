@@ -180,7 +180,7 @@ def transformation() -> flask.Response:
             cluster_method="sc",  # supported types: ['ahc', 'sc']
         )
         logger.info("Loaded speaker diarization model")
-        segments = diar.diarize(wav_file, num_speakers=2)
+        segments = diar.diarize(wav_file, num_speakers=speaker_count)
         logger.info(f"Speaker diarization of {filename} complete")
 
         # Create the result
