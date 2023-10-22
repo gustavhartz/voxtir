@@ -94,7 +94,7 @@ async function main(): Promise<void> {
     }
   });
 
-  const fileUploadSizeLimit = 200 * 10 ** 6; // 200MB
+  const fileUploadSizeLimit = 2000 * 10 ** 6; // 2GB
   const gqlServer = await getGqlServer(httpServer);
   expressApp.use(
     '/graphql',
