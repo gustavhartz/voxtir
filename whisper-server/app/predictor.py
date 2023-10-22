@@ -174,12 +174,10 @@ def transformation() -> flask.Response:
         # Run speaker diarization
         logger.info(f"processing {filename} with ffmpeg for speaker diarization")
         wav_file = convert_wavfile(filename, filename + ".wav")
-        logger.info(f"Speaker diarization of {wav_file} done")
+        logger.info("Loading speaker diarization")
         diar = Diarizer(
             embed_model="ecapa",  # supported types: ['xvec', 'ecapa']
             cluster_method="sc",  # supported types: ['ahc', 'sc']
-            window=5,  # size of window to extract embeddings (in seconds)
-            period=1.5,  # hop of window (in seconds)
         )
         logger.info("Loaded speaker diarization model")
         segments = diar.diarize(wav_file, num_speakers=2)
