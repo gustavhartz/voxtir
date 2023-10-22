@@ -33,7 +33,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     'audio/x-caf',
     'audio/ac3',
   ];
-  const maxSizeInMB = 200; // Specify the max size in MB here
+  const maxSizeInMB = 2000; // Specify the max size in MB here
   const { fileUrl, file, fileName, fileSize, handleFileChange } = useFileUpload(
     supportedAudioFileTypes,
     maxSizeInMB

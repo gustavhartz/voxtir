@@ -1,5 +1,5 @@
 ARG TARGETPLATFORM=linux/amd64
-FROM nvidia/cuda:12.2.0-base-ubuntu20.04
+FROM nvidia/cuda:12.2.2-base-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC 
@@ -28,14 +28,6 @@ ENV PATH="/app:${PATH}"
 RUN mkdir /app
 WORKDIR /app
 RUN pip3 install --upgrade pip
-RUN pip install git+https://github.com/openai/whisper.git
-# Pyannote
-RUN pip install pyannote.audio
-#TODO: Download pyannote model save time
 COPY requirements.txt /app
 RUN pip3 install -r requirements.txt
 COPY app /app
-
-# Add Whipser image and set env to determine which model is available
-
-ENV AVAILABLE_WHISPER_MODELS='["large", "medium", "small"]'

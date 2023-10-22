@@ -238,8 +238,8 @@ export class TranscriptionJobHandler {
         {
           model:
             document.language === 'english' || document.language === 'en'
-              ? 'medium'
-              : 'large',
+              ? 'openai/whisper-medium'
+              : 'openai/whisper-large-v2',
           language: document.language as keyof typeof LanguageCodePairs,
         },
         this.logger

@@ -5,22 +5,23 @@ import json
 import tempfile
 import flask
 import boto3
-import whisper
-from whisper.tokenizer import TO_LANGUAGE_CODE, LANGUAGES
+from helper import TO_LANGUAGE_CODE, LANGUAGES, AVAILABLE_WHISPER_MODELS
+import transformers
 import gc
-from pyannote.audio import Pipeline
 import torch
 from collections import defaultdict
 import sys
 from json_logger import logger
-import torchaudio
+from simple_diarizer.diarizer import Diarizer
+from simple_diarizer.utils import (
+    convert_wavfile,
+)
 
 JSON_TYPE = "application/json"
 TEXT_TYPE = "text/plain"
 try:
     ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
     HF_AUTH_TOKEN = os.environ.get("HF_AUTH_TOKEN")
-    AVAILABLE_WHISPER_MODELS = json.loads(os.environ.get("AVAILABLE_WHISPER_MODELS"))
 except KeyError as e:
     logger.error(f"Missing environment variable {e}")
     raise e
@@ -78,6 +79,9 @@ def transformation() -> flask.Response:
 
     input_dict = None
 
+    logger.info(f"Python version: {sys.version_info}")
+    logger.info(f"Transformers version: {transformers.__version__}")
+
     if flask.request.content_type == JSON_TYPE:
         try:
             input_dict = json.loads(data)
@@ -100,10 +104,11 @@ def transformation() -> flask.Response:
     model_options = input_dict["modelOptions"]
     model = model_options.get("model")
     language = model_options.get("language", None)
-    speaker_count = model_options.get("speakerCount", None)
+    speaker_count = model_options.get("speakerCount", 2)
 
     language = TO_LANGUAGE_CODE.get(language, language)
-    if language and (language not in TO_LANGUAGE_CODE) and (language not in LANGUAGES):
+
+    if language and (language not in LANGUAGES.keys()):
         logger.error(
             f"Language {language} not supported. Supported languages: {TO_LANGUAGE_CODE}"
         )
@@ -128,14 +133,23 @@ def transformation() -> flask.Response:
         os.close(fd)
         logger.info(f"Downloading s3://{bucket_name}/{audio_input_key} to {filename}")
         s3_client.download_file(bucket_name, audio_input_key, filename)
-        logger.info(f"Loading model {model}")
-
-        # The root is relative to the current working directory in docker
-        logger.info(f"Loding model {model}")
-        model = whisper.load_model(model)
+        # Whisper model
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Setting device to {device}")
+        logger.info(f"Loding HF model {model}")
+        pipe = transformers.pipeline(
+            "automatic-speech-recognition",
+            model=model,
+            chunk_length_s=30,
+            device=device,
+        )
         logger.info(f"Model {model} loaded")
         logger.info(f"Transcribing {filename}")
-        result = model.transcribe(filename, language=language, word_timestamps=True)
+        result = pipe(
+            filename,
+            generate_kwargs={"language": f"<|{language}|>", "task": "transcribe"},
+            return_timestamps=True,
+        )
         logger.info(f"Transcription of {filename} complete")
         # Dump the result to a file
         WHISPER_FILE_NAME = "whisper.json"
@@ -148,40 +162,36 @@ def transformation() -> flask.Response:
         s3_client.upload_file(WHISPER_FILE_NAME, bucket_name, speech_to_text_output_key)
 
         # Cleanup of resources
-        logger.info(f"Cleaning up resources")
+        logger.info("Cleaning up resources")
         del model
         del result
         torch.cuda.empty_cache()
         gc.collect()
         torch.cuda.empty_cache()
-        logger.info(f"Resources cleaned up. Loading speaker diarization model")
+        logger.info(
+            "Resources cleaned up. Loading and running speaker diarization model"
+        )
         # Run speaker diarization
-        pipeline = Pipeline.from_pretrained(
-            "pyannote/speaker-diarization-3.0", use_auth_token=HF_AUTH_TOKEN
+        logger.info(f"processing {filename} with ffmpeg for speaker diarization")
+        wav_file = convert_wavfile(filename, filename + ".wav")
+        logger.info("Loading speaker diarization")
+        diar = Diarizer(
+            embed_model="ecapa",  # supported types: ['xvec', 'ecapa']
+            cluster_method="sc",  # supported types: ['ahc', 'sc']
         )
-        logger.info(f"Speaker diarization model loaded. Setting device")
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        pipeline = pipeline.to(device)
-        logger.info("Preloading audio")
-        waveform, sample_rate = torchaudio.load(filename)
-        logger.info(f"Running speaker diarization on {filename}")
-        diarization = pipeline(
-            {"waveform": waveform, "sample_rate": sample_rate},
-            num_speakers=speaker_count,
-        )
+        logger.info("Loaded speaker diarization model")
+        segments = diar.diarize(wav_file, num_speakers=speaker_count)
         logger.info(f"Speaker diarization of {filename} complete")
 
         # Create the result
         result = defaultdict(list)
-        for idx, (turn, _, speaker) in enumerate(
-            diarization.itertracks(yield_label=True)
-        ):
+        for idx, element in enumerate(segments):
             result["segments"].append(
                 {
-                    "start": turn.start,
-                    "end": turn.end,
+                    "start": element["start"],
+                    "end": element["end"],
                     "idx": idx,
-                    "speaker": speaker,
+                    "speaker": element["label"],
                 }
             )
         # Dump the result to a file

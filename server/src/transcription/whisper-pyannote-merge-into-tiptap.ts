@@ -10,29 +10,13 @@ import {
   TipTapTransformerDocument,
 } from '../types/tiptap-editor.js';
 
-interface WhisperSegment {
-  id: number;
-  seek: number;
-  start: number;
-  end: number;
+interface WhisperChunk {
+  timestamp: [number, number?];
   text: string;
-  tokens: number[];
-  temperature: number;
-  avg_logprob: number;
-  compression_ratio: number;
-  no_speech_prob: number;
-  words: WhisperWordTimestamp[];
 }
 
-interface WhisperWordTimestamp {
-  word: string;
-  start: number;
-  end: number;
-  probability: number;
-}
-
-interface WhisperTranscript {
-  segments: WhisperSegment[];
+export interface WhisperTranscript {
+  chunks?: WhisperChunk[];
   text: string;
 }
 
@@ -217,11 +201,12 @@ export class WhisperPyannoteMerger {
       this.timestampEveryApproximateSeconds;
 
     this.logger.info(
-      `Creating speaker change transcription document based on ${pyannoteTranscript.segments.length} pyannote segments and ${whisperTranscript.segments.length} whisper segments`
+      `Creating speaker change transcription document based on ${pyannoteTranscript.segments.length} pyannote segments and ${whisperTranscript.chunks?.length} whisper segments`
     );
     if (
       pyannoteTranscript.segments.length === 0 ||
-      whisperTranscript.segments.length <= 1
+      !whisperTranscript.chunks ||
+      whisperTranscript.text === ''
     ) {
       this.logger.warn(
         'ML Pipeline data is not sufficient to create a transcription. Probably an error'
@@ -253,17 +238,21 @@ export class WhisperPyannoteMerger {
 
     // Text is the primary focus of the whisper transcript, so we iterate over the whisper transcript
     // and add the pyannote speaker changes and timestamps to improve the whisper transcript
-    while (whisperIdx < whisperTranscript.segments.length) {
-      const whisperSegment = whisperTranscript.segments[whisperIdx];
+    while (whisperIdx < whisperTranscript.chunks.length) {
+      const whisperSegment = whisperTranscript.chunks[whisperIdx];
+      const whisperSegmentSpan = getChunkSpan(
+        whisperIdx,
+        whisperTranscript.chunks
+      );
 
       // Identify potential speakers
       const potentialSpeakers = intervalTree
-        .search(whisperSegment.start, whisperSegment.end)
+        .search(whisperSegmentSpan.start, whisperSegmentSpan.end)
         .map((interval) => interval.data);
 
       const bestSpeaker = this.getBestSpeakerMatch(
         potentialSpeakers,
-        whisperSegment
+        whisperSegmentSpan
       );
 
       if (bestSpeaker && bestSpeaker !== prevSpeaker) {
@@ -282,17 +271,17 @@ export class WhisperPyannoteMerger {
       if (
         (setTimestamp ||
           lastTimestampAt <
-            whisperSegment.end - timestampEveryApproximateSeconds) &&
+            whisperSegmentSpan.end - timestampEveryApproximateSeconds) &&
         lastTimestampAt + minimumTimeBetweenTimestampsSeconds <
-          whisperSegment.end
+          whisperSegmentSpan.end
       ) {
         currentParagraph.content?.push(
           WhisperPyannoteMerger.getTimeStampTemplate(
-            convertSecondsToTimestamp(whisperSegment.start)
+            convertSecondsToTimestamp(whisperSegmentSpan.start)
           )
         );
         setTimestamp = false;
-        lastTimestampAt = whisperSegment.start;
+        lastTimestampAt = whisperSegmentSpan.start;
       }
 
       // Empty text nodes are not allowed in the TipTapJSONDoc
@@ -303,6 +292,7 @@ export class WhisperPyannoteMerger {
       }
       whisperIdx++;
     }
+    TipTapJSONDoc.default.content.push(currentParagraph);
     return TipTapJSONDoc;
   }
 
@@ -316,17 +306,18 @@ export class WhisperPyannoteMerger {
    */
   getBestSpeakerMatch(
     potentialSpeakers: PyannoteSegment[],
-    whisperSegment: WhisperSegment
+    whisperSegmentSpan: TimeSpan
   ): string | null {
     let maxOverlap = 0;
     let bestSpeaker = null;
     let bestSpeakerLength = 0;
     for (const potentialSpeaker of potentialSpeakers) {
       const overlapLength =
-        Math.min(potentialSpeaker.end, whisperSegment.end) -
-        Math.max(potentialSpeaker.start, whisperSegment.start);
+        Math.min(potentialSpeaker.end, whisperSegmentSpan.end) -
+        Math.max(potentialSpeaker.start, whisperSegmentSpan.start);
       const overlapPercentage = Math.min(
-        1e-3 + overlapLength / (whisperSegment.end - whisperSegment.start),
+        1e-3 +
+          overlapLength / (whisperSegmentSpan.end - whisperSegmentSpan.start),
         1
       );
 
@@ -348,3 +339,20 @@ export class WhisperPyannoteMerger {
     return bestSpeaker;
   }
 }
+interface TimeSpan {
+  start: number;
+  end: number;
+}
+const getChunkSpan = (chunkIdx: number, chunks: WhisperChunk[]): TimeSpan => {
+  // In case we don't have an end timestamp, we assume the chunk is 5 seconds long
+  const defaultChunkLength = 5;
+  if (chunkIdx < 0 || chunkIdx >= chunks.length) {
+    throw new Error('Invalid chunk index');
+  }
+  const start = chunks[chunkIdx].timestamp[0];
+  let end = chunks[chunkIdx].timestamp[1] ?? start + defaultChunkLength;
+  if (!chunks[chunkIdx].timestamp[1] && chunkIdx + 1 < chunks.length) {
+    end = chunks[chunkIdx + 1].timestamp[0];
+  }
+  return { start, end };
+};

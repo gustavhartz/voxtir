@@ -11,6 +11,7 @@ module.exports = {
     '**/*.local.*',
     '.eslintrc.cjs',
     '*config.ts',
+    'jest.setup.ts'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
