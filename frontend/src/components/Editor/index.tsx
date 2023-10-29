@@ -1,21 +1,11 @@
 import { HocuspocusProvider } from '@hocuspocus/provider';
-import Collaboration from '@tiptap/extension-collaboration';
-import { Color } from '@tiptap/extension-color';
-import Document from '@tiptap/extension-document';
-import Heading from '@tiptap/extension-heading';
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
-import Mention from '@tiptap/extension-mention';
-import Paragraph from '@tiptap/extension-paragraph';
-import Placeholder from '@tiptap/extension-placeholder';
-import Text from '@tiptap/extension-text';
-import TextStyle from '@tiptap/extension-text-style';
 import { EditorContent, useEditor } from '@tiptap/react';
 import React, { useState } from 'react';
 
 import Drawer from '../Drawer';
-import suggestion from '../Extensions/Custom/Speakers/Suggestion';
-import TrackTimeStamp from '../Extensions/Custom/TimeStamp';
 import Track from '../Track';
+import { getExtensions } from './extensions';
+import MenuBar from './menu';
 
 const DOMAIN = import.meta.env.VITE_BACKEND_WS_URL_BASE;
 
@@ -57,34 +47,7 @@ function Editor(props: EditorProps): JSX.Element {
     },
   });
   const editor = useEditor({
-    extensions: [
-      Document,
-      Paragraph,
-      Text,
-      HorizontalRule,
-      Heading,
-      Color,
-      TextStyle,
-      Collaboration.configure({
-        document: provider.document,
-      }),
-      Placeholder.configure({
-        placeholder: 'Start typing here...',
-        emptyNodeClass:
-          'first:before:h-0 first:before:text-gray-400 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
-      }),
-      Mention.configure({
-        HTMLAttributes: {
-          class:
-            'border-black rounded-md break-clone py-0.5 px-1.5 p-1 bg-blue-500 text-white',
-        },
-        suggestion,
-      }),
-      TrackTimeStamp.configure({
-        timestamp: '00:00:00',
-        show: false,
-      }),
-    ],
+    extensions: getExtensions(provider),
     editorProps: {
       attributes: {
         class: `rounded-lg min-w-full h-full min-h-screen prose sm:prose-base lg:prose-lg focus:outline-none`,
@@ -95,12 +58,15 @@ function Editor(props: EditorProps): JSX.Element {
   return (
     <div className="w-full h-full flex flex-row">
       <div className="flex flex-row w-full">
-        {editorSyncState.isAuthenticated && (
+        {editorSyncState.isAuthenticated && editor !== null && (
           <div className="flex flex-col w-full">
             <EditorContent
-              className="w-full h-full p-8 overflow-y-scroll"
+              className="w-full h-full p-4 overflow-y-scroll"
               editor={editor}
             />
+            <div className="px-4 border-t-1 mb-2 border-gray-100">
+              <MenuBar editor={editor} />
+            </div>
             <div className="w-full">
               <Track />
             </div>

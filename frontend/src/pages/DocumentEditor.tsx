@@ -1,6 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import withAccessToken from '../components/Auth/with-access-token.tsx';
 import Editor from '../components/Editor/index.tsx';
@@ -42,13 +41,13 @@ function DocumentEditor({ token }: { token: string }): JSX.Element {
     trackDocumentId !== documentID ||
     presignedFileURLExpiresAtUnixMS < requiredExpirationTime.getTime()
   ) {
-    console.log('Fetching new presigned URL');
     createProjectMutation({
       variables: {
         documentId: documentID,
       },
     })
       .then((res) => {
+        console.log(res);
         if (res.data?.getPresignedUrlForAudioFile) {
           const expirationTime = new Date(
             // Convert from seconds to milliseconds

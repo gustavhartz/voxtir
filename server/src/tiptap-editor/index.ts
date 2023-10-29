@@ -1,13 +1,16 @@
 import { TiptapTransformer } from '@hocuspocus/transformer';
+import Bold from '@tiptap/extension-bold';
 import { Color } from '@tiptap/extension-color';
 import Document from '@tiptap/extension-document';
 import Heading from '@tiptap/extension-heading';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
+import Italic from '@tiptap/extension-italic';
 import Mention from '@tiptap/extension-mention';
 import Paragraph from '@tiptap/extension-paragraph';
 import Placeholder from '@tiptap/extension-placeholder';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
+import Underline from '@tiptap/extension-underline';
 import { generateHTML } from '@tiptap/html';
 import * as Y from 'yjs';
 
@@ -16,6 +19,9 @@ import { Doc, TipTapTransformerDocument } from '../types/tiptap-editor.js';
 import TrackTimeStamp from './timestamp.js';
 
 const extensions = [
+  Bold,
+  Italic,
+  Underline,
   Document,
   Paragraph,
   Text,
