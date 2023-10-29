@@ -58,6 +58,7 @@ model TranscriptionJob {
 }
 
 enum TranscriptionProcessStatus {
+    PENDING_AUDIO_FILE_UPLOAD
     AUDIO_PREPROCESSOR_JOB_PENDING
     QUEUED
     TRANSCRIPTION_JOB_RUNNING
