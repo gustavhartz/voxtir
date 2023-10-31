@@ -100,15 +100,16 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
           transcriptionType: transcriptionType,
           language: language,
           speakerCount: speakerCount,
-          fileInput: {
-            file: file,
-            fileContentLength: file.size,
-          },
+          mimeType: file.type,
         },
       });
       const documentId = documentResponse.data?.createDocument;
 
-      if (!documentId || documentResponse.errors) {
+      if (
+        !documentId ||
+        documentResponse.errors ||
+        !documentResponse.data?.createDocument.url
+      ) {
         toast(`${documentResponse.errors}`, {
           type: 'error',
           toastId: 'createDocumentFailure',
@@ -116,6 +117,15 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
         });
         return;
       }
+      // Upload the file to s3 with presigned url
+      await fetch(documentResponse.data?.createDocument.url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        body: file,
+      });
+
       refetchDocuments();
       onClose();
     } catch (err) {
@@ -133,7 +143,7 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
     <>
       <ToastContainer />
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="p-6 sm:rounded-lg w-full md:w-4/5 lg:w-3/5 xl:w-2/5 max-h-full overflow-auto">
+        <div className="p-6 sm:rounded-lg w-full md:w-4/5 lg:w-3/5 xl:w-2/5 max-h-full overflow-auto">
           <div
             onClick={(e) => e.stopPropagation()}
             className="cursor-default overflow-y-scroll bg-white p-6 sm:rounded-lg shadow-lg !w-full h-full sm:w-2/3 md:w-3/5 sm:h-fit relative z-60"
@@ -241,17 +251,22 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
                 type="number"
                 id="speakerCount"
                 value={speakerCount}
-                onChange={(e) => setSpeakerCount(parseInt(e.target.value) || '')}
+                onChange={(e) =>
+                  setSpeakerCount(parseInt(e.target.value) || '')
+                }
                 className="w-full mt-2 px-2 py-2 text-gray-900 outline-gray-300 font-normal text-md outline rounded-md focus:outline-gray-400 focus:outline-2"
               />
             </div>
             <div className="mt-4">
-              <label htmlFor="transcriptionType" className="block font-semibold">
+              <label
+                htmlFor="transcriptionType"
+                className="block font-semibold"
+              >
                 Transcription Type
               </label>
               <p className="text-gray-400 pb-2">
-                Choose whether you want to automatically make the transcription or
-                manually.
+                Choose whether you want to automatically make the transcription
+                or manually.
               </p>
               <select
                 id="transcriptionType"
@@ -279,7 +294,11 @@ const DocumentCreationModal: React.FC<DocumentCreationModalProps> = ({
             <button
               onClick={handleSubmit}
               disabled={
-                loading || !fileUrl || !language || !documentName || !speakerCount
+                loading ||
+                !fileUrl ||
+                !language ||
+                !documentName ||
+                !speakerCount
               }
               className="mt-6 disabled:animate-pulse bg-gray-900 disabled:bg-gray-400 text-white py-2 px-4 rounded"
             >
