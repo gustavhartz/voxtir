@@ -2,6 +2,7 @@ import { taskType, TranscriptionProcessStatus } from '@prisma/client';
 
 import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import prisma from '../prisma/index.js';
+import { subtractCreditsFromUser } from '../routes/graphql/resolvers/database-helpers.js';
 import { Logger, logger } from '../services/logger.js';
 import { S3StorageHandler } from '../services/storageHandler.js';
 import { TranscriptionJobHandler } from '../transcription/transcription-job-handler.js';
@@ -10,6 +11,7 @@ import { taskLockWrapper } from './common.js';
 import { HandlerFunction, ScheduledAsyncTask } from './scheduler.js';
 
 export const POLL_INTERVAL_MS = 15000;
+const UPLOAD_TIME_LIMIT = 5 * 60 * 1000; // 5 minutes
 
 /**
  * This job will start the transcription job for all pending jobs. This manages all the states of the transcription jobs
@@ -94,6 +96,69 @@ const audioPreProcessingJobTask: HandlerFunction = async (
   );
 };
 
+/**
+ * This job will check uploaded audio files and determine if they are valid audio files
+ * @param {string} _
+ * @param {Logger} executionLogger
+ * @return {*}  {Promise<void>}
+ */
+const audioValidationJobTask: HandlerFunction = async (
+  _: string,
+  executionLogger: Logger
+): Promise<void> => {
+  executionLogger.info(`Starting audio validation job`);
+  const pendingJobs = await prisma.transcriptionJob.findMany({
+    where: {
+      status: TranscriptionProcessStatus.PENDING_AUDIO_FILE_UPLOAD,
+    },
+    include: {
+      document: true,
+    },
+  });
+  const s3 = new S3StorageHandler(AWS_AUDIO_BUCKET_NAME);
+  // Start the audio pre-processing job for each pending job
+  const jobList = pendingJobs.map(async (job) => {
+    if (!job.document.audioFileURL || !job.document.rawAudioFileExtension) {
+      executionLogger.error(
+        `Document ${job.document.id} does not have an audio file URL`
+      );
+      return Promise.resolve(); // or return Promise.reject("REJECTED"); if you want to handle rejection separately
+    }
+    const { audioFileURL, updatedAt, id } = job.document;
+
+    try {
+      await s3.headObject(audioFileURL);
+      await prisma.transcriptionJob.update({
+        where: {
+          documentId: id,
+        },
+        data: {
+          status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
+        },
+      });
+      if (job.document.createdByUserId) {
+        await subtractCreditsFromUser(job.document.createdByUserId, 1);
+      }
+    } catch (e) {
+      executionLogger.warn(
+        `Document ${job.document.id} does not have an uploaded audio file URL and will be deleted`
+      );
+
+      // If more than UPLOAD_TIME_LIMIT minutes old we delete it
+      if (updatedAt.getTime() < new Date().getTime() - UPLOAD_TIME_LIMIT) {
+        await prisma.document.delete({
+          where: {
+            id: id,
+          },
+        });
+      }
+    }
+  });
+
+  await Promise.all(jobList);
+  executionLogger.info(`Audio upload validation job completed`);
+};
+
 export const audioPreProcessingJob = new ScheduledAsyncTask(
   'audio_preprocessing_job',
   taskLockWrapper(
@@ -110,8 +175,18 @@ export const transcriptionJob = new ScheduledAsyncTask(
   POLL_INTERVAL_MS
 );
 
+export const audioFileValidation = new ScheduledAsyncTask(
+  'audio_file_validation_job',
+  taskLockWrapper(
+    taskType.AUDIO_VALIDATION_JOB_STARTER,
+    audioValidationJobTask
+  ),
+  POLL_INTERVAL_MS
+);
+
 const isRunningDirectly = false;
 if (isRunningDirectly) {
   await transcriptionJobTask('', logger);
   await audioPreProcessingJobTask('', logger);
+  await audioValidationJobTask('', logger);
 }
