@@ -112,7 +112,7 @@ const mutations: MutationResolvers = {
 
       return {
         url: presigned.url,
-        expiresAtUnixSeconds: presigned.expiration.getTime() / 1000,
+        expiresAtUnixSeconds: Math.floor(presigned.expiration.getTime() / 1000),
       };
     } catch (err) {
       logger.error(`Error in document creation`, err);
