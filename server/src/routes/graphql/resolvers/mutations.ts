@@ -3,7 +3,6 @@ import {
   TranscriptionProcessStatus,
   TranscriptionType,
 } from '@prisma/client';
-import { ReadStream } from 'fs';
 import { GraphQLError } from 'graphql';
 
 import {
@@ -16,16 +15,14 @@ import { Auth0Client } from '../../../services/auth0.js';
 import { logger } from '../../../services/logger.js';
 import { sendProjectShareEmail } from '../../../services/resend.js';
 import {
+  generatePresignedUploadUrlForAudioFile,
   getPresignedUrlForDocumentAudioFile,
-  uploadRawAudioFile,
 } from '../../../transcription/index.js';
 import { MutationResolvers } from '../generated/graphql';
 import {
   assertUserCreditsGreaterThan,
   checkUserRightsOnProject,
-  subtractCreditsFromUser,
 } from './database-helpers.js';
-import { dumpReadStream } from './helpers.js';
 
 const mutations: MutationResolvers = {
   updateDocument: async (_, args, context) => {
@@ -62,15 +59,11 @@ const mutations: MutationResolvers = {
       dialect,
       speakerCount,
       transcriptionType,
-      fileInput: { file: file, fileContentLength },
+      mimeType,
     } = args;
     logger.info(
       `Creating document for project: ${projectId} of type ${transcriptionType}`
     );
-
-    const { createReadStream, filename, mimetype } = await file;
-    const stream: ReadStream = createReadStream();
-    let documentId = '';
 
     // This is to ensure the stream is dumped in case of failure because gql upload sucks
     try {
@@ -93,12 +86,11 @@ const mutations: MutationResolvers = {
           createdByUserId: context.userId,
         },
       });
-      const result = await uploadRawAudioFile(
+
+      // Generate s3 upload url
+      const presigned = await generatePresignedUploadUrlForAudioFile(
         doc.id,
-        stream,
-        fileContentLength,
-        filename,
-        mimetype
+        mimeType
       );
 
       await prisma.document.update({
@@ -106,29 +98,26 @@ const mutations: MutationResolvers = {
           id: doc.id,
         },
         data: {
-          audioFileURL: result.rawAudioKey,
-          rawAudioFileExtension: result.fileExtension,
+          audioFileURL: presigned.key,
+          rawAudioFileExtension: presigned.key.split('.').pop() ?? '',
           transcription: {
             create: {
               type: transcriptionType,
-              status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
+              status: TranscriptionProcessStatus.PENDING_AUDIO_FILE_UPLOAD,
             },
           },
         },
       });
-      documentId = doc.id;
+      logger.info(`Created document: ${doc.id} for project: ${projectId}`);
 
-      if (transcriptionType === TranscriptionType.AUTOMATIC) {
-        await subtractCreditsFromUser(context.userId, 1);
-      }
+      return {
+        url: presigned.url,
+        expiresAtUnixSeconds: presigned.expiration.getTime() / 1000,
+      };
     } catch (err) {
       logger.error(`Error in document creation`, err);
-      // Ensure multipart can terminate
-      await dumpReadStream(stream);
       throw new GraphQLError('Error in document creation');
     }
-    logger.info(`Created document: ${documentId} for project: ${projectId}`);
-    return documentId;
   },
   trashDocument: async (_, args, context) => {
     const { documentId, projectId } = args;

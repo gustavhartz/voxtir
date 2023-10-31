@@ -1,8 +1,6 @@
 import gql from 'graphql-tag';
 
 export const typeDefs = gql`
-  scalar Upload
-
   type StatusResponse {
     message: String!
   }
@@ -10,10 +8,6 @@ export const typeDefs = gql`
   type ActionResult {
     success: Boolean!
     message: String
-  }
-  input FileUploadInput {
-    file: Upload!
-    fileContentLength: Int!
   }
 
   type PresignedUrlResponse {
