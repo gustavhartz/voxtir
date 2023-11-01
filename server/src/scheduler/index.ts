@@ -128,6 +128,9 @@ const audioValidationJobTask: HandlerFunction = async (
 
     try {
       await s3.headObject(audioFileURL);
+      if (job.document.createdByUserId) {
+        await subtractCreditsFromUser(job.document.createdByUserId, 1);
+      }
       await prisma.transcriptionJob.update({
         where: {
           documentId: id,
@@ -136,9 +139,9 @@ const audioValidationJobTask: HandlerFunction = async (
           status: TranscriptionProcessStatus.AUDIO_PREPROCESSOR_JOB_PENDING,
         },
       });
-      if (job.document.createdByUserId) {
-        await subtractCreditsFromUser(job.document.createdByUserId, 1);
-      }
+      executionLogger.info(
+        `Document ${job.document.id} is inspected and moved to audio pre-processing job`
+      );
     } catch (e) {
       executionLogger.warn(
         `Document ${job.document.id} does not have an uploaded audio file URL and will be deleted`
@@ -184,9 +187,9 @@ export const audioFileValidation = new ScheduledAsyncTask(
   POLL_INTERVAL_MS
 );
 
-const isRunningDirectly = false;
+const isRunningDirectly = true;
 if (isRunningDirectly) {
-  await transcriptionJobTask('', logger);
-  await audioPreProcessingJobTask('', logger);
+  // await transcriptionJobTask('', logger);
+  // await audioPreProcessingJobTask('', logger);
   await audioValidationJobTask('', logger);
 }
