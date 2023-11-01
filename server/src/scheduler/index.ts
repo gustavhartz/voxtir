@@ -144,7 +144,7 @@ const audioValidationJobTask: HandlerFunction = async (
       );
     } catch (e) {
       executionLogger.warn(
-        `Document ${job.document.id} does not have an uploaded audio file URL and will be deleted`
+        `Document ${job.document.id} does not have an uploaded audio file URL or user out of credits. Will be deleted`
       );
 
       // If more than UPLOAD_TIME_LIMIT minutes old we delete it
