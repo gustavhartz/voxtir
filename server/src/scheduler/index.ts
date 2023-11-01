@@ -187,9 +187,9 @@ export const audioFileValidation = new ScheduledAsyncTask(
   POLL_INTERVAL_MS
 );
 
-const isRunningDirectly = true;
+const isRunningDirectly = false;
 if (isRunningDirectly) {
-  // await transcriptionJobTask('', logger);
-  // await audioPreProcessingJobTask('', logger);
+  await transcriptionJobTask('', logger);
+  await audioPreProcessingJobTask('', logger);
   await audioValidationJobTask('', logger);
 }
