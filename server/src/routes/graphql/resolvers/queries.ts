@@ -252,7 +252,7 @@ const queries: QueryResolvers = {
 
     expiration.setTime(expiration.getTime() + accessPeriodSeconds * 1000);
 
-    const presignedUrl = await s3.generatePresignedUrlForObject(
+    const presignedUrl = await s3.generatePresignedUrlForGetObject(
       key,
       accessPeriodSeconds
     );

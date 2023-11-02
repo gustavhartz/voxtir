@@ -23,8 +23,8 @@ export const typeDefs = gql`
       dialect: String
       speakerCount: Int
       transcriptionType: TranscriptionType!
-      fileInput: FileUploadInput!
-    ): ID!
+      mimeType: String!
+    ): PresignedUrlResponse!
     updateDocument(documentId: ID!, title: String!): ActionResult!
     trashDocument(documentId: ID!, projectId: ID!): ActionResult!
     pinnedProject(projectId: ID!, pin: Boolean!): ActionResult!

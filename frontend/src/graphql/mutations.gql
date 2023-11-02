@@ -23,9 +23,9 @@ mutation CreateDocument(
   $projectId: ID!
   $title: String!
   $transcriptionType: TranscriptionType!
-  $fileInput: FileUploadInput!
   $language: String
   $speakerCount: Int
+  $mimeType: String!
 ) {
   createDocument(
     projectId: $projectId
@@ -33,8 +33,11 @@ mutation CreateDocument(
     transcriptionType: $transcriptionType
     language: $language
     speakerCount: $speakerCount
-    fileInput: $fileInput
-  )
+    mimeType: $mimeType
+  ) {
+    expiresAtUnixSeconds
+    url
+  }
 }
 
 mutation shareProject($shareProjectId: ID!, $userEmail: String!, $role: Role!) {

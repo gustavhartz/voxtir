@@ -4,7 +4,7 @@ import { AWS_AUDIO_BUCKET_NAME } from '../common/env.js';
 import { mimeTypeToExtension } from '../common/file-formats.js';
 import prisma from '../prisma/index.js';
 import { logger } from '../services/logger.js';
-import { S3StorageHandler } from '../services/storageHandler.js';
+import { PresignedUrl, S3StorageHandler } from '../services/storageHandler.js';
 import {
   AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION,
   getRawAudioFileKey,
@@ -43,6 +43,18 @@ export const uploadRawAudioFile = async (
   return { fileExtension, rawAudioKey };
 };
 
+export const generatePresignedUploadUrlForAudioFile = async (
+  documentId: string,
+  mimeType: string
+): Promise<PresignedUrl> => {
+  const fileExtension = mimeTypeToExtension(mimeType);
+  const rawAudioKey = getRawAudioFileKey(documentId, fileExtension);
+  logger.info(
+    `Generating presigned upload url for ${rawAudioKey} for document ${documentId}`
+  );
+  return s3.generatePresignedUrlForPutObject(rawAudioKey, 60 * 5);
+};
+
 /**
  * This function will generate a pre-signed URL for a processed audio file. This is intended to be used
  * for the client to download the processed audio file. The URL will expire after 2 hours. At assumes that
@@ -64,7 +76,7 @@ export const getPresignedUrlForDocumentAudioFile = async (
       `Document with id ${documentId} not found with audio file key`
     );
   }
-  const url = await s3.generatePresignedUrlForObject(
+  const url = await s3.generatePresignedUrlForGetObject(
     doc.audioFileURL,
     AWS_AUDIO_BUCKET_PRESIGNED_URL_EXPIRATION
   );
