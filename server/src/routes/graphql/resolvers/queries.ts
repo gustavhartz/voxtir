@@ -60,7 +60,7 @@ const queries: QueryResolvers = {
     const projects = await prisma.project.findMany({
       where: {
         UsersOnProjects: {
-          every: {
+          some: {
             userId: context.userId,
           },
         },
